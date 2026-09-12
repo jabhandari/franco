@@ -4,6 +4,15 @@ Franco is a React MVP shell for a French learning platform. The current app is a
 
 ## Run locally
 
+This project requires Node.js 22.12.0. If you use nvm, load the pinned version with:
+
+```bash
+nvm install
+nvm use
+```
+
+Then install dependencies and start the app:
+
 ```bash
 npm install
 npm run dev
