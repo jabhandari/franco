@@ -9,6 +9,14 @@ npm install
 npm run dev
 ```
 
+Content is stored in a local SQLite file and is not committed to Git (`data/` is ignored). After cloning, create it by running:
+
+```bash
+npm run import:all
+```
+
+Then start the API and web app with `npm run dev`. If the browser still shows loading, verify `http://127.0.0.1:8787/api/health` returns `{ "ok": true }` and open the Vite URL printed in the terminal.
+
 The dev command starts both services:
 
 - React/Vite: `http://127.0.0.1:5173/`

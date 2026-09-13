@@ -8,6 +8,7 @@
     "dev": "node scripts/dev.mjs",
     "import:tcf-official": "node scripts/import-tcf-official.mjs",
     "import:tv5": "node scripts/import-tv5-exercises.mjs",
+    "import:all": "npm run import:ud-gsd && npm run import:tcf-official && npm run import:tv5",
     "import:ud-gsd": "node scripts/import-ud-gsd.mjs",
     "web": "vite --host 127.0.0.1",
     "build": "vite build",
