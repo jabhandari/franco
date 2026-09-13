@@ -132,7 +132,7 @@ function App() {
         <div className="sidebar-panel">
           <p>Signed in as</p>
           <strong>{session.name}</strong>
-          <span>Waiting for database-backed learner data.</span>
+          <span>Your learning space</span>
         </div>
 
         <button className="nav-button logout-button" onClick={logout}>
@@ -142,7 +142,7 @@ function App() {
       </aside>
 
       <main className="main-content">
-        {view === 'home' && <HomeScreen userData={userData} />}
+        {view === 'home' && <HomeScreen userData={userData} onStart={() => setView('session')} />}
         {view === 'content' && <ContentScreen selectedSection={selectedSection} onSelectSection={setSelectedSection} />}
         {view === 'past' && <PastQuestionsScreen />}
         {view === 'session' && <SessionScreen token={authToken} selectedSection={selectedSection} onSelectSection={setSelectedSection} />}
@@ -166,7 +166,7 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
         <p className="eyebrow">French learning platform</p>
         <h1>Practice should come from your real learner profile.</h1>
         <p className="lede">
-          Sign in first. The dashboard, review queue, mistakes, and progress will be fetched from the database once the backend is connected.
+          Sign in first to keep your lessons, progress, and review history connected to your account.
         </p>
         <div className="auth-principles">
           <span><Database size={17} /> Database-first learner data</span>
@@ -217,7 +217,7 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
           {isSignup ? 'Already have an account? Log in' : 'Need an account? Sign up'}
         </button>
         <p className="form-note">
-          Credentials are now sent to the local API and stored in the SQLite database.
+          Your account is securely stored and synced with your profile.
         </p>
       </section>
     </main>
@@ -233,7 +233,7 @@ function NavButton({ icon: Icon, active, onClick, children }) {
   );
 }
 
-function HomeScreen({ userData }) {
+function HomeScreen({ userData, onStart }) {
   const profile = userData?.profile;
   const progressCount = userData?.progress?.length || 0;
   const mistakeCount = userData?.mistakes?.length || 0;
@@ -245,21 +245,20 @@ function HomeScreen({ userData }) {
       <div className="daily-panel">
         <div className="daily-art" aria-hidden="true">
           <span>franco</span>
-          <strong>Ready for data</strong>
+          <strong>Bonjour, {userData?.user?.name?.split(' ')[0] || 'learner'}</strong>
         </div>
         <p className="eyebrow">Today's French</p>
-        <h1>Your daily session will appear after your profile loads.</h1>
+        <h1>Your daily French session starts here.</h1>
         <p className="lede">
-          The app is connected to the database and now has real French examples imported from UD French GSD.
+          Practice with French examples and exercises matched to your level.
         </p>
         <div className="empty-grid">
           <EmptyMetric label="Reviews due" />
           <MetricValue label="Imported examples" value={contentCount || '--'} />
           <EmptyMetric label="Session length" />
         </div>
-        <DataConnectionPanel />
-        <button className="primary-button wide" disabled>
-          Start daily session <ChevronRight size={18} />
+        <button className="primary-button wide" onClick={onStart}>
+          Start a 10-minute session <ChevronRight size={18} />
         </button>
       </div>
 
@@ -272,7 +271,7 @@ function HomeScreen({ userData }) {
             <EmptyState
               icon={TrendingUp}
               title="No progress records"
-              text="The database connection works, but this user has no skill estimates yet."
+              text="Complete a few exercises to start building your skill profile."
             />
           )}
         </section>
@@ -284,7 +283,7 @@ function HomeScreen({ userData }) {
             <EmptyState
               icon={Plus}
               title="No mistakes records"
-              text="The mistakes table is connected and waiting for exercise attempts."
+              text="Mistakes you make while practicing will appear here for review."
             />
           )}
         </section>
@@ -406,7 +405,7 @@ function SessionScreen({ token, selectedSection, onSelectSection }) {
       {data && (
         <>
           <DataContract
-            title="Database response"
+            title="Session details"
             items={[
               `Section: ${data.section}`,
               `Reviews due: ${data.reviewsDue}`,
@@ -432,7 +431,7 @@ function ProgressScreen({ userData }) {
       <p className="lede">
         This page is intentionally empty until a real user profile, attempts ledger, and skill model are available.
       </p>
-      {progress.length ? <ProgressRecords progress={progress} /> : <EmptyState icon={TrendingUp} title="No progress rows yet" text="The progress table is connected, but this user has not generated skill evidence." />}
+      {progress.length ? <ProgressRecords progress={progress} /> : <EmptyState icon={TrendingUp} title="No progress yet" text="Complete a few exercises to see your progress here." />}
     </section>
   );
 }
@@ -451,7 +450,7 @@ function ConversationScreen({ token }) {
       {error && <EmptyState icon={Database} title="Target fetch failed" text={error} />}
       {data && (
         <DataContract
-          title="Database response"
+          title="Learning details"
           items={[
             `Scenario: ${data.scenario || 'not selected'}`,
             `Targets returned: ${data.targets.length}`,
@@ -495,7 +494,7 @@ function PanelHeading({ title }) {
   return (
     <div className="panel-title">
       <div>
-        <p className="eyebrow">Database field</p>
+        <p className="eyebrow">Your learning</p>
         <h2>{title}</h2>
       </div>
       <Database size={20} aria-hidden="true" />
@@ -518,8 +517,8 @@ function DataConnectionPanel() {
     <div className="data-panel">
       <Database size={20} aria-hidden="true" />
       <div>
-        <strong>API status: connected</strong>
-        <p>Authentication and user reads are backed by the local SQLite database.</p>
+        <strong>Your account is connected</strong>
+        <p>Your profile and learning activity are synced securely.</p>
       </div>
     </div>
   );
@@ -681,7 +680,7 @@ function LoadingScreen() {
       <section className="auth-card">
         <p className="eyebrow">Franco</p>
         <h1>Loading your account</h1>
-        <p className="lede">Checking the local API session.</p>
+        <p className="lede">Preparing your learning space.</p>
       </section>
     </main>
   );
