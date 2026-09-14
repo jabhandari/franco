@@ -13,17 +13,20 @@ import {
   Plus,
   ShieldCheck,
   TrendingUp,
-  UserRound
+  UserRound,
+  Sun,
+  Moon
 } from 'lucide-react';
 import './styles.css';
+import { concepts, conceptSections } from './content/concepts.js';
 
 const TOKEN_KEY = 'franco_auth_token';
 
 const navItems = [
   { id: 'home', label: 'Home', icon: Home },
+  { id: 'session', label: 'Session', icon: CirclePlay },
   { id: 'content', label: 'Content', icon: BookOpen },
   { id: 'past', label: 'Past questions', icon: BookOpen },
-  { id: 'session', label: 'Session', icon: CirclePlay },
   { id: 'progress', label: 'Progress', icon: TrendingUp },
   { id: 'conversation', label: 'Conversation', icon: Mic }
 ];
@@ -37,6 +40,12 @@ function App() {
   const [selectedSection, setSelectedSection] = React.useState('A1');
   const [loading, setLoading] = React.useState(Boolean(authToken));
   const [error, setError] = React.useState('');
+  const [theme, setTheme] = React.useState(() => localStorage.getItem('franco_theme') || 'dark');
+
+  React.useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('franco_theme', theme);
+  }, [theme]);
 
   React.useEffect(() => {
     if (!authToken) return;
@@ -139,9 +148,13 @@ function App() {
           <LogOut size={18} aria-hidden="true" />
           <span>Log out</span>
         </button>
+        <button className="theme-toggle" onClick={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}>
+          {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
+          <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
+        </button>
       </aside>
 
-      <main className="main-content">
+      <main className={`main-content ${view === 'content' ? 'wide-content' : ''}`}>
         {view === 'home' && <HomeScreen userData={userData} onStart={() => setView('session')} />}
         {view === 'content' && <ContentScreen selectedSection={selectedSection} onSelectSection={setSelectedSection} />}
         {view === 'past' && <PastQuestionsScreen />}
@@ -252,11 +265,6 @@ function HomeScreen({ userData, onStart }) {
         <p className="lede">
           Practice with French examples and exercises matched to your level.
         </p>
-        <div className="empty-grid">
-          <EmptyMetric label="Reviews due" />
-          <MetricValue label="Imported examples" value={contentCount || '--'} />
-          <EmptyMetric label="Session length" />
-        </div>
         <button className="primary-button wide" onClick={onStart}>
           Start a 10-minute session <ChevronRight size={18} />
         </button>
@@ -297,18 +305,19 @@ function HomeScreen({ userData, onStart }) {
 }
 
 function ContentScreen({ selectedSection, onSelectSection }) {
-  const { data: sectionsData, loading: sectionsLoading, error: sectionsError } = useApiResource('/api/content/sections');
-  const { data: sectionData, loading: sectionLoading, error: sectionError } = useApiResource(`/api/content/sections/${selectedSection}`);
-  const { data: examData, loading: examLoading, error: examError } = useApiResource(`/api/exam/questions?section=${selectedSection}`);
-  const { data: topicData } = useApiResource('/api/content/topics?section=A1');
-  const { data: tv5Data } = useApiResource(`/api/content/tv5-exercises?section=${selectedSection}`);
+  const [activeConceptId, setActiveConceptId] = React.useState(null);
+  const [layoutMode, setLayoutMode] = React.useState('roadmap');
+  React.useEffect(() => setActiveConceptId(null), [selectedSection]);
+  
+  return <section className="map-only-page"><div className="map-toolbar"><span>{layoutMode === 'roadmap' ? 'Roadmap view' : 'Table view'}</span><button onClick={() => setLayoutMode((mode) => mode === 'roadmap' ? 'table' : 'roadmap')}>{layoutMode === 'roadmap' ? 'Show table' : 'Show roadmap'}</button></div>{layoutMode === 'roadmap' ? <ConceptMap section={selectedSection} activeConceptId={activeConceptId} onSelectConcept={setActiveConceptId} onSelectSection={onSelectSection} /> : <RoadmapTable section={selectedSection} onSelectSection={onSelectSection} />}</section>;
 
+  /* legacy table layout retained below for reference */
   return (
     <section className="page-stack">
-      <p className="eyebrow">Imported content</p>
-      <h1 className="page-title">French GSD sections</h1>
+      <p className="eyebrow">Learn & read</p>
+      <h1 className="page-title">{layoutMode === 'roadmap' ? 'Your French learning roadmap.' : 'Build your French, one level at a time.'}</h1>
       <p className="lede">
-        These A1-B2 sections are generated from UD annotation heuristics. They are useful for practice, but not official CEFR labels.
+        Read examples, learn the patterns behind them, then practise what you have learned.
       </p>
 
       {sectionsLoading && <EmptyState icon={Database} title="Loading content sections" text="Fetching imported UD French GSD counts." />}
@@ -330,33 +339,83 @@ function ContentScreen({ selectedSection, onSelectSection }) {
               );
             })}
           </div>
-          <SourcePanel source={sectionsData.source} note={sectionsData.note} />
+          <div className="content-view-toggle"><span>{layoutMode === 'roadmap' ? 'Roadmap view' : 'Table view'}</span><button onClick={() => setLayoutMode((mode) => mode === 'roadmap' ? 'table' : 'roadmap')}>{layoutMode === 'roadmap' ? 'Show table' : 'Show roadmap'}</button></div>
+          {layoutMode === 'roadmap' ? <ConceptMap section={selectedSection} activeConceptId={activeConceptId} onSelectConcept={setActiveConceptId} /> : <><LevelGuide section={selectedSection} /><CurriculumLibrary section={selectedSection} activeConceptId={activeConceptId} onSelectConcept={setActiveConceptId} /></>}
         </>
       )}
-
-      {sectionLoading && <EmptyState icon={Database} title={`Loading ${selectedSection}`} text="Fetching example sentences and exercises." />}
-      {sectionError && <EmptyState icon={Database} title="Section fetch failed" text={sectionError} />}
-      {sectionData && <SectionExamples data={sectionData} />}
-      {selectedSection === 'A1' && topicData && <TopicTracks data={topicData} />}
-      {examLoading && <EmptyState icon={Database} title={`Loading ${selectedSection} exam samples`} text="Fetching imported official sample questions." />}
-      {examError && <EmptyState icon={Database} title="Exam sample fetch failed" text={examError} />}
-      {examData && <ExamQuestionList data={examData} />}
-      {tv5Data && <Tv5ExerciseList data={tv5Data} />}
     </section>
   );
 }
 
+const levelGuides = {
+  A1: { label: 'Breakthrough', goal: 'Handle familiar words and simple everyday phrases.', focus: 'Greetings, identity, numbers, time, articles, and present-tense verbs.', read: 'Short notices, messages, menus, and simple personal descriptions.' },
+  A2: { label: 'Waystage', goal: 'Understand the main point in predictable everyday situations.', focus: 'Routine tasks, past events, descriptions, directions, and common connectors.', read: 'Short emails, schedules, advertisements, and straightforward stories.' },
+  B1: { label: 'Threshold', goal: 'Follow the essential meaning of clear speech and texts on familiar topics.', focus: 'Opinions, experiences, explanations, narrative tenses, and paragraph structure.', read: 'Articles, interviews, personal accounts, and practical workplace texts.' },
+  B2: { label: 'Vantage', goal: 'Understand detailed arguments and communicate with growing precision.', focus: 'Nuance, register, cohesion, complex grammar, and topic-specific vocabulary.', read: 'Longer articles, reports, editorials, and interviews with implicit meaning.' }
+};
+
+function LevelGuide({ section }) {
+  const guide = levelGuides[section];
+  return <section className="level-guide panel">
+    <div><span className="eyebrow">{section} · {guide.label}</span><h2>{guide.goal}</h2></div>
+    <div className="guide-columns"><div><strong>Focus</strong><p>{guide.focus}</p></div><div><strong>Reading practice</strong><p>{guide.read}</p></div></div>
+    <small>Level descriptors adapted from the <a href="https://www.coe.int/en/web/common-european-framework-reference-languages/cefr-descriptors" target="_blank" rel="noreferrer">Council of Europe CEFR descriptors</a>.</small>
+  </section>;
+}
+
+function RoadmapTable({ section, onSelectSection }) {
+  const nodes = concepts.filter((concept) => concept.level === section);
+  return <section className="roadmap-table-page"><div className="roadmap-levels">{['A1','A2','B1','B2'].map((level) => <button key={level} className={section === level ? 'selected' : ''} onClick={() => onSelectSection(level)}>{level}</button>)}</div><div className="roadmap-table"><div className="roadmap-table-head"><span>Concept</span><span>Area</span><span>What you will learn</span></div>{nodes.map((node, index) => <div className="roadmap-table-row" key={node.id}><span><b>{String(index + 1).padStart(2, '0')}</b>{node.title}</span><small>{node.category}</small><p>{node.shortDescription}</p></div>)}</div></section>;
+}
+
+function RoadmapConnectors({ section }) {
+  const [shape, setShape] = React.useState({ width: 0, height: 0, paths: [] });
+  React.useLayoutEffect(() => {
+    const update = () => {
+      const canvas = document.querySelector(`.roadmap-${section.toLowerCase()}`);
+      if (!canvas) return;
+      const cards = [...canvas.querySelectorAll('.roadmap-node')];
+      const base = canvas.getBoundingClientRect();
+      const points = cards.map((card) => { const r = card.getBoundingClientRect(); return { x: r.left - base.left + r.width / 2, top: r.top - base.top, bottom: r.bottom - base.top }; });
+      const edges = section === 'A1' ? [[0,1],[1,2],[1,6],[2,3],[2,4],[3,5],[4,5],[6,7],[7,8],[7,9],[7,10],[5,11],[8,11],[9,11],[10,11],[11,12],[12,13],[12,14]] : [[0,1],[1,2],[1,5],[2,3],[2,4],[3,6],[4,6],[5,6]];
+      const paths = edges.filter(([a,b]) => points[a] && points[b]).map(([a,b]) => { const from = points[a]; const to = points[b]; const mid = from.bottom + (to.top - from.bottom) * .5; return `M ${from.x} ${from.bottom} C ${from.x} ${mid}, ${to.x} ${mid}, ${to.x} ${to.top}`; });
+      setShape({ width: base.width, height: base.height, paths });
+    };
+    update(); window.addEventListener('resize', update); return () => window.removeEventListener('resize', update);
+  }, [section]);
+  if (!shape.width) return null;
+  return <svg className="roadmap-connectors" viewBox={`0 0 ${shape.width} ${shape.height}`} preserveAspectRatio="none" aria-hidden="true"><path d={shape.paths.join(' ')} /></svg>;
+}
+
+function ConceptMap({ section, activeConceptId, onSelectConcept, onSelectSection }) {
+  const guide = levelGuides[section];
+  const nodes = concepts.filter((concept) => concept.level === section);
+  const active = nodes.find((node) => node.id === activeConceptId);
+  return <section className={`concept-map panel ${active ? 'has-modal' : ''}`}><div className="roadmap-heading"><div className="roadmap-levels">{['A1','A2','B1','B2'].map((level) => <button key={level} className={section === level ? 'selected' : ''} onClick={() => onSelectSection(level)}>{level}</button>)}</div><span className="roadmap-badge">{nodes.length} concepts</span></div><div className={`roadmap-canvas roadmap-${section.toLowerCase()}`}><div className="roadmap-spine" /><RoadmapConnectors section={section} />{nodes.map((node, index) => <button className={`roadmap-node roadmap-node-${index + 1} ${activeConceptId === node.id ? 'active' : ''}`} key={node.id} onClick={() => onSelectConcept(activeConceptId === node.id ? null : node.id)}><span>{String(index + 1).padStart(2, '0')}</span><strong>{node.title}</strong><small>{node.category}</small><i /></button>)}</div>{active && <div className="concept-modal" role="dialog" aria-modal="true"><button className="concept-modal-close" onClick={() => onSelectConcept(null)} aria-label="Close lesson">×</button><div className="concept-modal-scroll"><ConceptDetail concept={active} /></div></div>}</section>;
+}
+
 function Tv5ExerciseList({ data }) {
-  return <section className="panel">
-    <h2>{data.section} TV5MONDE exercises</h2>
-    <p className="muted">{data.count} free activities imported from the TV5MONDE catalogue.</p>
+  const [showAll, setShowAll] = React.useState(false); const visible = showAll ? data.exercises : data.exercises.slice(0, 12);
+  return <details className="content-module"><summary><span>Video activities</span><small>{data.count} activities</small></summary><section className="panel">
+    <h2>{data.section} TV5MONDE practice</h2><p className="muted">Build listening skills with guided video activities.</p>
     <div className="example-list">
-      {data.exercises.map((exercise) => <article className="example-card" key={exercise.id}>
+      {visible.map((exercise) => <article className="example-card" key={exercise.id}>
         <span>{exercise.cefr_section} · TV5MONDE</span><p>{exercise.title}</p>
         <a href={exercise.exercise_url} target="_blank" rel="noreferrer">Open activity ↗</a>
       </article>)}
     </div>
-  </section>;
+    {data.count > 12 && <button className="text-button module-action" onClick={() => setShowAll((value) => !value)}>{showAll ? 'Show fewer activities' : `Show all ${data.count} activities`}</button>}
+  </section></details>;
+}
+
+function CurriculumLibrary({ section, activeConceptId, onSelectConcept }) {
+  const [title, ids] = conceptSections[section];
+  const items = ids.map((id) => concepts.find((concept) => concept.id === id)).filter(Boolean);
+  return <section className="curriculum panel"><div className="curriculum-heading"><div><span className="eyebrow">Curriculum</span><h2>{section} · {title}</h2></div><span className="curriculum-count">{items.length} concepts</span></div><div className="concept-list">{items.map((concept, index) => <React.Fragment key={concept.id}><button id={`concept-${concept.id}`} className={`concept-row ${activeConceptId === concept.id ? 'selected' : ''}`} onClick={() => onSelectConcept(activeConceptId === concept.id ? null : concept.id)}><span className="concept-number">{String(index + 1).padStart(2, '0')}</span><span><strong>{concept.title}</strong><small>{concept.shortDescription}</small></span><span className="concept-arrow">{activeConceptId === concept.id ? '⌃' : '›'}</span></button>{activeConceptId === concept.id && <ConceptDetail concept={concept} />}</React.Fragment>)}</div></section>;
+}
+
+function ConceptDetail({ concept }) {
+  return <article className="concept-detail"><div><span className="eyebrow">{concept.category} · {concept.level}</span><h2>{concept.title}</h2><p className="concept-subtitle">{concept.shortDescription}</p></div><div className="theory-blocks">{concept.theory.map((block, index) => block[0] === 'table' ? <div className="theory-table" key={index}>{block.slice(1).map((cell, cellIndex) => <span key={cellIndex}>{cell}</span>)}</div> : <div className={`theory-card ${block[0]}`} key={index}><strong>{block[0] === 'idea' ? 'The idea' : block[0] === 'rule' ? block[1] : block[0] === 'tip' ? 'Tip' : 'Example'}</strong><p>{block[0] === 'rule' ? block[2] : block[0] === 'example' ? block[2] : block[1]}</p>{block[0] === 'rule' && <code>{block[2]}</code>}</div>)}</div>{concept.vocabulary.length > 0 && <div className="related-vocab"><strong>Vocabulary</strong><div>{concept.vocabulary.map((word) => <span key={word}>{word}</span>)}</div></div>}<div className="concept-footer"><small>Further reading: {concept.sources.map(([label,url]) => <a href={url} target="_blank" rel="noreferrer" key={url}>{label}</a>)}</small></div></article>;
 }
 
 function TopicTracks({ data }) {
@@ -374,12 +433,12 @@ function TopicTracks({ data }) {
 
 function PastQuestionsScreen() {
   const { data, loading, error } = useApiResource('/api/exam/past-questions');
+  const readingData = data ? { ...data, questions: (Array.isArray(data.questions) ? data.questions : []).filter((question) => String(question.skill || '').toLowerCase() === 'reading'), section: 'Reading ·' } : null;
   return <section className="page-stack">
     <p className="eyebrow">Exam archive</p><h1 className="page-title">Past questions</h1>
-    <p className="lede">All imported official sample questions are kept here separately from generated UD exercises.</p>
     {loading && <EmptyState icon={Database} title="Loading past questions" text="Fetching the complete exam archive." />}
     {error && <EmptyState icon={Database} title="Past questions fetch failed" text={error} />}
-    {data && <ExamQuestionList data={{ ...data, section: 'All levels' }} />}
+    {readingData && <ExamQuestionList data={readingData} />}
   </section>;
 }
 
@@ -391,7 +450,7 @@ function SessionScreen({ token, selectedSection, onSelectSection }) {
       <p className="eyebrow">Daily session</p>
       <h1 className="page-title">{selectedSection} session queue</h1>
       <p className="lede">
-        The session plan is now generated from imported UD French GSD examples. Later we can mix this with due reviews and your mistake history.
+        Build confidence with a focused set of French questions at your level.
       </p>
       <div className="section-tabs compact" role="group" aria-label="Choose session level">
         {['A1', 'A2', 'B1', 'B2'].map((section) => (
@@ -400,20 +459,10 @@ function SessionScreen({ token, selectedSection, onSelectSection }) {
           </button>
         ))}
       </div>
-      {loading && <EmptyState icon={Database} title="Loading session plan" text="Fetching /api/me/session-plan." />}
+      {loading && <EmptyState icon={Database} title="Preparing your session" text="Loading questions for this level." />}
       {error && <EmptyState icon={Database} title="Session fetch failed" text={error} />}
       {data && (
         <>
-          <DataContract
-            title="Session details"
-            items={[
-              `Section: ${data.section}`,
-              `Reviews due: ${data.reviewsDue}`,
-              `Available examples: ${data.newConcepts}`,
-              `Exercises returned: ${data.exercises.length}`,
-              data.message
-            ]}
-          />
           <ExerciseList exercises={data.exercises} />
         </>
       )}
@@ -551,75 +600,94 @@ function SourcePanel({ source, note }) {
 }
 
 function SectionExamples({ data }) {
+  const [showAll, setShowAll] = React.useState(false);
+  const visible = showAll ? data.examples : data.examples.slice(0, 12);
   return (
-    <>
+    <details className="content-module" open>
+      <summary><span>Reading library</span><small>{data.examples.length} examples</small></summary>
       <section className="panel">
-        <h2>{data.section} examples</h2>
-        <p className="muted">{data.examples.length} sentences loaded for this section.</p>
+        <h2>{data.section} reading examples</h2>
+        <p className="muted">Read each sentence aloud, notice the structure, then try a related exercise in Session.</p>
       </section>
       <div className="example-list">
-        {data.examples.map((example) => (
+        {visible.map((example) => (
           <article className="example-card" key={example.id}>
-            <span>{example.cefr_section} - {example.token_count} tokens - score {example.difficulty_score}</span>
+            <span>{example.cefr_section} reading</span>
             <p>{example.text}</p>
           </article>
         ))}
       </div>
-    </>
+      {data.examples.length > 12 && <button className="text-button module-action" onClick={() => setShowAll((value) => !value)}>{showAll ? 'Show fewer examples' : `Show all ${data.examples.length} examples`}</button>}
+    </details>
   );
 }
 
 function ExerciseList({ exercises }) {
+  const [resetKey, setResetKey] = React.useState(0);
   if (!exercises.length) {
     return <EmptyState icon={BookOpen} title="No exercises yet" text="Run the UD importer to generate exercise items." />;
   }
 
-  return (
-    <div className="exercise-list">
-      {exercises.map((exercise) => (
-        <article className="exercise-preview" key={exercise.id}>
-          <span>{exercise.cefr_section} - {exercise.exercise_type}</span>
-          <h2>{exercise.prompt}</h2>
-          {exercise.choices?.length ? (
-            <div className="choice-pills">
-              {exercise.choices.slice(0, 10).map((choice) => <span key={choice}>{choice}</span>)}
-            </div>
-          ) : null}
-          <details>
-            <summary>Answer</summary>
-            <p>{exercise.answer}</p>
-            <small>{exercise.explanation}</small>
-          </details>
-        </article>
-      ))}
+  return <>
+    <div className="session-toolbar"><span>{exercises.length} questions</span><button className="reset-button" onClick={() => setResetKey((value) => value + 1)}>Reset all</button></div>
+    <div className="exercise-list">{exercises.map((exercise, index) => <MultipleChoiceExercise key={exercise.id} exercise={exercise} allExercises={exercises} index={index} resetKey={resetKey} />)}</div>
+  </>;
+}
+
+function MultipleChoiceExercise({ exercise, allExercises, index, resetKey }) {
+  const [selected, setSelected] = React.useState(null);
+  React.useEffect(() => setSelected(null), [resetKey]);
+  const options = React.useMemo(() => {
+    const supplied = exercise.exercise_type === 'grammar_focus' && exercise.choices?.length ? exercise.choices : [];
+    const distractors = allExercises.filter((item) => item.id !== exercise.id && item.answer && item.exercise_type === exercise.exercise_type).map((item) => item.answer);
+    const values = Array.from(new Set([...(supplied.length ? supplied : [exercise.answer]), ...distractors])).filter(Boolean).slice(0, 4);
+    return values.sort(() => 0.5 - ((index * 17 + values.indexOf(values[0])) % 3) / 3);
+  }, [exercise, allExercises, index]);
+  const isCorrect = selected !== null && selected.trim().toLowerCase() === exercise.answer.trim().toLowerCase();
+  return <article className={`exercise-preview mcq-card ${selected ? (isCorrect ? 'answered-correct' : 'answered-wrong') : ''}`}>
+    <span>{exercise.cefr_section} · {exercise.exercise_type.replace('_', ' ')}</span>
+    <h2>{exercise.prompt}</h2>
+    <div className="mcq-options">
+      {options.map((option, optionIndex) => <button key={`${exercise.id}-${optionIndex}`} className={selected === option ? (option.trim().toLowerCase() === exercise.answer.trim().toLowerCase() ? 'correct' : 'incorrect') : ''} onClick={() => setSelected(option)} disabled={Boolean(selected)}>{option}</button>)}
     </div>
-  );
+    {selected && <div className={`mcq-feedback ${isCorrect ? 'correct' : 'incorrect'}`}><strong>{isCorrect ? 'Correct!' : 'Not quite.'}</strong><span>{isCorrect ? exercise.explanation : `Correct answer: ${exercise.answer}`}</span>{!isCorrect && <button className="retry-button" onClick={() => setSelected(null)}>Try again</button>}</div>}
+  </article>;
 }
 
 function ExamQuestionList({ data }) {
-  return (
-    <>
-      <section className="panel">
-        <h2>{data.section} imported exam samples</h2>
-        <p className="muted">{data.questions.length} questions loaded. {data.note}</p>
-      </section>
-      <div className="exercise-list">
-        {data.questions.map((question) => (
-          <article className="exercise-preview" key={question.id}>
-            <span>{question.exam_name} - {question.skill}</span>
-            <h2>{question.prompt}</h2>
-            {question.context ? <p>{question.context}</p> : null}
-            {question.choices?.length ? (
-              <div className="choice-pills">
-                {question.choices.map((choice) => <span key={choice.key}>{choice.key}. {choice.text}</span>)}
-              </div>
-            ) : null}
-            <small>{question.explanation}</small>
-          </article>
-        ))}
-      </div>
-    </>
-  );
+  const [showAll, setShowAll] = React.useState(false);
+  const [answers, setAnswers] = React.useState({});
+  const visible = showAll ? data.questions : data.questions.slice(0, 12);
+  const reset = () => setAnswers({});
+  return <details className="content-module"><summary><span>Exam practice</span><small>{data.questions.length} questions</small></summary>
+    <section className="panel"><div className="session-toolbar"><h2>{data.section} imported exam samples</h2><button className="reset-button" onClick={reset}>Reset all</button></div><p className="muted">{data.questions.length} questions loaded. {data.note}</p></section>
+    <div className="exercise-list">{visible.map((question) => <ExamQuestionCard key={question.id} question={question} selected={answers[question.id] || null} onSelect={(value) => setAnswers((current) => ({ ...current, [question.id]: value }))} onRetry={() => setAnswers(({ [question.id]: _removed, ...rest }) => rest)} />)}</div>
+    {data.questions.length > 12 && <button className="text-button module-action" onClick={() => setShowAll((value) => !value)}>{showAll ? 'Show fewer questions' : `Show all ${data.questions.length} questions`}</button>}
+  </details>;
+}
+
+function ExamQuestionCard({ question, selected, onSelect, onRetry }) {
+  const choices = React.useMemo(() => {
+    const rawChoices = question.choices ?? question.choices_json;
+    if (Array.isArray(rawChoices)) return rawChoices;
+    if (typeof rawChoices === 'string') {
+      try { const parsed = JSON.parse(rawChoices); return Array.isArray(parsed) ? parsed : []; } catch { return []; }
+    }
+    return [];
+  }, [question.choices, question.choices_json]);
+  const correct = question.answer ? String(question.answer).trim().toLowerCase() : null;
+  const selectedChoice = choices.find((choice) => choice.key === selected || choice.text === selected);
+  const isCorrect = Boolean(selected && correct && (String(selected).trim().toLowerCase() === correct || selectedChoice?.key?.toLowerCase() === correct));
+  const prompt = String(question.prompt || '').replace(/^Sur le livret,\s*vous lisez\s*:\s*/i, '');
+  let passage = String(question.context || '').replace(/^.*?Sur le livret,\s*vous lisez\s*:\s*/i, '').replace(/^Sur le livret,\s*vous lisez\s*:\s*/i, '').replace(/\s*Cochez (?:une case|la bonne réponse)[\s\S]*$/i, '').trim();
+  if (passage.toLowerCase().startsWith(prompt.toLowerCase())) passage = passage.slice(prompt.length).trim();
+  passage = passage.replace(/^A\.\s+[\s\S]*$/i, '').trim();
+  return <article className={`exercise-preview mcq-card ${selected && correct ? (isCorrect ? 'answered-correct' : 'answered-wrong') : ''}`}>
+    <span>{question.exam_name} - {question.skill}</span>{passage && passage.toLowerCase() !== prompt.toLowerCase() && <div className="reading-passage"><strong>Read the passage</strong><p>{passage}</p></div>}<h2>{prompt}</h2>
+    {choices.length > 0 && <div className="mcq-options">{choices.map((choice) => <button key={choice.key} className={selected === choice.key && correct ? (choice.key.toLowerCase() === correct ? 'correct' : 'incorrect') : ''} onClick={() => onSelect(choice.key)} disabled={Boolean(selected)}>{choice.key}. {choice.text}</button>)}</div>}
+    {selected && correct && <div className={`mcq-feedback ${isCorrect ? 'correct' : 'incorrect'}`}><strong>{isCorrect ? 'Correct!' : 'Not quite.'}</strong><span>{isCorrect ? (question.explanation || 'Well done.') : `Correct answer: ${question.answer}`}</span>{!isCorrect && <button className="retry-button" onClick={onRetry}>Try again</button>}</div>}
+    {!correct && <small>{question.explanation}</small>}
+  </article>;
 }
 
 function SkeletonBar({ label }) {
@@ -690,7 +758,10 @@ function useApiResource(path, token) {
   const [state, setState] = React.useState({ data: null, loading: true, error: '' });
 
   React.useEffect(() => {
-    if (!token) return;
+    if (!token && path.startsWith('/api/me')) {
+      setState({ data: null, loading: false, error: '' });
+      return;
+    }
     let cancelled = false;
     setState({ data: null, loading: true, error: '' });
 
