@@ -31,16 +31,43 @@ const navItems = [
   { id: 'conversation', label: 'Conversation', icon: Mic }
 ];
 
+const viewPaths = { home: '/', session: '/session', content: '/content', past: '/past-questions', progress: '/progress', conversation: '/conversation' };
+function viewFromPath(pathname) {
+  const entry = Object.entries(viewPaths).find(([, path]) => path === pathname || (path !== '/' && pathname.startsWith(`${path}/`)));
+  return entry?.[0] || 'home';
+}
+function sectionFromPath(pathname) {
+  const match = pathname.match(/\/(?:session|content)\/(A1|A2|B1|B2)(?:\/|$)/i);
+  return match ? match[1].toUpperCase() : 'A1';
+}
+
 function App() {
   const [authView, setAuthView] = React.useState('login');
   const [session, setSession] = React.useState(null);
   const [authToken, setAuthToken] = React.useState(() => sessionStorage.getItem(TOKEN_KEY));
   const [userData, setUserData] = React.useState(null);
-  const [view, setView] = React.useState('home');
-  const [selectedSection, setSelectedSection] = React.useState('A1');
+  const [view, setView] = React.useState(() => viewFromPath(window.location.pathname));
+  const [selectedSection, setSelectedSection] = React.useState(() => sectionFromPath(window.location.pathname));
   const [loading, setLoading] = React.useState(Boolean(authToken));
   const [error, setError] = React.useState('');
   const [theme, setTheme] = React.useState(() => localStorage.getItem('franco_theme') || 'dark');
+
+  function navigate(nextView, replace = false) {
+    setView(nextView);
+    const path = nextView === 'session' || nextView === 'content' ? `${viewPaths[nextView]}/${selectedSection}` : (viewPaths[nextView] || '/');
+    window.history[replace ? 'replaceState' : 'pushState']({}, '', path);
+  }
+
+  function selectSection(nextSection) {
+    setSelectedSection(nextSection);
+    if (view === 'session' || view === 'content') window.history.replaceState({}, '', `${viewPaths[view]}/${nextSection}`);
+  }
+
+  React.useEffect(() => {
+    const onPopState = () => { setView(viewFromPath(window.location.pathname)); setSelectedSection(sectionFromPath(window.location.pathname)); };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
 
   React.useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -92,7 +119,7 @@ function App() {
       setAuthToken(payload.token);
       setSession(payload.user);
       setUserData(payload);
-      setView('home');
+      navigate('home', true);
     } catch (requestError) {
       setError(requestError.message);
     } finally {
@@ -106,7 +133,7 @@ function App() {
     setAuthToken(null);
     sessionStorage.removeItem(TOKEN_KEY);
     setAuthView('login');
-    setView('home');
+    navigate('home', true);
   }
 
   if (loading && authToken && !session) {
@@ -120,7 +147,7 @@ function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <button className="brand" onClick={() => setView('home')} aria-label="Franco home">
+        <button className="brand" onClick={() => navigate('home')} aria-label="Franco home">
           <span className="brand-mark">fr</span>
           <span>Franco</span>
         </button>
@@ -131,7 +158,7 @@ function App() {
               key={item.id}
               icon={item.icon}
               active={view === item.id}
-              onClick={() => setView(item.id)}
+              onClick={() => navigate(item.id)}
             >
               {item.label}
             </NavButton>
@@ -155,10 +182,10 @@ function App() {
       </aside>
 
       <main className={`main-content ${view === 'content' ? 'wide-content' : ''}`}>
-        {view === 'home' && <HomeScreen userData={userData} onStart={() => setView('session')} />}
-        {view === 'content' && <ContentScreen selectedSection={selectedSection} onSelectSection={setSelectedSection} />}
+        {view === 'home' && <HomeScreen userData={userData} onStart={() => navigate('session')} />}
+        {view === 'content' && <ContentScreen selectedSection={selectedSection} onSelectSection={selectSection} />}
         {view === 'past' && <PastQuestionsScreen />}
-        {view === 'session' && <SessionScreen token={authToken} selectedSection={selectedSection} onSelectSection={setSelectedSection} />}
+        {view === 'session' && <SessionScreen token={authToken} selectedSection={selectedSection} onSelectSection={selectSection} />}
         {view === 'progress' && <ProgressScreen userData={userData} />}
         {view === 'conversation' && <ConversationScreen token={authToken} />}
       </main>
@@ -444,6 +471,10 @@ function PastQuestionsScreen() {
 
 function SessionScreen({ token, selectedSection, onSelectSection }) {
   const { data, loading, error } = useApiResource(`/api/me/session-plan?section=${selectedSection}`, token);
+  const sessionExercises = React.useMemo(() => {
+    if (!data?.exercises) return [];
+    return [...data.exercises].sort(() => Math.random() - 0.5).slice(0, 10);
+  }, [data]);
 
   return (
     <section className="page-stack">
@@ -463,7 +494,7 @@ function SessionScreen({ token, selectedSection, onSelectSection }) {
       {error && <EmptyState icon={Database} title="Session fetch failed" text={error} />}
       {data && (
         <>
-          <ExerciseList exercises={data.exercises} />
+          <ExerciseList exercises={sessionExercises} />
         </>
       )}
     </section>
@@ -792,7 +823,7 @@ async function apiPost(path, body) {
 
 async function apiGet(path, token) {
   const headers = token ? { authorization: `Bearer ${token}` } : {};
-  const response = await fetch(path, { headers });
+  const response = await fetch(path, { headers, cache: 'no-store' });
   return parseApiResponse(response);
 }
 
