@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from 'node:crypto';
-import { db, migrate } from '../server/database.js';
+import { db, migrate } from '../server/legacy-sqlite.js';
 
 const SOURCE = {
   id: 'ud-fr-gsd',

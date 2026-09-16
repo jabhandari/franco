@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { db, migrate } from '../server/database.js';
+import { db, migrate } from '../server/legacy-sqlite.js';
 
 const SOURCE = {
   id: 'tv5monde-free-exercises',

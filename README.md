@@ -33,6 +33,32 @@ The dev command starts both services:
 
 The local SQLite database is created at `data/franco.sqlite`.
 
+## Content API contract
+
+The scraper-facing contract is [`schemas/content.v1.schema.json`](schemas/content.v1.schema.json). It is immutable: breaking changes require a new version. The same schema can be downloaded from `GET /api/content/v1/schema` and validated by the scraper before submission.
+
+Set `CONTENT_API_KEY` in the API environment. Send it as `X-API-Key` to submit batches. The API validates and normalizes each batch, enforces idempotency, records exact and near-duplicate candidates, and stages accepted items as `pending_review`. Review actions are available through the versioned content API; only `published` items are returned by the published-item endpoint.
+
+Example batch shape:
+
+```json
+{
+  "schema_version": "content.v1",
+  "batch_id": "ud-2026-09-15-01",
+  "idempotency_key": "ud-2026-09-15-01-retry-safe",
+  "source": {
+    "id": "example-source",
+    "name": "Example Source",
+    "url": "https://example.com",
+    "license": "CC BY 4.0",
+    "attribution": "Example Source"
+  },
+  "items": []
+}
+```
+
+Run the contract checks with `npm run test:content-contract`.
+
 To refresh the French content from UD French GSD:
 
 ```bash
