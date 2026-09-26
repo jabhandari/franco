@@ -2,6 +2,14 @@
 
 Franco is a React MVP shell for a French learning platform. The current app is authentication-first and uses a local Node API with SQLite for users, sessions, learner profiles, progress rows, attempts, and mistakes.
 
+## Backend data model
+
+The Supabase PostgreSQL storage model is documented in [`supabase/schema.sql`](./supabase/schema.sql), with a relationship overview and guidance in [`supabase/README.md`](./supabase/README.md). Use those files when working with backend tables and columns; they describe the Supabase database, not the browser API response format.
+
+### Import the normalized dataset
+
+With `DATABASE_URL` set to the Supabase PostgreSQL connection string in `.env`, run `npm run import:normalized` to insert the rows from `normalized-content.json`. The importer follows the foreign-key order and skips rows that already exist, so it can be safely rerun.
+
 ## Run locally
 
 This project requires Node.js 22.12.0. If you use nvm, load the pinned version with:
