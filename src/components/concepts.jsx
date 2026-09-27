@@ -275,6 +275,40 @@ export function ConceptRoadmap({ level, token, onSelectSection }) {
   );
 }
 
+// Learner-facing labels for Lexique part-of-speech codes stored in the
+// vocabulary topic rows (e.g. {"lemma":"accord","pos":"NOM","gender":"m",...}).
+const POS_LABELS = {
+  NOM: 'noun', VER: 'verb', AUX: 'auxiliary verb', ADJ: 'adjective',
+  ADV: 'adverb', PRE: 'preposition', PRO: 'pronoun', CON: 'conjunction',
+  ART: 'article', DET: 'determiner', NUM: 'number',
+  INT: 'interjection', ONO: 'interjection',
+};
+
+// Turn a vocabulary topic's item value into a short human-readable
+// description. Vocabulary rows store Lexique metadata as a JSON string;
+// render it as "noun · masculine · very common (#145)" instead of raw JSON.
+// Plain-text topics (e.g. "le / la / l’ / les") render unchanged.
+function describeWord(item) {
+  if (typeof item !== 'string') return safeText(item);
+  let parsed = null;
+  try { parsed = JSON.parse(item); } catch { parsed = null; }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || !parsed.pos) {
+    return safeText(item);
+  }
+  const posKey = String(parsed.pos).split(':')[0].toUpperCase();
+  const parts = [POS_LABELS[posKey] || posKey.toLowerCase()];
+  if (parsed.gender === 'm') parts.push('masculine');
+  if (parsed.gender === 'f') parts.push('feminine');
+  if (parsed.number === 's') parts.push('singular');
+  if (parsed.number === 'p') parts.push('plural');
+  const rank = Number(parsed.freq_rank);
+  if (Number.isFinite(rank) && rank > 0) {
+    const bucket = rank <= 100 ? 'very common' : rank <= 1000 ? 'common' : 'less common';
+    parts.push(`${bucket} (#${rank})`);
+  }
+  return parts.join(' · ');
+}
+
 // Vocabulary topics for a CEFR section, backed by the server.
 export function TopicTracks({ section }) {
   const { data, loading, error } = useApiResource(`/api/content/topics?section=${section}`);
@@ -290,17 +324,22 @@ export function TopicTracks({ section }) {
       <h2>{section} learning tracks</h2>
       <p className="muted">Vocabulary, spelling, and practical topics from the {section} study plan.</p>
       <div className="topic-grid">
-        {categories.map((category) => (
-          <div className="topic-group" key={category}>
-            <h3>{category}</h3>
-            {topics.filter((topic) => topic.category === category).map((topic) => (
-              <div className="topic-item" key={topic.id}>
-                <strong>{topic.title}</strong>
-                <span>{topic.item}</span>
+        {categories.map((category) => {
+          const categoryTopics = topics.filter((topic) => topic.category === category);
+          return (
+            <div className={`topic-group${categoryTopics.length > 8 ? ' topic-group--wide' : ''}`} key={category}>
+              <h3>{safeText(category)}</h3>
+              <div className="topic-words">
+                {categoryTopics.map((topic) => (
+                  <div className="topic-word" key={topic.id}>
+                    <strong>{safeText(topic.title)}</strong>
+                    <span>{describeWord(topic.item)}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
     </section>
   );

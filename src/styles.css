@@ -515,11 +515,18 @@ html:not([data-theme="light"]) .error-message {
 .topic-panel { display: grid; gap: 14px; }
 .topic-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .topic-group { padding: 14px; border: 1px solid #e7ddd1; border-radius: 8px; background: #fff; }
-.topic-group h3 { margin: 0 0 10px; color: #156064; font-size: 15px; }
+.topic-group h3 { margin: 0 0 10px; color: #156064; font-size: 15px; text-transform: capitalize; }
+.topic-group--wide { grid-column: 1 / -1; }
 .topic-item { display: grid; gap: 3px; padding: 8px 0; border-top: 1px solid #eee5da; }
 .topic-item:first-of-type { border-top: 0; }
 .topic-item strong { color: #243b53; font-size: 13px; }
 .topic-item span { color: #687178; font-size: 13px; }
+/* Word lists (e.g. the vocabulary track) flow across columns so long lists
+   fill the row instead of stacking one very tall column. */
+.topic-words { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 4px 24px; }
+.topic-word { display: flex; align-items: baseline; gap: 8px; padding: 6px 0; min-width: 0; }
+.topic-word strong { color: #243b53; font-size: 13px; white-space: nowrap; }
+.topic-word span { color: #687178; font-size: 12px; overflow-wrap: anywhere; }
 
 summary {
   cursor: pointer;
@@ -601,6 +608,10 @@ h1,h2,h3 { color:#f4f8ff; letter-spacing:-.035em; }
 .primary-button:hover { transform:translateY(-2px); box-shadow:0 16px 34px rgba(240,79,119,.36); }
 .empty-state { background:rgba(12,24,40,.55); border-color:#2b4764; color:#a7b7ca; }
 .record-list div,.topic-item { background:rgba(20,35,56,.8); border-color:#294661; }
+html[data-theme="light"] .topic-word strong { color:#243b53; }
+html[data-theme="light"] .topic-word span { color:#687178; }
+.topic-word strong { color:#dce6f2; }
+.topic-word span { color:#91a3bb; }
 .section-tabs button { background:rgba(15,26,43,.82); border-color:#294661; color:#d8e8fb; }
 .section-tabs button.selected { background:rgba(49,178,169,.18); border-color:#5eead4; color:#8ff8e7; }
 .example-card p,.exercise-preview p,.clean-list { color:#d4e0ee; }
