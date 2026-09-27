@@ -1,5 +1,5 @@
 import React from 'react';
-import { Database } from 'lucide-react';
+import { Database, Search, X } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { safeText } from '../api/client.js';
 import { EmptyState } from './ui.jsx';
@@ -309,6 +309,74 @@ function describeWord(item) {
   return parts.join(' · ');
 }
 
+// One category group inside the learning tracks. The vocabulary group gets a
+// search button in its top-right corner; expanding it filters the group's
+// words live as the learner types.
+function TopicGroup({ category, topics }) {
+  const [searchOpen, setSearchOpen] = React.useState(false);
+  const [query, setQuery] = React.useState('');
+  const searchable = category === 'vocabulary';
+
+  const closeSearch = () => {
+    setQuery('');
+    setSearchOpen(false);
+  };
+
+  const term = query.trim().toLowerCase();
+  const visible = !searchable || !term
+    ? topics
+    : topics.filter((topic) => {
+        const haystack = `${safeText(topic.title)} ${describeWord(topic.item)}`.toLowerCase();
+        return haystack.includes(term);
+      });
+
+  return (
+    <div className={`topic-group${topics.length > 8 ? ' topic-group--wide' : ''}`}>
+      <div className="topic-group-head">
+        <h3>{safeText(category)}</h3>
+        {searchable && (
+          <div className="topic-search">
+            {searchOpen ? (
+              <>
+                <input
+                  autoFocus
+                  type="text"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Escape') closeSearch();
+                  }}
+                  placeholder="Search words"
+                  aria-label="Search vocabulary words"
+                />
+                <button type="button" className="topic-search-btn" onClick={closeSearch} aria-label="Close search" title="Close search">
+                  <X size={15} aria-hidden="true" />
+                </button>
+              </>
+            ) : (
+              <button type="button" className="topic-search-btn" onClick={() => setSearchOpen(true)} aria-label="Search vocabulary words" title="Search">
+                <Search size={15} aria-hidden="true" />
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+      {visible.length === 0 ? (
+        <p className="muted">No words match your search.</p>
+      ) : (
+        <div className="topic-words">
+          {visible.map((topic) => (
+            <div className="topic-word" key={topic.id}>
+              <strong>{safeText(topic.title)}</strong>
+              <span>{describeWord(topic.item)}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Vocabulary topics for a CEFR section, backed by the server.
 export function TopicTracks({ section }) {
   const { data, loading, error } = useApiResource(`/api/content/topics?section=${section}`);
@@ -324,22 +392,13 @@ export function TopicTracks({ section }) {
       <h2>{section} learning tracks</h2>
       <p className="muted">Vocabulary, spelling, and practical topics from the {section} study plan.</p>
       <div className="topic-grid">
-        {categories.map((category) => {
-          const categoryTopics = topics.filter((topic) => topic.category === category);
-          return (
-            <div className={`topic-group${categoryTopics.length > 8 ? ' topic-group--wide' : ''}`} key={category}>
-              <h3>{safeText(category)}</h3>
-              <div className="topic-words">
-                {categoryTopics.map((topic) => (
-                  <div className="topic-word" key={topic.id}>
-                    <strong>{safeText(topic.title)}</strong>
-                    <span>{describeWord(topic.item)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        })}
+        {categories.map((category) => (
+          <TopicGroup
+            key={category}
+            category={category}
+            topics={topics.filter((topic) => topic.category === category)}
+          />
+        ))}
       </div>
     </section>
   );
