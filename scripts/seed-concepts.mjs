@@ -6,13 +6,13 @@ await migrate();
 
 const idFor = (slug) => createHash('sha256').update(`concept:${slug}`).digest('hex');
 
-for (const concept of concepts) {
+for (const [index, concept] of concepts.entries()) {
   await pool.query(
-    `INSERT INTO concepts(id,slug,title,description,concept_type,level_code,metadata_json)
-     VALUES($1,$2,$3,$4,$5,$6,$7)
+    `INSERT INTO concepts(id,slug,title,description,concept_type,level_code,list_order,metadata_json)
+     VALUES($1,$2,$3,$4,$5,$6,$7,$8)
      ON CONFLICT(slug) DO UPDATE SET title=EXCLUDED.title,description=EXCLUDED.description,
-       concept_type=EXCLUDED.concept_type,level_code=EXCLUDED.level_code,metadata_json=EXCLUDED.metadata_json`,
-    [idFor(concept.id), concept.id, concept.title, concept.shortDescription, concept.category, concept.level,
+       concept_type=EXCLUDED.concept_type,level_code=EXCLUDED.level_code,list_order=EXCLUDED.list_order,metadata_json=EXCLUDED.metadata_json`,
+    [idFor(concept.id), concept.id, concept.title, concept.shortDescription, concept.category, concept.level, index,
      JSON.stringify({ theory: concept.theory, vocabulary: concept.vocabulary, examples: concept.examples, sources: concept.sources, stub: concept.stub })]
   );
 }

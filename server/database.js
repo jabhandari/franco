@@ -38,6 +38,7 @@ export async function migrate() {
     ALTER TABLE content_concepts ADD COLUMN IF NOT EXISTS is_primary BOOLEAN NOT NULL DEFAULT FALSE;
     ALTER TABLE content_concepts ADD COLUMN IF NOT EXISTS weight REAL NOT NULL DEFAULT 1.0;
     CREATE TABLE IF NOT EXISTS concept_prerequisites (concept_id TEXT NOT NULL REFERENCES concepts(id) ON DELETE CASCADE, prerequisite_concept_id TEXT NOT NULL REFERENCES concepts(id) ON DELETE CASCADE, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), PRIMARY KEY(concept_id, prerequisite_concept_id), CHECK (concept_id <> prerequisite_concept_id));
+    ALTER TABLE concepts ADD COLUMN IF NOT EXISTS list_order INTEGER;
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS correct BOOLEAN;
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS attempt_number INTEGER;
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS session_id TEXT;

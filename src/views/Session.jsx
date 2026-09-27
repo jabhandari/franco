@@ -1,114 +1,53 @@
 import React from 'react';
-import { BookOpen, RotateCcw, Zap } from 'lucide-react';
+import { BookOpen, Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { ExerciseCard } from '../components/exercises/ExerciseCard.jsx';
-import { EmptyState, QueueKindLabel, RecordCount } from '../components/ui.jsx';
+import { EmptyState } from '../components/ui.jsx';
 
 const SECTIONS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
+// Restored original session display: the full question list under the level
+// tabs, instead of the one-at-a-time stepper. The queue itself is still the
+// adaptive server-ordered one (due reviews, new items, weak concepts — never
+// client-side random), and every card reports its answer to /api/me/attempts.
 export function Session({ token }) {
   const [selectedSection, setSelectedSection] = React.useState('A1');
-  const [runId, setRunId] = React.useState(0);
-  const [index, setIndex] = React.useState(0);
-  const [correctCount, setCorrectCount] = React.useState(0);
-  const [answeredCount, setAnsweredCount] = React.useState(0);
-
-  const { data, loading, error } = useApiResource(
-    `/api/me/session-plan?section=${selectedSection}&run=${runId}`,
-    token
-  );
-
-  React.useEffect(() => {
-    setIndex(0);
-    setCorrectCount(0);
-    setAnsweredCount(0);
-  }, [selectedSection, runId]);
-
+  const [resetKey, setResetKey] = React.useState(0);
+  const { data, loading, error } = useApiResource(`/api/me/session-plan?section=${selectedSection}`, token);
   const queue = data?.queue || [];
-  const entry = queue[index];
-  const finished = queue.length > 0 && index >= queue.length;
-
-  function handleResult(result) {
-    if (!result || result.error) return;
-    setAnsweredCount((n) => n + 1);
-    if (result.correct) setCorrectCount((n) => n + 1);
-  }
 
   return (
-    <div className="stack">
-      <div className="panel">
-        <div className="panel-title">
-          <div>
-            <p className="eyebrow">Adaptive session</p>
-            <h2>Your next session</h2>
-          </div>
-          <Zap size={20} aria-hidden="true" />
-        </div>
-        <p className="muted">
-          Built from your spaced-repetition reviews, new items at your level, and
-          your weakest concepts — no random ordering.
-        </p>
-        <div className="section-tabs">
-          {SECTIONS.map((section) => (
-            <button
-              key={section}
-              className={`section-tab ${selectedSection === section ? 'active' : ''}`}
-              onClick={() => setSelectedSection(section)}
-            >
-              {section}
-            </button>
-          ))}
-        </div>
-        <div className="session-stats">
-          <RecordCount count={data?.reviewsDue ?? 0} label="reviews due" />
-          <RecordCount count={queue.length} label="items queued" />
-          <RecordCount count={answeredCount} label="answered" />
-          <RecordCount count={correctCount} label="correct" />
-        </div>
+    <section className="page-stack">
+      <p className="eyebrow">Daily session</p>
+      <h1 className="page-title">{selectedSection} session queue</h1>
+      <p className="lede">
+        Your adaptive queue: spaced-repetition reviews first, then new items at your level, then your weakest concepts.
+      </p>
+      <div className="section-tabs compact" role="group" aria-label="Choose session level">
+        {SECTIONS.map((section) => (
+          <button key={section} className={selectedSection === section ? 'selected' : ''} onClick={() => setSelectedSection(section)}>
+            <strong>{section}</strong>
+          </button>
+        ))}
       </div>
-
-      {loading && <p className="muted">Building your session…</p>}
-      {error && <p className="error-message">{error}</p>}
-
+      {loading && <EmptyState icon={Database} title="Preparing your session" text="Loading questions for this level." />}
+      {error && <EmptyState icon={Database} title="Session fetch failed" text={error} />}
       {!loading && !error && !queue.length && (
-        <EmptyState
-          icon={BookOpen}
-          title="No items available"
-          text="Nothing is queued for this level yet. Try another level or come back after your next review window."
-        />
+        <EmptyState icon={BookOpen} title="No exercises yet" text="Nothing is queued for this level yet. Try another level or check back after your next review window." />
       )}
-
-      {!loading && !error && entry && !finished && (
-        <div className="session-runner">
-          <div className="session-progress">
-            <span>Question {index + 1} of {queue.length}</span>
-            <QueueKindLabel kind={entry.queue_kind} />
+      {!loading && !error && queue.length > 0 && (
+        <>
+          <div className="session-toolbar">
+            <span>{queue.length} questions{(data?.reviewsDue ?? 0) > 0 && ` · ${data.reviewsDue} reviews due`}</span>
+            <button className="reset-button" onClick={() => setResetKey((value) => value + 1)}>Reset all</button>
           </div>
-          <ExerciseCard key={`${entry.item_kind}-${entry.id}`} entry={entry} token={token} onResult={handleResult} />
-          <div className="session-nav">
-            <button className="retry-button" onClick={() => setIndex((i) => Math.max(0, i - 1))} disabled={index === 0}>
-              Back
-            </button>
-            <button className="primary-button" onClick={() => setIndex((i) => i + 1)}>
-              {index + 1 === queue.length ? 'Finish session' : 'Next'}
-            </button>
+          <div className="exercise-list">
+            {queue.map((entry) => (
+              <ExerciseCard key={`${resetKey}-${entry.item_kind}-${entry.id}`} entry={entry} token={token} />
+            ))}
           </div>
-        </div>
+        </>
       )}
-
-      {!loading && !error && finished && (
-        <div className="panel">
-          <div className="panel-title">
-            <div>
-              <p className="eyebrow">Session complete</p>
-              <h2>{correctCount} of {answeredCount} correct</h2>
-            </div>
-            <RotateCcw size={20} aria-hidden="true" />
-          </div>
-          <p className="muted">Your SM-2 schedule and concept mastery were updated from every answer.</p>
-          <button className="primary-button" onClick={() => setRunId((r) => r + 1)}>Start a new session</button>
-        </div>
-      )}
-    </div>
+    </section>
   );
 }

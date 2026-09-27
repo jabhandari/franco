@@ -2,12 +2,11 @@ import React from 'react';
 import { BookOpen, PenLine, Mic, Library } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { ExerciseCard } from '../components/exercises/ExerciseCard.jsx';
-import { ConceptRoadmap, TopicTracks } from '../components/concepts.jsx';
+import { ConceptRoadmap, LevelGuide, TopicTracks } from '../components/concepts.jsx';
 import { EmptyState } from '../components/ui.jsx';
 
 const SECTIONS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-const TABS = [
-  { id: 'roadmap', label: 'Roadmap', icon: BookOpen },
+const LIBRARY_TABS = [
   { id: 'writing', label: 'Writing', icon: PenLine },
   { id: 'speaking', label: 'Speaking', icon: Mic },
   { id: 'vocabulary', label: 'Vocabulary', icon: Library },
@@ -47,45 +46,34 @@ function CanonicalList({ type, section, token }) {
 
 export function Content({ token }) {
   const [selectedSection, setSelectedSection] = React.useState('A1');
-  const [activeTab, setActiveTab] = React.useState('roadmap');
+  const [libraryTab, setLibraryTab] = React.useState('vocabulary');
 
   return (
-    <div className="stack">
-      <div className="panel">
+    <section className="map-only-page">
+      <ConceptRoadmap level={selectedSection} token={token} onSelectSection={setSelectedSection} />
+      <LevelGuide section={selectedSection} />
+      <section className="panel">
         <div className="panel-title">
           <div>
-            <p className="eyebrow">Learn</p>
-            <h2>Content library</h2>
+            <p className="eyebrow">Study library</p>
+            <h2>More {selectedSection} content</h2>
           </div>
         </div>
-        <div className="section-tabs">
-          {SECTIONS.map((section) => (
-            <button
-              key={section}
-              className={`section-tab ${selectedSection === section ? 'active' : ''}`}
-              onClick={() => setSelectedSection(section)}
-            >
-              {section}
-            </button>
-          ))}
-        </div>
         <div className="tab-row">
-          {TABS.map(({ id, label, icon: Icon }) => (
+          {LIBRARY_TABS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
-              className={`section-tab ${activeTab === id ? 'active' : ''}`}
-              onClick={() => setActiveTab(id)}
+              className={`section-tab ${libraryTab === id ? 'active' : ''}`}
+              onClick={() => setLibraryTab(id)}
             >
               <Icon size={14} aria-hidden="true" /> {label}
             </button>
           ))}
         </div>
-      </div>
-
-      {activeTab === 'roadmap' && <ConceptRoadmap level={selectedSection} token={token} />}
-      {activeTab === 'writing' && <CanonicalList type="writing_prompt" section={selectedSection} token={token} />}
-      {activeTab === 'speaking' && <CanonicalList type="speaking_prompt" section={selectedSection} token={token} />}
-      {activeTab === 'vocabulary' && <TopicTracks section={selectedSection} />}
-    </div>
+      </section>
+      {libraryTab === 'writing' && <CanonicalList type="writing_prompt" section={selectedSection} token={token} />}
+      {libraryTab === 'speaking' && <CanonicalList type="speaking_prompt" section={selectedSection} token={token} />}
+      {libraryTab === 'vocabulary' && <TopicTracks section={selectedSection} />}
+    </section>
   );
 }

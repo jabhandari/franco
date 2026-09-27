@@ -251,7 +251,7 @@ async function main() {
                 return json(res, 200, { items: rows.map((r) => shapeContentItem(r, null, mediaByItem)) });
             }
             if (req.method === 'GET' && u.pathname === '/api/content/v1/concepts') {
-                const concepts = await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status,metadata_json FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST,title");
+                const concepts = await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status,metadata_json FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST, list_order NULLS LAST, title");
                 const prereqs = await query('SELECT concept_id,prerequisite_concept_id FROM concept_prerequisites');
                 const slugById = new Map(concepts.map((c) => [c.id, c.slug]));
                 return json(res, 200, { concepts: concepts.map((c) => ({ id: c.id, slug: c.slug, title: c.title, description: c.description, concept_type: c.concept_type, level_code: c.level_code, parent_id: c.parent_id, status: c.status, metadata: c.metadata_json || {}, prerequisites: prereqs.filter((p) => p.concept_id === c.id).map((p) => slugById.get(p.prerequisite_concept_id)).filter(Boolean) })) });
@@ -328,7 +328,7 @@ async function main() {
                 : 'Introduce yourself: name, where you live, what you do.';
               return json(res, 200, {
                 scenario,
-                targets: concepts.map((c) => ({ id: c.id, section: c.level_code || level, text: c.description || c.title })),
+                targets: concepts.map((c) => ({ id: c.id, section: c.level_code || level, title: c.title, text: c.description || c.title })),
                 message: weak.length
                   ? `Based on your ${weak.length} weakest tracked concept${weak.length === 1 ? '' : 's'}.`
                   : 'No attempts yet — showing starter concepts for your level. Complete exercises to personalize this.',

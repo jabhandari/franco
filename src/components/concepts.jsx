@@ -1,221 +1,247 @@
 import React from 'react';
-import { Award, BookOpen, CheckCircle, Circle, ChevronRight } from 'lucide-react';
+import { Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { PanelHeading, RecordCount } from './ui.jsx';
+import { EmptyState } from './ui.jsx';
 
-// Concepts come from the server's canonical store (seeded from
-// scripts/concept-data.mjs). Edges are derived from prerequisite data,
-// never from hardcoded array indices.
+// Restored original roadmap display: the interactive concept tree with a
+// spine, SVG connectors, numbered nodes, and a click-to-open lesson modal.
+// Data now comes from /api/content/v1/concepts (DB-backed) instead of the
+// hardcoded frontend file, and edges are derived from prerequisite slugs —
+// never from hardcoded array indices. Node order follows the curated seed
+// order (list_order), which the hand-tuned roadmap-node-N grid positions
+// were designed around.
+
+export const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
+export const levelGuides = {
+  A1: { label: 'Breakthrough', goal: 'Handle familiar words and simple everyday phrases.', focus: 'Greetings, identity, numbers, time, articles, and present-tense verbs.', read: 'Short notices, messages, menus, and simple personal descriptions.' },
+  A2: { label: 'Waystage', goal: 'Understand the main point in predictable everyday situations.', focus: 'Routine tasks, past events, descriptions, directions, and common connectors.', read: 'Short emails, schedules, advertisements, and straightforward stories.' },
+  B1: { label: 'Threshold', goal: 'Follow the essential meaning of clear speech and texts on familiar topics.', focus: 'Opinions, experiences, explanations, narrative tenses, and paragraph structure.', read: 'Articles, interviews, personal accounts, and practical workplace texts.' },
+  B2: { label: 'Vantage', goal: 'Understand detailed arguments and communicate with growing precision.', focus: 'Nuance, register, cohesion, complex grammar, and topic-specific vocabulary.', read: 'Longer articles, reports, editorials, and interviews with implicit meaning.' },
+  C1: { label: 'Effective proficiency', goal: 'Use French flexibly and effectively for social, academic, and professional purposes.', focus: 'Implicit meaning, stylistic control, complex argumentation, and precise vocabulary.', read: 'Long demanding texts, literature, and specialised articles.' },
+  C2: { label: 'Mastery', goal: 'Understand virtually everything with ease and express yourself with precision.', focus: 'Fine shades of meaning, idiomatic control, and effortless adaptation to context.', read: 'Anything: abstract, literary, and technically dense material.' },
+};
+
+export function LevelGuide({ section }) {
+  const guide = levelGuides[section];
+  if (!guide) return null;
+  return (
+    <section className="level-guide panel">
+      <div><span className="eyebrow">{section} · {guide.label}</span><h2>{guide.goal}</h2></div>
+      <div className="guide-columns"><div><strong>Focus</strong><p>{guide.focus}</p></div><div><strong>Reading practice</strong><p>{guide.read}</p></div></div>
+      <small>Level descriptors adapted from the <a href="https://www.coe.int/en/web/common-european-framework-reference-languages/cefr-descriptors" target="_blank" rel="noreferrer">Council of Europe CEFR descriptors</a>.</small>
+    </section>
+  );
+}
+
+// Adapt an API concept to the node shape the roadmap components render.
+function toNode(concept) {
+  const meta = concept.metadata || {};
+  return {
+    id: concept.slug,
+    title: concept.title,
+    category: concept.concept_type,
+    level: concept.level_code,
+    shortDescription: concept.description,
+    theory: meta.theory || [],
+    vocabulary: meta.vocabulary || [],
+    examples: meta.examples || [],
+    sources: meta.sources || [],
+    stub: Boolean(meta.stub),
+  };
+}
+
+// Nodes for one level in curated seed order; edges derived from the
+// prerequisite DAG (slug -> index pairs).
 function levelNodes(concepts, level) {
-  const nodes = concepts.filter((concept) => concept.level_code === level);
-  const index = new Map(nodes.map((node, i) => [node.slug, i]));
+  const raw = concepts.filter((concept) => concept.level_code === level);
+  const nodes = raw.map(toNode);
+  const index = new Map(nodes.map((node, i) => [node.id, i]));
   const edges = [];
-  for (const node of nodes) {
-    for (const prereq of node.prerequisites || []) {
-      if (index.has(prereq) && index.has(node.slug)) {
-        edges.push([index.get(prereq), index.get(node.slug)]);
+  for (const concept of raw) {
+    for (const prereq of concept.prerequisites || []) {
+      if (index.has(prereq) && index.has(concept.slug)) {
+        edges.push([index.get(prereq), index.get(concept.slug)]);
       }
     }
   }
   return { nodes, edges };
 }
 
-export function RoadmapConnectors({ nodes, edges }) {
-  const rows = 3;
-  const cols = Math.ceil(nodes.length / rows);
-  const cardWidth = 220;
-  const cardHeight = 110;
-  const padding = 50;
-  const position = (index) => {
-    const row = index % rows;
-    const col = Math.floor(index / rows);
-    return { x: padding + col * (cardWidth + 60), y: padding + row * (cardHeight + 50) };
-  };
-  const width = Math.max(300, padding * 2 + (cols - 1) * (cardWidth + 60) + cardWidth);
-  const height = padding * 2 + rows * cardHeight + (rows - 1) * 50;
-
-  const pathFor = ([from, to]) => {
-    const start = position(from);
-    const end = position(to);
-    const x1 = start.x + cardWidth / 2;
-    const y1 = start.y;
-    const x2 = end.x + cardWidth / 2;
-    const y2 = end.y;
-    const dx = Math.abs(x2 - x1);
-    const curve = Math.min(60, dx / 2);
-    const startDir = y2 > y1 ? 1 : -1;
-    const endDir = y2 > y1 ? -1 : 1;
-    return `M ${x1} ${y1} C ${x1} ${y1 + startDir * curve}, ${x2} ${y2 + endDir * curve}, ${x2} ${y2}`;
-  };
-
+export function RoadmapConnectors({ section, edges }) {
+  const [shape, setShape] = React.useState({ width: 0, height: 0, paths: [] });
+  React.useLayoutEffect(() => {
+    const update = () => {
+      const canvas = document.querySelector(`.roadmap-${section.toLowerCase()}`);
+      if (!canvas) return;
+      const cards = [...canvas.querySelectorAll('.roadmap-node')];
+      const base = canvas.getBoundingClientRect();
+      const points = cards.map((card) => {
+        const r = card.getBoundingClientRect();
+        return { x: r.left - base.left + r.width / 2, top: r.top - base.top, bottom: r.bottom - base.top };
+      });
+      const paths = edges
+        .filter(([a, b]) => points[a] && points[b])
+        .map(([a, b]) => {
+          const from = points[a];
+          const to = points[b];
+          const mid = from.bottom + (to.top - from.bottom) * 0.5;
+          return `M ${from.x} ${from.bottom} C ${from.x} ${mid}, ${to.x} ${mid}, ${to.x} ${to.top}`;
+        });
+      setShape({ width: base.width, height: base.height, paths });
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, [section, edges]);
+  if (!shape.width) return null;
   return (
-    <svg className="roadmap-connectors" width={width} height={height} aria-hidden="true">
-      <defs>
-        <marker id="roadmap-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M 0 1 L 9 5 L 0 9 z" fill="#94a3b8" />
-        </marker>
-      </defs>
-      {edges.map(([from, to]) => (
-        <path key={`${from}-${to}`} d={pathFor([from, to])} className="roadmap-edge" markerEnd="url(#roadmap-arrow)" />
-      ))}
-      {nodes.map((node, index) => {
-        const { x, y } = position(index);
-        return <circle key={node.slug} cx={x + cardWidth / 2} cy={y} r="5" className="roadmap-anchor" />;
-      })}
+    <svg className="roadmap-connectors" viewBox={`0 0 ${shape.width} ${shape.height}`} preserveAspectRatio="none" aria-hidden="true">
+      <path d={shape.paths.join(' ')} />
     </svg>
   );
 }
 
-export function ConceptMap({ concepts, level, selectedId, onSelect, completedIds = [] }) {
-  const { nodes, edges } = levelNodes(concepts, level);
-
+export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectConcept, onSelectSection }) {
+  const active = nodes.find((node) => node.id === activeConceptId);
   return (
-    <div className="concept-map-scroll">
-      <div className="concept-map">
-        <RoadmapConnectors nodes={nodes} edges={edges} />
-        {nodes.map((concept) => {
-          const completed = completedIds.includes(concept.slug);
-          return (
-            <button
-              key={concept.slug}
-              className={`concept-card ${selectedId === concept.slug ? 'selected' : ''} ${concept.metadata?.stub ? 'stub' : ''}`}
-              onClick={() => onSelect(concept.slug === selectedId ? null : concept.slug)}
-            >
-              <div className="concept-icon">
-                {completed ? <CheckCircle size={22} /> : <Circle size={22} />}
-              </div>
-              <h3>{concept.title}</h3>
-              <p>{concept.description}</p>
-              {concept.metadata?.stub && <span className="stub-badge">Stub</span>}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-export function RoadmapTable({ concepts, level, onSelect }) {
-  const { nodes, edges } = levelNodes(concepts, level);
-  const index = new Map(nodes.map((node, i) => [node.slug, i]));
-
-  return (
-    <div className="panel roadmap-table">
-      <h2>{level} curriculum roadmap</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Step</th>
-            <th>Concept</th>
-            <th>Focus</th>
-            <th>Prerequisites</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {nodes.map((concept, i) => (
-            <tr key={concept.slug}>
-              <td>{i + 1}</td>
-              <td>
-                <strong>{concept.title}</strong>
-                {concept.metadata?.stub && <span className="stub-badge">Stub</span>}
-              </td>
-              <td>{concept.concept_type}</td>
-              <td>{(concept.prerequisites || []).length ? concept.prerequisites.join(', ') : '—'}</td>
-              <td>
-                <button className="link-button" onClick={() => onSelect(concept.slug)}>
-                  View <ChevronRight size={14} />
-                </button>
-              </td>
-            </tr>
+    <section className={`concept-map panel ${active ? 'has-modal' : ''}`}>
+      <div className="roadmap-heading">
+        <div className="roadmap-levels">
+          {LEVELS.map((level) => (
+            <button key={level} className={section === level ? 'selected' : ''} onClick={() => onSelectSection(level)}>{level}</button>
           ))}
-        </tbody>
-      </table>
-      <p className="muted">{nodes.length} concepts · {edges.length} prerequisite links</p>
-    </div>
-  );
-}
-
-export function ConceptDetail({ concept, onClose }) {
-  if (!concept) return null;
-  const meta = concept.metadata || {};
-
-  return (
-    <section className="concept-detail panel">
-      <div className="concept-detail-head">
-        <div>
-          <p className="eyebrow">{concept.level_code} · {concept.concept_type}</p>
-          <h2>{concept.title}</h2>
-          <p className="lede">{concept.description}</p>
-          {meta.stub && <span className="stub-badge">Stub — full lesson not yet authored</span>}
         </div>
-        <button className="retry-button" onClick={onClose}>Close</button>
+        <span className="roadmap-badge">{nodes.length} concepts</span>
       </div>
-
-      {(meta.theory || []).map(([kind, text], index) => (
-        <div key={index} className={`theory-block theory-${kind}`}>
-          {kind === 'idea' && <Award size={16} />}
-          {kind === 'tip' && <BookOpen size={16} />}
-          <p>{text}</p>
+      <div className={`roadmap-canvas roadmap-${section.toLowerCase()}`}>
+        <div className="roadmap-spine" />
+        <RoadmapConnectors section={section} edges={edges} />
+        {nodes.map((node, index) => (
+          <button
+            className={`roadmap-node roadmap-node-${index + 1} ${activeConceptId === node.id ? 'active' : ''}`}
+            key={node.id}
+            onClick={() => onSelectConcept(activeConceptId === node.id ? null : node.id)}
+          >
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <strong>{node.title}</strong>
+            <small>{node.category}</small>
+            <i />
+          </button>
+        ))}
+      </div>
+      {active && (
+        <div className="concept-modal" role="dialog" aria-modal="true">
+          <button className="concept-modal-close" onClick={() => onSelectConcept(null)} aria-label="Close lesson">×</button>
+          <div className="concept-modal-scroll"><ConceptDetail concept={active} /></div>
         </div>
-      ))}
-
-      {(meta.vocabulary || []).length > 0 && (
-        <div className="vocab-grid">
-          <h3>Vocabulary</h3>
-          <div className="vocab-cards">
-            {meta.vocabulary.map((item) => (
-              <div key={item.word} className="vocab-card">
-                <strong>{item.word}</strong>
-                <span>{item.meaning}</span>
-                {item.note && <em>{item.note}</em>}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {(meta.examples || []).length > 0 && (
-        <div>
-          <h3>Examples</h3>
-          <ul className="example-list">
-            {meta.examples.map((example, index) => (
-              <li key={index}>
-                <strong>{example.french}</strong>
-                <span>{example.english}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {(meta.sources || []).length > 0 && (
-        <p className="muted small">Sources: {meta.sources.join(', ')}</p>
       )}
     </section>
   );
 }
 
-// Fetches canonical concepts once and renders the roadmap for a level.
-export function ConceptRoadmap({ level, token }) {
+export function RoadmapTable({ section, nodes, onSelectSection }) {
+  return (
+    <section className="roadmap-table-page">
+      <div className="roadmap-levels">
+        {LEVELS.map((level) => (
+          <button key={level} className={section === level ? 'selected' : ''} onClick={() => onSelectSection(level)}>{level}</button>
+        ))}
+      </div>
+      <div className="roadmap-table">
+        <div className="roadmap-table-head"><span>Concept</span><span>Area</span><span>What you will learn</span></div>
+        {nodes.map((node, index) => (
+          <div className="roadmap-table-row" key={node.id}>
+            <span><b>{String(index + 1).padStart(2, '0')}</b>{node.title}</span>
+            <small>{node.category}</small>
+            <p>{node.shortDescription}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function ConceptDetail({ concept }) {
+  if (!concept) return null;
+  return (
+    <article className="concept-detail">
+      <div>
+        <span className="eyebrow">{concept.category} · {concept.level}</span>
+        <h2>{concept.title}</h2>
+        <p className="concept-subtitle">{concept.shortDescription}</p>
+        {concept.stub && <p className="muted small">Full lesson content for this concept is still being authored.</p>}
+      </div>
+      <div className="theory-blocks">
+        {concept.theory.map((block, index) => block[0] === 'table' ? (
+          <div className="theory-table" key={index}>
+            {block.slice(1).map((cell, cellIndex) => <span key={cellIndex}>{cell}</span>)}
+          </div>
+        ) : (
+          <div className={`theory-card ${block[0]}`} key={index}>
+            <strong>{block[0] === 'idea' ? 'The idea' : block[0] === 'rule' ? block[1] : block[0] === 'tip' ? 'Tip' : 'Example'}</strong>
+            <p>{block[0] === 'rule' ? block[2] : block[0] === 'example' ? block[2] : block[1]}</p>
+            {block[0] === 'rule' && <code>{block[2]}</code>}
+          </div>
+        ))}
+      </div>
+      {concept.vocabulary.length > 0 && (
+        <div className="related-vocab">
+          <strong>Vocabulary</strong>
+          <div>{concept.vocabulary.map((word) => <span key={word}>{word}</span>)}</div>
+        </div>
+      )}
+      {concept.examples.length > 0 && (
+        <div className="related-examples">
+          <strong>Examples</strong>
+          {concept.examples.map(([french, english], index) => (
+            <p key={index}><strong>{french}</strong><span>{english}</span></p>
+          ))}
+        </div>
+      )}
+      {concept.sources.length > 0 && (
+        <div className="concept-footer">
+          <small>Further reading: {concept.sources.map(([label, url]) => <a href={url} target="_blank" rel="noreferrer" key={url}>{label}</a>)}</small>
+        </div>
+      )}
+    </article>
+  );
+}
+
+// Fetches canonical concepts once and renders the roadmap for a level,
+// with the original roadmap/table view toggle.
+export function ConceptRoadmap({ level, token, onSelectSection }) {
   const { data, loading, error } = useApiResource('/api/content/v1/concepts', token);
-  const [selectedId, setSelectedId] = React.useState(null);
+  const [activeConceptId, setActiveConceptId] = React.useState(null);
+  const [layoutMode, setLayoutMode] = React.useState('roadmap');
+  React.useEffect(() => setActiveConceptId(null), [level]);
   const concepts = data?.concepts || [];
-  const selected = concepts.find((c) => c.slug === selectedId) || null;
+  const { nodes, edges } = React.useMemo(() => levelNodes(concepts, level), [concepts, level]);
+
+  if (loading) return <EmptyState icon={Database} title="Loading curriculum" text="Fetching concepts from the server." />;
+  if (error) return <EmptyState icon={Database} title="Curriculum fetch failed" text={error} />;
 
   return (
-    <div>
-      {loading && <p className="muted">Loading curriculum…</p>}
-      {error && <p className="error-message">{error}</p>}
-      {!loading && !error && (
-        <>
-          <PanelHeading title={`${level} concept map`} />
-          <ConceptMap concepts={concepts} level={level} selectedId={selectedId} onSelect={setSelectedId} />
-          <ConceptDetail concept={selected} onClose={() => setSelectedId(null)} />
-          <RoadmapTable concepts={concepts} level={level} onSelect={setSelectedId} />
-        </>
+    <>
+      <div className="map-toolbar">
+        <span>{layoutMode === 'roadmap' ? 'Roadmap view' : 'Table view'}</span>
+        <button onClick={() => setLayoutMode((mode) => mode === 'roadmap' ? 'table' : 'roadmap')}>
+          {layoutMode === 'roadmap' ? 'Show table' : 'Show roadmap'}
+        </button>
+      </div>
+      {layoutMode === 'roadmap' ? (
+        <ConceptMap
+          section={level}
+          nodes={nodes}
+          edges={edges}
+          activeConceptId={activeConceptId}
+          onSelectConcept={setActiveConceptId}
+          onSelectSection={onSelectSection}
+        />
+      ) : (
+        <RoadmapTable section={level} nodes={nodes} onSelectSection={onSelectSection} />
       )}
-    </div>
+    </>
   );
 }
 
@@ -223,23 +249,29 @@ export function ConceptRoadmap({ level, token }) {
 export function TopicTracks({ section }) {
   const { data, loading, error } = useApiResource(`/api/content/topics?section=${section}`);
   const topics = data?.topics || [];
+  const categories = [...new Set(topics.map((topic) => topic.category))];
 
   if (loading) return <p className="muted">Loading topics…</p>;
   if (error) return <p className="error-message">{error}</p>;
   if (!topics.length) return <p className="muted">No vocabulary topics yet for {section}.</p>;
 
   return (
-    <div className="panel">
-      <PanelHeading title={`${section} vocabulary`} />
-      <RecordCount count={topics.length} label="topics" />
-      <div className="topic-list">
-        {topics.map((topic) => (
-          <div key={topic.id} className="topic-card">
-            <h3>{topic.topic}</h3>
-            <p className="muted">{topic.category} · {topic.cefr_section}</p>
+    <section className="panel topic-panel">
+      <h2>{section} learning tracks</h2>
+      <p className="muted">Vocabulary, spelling, and practical topics from the {section} study plan.</p>
+      <div className="topic-grid">
+        {categories.map((category) => (
+          <div className="topic-group" key={category}>
+            <h3>{category}</h3>
+            {topics.filter((topic) => topic.category === category).map((topic) => (
+              <div className="topic-item" key={topic.id}>
+                <strong>{topic.title}</strong>
+                <span>{topic.item}</span>
+              </div>
+            ))}
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

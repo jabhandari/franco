@@ -1,6 +1,7 @@
 import React from 'react';
 import { ClipboardCheck } from 'lucide-react';
 import { apiPost, shuffle } from '../api/client.js';
+import { levelGuides } from '../components/concepts.jsx';
 
 // Original 10-question placement quiz, A1 → B2 gradient. The resulting CEFR
 // level is submitted to POST /api/me/placement and becomes the learner's
@@ -46,22 +47,29 @@ export function Placement({ token, onPlaced }) {
     const level = levelForScore(score);
     try {
       const res = await apiPost('/api/me/placement', { level }, token);
-      setResult({ score, level, profile: res.profile });
-      onPlaced?.(res.profile);
+      setResult({ score, level, placementStatus: res.placement_status });
+      onPlaced?.();
     } catch (e) {
       setError(e.message);
     }
   }
 
   if (result) {
+    const guide = levelGuides[result.level];
     return (
       <section className="page-stack">
         <p className="eyebrow">Placement complete</p>
-        <h1 className="page-title">Your level: {result.level}</h1>
+        <h1 className="page-title">Your level: {result.level}{guide ? ` · ${guide.label}` : ''}</h1>
         <p className="lede">You scored {result.score} out of {QUESTIONS.length}. Your sessions will now target {result.level} content.</p>
-        <div className="panel">
-          <p className="muted">Placement status: {result.profile?.placement_status} · Current level: {result.profile?.current_level}</p>
-        </div>
+        {guide && (
+          <section className="level-guide panel">
+            <div><span className="eyebrow">{result.level} · {guide.label}</span><h2>{guide.goal}</h2></div>
+            <div className="guide-columns">
+              <div><strong>What to focus on</strong><p>{guide.focus}</p></div>
+              <div><strong>Reading practice</strong><p>{guide.read}</p></div>
+            </div>
+          </section>
+        )}
       </section>
     );
   }
