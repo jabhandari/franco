@@ -1,5 +1,6 @@
 import React from 'react';
 import { Database } from 'lucide-react';
+import { formatEnum, safeText } from '../api/client.js';
 
 export function EmptyState({ icon: Icon, title, text }) {
   return (
@@ -35,17 +36,17 @@ export function NavButton({ icon: Icon, active, onClick, children }) {
 export function RecordCount({ count, label }) {
   return (
     <div className="record-count">
-      <strong>{count}</strong>
-      <span>{label}</span>
+      <strong>{safeText(count, '–')}</strong>
+      <span>{safeText(label)}</span>
     </div>
   );
 }
 
 export function ProfileRows({ profile }) {
   const rows = [
-    ['Placement', profile?.placement_status || 'not_started'],
-    ['Current level', profile?.current_level || 'not set'],
-    ['Learning goal', profile?.learning_goal || 'not set'],
+    ['Placement', formatEnum(profile?.placement_status) || 'Not started'],
+    ['Current level', formatEnum(profile?.current_level) || 'Not set'],
+    ['Learning goal', formatEnum(profile?.learning_goal) || 'Not set'],
   ];
 
   return (
@@ -74,10 +75,10 @@ export function ProgressRecords({ progress }) {
   return (
     <div className="progress-grid">
       {progress.map((row) => (
-        <section className="panel compact" key={`${row.cefr_level}-${row.skill}`}>
-          <h2>{row.cefr_level}</h2>
-          <p className="muted">{row.skill}</p>
-          <SkeletonBar label={row.skill} />
+        <section className="panel compact" key={`${safeText(row.cefr_level)}-${safeText(row.skill)}`}>
+          <h2>{safeText(row.cefr_level)}</h2>
+          <p className="muted">{safeText(row.skill)}</p>
+          <SkeletonBar label={safeText(row.skill)} />
         </section>
       ))}
     </div>

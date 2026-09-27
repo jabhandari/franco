@@ -21,7 +21,7 @@ export function Session({ token }) {
       <p className="eyebrow">Daily session</p>
       <h1 className="page-title">{selectedSection} session queue</h1>
       <p className="lede">
-        Your adaptive queue: spaced-repetition reviews first, then new items at your level, then your weakest concepts.
+        Work through the list in order — reviews first, then new material at your level.
       </p>
       <div className="section-tabs compact" role="group" aria-label="Choose session level">
         {SECTIONS.map((section) => (
@@ -31,7 +31,7 @@ export function Session({ token }) {
         ))}
       </div>
       {loading && <EmptyState icon={Database} title="Preparing your session" text="Loading questions for this level." />}
-      {error && <EmptyState icon={Database} title="Session fetch failed" text={error} />}
+      {error && <EmptyState icon={Database} title="Couldn't load this session" text={error} />}
       {!loading && !error && !queue.length && (
         <EmptyState icon={BookOpen} title="No exercises yet" text="Nothing is queued for this level yet. Try another level or check back after your next review window." />
       )}

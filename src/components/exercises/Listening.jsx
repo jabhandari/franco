@@ -1,5 +1,5 @@
 import React from 'react';
-import { reportAttempt } from '../../api/client.js';
+import { getErrorMessage, reportAttempt } from '../../api/client.js';
 
 // Pronunciation drill: listen, repeat aloud, then honestly self-mark.
 export function PronunciationDrill({ entry, token, onResult }) {
@@ -19,7 +19,7 @@ export function PronunciationDrill({ entry, token, onResult }) {
       setResult(res);
       onResult?.(res);
     } catch (error) {
-      setResult({ error: error.message });
+      setResult({ error: getErrorMessage(error) });
     }
   }
 
@@ -30,7 +30,7 @@ export function PronunciationDrill({ entry, token, onResult }) {
 
   return (
     <article className={`exercise-preview mcq-card ${result && !result.error ? (result.correct ? 'answered-correct' : 'answered-wrong') : ''}`}>
-      <span>{entry.level} · pronunciation drill</span>
+      <span>{[entry.level, 'pronunciation drill'].filter(Boolean).join(' · ')}</span>
       <h2>{entry.prompt}</h2>
       {audio?.url ? (
         <div className="audio-player">

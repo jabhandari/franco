@@ -1,6 +1,7 @@
 import React from 'react';
 import { Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
+import { safeText } from '../api/client.js';
 import { EmptyState } from './ui.jsx';
 
 // Restored original roadmap display: the interactive concept tree with a
@@ -38,11 +39,11 @@ export function LevelGuide({ section }) {
 function toNode(concept) {
   const meta = concept.metadata || {};
   return {
-    id: concept.slug,
-    title: concept.title,
-    category: concept.concept_type,
-    level: concept.level_code,
-    shortDescription: concept.description,
+    id: safeText(concept.slug),
+    title: safeText(concept.title),
+    category: safeText(concept.concept_type),
+    level: safeText(concept.level_code),
+    shortDescription: safeText(concept.description),
     theory: meta.theory || [],
     vocabulary: meta.vocabulary || [],
     examples: meta.examples || [],
@@ -53,8 +54,38 @@ function toNode(concept) {
 
 // Nodes for one level in curated seed order; edges derived from the
 // prerequisite DAG (slug -> index pairs).
+// Canonical A1 teaching order (matches scripts/seed-concepts.mjs). Used as the
+// roadmap fallback when the server has no list_order yet (pre-reseed rows),
+// so the hand-tuned node positions never show a scrambled map.
+const CANONICAL_ORDER = [
+  'basic-sentence-structure',
+  'subject-pronouns',
+  'noun-gender',
+  'definite-articles',
+  'indefinite-articles',
+  'singular-plural',
+  'what-is-conjugation',
+  'present-tense',
+  'regular-er-verbs',
+  'etre',
+  'avoir',
+  'aller',
+  'adjective-agreement',
+  'negation',
+  'asking-questions',
+];
+const canonicalIndex = new Map(CANONICAL_ORDER.map((slug, index) => [slug, index]));
+
 function levelNodes(concepts, level) {
-  const raw = concepts.filter((concept) => concept.level_code === level);
+  const FALLBACK_ORDER = Number.MAX_SAFE_INTEGER;
+  const raw = concepts
+    .filter((concept) => concept.level_code === level)
+    .sort((a, b) => {
+      const orderA = a.list_order ?? canonicalIndex.get(a.slug) ?? FALLBACK_ORDER;
+      const orderB = b.list_order ?? canonicalIndex.get(b.slug) ?? FALLBACK_ORDER;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.title.localeCompare(b.title, 'fr');
+    });
   const nodes = raw.map(toNode);
   const index = new Map(nodes.map((node, i) => [node.id, i]));
   const edges = [];
@@ -168,34 +199,33 @@ export function ConceptDetail({ concept }) {
     <article className="concept-detail">
       <div>
         <span className="eyebrow">{concept.category} · {concept.level}</span>
-        <h2>{concept.title}</h2>
+        <h2>{safeText(concept.title)}</h2>
         <p className="concept-subtitle">{concept.shortDescription}</p>
         {concept.stub && <p className="muted small">Full lesson content for this concept is still being authored.</p>}
       </div>
       <div className="theory-blocks">
         {concept.theory.map((block, index) => block[0] === 'table' ? (
           <div className="theory-table" key={index}>
-            {block.slice(1).map((cell, cellIndex) => <span key={cellIndex}>{cell}</span>)}
+            {block.slice(1).map((cell, cellIndex) => <span key={cellIndex}>{safeText(cell)}</span>)}
           </div>
         ) : (
           <div className={`theory-card ${block[0]}`} key={index}>
-            <strong>{block[0] === 'idea' ? 'The idea' : block[0] === 'rule' ? block[1] : block[0] === 'tip' ? 'Tip' : 'Example'}</strong>
-            <p>{block[0] === 'rule' ? block[2] : block[0] === 'example' ? block[2] : block[1]}</p>
-            {block[0] === 'rule' && <code>{block[2]}</code>}
+            <strong>{block[0] === 'idea' ? 'The idea' : block[0] === 'rule' ? safeText(block[1]) : block[0] === 'tip' ? 'Tip' : 'Example'}</strong>
+            <p>{safeText(block[0] === 'rule' ? block[2] : block[0] === 'example' ? block[2] : block[1])}</p>
           </div>
         ))}
       </div>
       {concept.vocabulary.length > 0 && (
         <div className="related-vocab">
           <strong>Vocabulary</strong>
-          <div>{concept.vocabulary.map((word) => <span key={word}>{word}</span>)}</div>
+          <div>{concept.vocabulary.map((word, index) => <span key={index}>{safeText(word)}</span>)}</div>
         </div>
       )}
       {concept.examples.length > 0 && (
         <div className="related-examples">
           <strong>Examples</strong>
           {concept.examples.map(([french, english], index) => (
-            <p key={index}><strong>{french}</strong><span>{english}</span></p>
+            <p key={index}><strong>{safeText(french)}</strong>{safeText(english) ? <span> — {safeText(english)}</span> : null}</p>
           ))}
         </div>
       )}
@@ -218,8 +248,8 @@ export function ConceptRoadmap({ level, token, onSelectSection }) {
   const concepts = data?.concepts || [];
   const { nodes, edges } = React.useMemo(() => levelNodes(concepts, level), [concepts, level]);
 
-  if (loading) return <EmptyState icon={Database} title="Loading curriculum" text="Fetching concepts from the server." />;
-  if (error) return <EmptyState icon={Database} title="Curriculum fetch failed" text={error} />;
+  if (loading) return <EmptyState icon={Database} title="Loading curriculum" text="Pulling up the lesson roadmap." />;
+  if (error) return <EmptyState icon={Database} title="Couldn't load the curriculum" text={error} />;
 
   return (
     <>

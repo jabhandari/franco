@@ -62,10 +62,9 @@ function ExamQuestionList({ data }) {
       <summary><span>Exam practice</span><small>{data.questions.length} questions</small></summary>
       <section className="panel">
         <div className="session-toolbar">
-          <h2>{data.section} past questions</h2>
+          <span>{data.section}</span>
           <button className="reset-button" onClick={reset}>Reset all</button>
         </div>
-        <p className="muted">{data.questions.length} questions loaded.</p>
       </section>
       <div className="exercise-list">
         {visible.map((question) => (
@@ -116,7 +115,7 @@ export function PastQuestions({ token }) {
         ))}
       </div>
       {loading && <EmptyState icon={Database} title="Loading past questions" text="Fetching the exam archive." />}
-      {error && <EmptyState icon={Database} title="Past questions fetch failed" text={error} />}
+      {error && <EmptyState icon={Database} title="Couldn't load past questions" text={error} />}
       {!loading && !error && (
         <ExamQuestionList data={{ questions: filtered, section: `${section} · ${skillLabel}` }} />
       )}

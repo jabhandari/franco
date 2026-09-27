@@ -1,5 +1,5 @@
 import React from 'react';
-import { reportAttempt } from '../../api/client.js';
+import { getErrorMessage, reportAttempt } from '../../api/client.js';
 
 // Writing prompt: free-form text graded against the server-side rubric.
 export function WritingPrompt({ entry, token, onResult }) {
@@ -16,13 +16,13 @@ export function WritingPrompt({ entry, token, onResult }) {
       setResult(res);
       onResult?.(res);
     } catch (error) {
-      setResult({ error: error.message });
+      setResult({ error: getErrorMessage(error) });
     }
   }
 
   return (
     <article className="exercise-preview mcq-card">
-      <span>{entry.level} · writing</span>
+      <span>{[entry.level, 'writing'].filter(Boolean).join(' · ')}</span>
       <h2>{entry.title || 'Writing prompt'}</h2>
       <p>{entry.prompt}</p>
       {entry.instructions && <p className="muted">{entry.instructions}</p>}
@@ -76,13 +76,13 @@ export function SpeakingPrompt({ entry, token, onResult }) {
       setResult(res);
       onResult?.(res);
     } catch (error) {
-      setResult({ error: error.message });
+      setResult({ error: getErrorMessage(error) });
     }
   }
 
   return (
     <article className="exercise-preview mcq-card">
-      <span>{entry.level} · speaking</span>
+      <span>{[entry.level, 'speaking'].filter(Boolean).join(' · ')}</span>
       <h2>{entry.title || 'Speaking practice'}</h2>
       <p>{entry.prompt}</p>
       {entry.instructions && <p className="muted">{entry.instructions}</p>}

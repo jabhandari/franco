@@ -4,17 +4,21 @@ import { WordOrder } from './WordOrder.jsx';
 import { Spelling } from './Spelling.jsx';
 import { PronunciationDrill } from './Listening.jsx';
 import { WritingPrompt, SpeakingPrompt } from './WritingSpeaking.jsx';
+import { sanitizeEntry } from '../../api/client.js';
 
 // One renderer per item type. Every answered item reports an attempt with
 // response + duration to the server's adaptive engine.
 export function ExerciseCard({ entry, token, onResult }) {
-  // Normalize server snake_case fields for the renderers.
-  const item = {
-    ...entry,
-    expectedPoints: entry.expectedPoints ?? entry.expected_points,
-    followUpQuestions: entry.followUpQuestions ?? entry.follow_up_questions,
-  };
-  switch (item.type) {
+  // Normalize server snake_case fields for the renderers, then sanitize so
+  // object-shaped API values can never crash a renderer or print raw JSON.
+  const raw = entry && typeof entry === 'object' ? entry : {};
+  const rawType = raw.type;
+  const item = sanitizeEntry({
+    ...raw,
+    expectedPoints: raw.expectedPoints ?? raw.expected_points,
+    followUpQuestions: raw.followUpQuestions ?? raw.follow_up_questions,
+  });
+  switch (rawType) {
     case 'word_order':
       return <WordOrder entry={item} token={token} onResult={onResult} />;
     case 'spelling':

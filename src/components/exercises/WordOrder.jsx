@@ -1,5 +1,5 @@
 import React from 'react';
-import { reportAttempt, shuffle } from '../../api/client.js';
+import { getErrorMessage, reportAttempt, shuffle } from '../../api/client.js';
 
 // Tap-to-order sentence builder for word_order items.
 export function WordOrder({ entry, token, onResult }) {
@@ -35,7 +35,7 @@ export function WordOrder({ entry, token, onResult }) {
       setResult(res);
       onResult?.(res);
     } catch (error) {
-      setResult({ error: error.message });
+      setResult({ error: getErrorMessage(error) });
     }
   }
 
@@ -48,7 +48,7 @@ export function WordOrder({ entry, token, onResult }) {
 
   return (
     <article className={`exercise-preview mcq-card ${result && !result.error ? (result.correct ? 'answered-correct' : 'answered-wrong') : ''}`}>
-      <span>{entry.level} · word order</span>
+      <span>{[entry.level, 'word order'].filter(Boolean).join(' · ')}</span>
       <h2>{entry.prompt}</h2>
       <p className="muted">Tap the words in order to build the sentence. Tap a placed word to remove it.</p>
       <div className="word-order-answer" aria-label="Your sentence">

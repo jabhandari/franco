@@ -1,5 +1,5 @@
 import React from 'react';
-import { reportAttempt, shuffle } from '../../api/client.js';
+import { getErrorMessage, reportAttempt, shuffle } from '../../api/client.js';
 
 function typeLabel(entry) {
   return [entry.level, entry.skill || (entry.type || '').replace(/_/g, ' ')].filter(Boolean).join(' · ');
@@ -19,7 +19,7 @@ export function MultipleChoice({ entry, token, onResult }) {
       setResult(res);
       onResult?.(res);
     } catch (error) {
-      setResult({ error: error.message });
+      setResult({ error: getErrorMessage(error) });
     }
   }
 

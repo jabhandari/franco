@@ -1,5 +1,5 @@
 import React from 'react';
-import { apiGet } from '../api/client.js';
+import { apiGet, getErrorMessage } from '../api/client.js';
 
 export function useApiResource(path, token) {
   const [state, setState] = React.useState({ data: null, loading: true, error: '' });
@@ -17,7 +17,7 @@ export function useApiResource(path, token) {
         if (!cancelled) setState({ data, loading: false, error: '' });
       })
       .catch((error) => {
-        if (!cancelled) setState({ data: null, loading: false, error: error.message });
+        if (!cancelled) setState({ data: null, loading: false, error: getErrorMessage(error) });
       });
 
     return () => {

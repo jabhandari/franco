@@ -1,6 +1,6 @@
 import React from 'react';
 import { ClipboardCheck } from 'lucide-react';
-import { apiPost, shuffle } from '../api/client.js';
+import { apiPost, getErrorMessage, shuffle } from '../api/client.js';
 import { levelGuides } from '../components/concepts.jsx';
 
 // Original 10-question placement quiz, A1 → B2 gradient. The resulting CEFR
@@ -50,7 +50,7 @@ export function Placement({ token, onPlaced }) {
       setResult({ score, level, placementStatus: res.placement_status });
       onPlaced?.();
     } catch (e) {
-      setError(e.message);
+      setError(getErrorMessage(e));
     }
   }
 

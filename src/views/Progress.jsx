@@ -32,7 +32,7 @@ export function Progress({ token }) {
     <section className="page-stack">
       <p className="eyebrow">Progress</p>
       <h1 className="page-title">Your learning, measured</h1>
-      <p className="lede">Spaced-repetition state and concept mastery update with every answered exercise.</p>
+      <p className="lede">Your review queue and concept mastery update every time you answer an exercise.</p>
 
       {loading && <SkeletonBar label="Loading progress" />}
       {error && <p className="error-message">{error}</p>}

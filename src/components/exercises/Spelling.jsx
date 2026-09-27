@@ -1,5 +1,5 @@
 import React from 'react';
-import { reportAttempt } from '../../api/client.js';
+import { getErrorMessage, reportAttempt } from '../../api/client.js';
 
 // Typed-answer renderer for spelling / cloze / free-text items, and dictation
 // when an audioUrl is provided.
@@ -17,7 +17,7 @@ export function Spelling({ entry, token, audioUrl, onResult }) {
       setResult(res);
       onResult?.(res);
     } catch (error) {
-      setResult({ error: error.message });
+      setResult({ error: getErrorMessage(error) });
     }
   }
 
@@ -29,7 +29,7 @@ export function Spelling({ entry, token, audioUrl, onResult }) {
 
   return (
     <article className={`exercise-preview mcq-card ${result && !result.error ? (result.correct ? 'answered-correct' : 'answered-wrong') : ''}`}>
-      <span>{entry.level} · {isDictation ? 'dictation' : (entry.type || 'spelling').replace(/_/g, ' ')}</span>
+      <span>{[entry.level, isDictation ? 'dictation' : (entry.type || 'spelling').replace(/_/g, ' ')].filter(Boolean).join(' · ')}</span>
       {audioUrl && (
         <div className="audio-player">
           <audio controls src={audioUrl} preload="metadata" />
