@@ -2,6 +2,8 @@ import { createHash, pbkdf2Sync, randomBytes, randomUUID } from 'node:crypto';
 import { createServer } from 'node:http';
 import { query, pool, migrate, createProfileForUser } from './database.js';
 import { CONTENT_SCHEMA_VERSION, normalizeItem, schemaDocument, validateBatch } from './content-contract.js';
+import { sm2Update, masteryDelta } from './sm2.js';
+import { evaluate, gradeExamQuestion, gradeExerciseItem, normalizeText } from './evaluate.js';
 
 const PORT = Number(process.env.PORT || 8787); const hashToken = (v) => createHash('sha256').update(v).digest('hex');
 const json = (res, status, body) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-origin': 'http://127.0.0.1:5173', 'access-control-allow-headers': 'content-type, authorization', 'access-control-allow-methods': 'GET, POST, OPTIONS' }); res.end(JSON.stringify(body)); };
@@ -9,12 +11,190 @@ const body = (req) => new Promise((resolve, reject) => { let b = ''; req.on('dat
 const password = (p, s = randomBytes(16).toString('hex')) => ({ salt: s, hash: pbkdf2Sync(p, s, 120000, 64, 'sha512').toString('hex') });
 async function user(req) { const h = req.headers.authorization || ''; if (!h.startsWith('Bearer ')) return null; const r = await query('SELECT u.id,u.email,u.name,s.expires_at FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=?', [hashToken(h.slice(7))]); return r[0] && new Date(r[0].expires_at) > new Date() ? r[0] : null; }
 async function source(id) { const r = await query('SELECT name,url,license,attribution,imported_at FROM content_sources WHERE id=?', [id]); return r[0] || null; }
+// DEPRECATED (legacy track): served the UD-generated example_sentences /
+// exercise_items content. New UI reads the canonical content_items track via
+// /api/content/v1/items and /api/me/session-plan. Kept working for old clients.
 async function sections() { return { source: await source('ud-fr-gsd'), sections: await query('SELECT cefr_section AS section,COUNT(*) AS example_count,(SELECT COUNT(*) FROM exercise_items e WHERE e.cefr_section=example_sentences.cefr_section) AS exercise_count,ROUND(AVG(token_count),1) AS average_tokens FROM example_sentences GROUP BY cefr_section ORDER BY cefr_section'), note: 'CEFR sections are local difficulty heuristics.' }; }
-async function section(s, exerciseLimit = null) { s = s.toUpperCase(); const examples = await query('SELECT * FROM example_sentences WHERE cefr_section=? ORDER BY difficulty_score,token_count,text', [s]); const exerciseSql = exerciseLimit ? `SELECT e.*,x.text AS source_text FROM exercise_items e JOIN example_sentences x ON x.id=e.example_id WHERE e.cefr_section=? ORDER BY RANDOM() LIMIT ${Math.max(1, Math.min(50, Number(exerciseLimit)))}` : 'SELECT e.*,x.text AS source_text FROM exercise_items e JOIN example_sentences x ON x.id=e.example_id WHERE e.cefr_section=? ORDER BY x.difficulty_score,e.exercise_type'; const exercises = await query(exerciseSql, [s]); return { section: s, examples, exercises: exercises.map(x => ({ ...x, choices: x.choices_json, choices_json: undefined })) }; }
+// DEPRECATED (legacy track): see sections(). When a limit is used (session
+// plans), ordering is deterministic by difficulty instead of ORDER BY RANDOM()
+// so queues are reproducible and review scheduling stays meaningful.
+async function section(s, exerciseLimit = null) { s = s.toUpperCase(); const examples = await query('SELECT * FROM example_sentences WHERE cefr_section=? ORDER BY difficulty_score,token_count,text', [s]); const exerciseSql = exerciseLimit ? `SELECT e.*,x.text AS source_text FROM exercise_items e JOIN example_sentences x ON x.id=e.example_id WHERE e.cefr_section=? ORDER BY x.difficulty_score,e.id LIMIT ${Math.max(1, Math.min(50, Number(exerciseLimit)))}` : 'SELECT e.*,x.text AS source_text FROM exercise_items e JOIN example_sentences x ON x.id=e.example_id WHERE e.cefr_section=? ORDER BY x.difficulty_score,e.exercise_type'; const exercises = await query(exerciseSql, [s]); return { section: s, examples, exercises: exercises.map(x => ({ ...x, choices: x.choices_json, choices_json: undefined })) }; }
 const apiKey = async (req, scope) => { const supplied = req.headers['x-api-key']; if (!supplied) return false; const hash = createHash('sha256').update(supplied).digest('hex'); const rows = await query('SELECT scopes FROM content_api_keys WHERE key_hash=? AND revoked_at IS NULL', [hash]); return Boolean(rows[0]?.scopes?.includes(scope)); };
+// Explicit scope routing for the content API (no substring matching).
+// Returns the required scope, or null when the route is public.
+function contentApiScope(method, pathname) {
+  if (method === 'POST' && pathname === '/api/content/v1/batches') return 'content:write';
+  if (method === 'POST' && /^\/api\/content\/v1\/items\/[^/]+\/(approve|reject|publish)$/.test(pathname)) return 'content:review';
+  if (method === 'GET' && /^\/api\/content\/v1\/batches(\/|$)/.test(pathname)) return 'content:write';
+  return null; // public: schema, published items, item detail, concepts
+}
 const canonical = (item) => JSON.stringify({ type: item.type, prompt: item.prompt, context: item.context || '', response: item.response, evaluation: item.evaluation });
 const similarity = (a, b) => { const words = (s) => new Set(String(s).toLowerCase().normalize('NFKC').replace(/[^\p{L}\p{N}]+/gu, ' ').trim().split(/\s+/).filter(Boolean)); const x = words(a), y = words(b); if (!x.size || !y.size) return 0; const intersection = [...x].filter(v => y.has(v)).length; return intersection / (x.size + y.size - intersection); };
-function evaluate(item, response) { const mode = item.evaluation_json.mode; if (mode === 'choice') return String(response) === String(item.response_json.answer); if (mode === 'token_order') return JSON.stringify(response) === JSON.stringify(item.response_json.tokens); const accepted = item.response_json.accepted_answers || [item.response_json.answer]; return accepted.filter(Boolean).some(answer => String(answer).trim().toLocaleLowerCase() === String(response ?? '').trim().toLocaleLowerCase()); }
+
+// Normalize exam choices to [{key, text}] regardless of stored shape.
+function normalizeChoices(raw) {
+  let choices = raw;
+  if (typeof choices === 'string') { try { choices = JSON.parse(choices); } catch { return []; } }
+  if (Array.isArray(choices)) return choices.map((c) => ({ key: String(c.key ?? c.id ?? ''), text: String(c.text ?? '') })).filter((c) => c.text);
+  if (choices && typeof choices === 'object') return Object.entries(choices).map(([key, text]) => ({ key: String(key), text: String(text) }));
+  return [];
+}
+
+// ---- Adaptive session plan ------------------------------------------------
+// Queue order: due SM-2 reviews -> new items at the learner's level ->
+// weak-concept items -> exam practice -> extra legacy drills.
+const USABLE_STATUSES = `('published','approved','pending_review')`;
+const STATUS_ORDER = `CASE i.status WHEN 'published' THEN 0 WHEN 'approved' THEN 1 ELSE 2 END`;
+
+async function sessionContentItems(where, params, orderBy, limit) {
+  const items = await query(
+    `SELECT i.id, i.item_type, i.cefr_level, i.difficulty_score, i.status, i.created_at,
+            r.title, r.prompt, r.instructions, r.context, r.response_json, r.evaluation_json, r.metadata_json
+     FROM content_items i
+     JOIN content_revisions r ON r.item_id = i.id AND r.revision = i.current_revision
+     WHERE ${where}
+     ORDER BY ${orderBy}
+     LIMIT ${limit}`,
+    params
+  );
+  const mediaByItem = {};
+  if (items.length) {
+    const media = await query('SELECT item_id, kind, url, duration_seconds, transcript FROM media_assets WHERE item_id = ANY(?)', [items.map((i) => i.id)]);
+    for (const m of media) { (mediaByItem[m.item_id] = mediaByItem[m.item_id] || []).push({ kind: m.kind, url: m.url, duration_seconds: m.duration_seconds, transcript: m.transcript }); }
+  }
+  return { items, mediaByItem };
+}
+
+function shapeContentItem(row, queueKind, mediaByItem) {
+  const ev = row.evaluation_json || {};
+  const resp = row.response_json || {};
+  const entry = {
+    queue_kind: queueKind, item_kind: 'content_item', id: row.id,
+    level: row.cefr_level, type: row.item_type,
+    title: row.title, prompt: row.prompt, instructions: row.instructions, context: row.context,
+    media: mediaByItem[row.id] || [],
+    evaluation_mode: ev.mode || null,
+  };
+  if (row.item_type === 'multiple_choice' && Array.isArray(resp.choices)) entry.choices = resp.choices;
+  if (row.item_type === 'word_order' && Array.isArray(resp.tokens)) entry.tokens = resp.tokens;
+  if (ev.rubric) entry.rubric = ev.rubric;
+  if (ev.expected_points) entry.expected_points = ev.expected_points;
+  if (ev.follow_up_questions) entry.follow_up_questions = ev.follow_up_questions;
+  if (resp.expected !== undefined) entry.expected = resp.expected;
+  else if (typeof resp.answer === 'string') entry.expected = resp.answer;
+  return entry;
+}
+
+async function attachDrillChoices(drills, level) {
+  const needy = drills.filter((d) => !d.choices_json && (d.exercise_type === 'reading' || d.exercise_type === 'grammar_focus'));
+  if (!needy.length) return;
+  const pool = {};
+  for (const t of [...new Set(needy.map((d) => d.exercise_type))]) {
+    pool[t] = (await query('SELECT answer FROM exercise_items WHERE exercise_type=? AND cefr_section=? LIMIT 200', [t, level])).map((r) => r.answer);
+  }
+  for (const d of needy) {
+    const distractors = [...new Set((pool[d.exercise_type] || []).filter((a) => a && normalizeText(a) !== normalizeText(d.answer)))].slice(0, 3);
+    d.choices = [{ key: 'A', text: d.answer }, ...distractors.map((text, i) => ({ key: String.fromCharCode(66 + i), text }))];
+  }
+}
+
+async function buildSessionPlan(userId, level) {
+  const queue = [];
+  // 1. Due SM-2 reviews.
+  const mediaByItem = {};
+  const reviewRows = await query(
+    `SELECT i.id, i.item_type, i.cefr_level, i.difficulty_score, i.status, i.created_at,
+            r.title, r.prompt, r.instructions, r.context, r.response_json, r.evaluation_json, r.metadata_json, s.due_at
+     FROM learner_item_state s
+     JOIN content_items i ON i.id = s.item_id
+     JOIN content_revisions r ON r.item_id = i.id AND r.revision = i.current_revision
+     WHERE s.user_id = ? AND s.due_at <= NOW() AND i.status IN ${USABLE_STATUSES}
+     ORDER BY s.due_at LIMIT 10`,
+    [userId]
+  );
+  if (reviewRows.length) {
+    const media = await query('SELECT item_id, kind, url, duration_seconds, transcript FROM media_assets WHERE item_id = ANY(?)', [reviewRows.map((i) => i.id)]);
+    for (const m of media) { (mediaByItem[m.item_id] = mediaByItem[m.item_id] || []).push({ kind: m.kind, url: m.url, duration_seconds: m.duration_seconds, transcript: m.transcript }); }
+  }
+  for (const row of reviewRows) queue.push(shapeContentItem(row, 'review', mediaByItem));
+
+  // 2. New items at the learner's level (never attempted).
+  const fresh = await sessionContentItems(
+    `i.cefr_level = ? AND i.status IN ${USABLE_STATUSES} AND NOT EXISTS (SELECT 1 FROM learning_attempts a WHERE a.user_id = ? AND a.item_id = i.id)`,
+    [level, userId], `${STATUS_ORDER}, i.difficulty_score NULLS LAST, i.created_at`, 12
+  );
+  for (const row of fresh.items) queue.push(shapeContentItem(row, 'new', fresh.mediaByItem));
+
+  // 3. Weak-concept items (mastery below 0.4).
+  const weak = await query(
+    `SELECT i.id, i.item_type, i.cefr_level, i.difficulty_score, i.status, i.created_at,
+            r.title, r.prompt, r.instructions, r.context, r.response_json, r.evaluation_json, r.metadata_json, m.mastery
+     FROM learner_concept_mastery m
+     JOIN content_concepts cc ON cc.concept_id = m.concept_id
+     JOIN content_items i ON i.id = cc.item_id
+     JOIN content_revisions r ON r.item_id = i.id AND r.revision = i.current_revision
+     WHERE m.user_id = ? AND m.mastery < 0.4 AND i.cefr_level = ? AND i.status IN ${USABLE_STATUSES}
+       AND NOT EXISTS (SELECT 1 FROM learning_attempts a WHERE a.user_id = ? AND a.item_id = i.id)
+     ORDER BY m.mastery ASC, ${STATUS_ORDER} LIMIT 6`,
+    [userId, level, userId]
+  );
+  const weakMedia = {};
+  if (weak.length) {
+    const media = await query('SELECT item_id, kind, url, duration_seconds, transcript FROM media_assets WHERE item_id = ANY(?)', [weak.map((i) => i.id)]);
+    for (const m of media) { (weakMedia[m.item_id] = weakMedia[m.item_id] || []).push({ kind: m.kind, url: m.url, duration_seconds: m.duration_seconds, transcript: m.transcript }); }
+  }
+  const seen = new Set(queue.map((q) => q.id));
+  for (const row of weak) { if (!seen.has(row.id)) { seen.add(row.id); queue.push(shapeContentItem(row, 'weak', weakMedia)); } }
+
+  // 4. Exam practice (authored QCMs at level, not yet attempted).
+  const exam = await query(
+    `SELECT id, exam_name, cefr_section, skill, prompt, context, choices_json
+     FROM exam_questions
+     WHERE cefr_section = ?
+       AND NOT EXISTS (SELECT 1 FROM learning_attempts a WHERE a.user_id = ? AND a.item_kind = 'exam_question' AND a.legacy_ref = exam_questions.id)
+     ORDER BY skill, external_id LIMIT 6`,
+    [level, userId]
+  );
+  for (const q of exam) {
+    queue.push({
+      queue_kind: 'exam', item_kind: 'exam_question', id: q.id, level: q.cefr_section,
+      type: 'multiple_choice', skill: q.skill, title: q.exam_name, prompt: q.prompt, context: q.context,
+      choices: normalizeChoices(q.choices_json), media: [],
+    });
+  }
+
+  // 5. Extra legacy drills (UD-generated; deprecated track, kept for practice volume).
+  const drills = await query(
+    `SELECT id, exercise_type, cefr_section, prompt, answer, choices_json
+     FROM exercise_items
+     WHERE cefr_section = ?
+       AND NOT EXISTS (SELECT 1 FROM learning_attempts a WHERE a.user_id = ? AND a.item_kind = 'exercise' AND a.legacy_ref = exercise_items.id)
+     ORDER BY exercise_type, created_at LIMIT 6`,
+    [level, userId]
+  );
+  await attachDrillChoices(drills, level);
+  for (const d of drills) {
+    const entry = {
+      queue_kind: 'drill', item_kind: 'exercise', id: d.id, level: d.cefr_section,
+      type: d.exercise_type, prompt: d.prompt, media: [],
+    };
+    if (d.exercise_type === 'word_order') {
+      try { entry.tokens = JSON.parse(d.choices_json); } catch { entry.tokens = []; }
+    } else {
+      entry.choices = d.choices || normalizeChoices(d.choices_json);
+    }
+    queue.push(entry);
+  }
+
+  return {
+    section: level,
+    reviewsDue: reviewRows.length,
+    queue,
+    estimatedMinutes: Math.max(2, Math.round(queue.length * 1.2)),
+    message: 'Adaptive queue: due reviews, then new items at your level, then weak concepts, exam practice, and drills.',
+  };
+}
+
 async function ingestBatch(batch) {
   const checked = validateBatch(batch);
   if (!checked.valid) return { status: 422, body: { error: 'Content batch validation failed.', schema_version: CONTENT_SCHEMA_VERSION, errors: checked.errors } };
@@ -53,40 +233,108 @@ async function main() {
             if (req.method === 'OPTIONS') return json(res, 204, {}); const u = new URL(req.url, `http://${req.headers.host}`);
             if (req.method === 'GET' && u.pathname === '/api/health') return json(res, 200, { ok: true, database: 'supabase-postgres' });
             if (req.method === 'GET' && u.pathname === '/api/content/v1/schema') return json(res, 200, await schemaDocument());
-            if (u.pathname.startsWith('/api/content/v1/') && u.pathname !== '/api/content/v1/schema' && !(await apiKey(req, u.pathname.includes('/approve') || u.pathname.includes('/reject') || u.pathname.includes('/publish') ? 'content:review' : 'content:write'))) return json(res, 401, { error: 'A scoped content API key is required.' });
+            if (u.pathname.startsWith('/api/content/v1/')) { const scope = u.pathname === '/api/content/v1/schema' ? null : contentApiScope(req.method, u.pathname); if (scope && !(await apiKey(req, scope))) return json(res, 401, { error: 'A scoped content API key is required.' }); }
             if (req.method === 'POST' && u.pathname === '/api/content/v1/batches') { const result = await ingestBatch(await body(req)); return json(res, result.status, result.body); }
             const itemMatch = u.pathname.match(/^\/api\/content\/v1\/items\/([^/]+)(?:\/(approve|reject|publish))?$/);
             if (req.method === 'GET' && itemMatch) { const rows = await query('SELECT i.*,r.revision,r.title,r.prompt,r.instructions,r.context,r.response_json,r.evaluation_json,r.metadata_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE i.id=?', [itemMatch[1]]); return rows[0] ? json(res, 200, rows[0]) : json(res, 404, { error: 'Content item not found.' }); }
             if (req.method === 'POST' && itemMatch?.[2]) { const action = itemMatch[2]; const status = action === 'approve' ? 'approved' : action === 'publish' ? 'published' : 'rejected'; const rows = await query('UPDATE content_items SET status=?,updated_at=NOW() WHERE id=? RETURNING id,status', [status, itemMatch[1]]); if (!rows[0]) return json(res, 404, { error: 'Content item not found.' }); await query('INSERT INTO content_reviews(id,item_id,action,reviewer,note) VALUES(?,?,?,?,?)', [randomUUID(), itemMatch[1], action, 'content-api-key', (await body(req)).note ?? null]); return json(res, 200, rows[0]); }
             const batchMatch = u.pathname.match(/^\/api\/content\/v1\/batches\/([^/]+)$/);
             if (req.method === 'GET' && batchMatch) { const batch = (await query('SELECT * FROM content_batches WHERE id=?', [batchMatch[1]]))[0]; return batch ? json(res, 200, { ...batch, items: await query('SELECT i.id,i.external_id,i.item_type,i.status,i.cefr_level FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=1 WHERE r.batch_id=? ORDER BY i.created_at', [batch.id]) }) : json(res, 404, { error: 'Batch not found.' }); }
-            if (req.method === 'GET' && u.pathname === '/api/content/v1/batches') return json(res, 200, { batches: await query('SELECT * FROM content_batches ORDER BY created_at DESC LIMIT 100') });
             if (req.method === 'GET' && u.pathname === '/api/content/v1/items') {
-                const params = []; const where = ["i.status='published'"]; const add = (sql, value) => { params.push(value); where.push(sql.replace('?', `$${params.length}`)); };
-                if (u.searchParams.get('level')) add('i.cefr_level=?', u.searchParams.get('level').toUpperCase());
-                if (u.searchParams.get('type')) add('i.item_type=?', u.searchParams.get('type'));
-                const limit = Math.min(100, Math.max(1, Number(u.searchParams.get('limit') || 25))); const rows = await pool.query(`SELECT i.*,r.revision,r.title,r.prompt,r.instructions,r.context,r.response_json,r.evaluation_json,r.metadata_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE ${where.join(' AND ')} ORDER BY i.updated_at DESC LIMIT ${limit}`, params); return json(res, 200, { items: rows.rows });
+                const params = []; const where = ["i.status='published'"];
+                if (u.searchParams.get('level')) { params.push(u.searchParams.get('level').toUpperCase()); where.push(`i.cefr_level=$${params.length}`); }
+                if (u.searchParams.get('type')) { params.push(u.searchParams.get('type')); where.push(`i.item_type=$${params.length}`); }
+                const limit = Math.min(100, Math.max(1, Number(u.searchParams.get('limit') || 25)));
+                const rows = await query(`SELECT i.id,i.item_type,i.cefr_level,i.difficulty_score,i.status,i.created_at,r.title,r.prompt,r.instructions,r.context,r.response_json,r.evaluation_json,r.metadata_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE ${where.join(' AND ')} ORDER BY i.updated_at DESC LIMIT ${limit}`, params);
+                const mediaByItem = {};
+                if (rows.length) { const media = await query('SELECT item_id,kind,url,duration_seconds,transcript FROM media_assets WHERE item_id=ANY(?)', [rows.map((r) => r.id)]); for (const m of media) { (mediaByItem[m.item_id] = mediaByItem[m.item_id] || []).push({ kind: m.kind, url: m.url, duration_seconds: m.duration_seconds, transcript: m.transcript }); } }
+                return json(res, 200, { items: rows.map((r) => shapeContentItem(r, null, mediaByItem)) });
             }
-            if (req.method === 'GET' && u.pathname === '/api/content/v1/concepts') return json(res, 200, { concepts: await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST,title") });
+            if (req.method === 'GET' && u.pathname === '/api/content/v1/concepts') {
+                const concepts = await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status,metadata_json FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST, list_order NULLS LAST, title");
+                const prereqs = await query('SELECT concept_id,prerequisite_concept_id FROM concept_prerequisites');
+                const slugById = new Map(concepts.map((c) => [c.id, c.slug]));
+                return json(res, 200, { concepts: concepts.map((c) => ({ id: c.id, slug: c.slug, title: c.title, description: c.description, concept_type: c.concept_type, level_code: c.level_code, parent_id: c.parent_id, status: c.status, metadata: c.metadata_json || {}, prerequisites: prereqs.filter((p) => p.concept_id === c.id).map((p) => slugById.get(p.prerequisite_concept_id)).filter(Boolean) })) });
+            }
             if (req.method === 'GET' && u.pathname === '/api/me/progress') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { items: await query('SELECT * FROM learner_item_state WHERE user_id=? ORDER BY due_at', [x.id]), concepts: await query('SELECT * FROM learner_concept_mastery WHERE user_id=? ORDER BY mastery', [x.id]), attempts: await query('SELECT * FROM learning_attempts WHERE user_id=? ORDER BY created_at DESC LIMIT 100', [x.id]) }); }
             if (req.method === 'GET' && u.pathname === '/api/me/review-due') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { items: await query("SELECT i.*,r.prompt,r.response_json,r.evaluation_json,s.due_at FROM learner_item_state s JOIN content_items i ON i.id=s.item_id JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE s.user_id=? AND i.status='published' AND s.due_at<=NOW() ORDER BY s.due_at LIMIT 50", [x.id]) }); }
             if (req.method === 'POST' && u.pathname === '/api/me/attempts') {
-              const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const b = await body(req); if (!b.item_id || b.response === undefined) return json(res, 400, { error: 'item_id and response are required.' });
-              const row = (await query("SELECT i.*,r.revision,r.response_json,r.evaluation_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE i.id=? AND i.status='published'", [b.item_id]))[0]; if (!row) return json(res, 404, { error: 'Published content item not found.' });
-              const correct = evaluate(row, b.response); const score = correct ? 1 : 0; const attemptNumber = Number((await query('SELECT COUNT(*)::int AS count FROM learning_attempts WHERE user_id=? AND item_id=?', [x.id, row.id]))[0].count) + 1; const attempt = (await query('INSERT INTO learning_attempts(id,user_id,item_id,revision,response_json,evaluation_json,score,duration_ms,correct,attempt_number,session_id,hint_used) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) RETURNING *', [randomUUID(), x.id, row.id, row.revision, JSON.stringify(b.response), JSON.stringify({ correct, evaluator: row.evaluation_json.mode }), score, b.duration_ms ?? null, correct, attemptNumber, b.session_id ?? null, Boolean(b.hint_used)]))[0];
-              const old = (await query('SELECT * FROM learner_item_state WHERE user_id=? AND item_id=?', [x.id, row.id]))[0]; const nextInterval = correct ? Math.max(1, (old?.interval_days || 0) * (old?.ease || 2.5) || 1) : 0; const due = correct ? `NOW() + (${nextInterval}) * INTERVAL '1 day'` : 'NOW()'; await query(`INSERT INTO learner_item_state(user_id,item_id,due_at,interval_days,ease,repetitions,lapses,last_result,last_attempt_at) VALUES(?,?,${due},?,?,?,?,?,NOW()) ON CONFLICT(user_id,item_id) DO UPDATE SET due_at=EXCLUDED.due_at,interval_days=EXCLUDED.interval_days,ease=GREATEST(1.3,learner_item_state.ease + CASE WHEN EXCLUDED.last_result='correct' THEN 0.05 ELSE -0.2 END),repetitions=learner_item_state.repetitions + CASE WHEN EXCLUDED.last_result='correct' THEN 1 ELSE 0 END,lapses=learner_item_state.lapses + CASE WHEN EXCLUDED.last_result='incorrect' THEN 1 ELSE 0 END,last_result=EXCLUDED.last_result,last_attempt_at=NOW()`, [x.id, row.id, nextInterval, old?.ease || 2.5, (old?.repetitions || 0) + (correct ? 1 : 0), old?.lapses || 0, correct ? 'correct' : 'incorrect']);
-              const concepts = await query('SELECT concept_id FROM content_concepts WHERE item_id=?', [row.id]); for (const concept of concepts) await query("INSERT INTO learner_concept_mastery(user_id,concept_id,mastery,confidence,evidence_count,total_attempts,correct_attempts,consecutive_correct,consecutive_incorrect,last_practiced_at,last_correct_at,last_incorrect_at) VALUES(?,?,?,?,?,1,?,?,?,NOW(),CASE WHEN ? THEN NOW() ELSE NULL END,CASE WHEN ? THEN NULL ELSE NOW() END) ON CONFLICT(user_id,concept_id) DO UPDATE SET mastery=GREATEST(0,LEAST(1,learner_concept_mastery.mastery + CASE WHEN ? THEN 0.08 ELSE -0.06 END)),confidence=LEAST(1,learner_concept_mastery.confidence+0.05),evidence_count=learner_concept_mastery.evidence_count+1,total_attempts=learner_concept_mastery.total_attempts+1,correct_attempts=learner_concept_mastery.correct_attempts+CASE WHEN ? THEN 1 ELSE 0 END,consecutive_correct=CASE WHEN ? THEN learner_concept_mastery.consecutive_correct+1 ELSE 0 END,consecutive_incorrect=CASE WHEN ? THEN 0 ELSE learner_concept_mastery.consecutive_incorrect+1 END,last_practiced_at=NOW(),last_correct_at=CASE WHEN ? THEN NOW() ELSE learner_concept_mastery.last_correct_at END,last_incorrect_at=CASE WHEN ? THEN learner_concept_mastery.last_incorrect_at ELSE NOW() END,updated_at=NOW()", [x.id, concept.concept_id, correct ? 0.08 : 0, correct ? 0.1 : 0, 1, correct ? 1 : 0, correct ? 1 : 0, correct ? 0 : 1, correct, correct, correct, correct, correct, correct, correct, correct]);
-              const scheduled = (await query('SELECT due_at FROM learner_item_state WHERE user_id=? AND item_id=?', [x.id, row.id]))[0]; return json(res, 201, { attempt, correct, next_due_at: scheduled?.due_at ?? null });
+              const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const b = await body(req); if (b.response === undefined) return json(res, 400, { error: 'response is required.' });
+              const itemKind = b.item_kind || 'content_item';
+              let target = null; let legacyRow = null;
+              if (itemKind === 'content_item') {
+                if (!b.item_id) return json(res, 400, { error: 'item_id is required for content items.' });
+                target = (await query("SELECT i.*,r.revision,r.response_json,r.evaluation_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE i.id=? AND i.status<>'rejected'", [b.item_id]))[0];
+                if (!target) return json(res, 404, { error: 'Content item not found.' });
+              } else if (itemKind === 'exam_question' || itemKind === 'exercise') {
+                if (!b.legacy_ref) return json(res, 400, { error: 'legacy_ref is required for legacy items.' });
+                legacyRow = (await query(`SELECT * FROM ${itemKind === 'exam_question' ? 'exam_questions' : 'exercise_items'} WHERE id=?`, [b.legacy_ref]))[0];
+                if (!legacyRow) return json(res, 404, { error: 'Legacy item not found.' });
+              } else return json(res, 400, { error: 'Unknown item_kind.' });
+              let correct; let score;
+              if (target) {
+                correct = evaluate(target, b.response);
+                const selfAssessed = !target.evaluation_json?.mode && (target.evaluation_json?.rubric || target.evaluation_json?.expected_points);
+                score = (target.evaluation_json?.mode === 'rubric' || selfAssessed) ? null : (correct ? 1 : 0);
+              } else if (itemKind === 'exam_question') { correct = gradeExamQuestion(legacyRow, b.response); score = correct ? 1 : 0; }
+              else { correct = gradeExerciseItem(legacyRow, b.response); score = correct ? 1 : 0; }
+              const attemptNumber = Number((await query('SELECT COUNT(*)::int AS count FROM learning_attempts WHERE user_id=? AND item_kind=? AND COALESCE(legacy_ref, item_id)=?', [x.id, itemKind, target?.id ?? legacyRow.id]))[0].count) + 1;
+              const attempt = (await query('INSERT INTO learning_attempts(id,user_id,item_id,item_kind,legacy_ref,revision,response_json,evaluation_json,score,duration_ms,correct,attempt_number,session_id,hint_used) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING *', [randomUUID(), x.id, target?.id ?? null, itemKind, legacyRow?.id ?? null, target?.revision ?? 1, JSON.stringify(b.response), JSON.stringify({ correct, evaluator: target?.evaluation_json?.mode ?? itemKind }), score, b.duration_ms ?? null, correct, attemptNumber, b.session_id ?? null, Boolean(b.hint_used)]))[0];
+              let nextDueAt = null;
+              if (target) {
+                const old = (await query('SELECT * FROM learner_item_state WHERE user_id=? AND item_id=?', [x.id, target.id]))[0];
+                const sm2 = sm2Update(old, correct);
+                const due = correct ? `NOW() + (${sm2.interval_days}) * INTERVAL '1 day'` : 'NOW()';
+                await query(`INSERT INTO learner_item_state(user_id,item_id,due_at,interval_days,ease,repetitions,lapses,last_result,last_attempt_at) VALUES(?,?,${due},?,?,?,?,?,NOW()) ON CONFLICT(user_id,item_id) DO UPDATE SET due_at=EXCLUDED.due_at,interval_days=EXCLUDED.interval_days,ease=GREATEST(1.3,learner_item_state.ease + CASE WHEN EXCLUDED.last_result='correct' THEN 0.05 ELSE -0.2 END),repetitions=learner_item_state.repetitions + CASE WHEN EXCLUDED.last_result='correct' THEN 1 ELSE 0 END,lapses=learner_item_state.lapses + CASE WHEN EXCLUDED.last_result='incorrect' THEN 1 ELSE 0 END,last_result=EXCLUDED.last_result,last_attempt_at=NOW()`, [x.id, target.id, sm2.interval_days, sm2.ease, (old?.repetitions || 0) + (correct ? 1 : 0), old?.lapses || 0, correct ? 'correct' : 'incorrect']);
+                const concepts = await query('SELECT concept_id FROM content_concepts WHERE item_id=?', [target.id]);
+                const delta = masteryDelta(correct);
+                for (const concept of concepts) await query("INSERT INTO learner_concept_mastery(user_id,concept_id,mastery,confidence,evidence_count,total_attempts,correct_attempts,consecutive_correct,consecutive_incorrect,last_practiced_at,last_correct_at,last_incorrect_at) VALUES(?,?,?,?,?,1,?,?,?,NOW(),CASE WHEN ? THEN NOW() ELSE NULL END,CASE WHEN ? THEN NULL ELSE NOW() END) ON CONFLICT(user_id,concept_id) DO UPDATE SET mastery=GREATEST(0,LEAST(1,learner_concept_mastery.mastery + ?)),confidence=LEAST(1,learner_concept_mastery.confidence+0.05),evidence_count=learner_concept_mastery.evidence_count+1,total_attempts=learner_concept_mastery.total_attempts+1,correct_attempts=learner_concept_mastery.correct_attempts+CASE WHEN ? THEN 1 ELSE 0 END,consecutive_correct=CASE WHEN ? THEN learner_concept_mastery.consecutive_correct+1 ELSE 0 END,consecutive_incorrect=CASE WHEN ? THEN 0 ELSE learner_concept_mastery.consecutive_incorrect+1 END,last_practiced_at=NOW(),last_correct_at=CASE WHEN ? THEN NOW() ELSE learner_concept_mastery.last_correct_at END,last_incorrect_at=CASE WHEN ? THEN learner_concept_mastery.last_incorrect_at ELSE NOW() END,updated_at=NOW()", [x.id, concept.concept_id, correct ? 0.08 : 0, correct ? 0.1 : 0, 1, correct ? 1 : 0, correct ? 1 : 0, correct ? 0 : 1, correct, correct, delta, correct, correct, correct, correct, correct]);
+                nextDueAt = (await query('SELECT due_at FROM learner_item_state WHERE user_id=? AND item_id=?', [x.id, target.id]))[0]?.due_at ?? null;
+              }
+              // Reveal the expected answer only AFTER grading — never sent upfront.
+              let reveal = null;
+              if (target) {
+                const rj = target.response_json || {};
+                reveal = rj.answer ?? rj.expected ?? (Array.isArray(rj.tokens) ? rj.tokens.join(' ') : null);
+              } else if (legacyRow) {
+                reveal = legacyRow.answer ?? null;
+              }
+              return json(res, 201, { attempt, correct, score, reveal, next_due_at: nextDueAt });
+            }
+            if (req.method === 'POST' && u.pathname === '/api/me/placement') {
+              const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' });
+              const b = await body(req); const level = String(b.level || '').toUpperCase();
+              if (!['A1','A2','B1','B2','C1','C2'].includes(level)) return json(res, 400, { error: 'level must be a CEFR code.' });
+              await query("UPDATE learner_profiles SET current_level=?,placement_status='complete',updated_at=NOW() WHERE user_id=?", [level, x.id]);
+              return json(res, 200, { level, placement_status: 'complete' });
             }
             if (req.method === 'POST' && (u.pathname === '/api/auth/signup' || u.pathname === '/api/auth/login')) { const b = await body(req), email = b.email?.trim().toLowerCase(); let row = (await query('SELECT * FROM users WHERE email=?', [email]))[0]; if (u.pathname.endsWith('signup')) { if (!email || !b.password || b.password.length < 8) return json(res, 400, { error: 'Email and an 8 character password are required.' }); if (row) return json(res, 409, { error: 'An account already exists for this email.' }); const id = randomUUID(), p = password(b.password); await query('INSERT INTO users(id,email,name,password_hash,password_salt) VALUES(?,?,?,?,?)', [id, email, b.name?.trim() || email.split('@')[0], p.hash, p.salt]); row = { id, email, name: b.name?.trim() || email.split('@')[0], password_hash: p.hash, password_salt: p.salt }; await createProfileForUser(id); } else { if (!row) return json(res, 401, { error: 'Invalid email or password.' }); if (password(b.password || '', row.password_salt).hash !== row.password_hash) return json(res, 401, { error: 'Invalid email or password.' }); } const token = randomBytes(32).toString('hex'); await query('INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(?,?,?,NOW()+INTERVAL \'14 days\')', [randomUUID(), row.id, hashToken(token)]); return json(res, 200, { token, user: { id: row.id, email: row.email, name: row.name }, profile: null, progress: [], mistakes: [], attempts: [] }); }
+            // DEPRECATED (legacy track): UD example/exercise browsing. See sections().
             if (req.method === 'GET' && u.pathname === '/api/content/sections') return json(res, 200, await sections());
             if (req.method === 'GET' && u.pathname.startsWith('/api/content/sections/')) return json(res, 200, await section(decodeURIComponent(u.pathname.split('/').pop())));
-            if (req.method === 'GET' && u.pathname === '/api/content/topics') return json(res, 200, { section: 'A1', topics: await query('SELECT * FROM learning_topics WHERE cefr_section=? ORDER BY category,title', ['A1']) });
+            if (req.method === 'GET' && u.pathname === '/api/content/topics') { const t = (u.searchParams.get('section') || 'A1').toUpperCase(); return json(res, 200, { section: t, topics: await query('SELECT * FROM learning_topics WHERE cefr_section=? ORDER BY category,title', [t]) }); }
             if (req.method === 'GET' && u.pathname === '/api/content/tv5-exercises') return json(res, 200, { section: u.searchParams.get('section') || 'all', exercises: await query('SELECT * FROM tv5_exercises WHERE ($1 IS NULL OR cefr_section=$1) ORDER BY cefr_section,title', [u.searchParams.get('section')?.toUpperCase() || null]) });
             if (req.method === 'GET' && u.pathname === '/api/exam/questions') return json(res, 200, { section: u.searchParams.get('section') || 'A1', questions: await query('SELECT *,choices_json AS choices FROM exam_questions WHERE cefr_section=? ORDER BY external_id', [u.searchParams.get('section')?.toUpperCase() || 'A1']), sources: [] });
             if (req.method === 'GET' && u.pathname === '/api/exam/past-questions') return json(res, 200, { questions: await query('SELECT *,choices_json AS choices FROM exam_questions ORDER BY cefr_section,external_id'), sources: [] });
             if (req.method === 'GET' && u.pathname === '/api/me') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { user: { id: x.id, email: x.email, name: x.name }, profile: (await query('SELECT * FROM learner_profiles WHERE user_id=?', [x.id]))[0] || null, progress: [], mistakes: [], attempts: [] }); }
-            if (req.method === 'GET' && (u.pathname === '/api/me/session-plan' || /^\/api\/me\/session-plan\/(A1|A2|B1|B2)$/i.test(u.pathname))) { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const pathSection = u.pathname.match(/session-plan\/(A1|A2|B1|B2)$/i)?.[1]; const p = await section(pathSection || u.searchParams.get('section') || 'A1', 10); return json(res, 200, { reviewsDue: 0, newConcepts: p.examples.length, estimatedMinutes: 12, section: p.section, exercises: p.exercises, message: 'Session plan generated from Supabase content.' }); }
+            if (req.method === 'GET' && u.pathname === '/api/me/conversation-targets') {
+              const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' });
+              const profile = (await query('SELECT current_level FROM learner_profiles WHERE user_id=?', [x.id]))[0];
+              const level = (u.searchParams.get('section') || profile?.current_level || 'A1').toUpperCase();
+              const weak = await query("SELECT c.id, c.slug, c.title, c.description, c.level_code, m.mastery FROM learner_concept_mastery m JOIN concepts c ON c.id=m.concept_id WHERE m.user_id=? AND m.evidence_count>0 ORDER BY m.mastery ASC LIMIT 8", [x.id]);
+              const concepts = weak.length ? weak : await query("SELECT id, slug, title, description, level_code FROM concepts WHERE level_code=? AND status='active' ORDER BY title LIMIT 8", [level]);
+              const scenario = concepts.length
+                ? `Roleplay an everyday situation using: ${concepts.slice(0, 3).map((c) => c.title).join(', ')}`
+                : 'Introduce yourself: name, where you live, what you do.';
+              return json(res, 200, {
+                scenario,
+                targets: concepts.map((c) => ({ id: c.id, section: c.level_code || level, title: c.title, text: c.description || c.title })),
+                message: weak.length
+                  ? `Based on your ${weak.length} weakest tracked concept${weak.length === 1 ? '' : 's'}.`
+                  : 'No attempts yet — showing starter concepts for your level. Complete exercises to personalize this.',
+              });
+            }
+            if (req.method === 'GET' && (u.pathname === '/api/me/session-plan' || /^\/api\/me\/session-plan\/(A1|A2|B1|B2|C1|C2)$/i.test(u.pathname))) { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const pathSection = u.pathname.match(/session-plan\/(A1|A2|B1|B2|C1|C2)$/i)?.[1]; const profile = (await query('SELECT current_level FROM learner_profiles WHERE user_id=?', [x.id]))[0]; const level = (pathSection || u.searchParams.get('section') || profile?.current_level || 'A1').toUpperCase(); return json(res, 200, await buildSessionPlan(x.id, level)); }
             return json(res, 404, { error: 'Not found.' });
         } catch (e) { console.error(e); return json(res, 500, { error: e.message }); }
     }).listen(PORT, '127.0.0.1', () => console.log(`Franco API listening on http://127.0.0.1:${PORT}`));

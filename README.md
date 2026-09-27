@@ -73,12 +73,6 @@ To refresh the French content from UD French GSD:
 npm run import:ud-gsd
 ```
 
-To import official free TCF sample questions:
-
-```bash
-npm run import:tcf-official
-```
-
 To import the public TV5MONDE exercise catalogue into its separate table:
 
 ```bash
@@ -90,24 +84,27 @@ npm run import:tv5
 - Login and sign-up screens call the local API.
 - User accounts and password hashes are stored in SQLite.
 - Browser sessions use a bearer token stored in `sessionStorage`.
-- The signed-in app shell includes Home, Session, Progress, and Conversation views.
-- The Content view shows A1, A2, B1, and B2 sections imported into SQLite.
-- Every usable UD sentence is retained; each produces reading, word-order, spelling, and grammar exercises.
-- A1 includes database-backed vocabulary/topic tracks, and the Past questions view keeps exam items separate.
-- Content endpoints include `GET /api/content/topics?section=A1` and `GET /api/exam/past-questions`.
-- Official TCF sample questions can be imported into `exam_questions`.
-- TV5MONDE activities are stored separately in `tv5_exercises`; they link back to the free activity pages for completion.
+- The signed-in app shell includes Home, Placement, Session, Content, Past questions, Progress, and Conversation views.
+- Sessions are adaptive: `GET /api/me/session-plan?section=A1` returns a queue ordered by due SM-2 reviews, then new items at the learner's level, then weak-concept items, then exam practice and legacy drills. The client renders the queue in server order — no client-side shuffling of the queue itself (MCQ options still use Fisher–Yates).
+- Every answered exercise reports `{ item_kind, item_id|legacy_ref, response, duration_ms, hint_used }` to `POST /api/me/attempts`, which grades server-side, updates SM-2 state (`learner_item_state`) and concept mastery, and reveals the correct answer only after grading.
+- One renderer per item type lives in `src/components/exercises/`: multiple choice (reading/grammar), tap-to-order word order, typed spelling/dictation, pronunciation drills with audio + self-marking, writing prompts with rubrics, and speaking prompts with follow-ups.
+- The Content view has Roadmap, Writing, Speaking, and Vocabulary tabs for levels A1–C2. Roadmap concepts, writing/speaking items, and vocabulary topics come from the canonical track (`/api/content/v1/concepts`, `/api/content/v1/items`, `/api/content/topics?section=...`).
+- A 10-question placement quiz (`/placement`) sets the learner's CEFR level via `POST /api/me/placement`; the profile refreshes immediately after.
+- Concept data is seeded from `scripts/concept-data.mjs` (rich authored A1 lessons; A2–C2 stubs clearly marked) via `npm run seed:concepts`; prerequisite edges drive the roadmap connectors.
+- Past questions show all skills (reading, listening, language structures) with section tabs A1–C2.
 - No fake user progress or mistakes are rendered.
 
-## Planned data sources
+## Learner API (implemented)
 
-The app should fetch learner profile, progress, attempts, mistakes, and session queues from backend endpoints such as:
-
-- `GET /api/me`
-- `GET /api/me/session-plan`
-- `GET /api/me/progress`
+- `GET /api/me` — user + profile
+- `GET /api/me/session-plan?section=A1` — adaptive queue (reviews → new → weak concepts → exam → drills)
+- `POST /api/me/attempts` — grade an answer, update SM-2 + mastery, reveal the answer
+- `POST /api/me/placement` — set CEFR level from the placement quiz
+- `GET /api/me/progress` — SM-2 state, concept mastery, recent attempts
+- `GET /api/me/review-due` — items due for review
 - `GET /api/me/conversation-targets`
-- `POST /api/me/conversation-turns`
+
+## Planned data sources
 
 The UD French GSD treebank can be used later as an open corpus source for annotated sentence examples, subject to its CC BY-SA 4.0 license and attribution requirements:
 
@@ -115,6 +112,9 @@ https://universaldependencies.org/treebanks/fr_gsd/
 
 The current A1-B2 labels are local difficulty sections generated from sentence length and UD annotations. UD French GSD does not provide official CEFR labels, so these should be improved later with CEFRLex/FLELex or a reviewed curriculum.
 
-The TCF scraper imports examples from France Education international's official sample page. It does not scrape random past-paper sites, and it keeps those imported items in a separate `exam_questions` table with source attribution.
+Do not scrape France Éducation international's official TCF/DELF sample pages: their terms
+prohibit reproducing exam samples, and copyright is retained by FEI. The previous
+`import:tcf-official` scraper was removed for this reason. Exam-style practice items must be
+original content authored for this project (see the `src_original_authored` source).
 
-TV5MONDE reports more than 4,000 free exercises across A1-B2. The importer stores the paginated catalogue links and metadata in `tv5_exercises`, while the activity itself remains on TV5MONDE.
+TV5MONDE reports more than 4,000 free exercises across A1-B2. The importer stores the paginated catalogue links and metadata in `tv5_exercises`; only links and catalogue metadata may be stored, never exercise content. The activity itself remains on TV5MONDE.

@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { migrate, pool } from '../server/database.js';
+import { cleanExamPassage } from '../server/exam-text.js';
 
 await migrate();
 const sqlite = new DatabaseSync('data/franco.sqlite');
@@ -25,7 +26,9 @@ for (const example of sqlite.prepare('SELECT * FROM example_sentences').all()) {
 }
 for (const question of sqlite.prepare('SELECT * FROM exam_questions').all()) {
   const choices = json(question.choices_json, []).map((choice, index) => typeof choice === 'string' ? { id: String(index), text: choice } : choice); const answer = question.answer || choices[0]?.id || null;
-  await insertItem({ oldId: `exam:${question.id}`, sourceId: question.source_id, externalId: `legacy-exam:${question.external_id}`, type: 'multiple_choice', level: question.cefr_section, prompt: question.prompt, context: question.context, response: { choices, answer }, evaluation: { mode: 'choice' }, metadata: { exam_name: question.exam_name, skill: question.skill, source_url: question.source_url, explanation: question.explanation, legacy: true } });
+  // Exam text is cleaned once at import so the UI never does regex surgery.
+  const cleaned = cleanExamPassage(question.prompt, question.context);
+  await insertItem({ oldId: `exam:${question.id}`, sourceId: question.source_id, externalId: `legacy-exam:${question.external_id}`, type: 'multiple_choice', level: question.cefr_section, prompt: cleaned.prompt, context: cleaned.passage, response: { choices, answer }, evaluation: { mode: 'choice' }, metadata: { exam_name: question.exam_name, skill: question.skill, source_url: question.source_url, explanation: question.explanation, legacy: true } });
 }
 await pool.end();
 console.log('Migrated legacy SQLite content into content.v1 records.');
