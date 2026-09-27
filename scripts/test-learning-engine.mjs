@@ -44,6 +44,15 @@ assert(evaluate({ response_json: {}, evaluation_json: { rubric: { coherence: 'x'
 assert(evaluate({ response_json: {}, evaluation_json: { rubric: { coherence: 'x' } } }, '   ') === false, 'rubric items incomplete on empty response');
 assert(evaluate({ response_json: {}, evaluation_json: { expected_points: ['a'] } }, 'ok') === true, 'speaking items complete on non-empty response');
 
+// --- evaluate(): founding-dataset shapes (answer in evaluation_json) ---
+const dictationItem = { response_json: {}, evaluation_json: { answer: "lorsque le jour du sabbat fut passé", scoring: 'exact_match_case_insensitive' } };
+assert(evaluate(dictationItem, 'Lorsque le jour du sabbat fut passé') === true, 'dictation: scoring label grades like normalized_text');
+assert(evaluate(dictationItem, 'lorsque le jour du sabbat fut passé!') === true, 'dictation: trailing punctuation ignored');
+assert(evaluate(dictationItem, 'un autre texte') === false, 'dictation: wrong text rejected');
+const pronItem = { response_json: {}, evaluation_json: { expected: 'être' } };
+assert(evaluate(pronItem, 'être') === true, 'pronunciation: evaluation_json.expected grades');
+assert(evaluate(pronItem, '') === false, 'pronunciation: empty self-report rejected');
+
 // --- legacy graders ---
 const examRow = { answer: 'À sept heures', choices_json: JSON.stringify({ A: 'À six heures', B: 'À sept heures' }) };
 assert(gradeExamQuestion(examRow, 'B') === true, 'exam: choice key resolves to correct text');

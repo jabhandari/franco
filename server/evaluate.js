@@ -22,32 +22,38 @@ export function normalizeTokens(tokens) {
 
 // `item` carries response_json / evaluation_json (content_items) and `response`
 // is the learner's raw answer (string, string[] for token_order, or object).
+// Reference answers may live in response_json (contract batches) or
+// evaluation_json (dataset-authored items, e.g. the founding dictation set).
 export function evaluate(item, response) {
   const ev = item.evaluation_json || {};
   const resp = item.response_json || {};
-  switch (ev.mode) {
+  const refAnswer = resp.answer ?? ev.answer;
+  const refExpected = resp.expected ?? ev.expected;
+  // Dataset-authored `scoring` labels map onto the contract evaluators.
+  const mode = ev.mode ?? (ev.scoring === 'exact_match_case_insensitive' ? 'normalized_text' : undefined);
+  switch (mode) {
     case 'choice':
       // Case-insensitive, whitespace-tolerant (matches historic client behavior).
-      return normalizeText(response) === normalizeText(resp.answer);
+      return normalizeText(response) === normalizeText(refAnswer);
     case 'token_order': {
       const given = normalizeTokens(response);
       const expected = normalizeTokens(resp.tokens);
       return given.length > 0 && given.length === expected.length && given.every((token, i) => token === expected[i]);
     }
     case 'normalized_text':
-      return normalizeText(response) === normalizeText(resp.answer ?? resp.expected);
+      return normalizeText(response) === normalizeText(refAnswer ?? refExpected);
     case 'exact':
-      return String(response ?? '').trim() === String(resp.answer ?? resp.expected ?? '').trim();
+      return String(response ?? '').trim() === String(refAnswer ?? refExpected ?? '').trim();
     case 'rubric':
     case 'external':
       // Human- or self-assessed: any non-empty response counts as completed.
       return normalizeText(response).length > 0;
     default: {
       // Dataset-authored items without an explicit contract mode.
-      if (resp.answer !== undefined) return normalizeText(response) === normalizeText(resp.answer);
-      if (resp.expected !== undefined) return normalizeText(response) === normalizeText(resp.expected);
+      if (refAnswer !== undefined) return normalizeText(response) === normalizeText(refAnswer);
+      if (refExpected !== undefined) return normalizeText(response) === normalizeText(refExpected);
       if (ev.rubric || ev.expected_points) return normalizeText(response).length > 0;
-      const accepted = resp.accepted_answers || [resp.answer];
+      const accepted = resp.accepted_answers || [refAnswer];
       return accepted.filter(Boolean).some((answer) => normalizeText(answer) === normalizeText(response));
     }
   }

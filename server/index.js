@@ -85,7 +85,9 @@ function shapeContentItem(row, queueKind, mediaByItem) {
   if (ev.expected_points) entry.expected_points = ev.expected_points;
   if (ev.follow_up_questions) entry.follow_up_questions = ev.follow_up_questions;
   if (resp.expected !== undefined) entry.expected = resp.expected;
+  else if (ev.expected !== undefined) entry.expected = ev.expected;
   else if (typeof resp.answer === 'string') entry.expected = resp.answer;
+  else if (typeof ev.answer === 'string') entry.expected = ev.answer;
   return entry;
 }
 
@@ -322,7 +324,8 @@ async function main() {
               let reveal = null;
               if (target) {
                 const rj = target.response_json || {};
-                reveal = rj.answer ?? rj.expected ?? (Array.isArray(rj.tokens) ? rj.tokens.join(' ') : null);
+                const ej = target.evaluation_json || {};
+                reveal = rj.answer ?? rj.expected ?? ej.answer ?? ej.expected ?? (Array.isArray(rj.tokens) ? rj.tokens.join(' ') : null);
               } else if (legacyRow) {
                 reveal = legacyRow.answer ?? null;
               }
