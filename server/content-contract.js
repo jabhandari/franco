@@ -71,9 +71,10 @@ function validateItem(item, index, errors) {
 
 export function validateBatch(batch) {
   const errors = [];
-  const allowed = new Set(['schema_version', 'batch_id', 'idempotency_key', 'source', 'items']);
+  const allowed = new Set(['schema_version', 'batch_id', 'idempotency_key', 'source', 'items', 'auto_publish']);
   if (!checkObject(batch, '$', allowed, errors)) return { valid: false, errors };
   required(batch, ['schema_version', 'batch_id', 'idempotency_key', 'source', 'items'], '$', errors);
+  if (batch.auto_publish !== undefined && typeof batch.auto_publish !== 'boolean') errors.push(issue('$.auto_publish', 'must be a boolean when present'));
   if (batch.schema_version !== CONTENT_SCHEMA_VERSION) errors.push(issue('$.schema_version', `must be ${CONTENT_SCHEMA_VERSION}`));
   string(batch.batch_id, '$.batch_id', errors, 1, 128); string(batch.idempotency_key, '$.idempotency_key', errors, 8, 256);
   validateSource(batch.source, errors);

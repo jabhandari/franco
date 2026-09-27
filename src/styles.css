@@ -974,3 +974,16 @@ html[data-theme="light"] .checklist small { color:#687178; }
 html[data-theme="light"] .step-card { background:#fff; border-color:#e7ddd1; }
 html[data-theme="light"] .step-card strong { color:#1f2830; }
 html[data-theme="light"] .step-card p { color:#687178; }
+
+/* Learner content reports */
+.exercise-card-wrap { display:flex; flex-direction:column; }
+.report-toggle { align-self:flex-end; margin-top:10px; opacity:.55; font-size:12.5px; min-height:0; padding:4px 2px; }
+.report-toggle:hover { opacity:1; }
+.report-toggle svg { flex:none; }
+.report-form { margin-top:10px; padding:12px; border:1px solid #303030; border-radius:10px; display:flex; flex-direction:column; gap:10px; background:#191919; }
+.report-form label { display:flex; flex-direction:column; gap:6px; font-size:13px; font-weight:600; }
+.report-form select, .report-form textarea { font:inherit; font-weight:400; padding:8px 10px; border:1px solid #303030; border-radius:8px; background:#111; color:inherit; }
+.report-actions { display:flex; justify-content:flex-end; gap:8px; }
+.report-thanks { margin-top:10px; font-size:13px; opacity:.7; text-align:right; }
+html[data-theme="light"] .report-form { border-color:#e7ddd1; background:#fff; }
+html[data-theme="light"] .report-form select, html[data-theme="light"] .report-form textarea { border-color:#e7ddd1; background:#fff; }
