@@ -1,6 +1,6 @@
 # Franco
 
-Franco is a React MVP shell for a French learning platform. The current app is authentication-first and uses a local Node API with SQLite for users, sessions, learner profiles, progress rows, attempts, and mistakes.
+Franco is a React MVP shell for a French learning platform. The current app is authentication-first and uses a Node API backed by Supabase PostgreSQL for users, sessions, learner profiles, progress rows, attempts, and mistakes.
 
 ## Backend data model
 
@@ -26,11 +26,13 @@ npm install
 npm run dev
 ```
 
-Content is stored in a local SQLite file and is not committed to Git (`data/` is ignored). After cloning, create it by running:
+The API requires `DATABASE_URL` (your Supabase PostgreSQL connection string) in `.env`. To load the founding content dataset, run:
 
 ```bash
-npm run import:all
+npm run import:normalized
 ```
+
+`data/` is git-ignored; it only holds the optional SQLite staging file used by the legacy corpus importers (`npm run import:ud-gsd`, `npm run import:tv5`).
 
 Then start the API and web app with `npm run dev`. If the browser still shows loading, verify `http://127.0.0.1:8787/api/health` returns `{ "ok": true }` and open the Vite URL printed in the terminal.
 
@@ -39,7 +41,7 @@ The dev command starts both services:
 - React/Vite: `http://127.0.0.1:5173/`
 - API: `http://127.0.0.1:8787/`
 
-The local SQLite database is created at `data/franco.sqlite`.
+The legacy corpus importers stage into a local SQLite file at `data/franco.sqlite`; the API itself only reads from Supabase.
 
 ## Content API contract
 
@@ -82,7 +84,7 @@ npm run import:tv5
 ## Current MVP behavior
 
 - Login and sign-up screens call the local API.
-- User accounts and password hashes are stored in SQLite.
+- User accounts and password hashes are stored in Supabase PostgreSQL.
 - Browser sessions use a bearer token stored in `sessionStorage`.
 - The signed-in app shell includes Home, Placement, Session, Content, Past questions, Progress, and Conversation views.
 - Sessions are adaptive: `GET /api/me/session-plan?section=A1` returns a queue ordered by due SM-2 reviews, then new items at the learner's level, then weak-concept items, then exam practice and legacy drills. The client renders the queue in server order — no client-side shuffling of the queue itself (MCQ options still use Fisher–Yates).
