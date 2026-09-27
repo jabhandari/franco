@@ -44,6 +44,10 @@ function normalizeChoices(raw) {
 // Queue order: due SM-2 reviews -> new items at the learner's level ->
 // weak-concept items -> exam practice -> extra legacy drills.
 const USABLE_STATUSES = `('published','approved','pending_review')`;
+// Learner reports needed from distinct users before an item is auto-demoted
+// back to pending_review for human re-review.
+const REPORT_THRESHOLD = 3;
+const REPORT_REASONS = new Set(['wrong_answer', 'unclear_prompt', 'typo', 'offensive', 'other']);
 const STATUS_ORDER = `CASE i.status WHEN 'published' THEN 0 WHEN 'approved' THEN 1 ELSE 2 END`;
 
 async function sessionContentItems(where, params, orderBy, limit) {
@@ -207,6 +211,9 @@ async function ingestBatch(batch) {
     if (unknown.length) return { status: 422, body: { error: 'Content references unknown concepts.', schema_version: CONTENT_SCHEMA_VERSION, errors: unknown.map(slug => ({ path: '$.items[].concepts', message: `Unknown concept slug: ${slug}` })), available_concepts: '/api/content/v1/concepts' } };
   }
   const source = batch.source;
+  // Trusted batches (ingested with a content:review-scoped key) may skip the
+  // review queue entirely. Untrusted batches always land in pending_review.
+  const itemStatus = batch.auto_publish === true ? 'published' : 'pending_review';
   await query('INSERT INTO content_sources(id,name,url,license,attribution) VALUES(?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET name=EXCLUDED.name,url=EXCLUDED.url,license=EXCLUDED.license,attribution=EXCLUDED.attribution', [source.id, source.name, source.url, source.license, source.attribution]);
   const batchId = batch.batch_id; await query('INSERT INTO content_batches(id,source_id,idempotency_key,schema_version,item_count) VALUES(?,?,?,?,?)', [batchId, source.id, batch.idempotency_key, batch.schema_version, batch.items.length]);
   const created = []; const duplicates = [];
@@ -216,16 +223,17 @@ async function ingestBatch(batch) {
     if (prior) { duplicates.push({ external_id: item.external_id, item_id: prior.id, kind: 'exact' }); continue; }
     const near = await query('SELECT id,prompt FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE i.status <> ? AND i.item_type=? AND i.cefr_level=? LIMIT 200', ['rejected', item.type, item.cefr.level]);
     const candidate = near.map(row => ({ ...row, score: similarity(item.prompt, row.prompt) })).sort((a,b) => b.score-a.score)[0];
-    await query('INSERT INTO content_items(id,source_id,external_id,item_type,cefr_level,cefr_method,cefr_confidence,difficulty_band,difficulty_score,exact_hash) VALUES(?,?,?,?,?,?,?,?,?,?)', [itemId, source.id, item.external_id, item.type, item.cefr.level, item.cefr.method, item.cefr.confidence ?? null, item.difficulty?.band ?? null, item.difficulty?.score ?? null, hash]);
+    await query('INSERT INTO content_items(id,source_id,external_id,item_type,cefr_level,cefr_method,cefr_confidence,difficulty_band,difficulty_score,exact_hash,status) VALUES(?,?,?,?,?,?,?,?,?,?,?)', [itemId, source.id, item.external_id, item.type, item.cefr.level, item.cefr.method, item.cefr.confidence ?? null, item.difficulty?.band ?? null, item.difficulty?.score ?? null, hash, itemStatus]);
     await query('INSERT INTO content_revisions(item_id,revision,batch_id,title,prompt,instructions,context,response_json,evaluation_json,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?)', [itemId, 1, batchId, item.title ?? null, item.prompt, item.instructions ?? null, item.context ?? null, JSON.stringify(item.response), JSON.stringify(item.evaluation), JSON.stringify(item.metadata ?? {})]);
+    if (itemStatus === 'published') await query('INSERT INTO content_reviews(id,item_id,action,reviewer,note) VALUES(?,?,?,?,?)', [randomUUID(), itemId, 'publish', 'auto-publish', 'Auto-published trusted batch']);
     for (const [index, slug] of (item.concepts ?? []).entries()) { const conceptId = (await query('SELECT id FROM concepts WHERE slug=?', [slug]))[0].id; await query('INSERT INTO content_concepts(item_id,concept_id,is_primary,weight) VALUES(?,?,?,?) ON CONFLICT(item_id,concept_id) DO UPDATE SET is_primary=EXCLUDED.is_primary,weight=EXCLUDED.weight', [itemId, conceptId, index === 0, index === 0 ? 1 : 0.5]); }
     for (const label of item.tags ?? []) { const slug = label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); const tagId = createHash('sha256').update(`tag:${slug}`).digest('hex'); await query('INSERT INTO tags(id,slug,label) VALUES(?,?,?) ON CONFLICT(slug) DO NOTHING', [tagId, slug, label]); await query('INSERT INTO content_tags(item_id,tag_id) VALUES(?,?) ON CONFLICT DO NOTHING', [itemId, tagId]); }
     for (const media of item.media ?? []) await query('INSERT INTO media_assets(id,item_id,kind,url,duration_seconds,transcript,checksum) VALUES(?,?,?,?,?,?,?)', [randomUUID(), itemId, media.kind, media.url, media.duration_seconds ?? null, media.transcript ?? null, media.checksum ?? null]);
     if (candidate && candidate.score >= 0.85) { const pair = [itemId, candidate.id].sort(); await query('INSERT INTO content_duplicates(id,item_id,candidate_item_id,similarity) VALUES(?,?,?,?) ON CONFLICT(item_id,candidate_item_id) DO NOTHING', [randomUUID(), pair[0], pair[1], candidate.score]); duplicates.push({ external_id: item.external_id, item_id: itemId, candidate_item_id: candidate.id, kind: 'near', similarity: candidate.score }); }
-    created.push({ external_id: item.external_id, item_id: itemId, status: 'pending_review' });
+    created.push({ external_id: item.external_id, item_id: itemId, status: itemStatus });
   }
-  await query('UPDATE content_batches SET status=?,completed_at=NOW() WHERE id=?', ['pending_review', batchId]);
-  return { status: 202, body: { batch_id: batchId, schema_version: batch.schema_version, status: 'pending_review', item_count: batch.items.length, created, duplicates } };
+  await query('UPDATE content_batches SET status=?,completed_at=NOW() WHERE id=?', [itemStatus, batchId]);
+  return { status: 202, body: { batch_id: batchId, schema_version: batch.schema_version, status: itemStatus, item_count: batch.items.length, created, duplicates } };
 }
 async function main() {
     await migrate(); createServer(async (req, res) => {
@@ -234,10 +242,29 @@ async function main() {
             if (req.method === 'GET' && u.pathname === '/api/health') return json(res, 200, { ok: true, database: 'supabase-postgres' });
             if (req.method === 'GET' && u.pathname === '/api/content/v1/schema') return json(res, 200, await schemaDocument());
             if (u.pathname.startsWith('/api/content/v1/')) { const scope = u.pathname === '/api/content/v1/schema' ? null : contentApiScope(req.method, u.pathname); if (scope && !(await apiKey(req, scope))) return json(res, 401, { error: 'A scoped content API key is required.' }); }
-            if (req.method === 'POST' && u.pathname === '/api/content/v1/batches') { const result = await ingestBatch(await body(req)); return json(res, result.status, result.body); }
+            if (req.method === 'POST' && u.pathname === '/api/content/v1/batches') { const b = await body(req); if (b && b.auto_publish === true && !(await apiKey(req, 'content:review'))) return json(res, 403, { error: 'auto_publish requires the content:review scope.' }); const result = await ingestBatch(b); return json(res, result.status, result.body); }
             const itemMatch = u.pathname.match(/^\/api\/content\/v1\/items\/([^/]+)(?:\/(approve|reject|publish))?$/);
             if (req.method === 'GET' && itemMatch) { const rows = await query('SELECT i.*,r.revision,r.title,r.prompt,r.instructions,r.context,r.response_json,r.evaluation_json,r.metadata_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE i.id=?', [itemMatch[1]]); return rows[0] ? json(res, 200, rows[0]) : json(res, 404, { error: 'Content item not found.' }); }
             if (req.method === 'POST' && itemMatch?.[2]) { const action = itemMatch[2]; const status = action === 'approve' ? 'approved' : action === 'publish' ? 'published' : 'rejected'; const rows = await query('UPDATE content_items SET status=?,updated_at=NOW() WHERE id=? RETURNING id,status', [status, itemMatch[1]]); if (!rows[0]) return json(res, 404, { error: 'Content item not found.' }); await query('INSERT INTO content_reviews(id,item_id,action,reviewer,note) VALUES(?,?,?,?,?)', [randomUUID(), itemMatch[1], action, 'content-api-key', (await body(req)).note ?? null]); return json(res, 200, rows[0]); }
+            const reportMatch = u.pathname.match(/^\/api\/content\/v1\/items\/([^/]+)\/report$/);
+            if (req.method === 'POST' && reportMatch) {
+              const viewer = await user(req);
+              if (!viewer) return json(res, 401, { error: 'Authentication required.' });
+              const payload = await body(req);
+              const reason = REPORT_REASONS.has(payload?.reason) ? payload.reason : 'other';
+              const note = typeof payload?.note === 'string' && payload.note.trim() ? payload.note.trim().slice(0, 500) : null;
+              const item = (await query('SELECT id,status FROM content_items WHERE id=?', [reportMatch[1]]))[0];
+              if (!item) return json(res, 404, { error: 'Content item not found.' });
+              await query('INSERT INTO content_reports(id,item_id,user_id,reason,note) VALUES(?,?,?,?,?) ON CONFLICT(item_id,user_id) DO NOTHING', [randomUUID(), item.id, viewer.id, reason, note]);
+              const [{ count }] = await query('SELECT COUNT(*)::int AS count FROM content_reports WHERE item_id=?', [item.id]);
+              let demoted = false;
+              if (count >= REPORT_THRESHOLD && item.status !== 'pending_review' && item.status !== 'rejected') {
+                await query("UPDATE content_items SET status='pending_review',updated_at=NOW() WHERE id=?", [item.id]);
+                await query('INSERT INTO content_reviews(id,item_id,action,reviewer,note) VALUES(?,?,?,?,?)', [randomUUID(), item.id, 'demote', 'learner-reports', `Auto-demoted after ${count} learner reports`]);
+                demoted = true;
+              }
+              return json(res, 200, { reported: true, reports: count, demoted });
+            }
             const batchMatch = u.pathname.match(/^\/api\/content\/v1\/batches\/([^/]+)$/);
             if (req.method === 'GET' && batchMatch) { const batch = (await query('SELECT * FROM content_batches WHERE id=?', [batchMatch[1]]))[0]; return batch ? json(res, 200, { ...batch, items: await query('SELECT i.id,i.external_id,i.item_type,i.status,i.cefr_level FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=1 WHERE r.batch_id=? ORDER BY i.created_at', [batch.id]) }) : json(res, 404, { error: 'Batch not found.' }); }
             if (req.method === 'GET' && u.pathname === '/api/content/v1/items') {

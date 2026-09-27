@@ -18,4 +18,8 @@ for (const invalid of [
   { ...base, items: [{ ...items[0], cefr: { level: 'D1', method: 'human_review' } }] },
   { ...base, items: [{ ...items[0], response: { choices: [{ id: 'a', text: 'A' }], answer: 'a' } }] }
 ]) if (validateBatch(invalid).valid) throw new Error('Expected invalid contract to be rejected');
+// auto_publish is an allowed opt-in flag (boolean); anything else is rejected.
+const trusted = validateBatch({ ...base, auto_publish: true, items });
+if (!trusted.valid) throw new Error(`Expected auto_publish:true to validate: ${JSON.stringify(trusted.errors)}`);
+if (validateBatch({ ...base, auto_publish: 'yes', items }).valid) throw new Error('Expected non-boolean auto_publish to be rejected');
 console.log('content.v1 contract checks passed');

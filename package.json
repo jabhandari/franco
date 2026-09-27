@@ -18,7 +18,8 @@
     "test": "node scripts/test-content-contract.mjs && node scripts/test-learning-engine.mjs",
     "migrate:content-v1": "node --env-file=.env scripts/migrate-content-v1.mjs",
     "seed:concepts": "node --env-file=.env scripts/seed-concepts.mjs",
-    "import:normalized": "node --env-file=.env scripts/import-normalized-content.mjs"
+    "import:normalized": "node --env-file=.env scripts/import-normalized-content.mjs",
+    "publish:founding": "node scripts/publish-founding-content.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",
