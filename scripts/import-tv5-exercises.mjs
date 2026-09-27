@@ -1,3 +1,7 @@
+// LEGAL BOUNDARY: TV5MONDE's terms prohibit reproducing or adapting their exercise
+// content. This importer stores catalogue LINKS and catalogue METADATA ONLY
+// (title, level, URL) so learners can complete activities on TV5MONDE itself.
+// Never extend this importer to fetch exercise questions, answers, or media.
 import { createHash } from 'node:crypto';
 import { db, migrate } from '../server/legacy-sqlite.js';
 

@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import pg from 'pg';
+import { cleanExamPassage } from '../server/exam-text.js';
 
 const { Pool } = pg;
 const datasetPath = resolve(process.argv[2] || 'normalized-content.json');
@@ -31,10 +32,18 @@ async function insertRows(client, table, rows) {
   if (!Array.isArray(rows)) throw new Error(`Expected ${table} to be an array.`);
   if (!rows.length) return 0;
 
-  const columns = Object.keys(rows[0]);
+  // Exam text is cleaned once at import so the UI never does regex surgery.
+  const cleaned = table === 'exam_questions'
+    ? rows.map((row) => {
+        const { prompt, passage } = cleanExamPassage(row.prompt, row.context);
+        return { ...row, prompt, context: passage || null };
+      })
+    : rows;
+
+  const columns = Object.keys(cleaned[0]);
   let inserted = 0;
-  for (let offset = 0; offset < rows.length; offset += 500) {
-    const chunk = rows.slice(offset, offset + 500);
+  for (let offset = 0; offset < cleaned.length; offset += 500) {
+    const chunk = cleaned.slice(offset, offset + 500);
     const values = [];
     const records = chunk.map((row) => {
       const placeholders = columns.map((column) => {

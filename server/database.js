@@ -52,6 +52,12 @@ export async function migrate() {
     CREATE INDEX IF NOT EXISTS content_items_status_level_idx ON content_items(status, cefr_level, item_type);
     CREATE INDEX IF NOT EXISTS learner_item_due_idx ON learner_item_state(user_id, due_at);
     CREATE INDEX IF NOT EXISTS attempts_user_time_idx ON learning_attempts(user_id, created_at DESC);
+    -- Attempts can reference new-track content_items OR legacy exam_questions /
+    -- exercise_items (recorded via item_kind + legacy_ref, item_id NULL).
+    ALTER TABLE learning_attempts ALTER COLUMN item_id DROP NOT NULL;
+    ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS item_kind TEXT NOT NULL DEFAULT 'content_item';
+    ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS legacy_ref TEXT;
+    CREATE INDEX IF NOT EXISTS attempts_legacy_idx ON learning_attempts(user_id, item_kind, legacy_ref);
   `);
   for (const [code, ordinal] of [['A1',1],['A2',2],['B1',3],['B2',4],['C1',5],['C2',6]]) await query('INSERT INTO cefr_levels(code,ordinal) VALUES(?,?) ON CONFLICT(code) DO NOTHING', [code, ordinal]);
   await query("INSERT INTO schema_migrations(version) VALUES('content-v1') ON CONFLICT(version) DO NOTHING");
