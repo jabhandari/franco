@@ -317,6 +317,23 @@ async function main() {
             if (req.method === 'GET' && u.pathname === '/api/exam/questions') return json(res, 200, { section: u.searchParams.get('section') || 'A1', questions: await query('SELECT *,choices_json AS choices FROM exam_questions WHERE cefr_section=? ORDER BY external_id', [u.searchParams.get('section')?.toUpperCase() || 'A1']), sources: [] });
             if (req.method === 'GET' && u.pathname === '/api/exam/past-questions') return json(res, 200, { questions: await query('SELECT *,choices_json AS choices FROM exam_questions ORDER BY cefr_section,external_id'), sources: [] });
             if (req.method === 'GET' && u.pathname === '/api/me') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { user: { id: x.id, email: x.email, name: x.name }, profile: (await query('SELECT * FROM learner_profiles WHERE user_id=?', [x.id]))[0] || null, progress: [], mistakes: [], attempts: [] }); }
+            if (req.method === 'GET' && u.pathname === '/api/me/conversation-targets') {
+              const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' });
+              const profile = (await query('SELECT current_level FROM learner_profiles WHERE user_id=?', [x.id]))[0];
+              const level = (u.searchParams.get('section') || profile?.current_level || 'A1').toUpperCase();
+              const weak = await query("SELECT c.id, c.slug, c.title, c.description, c.level_code, m.mastery FROM learner_concept_mastery m JOIN concepts c ON c.id=m.concept_id WHERE m.user_id=? AND m.evidence_count>0 ORDER BY m.mastery ASC LIMIT 8", [x.id]);
+              const concepts = weak.length ? weak : await query("SELECT id, slug, title, description, level_code FROM concepts WHERE level_code=? AND status='active' ORDER BY title LIMIT 8", [level]);
+              const scenario = concepts.length
+                ? `Roleplay an everyday situation using: ${concepts.slice(0, 3).map((c) => c.title).join(', ')}`
+                : 'Introduce yourself: name, where you live, what you do.';
+              return json(res, 200, {
+                scenario,
+                targets: concepts.map((c) => ({ id: c.id, section: c.level_code || level, text: c.description || c.title })),
+                message: weak.length
+                  ? `Based on your ${weak.length} weakest tracked concept${weak.length === 1 ? '' : 's'}.`
+                  : 'No attempts yet — showing starter concepts for your level. Complete exercises to personalize this.',
+              });
+            }
             if (req.method === 'GET' && (u.pathname === '/api/me/session-plan' || /^\/api\/me\/session-plan\/(A1|A2|B1|B2|C1|C2)$/i.test(u.pathname))) { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const pathSection = u.pathname.match(/session-plan\/(A1|A2|B1|B2|C1|C2)$/i)?.[1]; const profile = (await query('SELECT current_level FROM learner_profiles WHERE user_id=?', [x.id]))[0]; const level = (pathSection || u.searchParams.get('section') || profile?.current_level || 'A1').toUpperCase(); return json(res, 200, await buildSessionPlan(x.id, level)); }
             return json(res, 404, { error: 'Not found.' });
         } catch (e) { console.error(e); return json(res, 500, { error: e.message }); }
