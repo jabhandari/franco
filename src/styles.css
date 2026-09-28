@@ -1058,7 +1058,7 @@ html[data-theme="light"] .related-vocab .vocab-chip > span { border-top-color:#e
 .concept-modal {
   position: fixed; z-index: 50;
   left: 0; top: 0; right: auto; bottom: 0;
-  width: min(720px, 94vw); height: 100vh;
+  width: min(828px, 94vw); height: 100vh;
   display: flex; flex-direction: column;
   padding: 0;
   background: #1b1b1b;
