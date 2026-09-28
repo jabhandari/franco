@@ -299,6 +299,24 @@ CREATE TABLE public.learning_attempts (
   CONSTRAINT learning_attempts_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id),
   CONSTRAINT learning_attempts_item_id_fkey FOREIGN KEY (item_id) REFERENCES public.content_items(id)
 );
+CREATE TABLE public.speech_transcriptions (
+  id text NOT NULL,
+  user_id text NOT NULL,
+  item_id text,
+  model text NOT NULL,
+  duration_seconds double precision NOT NULL,
+  status text NOT NULL DEFAULT 'pending'::text,
+  provider_request_id text,
+  error_code text,
+  transcript_hash text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  completed_at timestamp with time zone,
+  CONSTRAINT speech_transcriptions_pkey PRIMARY KEY (id),
+  CONSTRAINT speech_transcriptions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id),
+  CONSTRAINT speech_transcriptions_item_id_fkey FOREIGN KEY (item_id) REFERENCES public.content_items(id),
+  CONSTRAINT speech_transcriptions_duration_check CHECK (duration_seconds > 0),
+  CONSTRAINT speech_transcriptions_status_check CHECK (status IN ('pending', 'succeeded', 'no_speech', 'provider_error'))
+);
 CREATE TABLE public.learner_item_state (
   user_id text NOT NULL,
   item_id text NOT NULL,

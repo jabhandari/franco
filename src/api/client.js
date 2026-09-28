@@ -51,6 +51,24 @@ export async function apiPost(path, body, token) {
 // src/presenters/collections.presenter.js and src/presenters/entry.presenter.js — re-exported
 // at the top of this file.
 
+let speechStatusToken = null;
+let speechStatusRequest = null;
+export function getSpeechStatus(token) {
+  if (speechStatusToken !== token) { speechStatusToken = token; speechStatusRequest = null; }
+  speechStatusRequest ||= apiGet('/api/speech/status', token).catch((error) => { speechStatusRequest = null; throw error; });
+  return speechStatusRequest;
+}
+
+export async function uploadSpeech(itemId, audio, token, practiceId = null) {
+  const path = '/api/speech/transcribe?item_id=' + encodeURIComponent(itemId) + (practiceId ? '&practice=' + encodeURIComponent(practiceId) : '');
+  const response = await fetch(path, {
+    method: 'POST',
+    headers: { authorization: 'Bearer ' + token, 'content-type': audio.type },
+    body: audio,
+  });
+  return parseApiResponse(response);
+}
+
 // Report an answered exercise to the adaptive engine. Every renderer calls
 // this; the server grades, updates SM-2 state, and returns { correct, reveal }.
 export function reportAttempt(entry, response, token, extra = {}) {
