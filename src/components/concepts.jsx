@@ -204,21 +204,51 @@ export function ConceptDetail({ concept }) {
         {concept.stub && <p className="muted small">Full lesson content for this concept is still being authored.</p>}
       </div>
       <div className="theory-blocks">
-        {concept.theory.map((block, index) => block[0] === 'table' ? (
-          <div className="theory-table" key={index}>
-            {block.slice(1).map((cell, cellIndex) => <span key={cellIndex}>{safeText(cell)}</span>)}
-          </div>
-        ) : (
-          <div className={`theory-card ${block[0]}`} key={index}>
-            <strong>{block[0] === 'idea' ? 'The idea' : block[0] === 'rule' ? safeText(block[1]) : block[0] === 'tip' ? 'Tip' : 'Example'}</strong>
-            <p>{safeText(block[0] === 'rule' ? block[2] : block[0] === 'example' ? block[2] : block[1])}</p>
-          </div>
-        ))}
+        {concept.theory.map((block, index) => {
+          const kind = block[0];
+          if (kind === 'table') {
+            return (
+              <div className="theory-table" key={index}>
+                {block.slice(1).map((cell, cellIndex) => <span key={cellIndex}>{safeText(cell)}</span>)}
+              </div>
+            );
+          }
+          if (kind === 'breakdown') {
+            const [, title, text, parts] = block;
+            return (
+              <div className="theory-card breakdown" key={index}>
+                <strong>{safeText(title)}</strong>
+                {text ? <p>{safeText(text)}</p> : null}
+                <div className="breakdown-parts">
+                  {(parts || []).map(([word, role], partIndex) => (
+                    <div className={`breakdown-part role-${String(role).toLowerCase().replace(/[^a-z]+/g, '')}`} key={partIndex}>
+                      <span className="breakdown-word">{safeText(word)}</span>
+                      <span className="breakdown-role">{safeText(role)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          }
+          return (
+            <div className={`theory-card ${kind}`} key={index}>
+              <strong>{kind === 'idea' ? 'The idea' : kind === 'rule' ? safeText(block[1]) : kind === 'tip' ? 'Tip' : kind === 'warning' ? '⚠ Watch out' : 'Example'}</strong>
+              <p>{safeText(kind === 'rule' ? block[2] : kind === 'example' ? block[2] : block[1])}</p>
+            </div>
+          );
+        })}
       </div>
       {concept.vocabulary.length > 0 && (
         <div className="related-vocab">
           <strong>Vocabulary</strong>
-          <div>{concept.vocabulary.map((word, index) => <span key={index}>{safeText(word)}</span>)}</div>
+          <div>{concept.vocabulary.map((word, index) => {
+            const entry = Array.isArray(word) ? word : [word, null];
+            return (
+              <span key={index} className={entry[1] ? 'vocab-chip' : undefined}>
+                {entry[1] ? (<><b>{safeText(entry[0])}</b><span>{safeText(entry[1])}</span></>) : safeText(entry[0])}
+              </span>
+            );
+          })}</div>
         </div>
       )}
       {concept.examples.length > 0 && (

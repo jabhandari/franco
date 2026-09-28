@@ -131,6 +131,16 @@ export const concepts = [
         "French statements usually begin with the subject, followed by the verb."
       ],
       [
+        "breakdown",
+        "The pattern",
+        "Every basic French sentence follows the same order:",
+        [
+          ["Je", "subject"],
+          ["mange", "verb"],
+          ["une pomme", "object"]
+        ]
+      ],
+      [
         "rule",
         "Subject + verb + object",
         "Je mange une pomme. — I eat an apple."
@@ -138,12 +148,19 @@ export const concepts = [
       [
         "tip",
         "Keep the subject pronoun with the verb while you build confidence."
+      ],
+      [
+        "warning",
+        "Unlike Spanish or Italian, French never drops the subject. Always say je parle — never just parle."
       ]
     ],
     "vocabulary": [
-      "je",
-      "manger",
-      "une pomme"
+      ["je", "I"],
+      ["manger", "to eat"],
+      ["une pomme", "an apple"],
+      ["parler", "to speak"],
+      ["aimer", "to like / love"],
+      ["le café", "the coffee"]
     ],
     "examples": [
       [
@@ -153,6 +170,14 @@ export const concepts = [
       [
         "Nous aimons le café.",
         "We like coffee."
+      ],
+      [
+        "Tu manges une pomme.",
+        "You eat an apple."
+      ],
+      [
+        "Elle regarde la télé.",
+        "She watches TV."
       ]
     ],
     "sources": [

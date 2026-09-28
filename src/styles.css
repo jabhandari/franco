@@ -1020,3 +1020,33 @@ html[data-theme="light"] .topic-search input { background:#fff; border-color:#e7
 html[data-theme="light"] .topic-search input::placeholder { color:#a8a094; }
 html[data-theme="light"] .topic-search input:focus { border-color:#2f54c4; }
 @media (max-width:680px) { .topic-search input { width:130px; } }
+
+/* Lesson content pass: breakdown blocks, warning cards, glossed vocab chips */
+.theory-card.warning { border-color:#a16207; background:rgba(245,158,11,.10); }
+.theory-card.warning strong { color:#d97706; }
+.breakdown-parts { display:flex; gap:10px; margin-top:12px; }
+.breakdown-part { flex:1; border-radius:10px; padding:12px 10px; text-align:center; background:#202020; }
+.breakdown-word { display:block; font-weight:800; font-size:17px; margin-bottom:4px; color:#dce6f2; }
+.breakdown-role { font-size:11px; text-transform:uppercase; letter-spacing:.08em; font-weight:700; color:#8997a8; }
+.breakdown-part.role-subject { background:rgba(59,130,246,.14); }
+.breakdown-part.role-subject .breakdown-word { color:#7db4ff; }
+.breakdown-part.role-verb { background:rgba(94,234,212,.12); }
+.breakdown-part.role-verb .breakdown-word { color:#5eead4; }
+.breakdown-part.role-object { background:rgba(245,158,11,.14); }
+.breakdown-part.role-object .breakdown-word { color:#fbbf24; }
+.related-vocab .vocab-chip { display:inline-flex; flex-direction:column; align-items:stretch; gap:0; }
+.related-vocab .vocab-chip b { font-size:13px; }
+.related-vocab .vocab-chip > span { padding:3px 0 0; margin-top:4px; border-top:1px solid #303030; background:none; font-size:11px; color:#8997a8; }
+html[data-theme="light"] .theory-card.warning { background:#fffaf2; border-color:#f3d1a7; }
+html[data-theme="light"] .theory-card.warning strong { color:#b45309; }
+html[data-theme="light"] .breakdown-part { background:#f6f1e7; }
+html[data-theme="light"] .breakdown-word { color:#243b53; }
+html[data-theme="light"] .breakdown-role { color:#687178; }
+html[data-theme="light"] .breakdown-part.role-subject { background:rgba(59,130,246,.12); }
+html[data-theme="light"] .breakdown-part.role-subject .breakdown-word { color:#1d4ed8; }
+html[data-theme="light"] .breakdown-part.role-verb { background:rgba(20,184,166,.14); }
+html[data-theme="light"] .breakdown-part.role-verb .breakdown-word { color:#0f766e; }
+html[data-theme="light"] .breakdown-part.role-object { background:rgba(245,158,11,.14); }
+html[data-theme="light"] .breakdown-part.role-object .breakdown-word { color:#b45309; }
+html[data-theme="light"] .related-vocab .vocab-chip > span { border-top-color:#e7ddd1; color:#687178; }
+@media (max-width:680px) { .breakdown-parts { flex-direction:column; } }
