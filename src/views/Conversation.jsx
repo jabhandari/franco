@@ -2,7 +2,17 @@ import React from 'react';
 import { Database, Timer } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { safeText } from '../api/client.js';
-import { EmptyState } from '../components/ui.jsx';
+import {
+  Checklist,
+  Chip,
+  EmptyState,
+  Page,
+  PageHeader,
+  Panel,
+  PanelHeader,
+  Steps,
+  Text,
+} from '../components/ui';
 
 // Guided speaking practice. There is no scripted chatbot here: the server
 // picks a roleplay scenario from your weakest concepts (or starter concepts
@@ -25,70 +35,53 @@ export function Conversation({ token }) {
   const done = targets.filter((target) => checked[target.id]).length;
 
   return (
-    <section className="page-stack">
-      <p className="eyebrow">Conversation</p>
-      <h1 className="page-title">À vous de parler</h1>
-      <p className="lede">
-        Deux minutes de français continu, construites autour de vos objectifs du moment.
-        <span className="lede-sub"> A two-minute speaking drill built around your current targets — out loud, with a partner, or into a voice recorder.</span>
-      </p>
+    <Page>
+      <PageHeader
+        eyebrow="Conversation"
+        title="À vous de parler"
+        lede={
+          <>
+            Deux minutes de français continu, construites autour de vos objectifs du moment.
+            <span className="lede-sub"> A two-minute speaking drill built around your current targets — out loud, with a partner, or into a voice recorder.</span>
+          </>
+        }
+      />
       {loading && <EmptyState icon={Database} title="Préparation de votre scénario…" text="Loading your speaking scenario…" />}
       {error && <EmptyState icon={Database} title="Pratique indisponible" text={error} />}
       {data && (
         <>
-          <section className="panel scenario-hero">
-            <div className="panel-title">
-              <div>
-                <p className="eyebrow">Votre scénario</p>
-                <h2>{safeText(data.scenario) || 'Introduce yourself: name, where you live, what you do.'}</h2>
-              </div>
-              <span className="timer-chip"><Timer size={14} aria-hidden="true" /> 2 min</span>
-            </div>
-            {safeText(data.message) && <p className="muted">{safeText(data.message)}</p>}
-          </section>
+          <Panel>
+            <PanelHeader
+              eyebrow="Votre scénario"
+              title={safeText(data.scenario) || 'Introduce yourself: name, where you live, what you do.'}
+              aside={<Chip icon={Timer} iconSize={14}>2 min</Chip>}
+            />
+            {safeText(data.message) && <Text variant="muted">{safeText(data.message)}</Text>}
+          </Panel>
           {targets.length > 0 && (
-            <section className="panel">
-              <div className="panel-title">
-                <div>
-                  <p className="eyebrow">Objectifs</p>
-                  <h2>Glissez-les dans votre discours</h2>
-                </div>
-                <span className="muted small nowrap">{done} sur {targets.length}</span>
-              </div>
-              <ul className="checklist">
-                {targets.map((target) => (
-                  <li key={target.id}>
-                    <button
-                      type="button"
-                      className={checked[target.id] ? 'checked' : ''}
-                      onClick={() => toggle(target.id)}
-                      aria-pressed={!!checked[target.id]}
-                    >
-                      <span className="checkbox" aria-hidden="true" />
-                      <span>
-                        <strong>{safeText(target.title) || safeText(target.section)}</strong>
-                        {safeText(target.text) && <small>{safeText(target.text)}</small>}
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </section>
+            <Panel>
+              <PanelHeader
+                eyebrow="Objectifs"
+                title="Glissez-les dans votre discours"
+                aside={<Text as="span" variant="muted" size="sm" nowrap>{done} sur {targets.length}</Text>}
+              />
+              <Checklist
+                items={targets.map((target) => ({
+                  id: target.id,
+                  title: safeText(target.title) || safeText(target.section),
+                  sub: safeText(target.text) || undefined,
+                }))}
+                checked={checked}
+                onToggle={toggle}
+              />
+            </Panel>
           )}
-          <section className="panel">
-            <p className="eyebrow">Méthode</p>
-            <div className="steps-row">
-              {STEPS.map((step, index) => (
-                <div className="step-card" key={step.title}>
-                  <span className="step-number">{index + 1}</span>
-                  <strong>{step.title}</strong>
-                  <p>{step.text}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+          <Panel>
+            <Text variant="eyebrow">Méthode</Text>
+            <Steps steps={STEPS} />
+          </Panel>
         </>
       )}
-    </section>
+    </Page>
   );
 }

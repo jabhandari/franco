@@ -2,7 +2,7 @@ import React from 'react';
 import { Database, Search, X } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { safeText } from '../api/client.js';
-import { EmptyState } from './ui.jsx';
+import { Badge, EmptyState, ErrorMessage, Modal, Panel, Tabs, Text } from './ui';
 
 // Restored original roadmap display: the interactive concept tree with a
 // spine, SVG connectors, numbered nodes, and a click-to-open lesson modal.
@@ -138,12 +138,13 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
   return (
     <section className={`concept-map panel ${active ? 'has-modal' : ''}`}>
       <div className="roadmap-heading">
-        <div className="roadmap-levels">
-          {LEVELS.map((level) => (
-            <button key={level} className={section === level ? 'selected' : ''} onClick={() => onSelectSection(level)}>{level}</button>
-          ))}
-        </div>
-        <span className="roadmap-badge">{nodes.length} concepts</span>
+        <Tabs
+          variant="roadmap"
+          options={LEVELS.map((level) => ({ id: level, label: level }))}
+          value={section}
+          onChange={onSelectSection}
+        />
+        <Badge variant="roadmap">{nodes.length} concepts</Badge>
       </div>
       <div className={`roadmap-canvas roadmap-${section.toLowerCase()}`}>
         <div className="roadmap-spine" />
@@ -162,10 +163,9 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
         ))}
       </div>
       {active && (
-        <div className="concept-modal" role="dialog" aria-modal="true">
-          <button className="concept-modal-close" onClick={() => onSelectConcept(null)} aria-label="Close lesson">×</button>
-          <div className="concept-modal-scroll"><ConceptDetail concept={active} /></div>
-        </div>
+        <Modal closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
+          <ConceptDetail concept={active} />
+        </Modal>
       )}
     </section>
   );
@@ -174,11 +174,12 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
 export function RoadmapTable({ section, nodes, onSelectSection }) {
   return (
     <section className="roadmap-table-page">
-      <div className="roadmap-levels">
-        {LEVELS.map((level) => (
-          <button key={level} className={section === level ? 'selected' : ''} onClick={() => onSelectSection(level)}>{level}</button>
-        ))}
-      </div>
+      <Tabs
+        variant="roadmap"
+        options={LEVELS.map((level) => ({ id: level, label: level }))}
+        value={section}
+        onChange={onSelectSection}
+      />
       <div className="roadmap-table">
         <div className="roadmap-table-head"><span>Concept</span><span>Area</span><span>What you will learn</span></div>
         {nodes.map((node, index) => (
@@ -201,7 +202,7 @@ export function ConceptDetail({ concept }) {
         <span className="eyebrow">{concept.category} · {concept.level}</span>
         <h2>{safeText(concept.title)}</h2>
         <p className="concept-subtitle">{concept.shortDescription}</p>
-        {concept.stub && <p className="muted small">Full lesson content for this concept is still being authored.</p>}
+        {concept.stub && <Text variant="muted" size="sm">Full lesson content for this concept is still being authored.</Text>}
       </div>
       <div className="theory-blocks">
         {concept.theory.map((block, index) => block[0] === 'table' ? (
@@ -362,7 +363,7 @@ function TopicGroup({ category, topics }) {
         )}
       </div>
       {visible.length === 0 ? (
-        <p className="muted">No words match your search.</p>
+        <Text variant="muted">No words match your search.</Text>
       ) : (
         <div className="topic-words">
           {visible.map((topic) => (
@@ -383,14 +384,14 @@ export function TopicTracks({ section }) {
   const topics = data?.topics || [];
   const categories = [...new Set(topics.map((topic) => topic.category))];
 
-  if (loading) return <p className="muted">Loading topics…</p>;
-  if (error) return <p className="error-message">{error}</p>;
-  if (!topics.length) return <p className="muted">No vocabulary topics yet for {section}.</p>;
+  if (loading) return <Text variant="muted">Loading topics…</Text>;
+  if (error) return <ErrorMessage message={error} />;
+  if (!topics.length) return <Text variant="muted">No vocabulary topics yet for {section}.</Text>;
 
   return (
-    <section className="panel topic-panel">
+    <Panel layout="grid">
       <h2>{section} learning tracks</h2>
-      <p className="muted">Vocabulary, spelling, and practical topics from the {section} study plan.</p>
+      <Text variant="muted">Vocabulary, spelling, and practical topics from the {section} study plan.</Text>
       <div className="topic-grid">
         {categories.map((category) => (
           <TopicGroup
@@ -400,6 +401,6 @@ export function TopicTracks({ section }) {
           />
         ))}
       </div>
-    </section>
+    </Panel>
   );
 }

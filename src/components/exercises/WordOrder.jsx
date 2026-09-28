@@ -1,5 +1,15 @@
 import React from 'react';
 import { getErrorMessage, reportAttempt, shuffle } from '../../api/client.js';
+import {
+  ExerciseShell,
+  ExerciseEyebrow,
+  Feedback,
+  ErrorMessage,
+  Button,
+  Text,
+  WordToken,
+  TokenTray,
+} from '../ui';
 
 // Tap-to-order sentence builder for word_order items.
 export function WordOrder({ entry, token, onResult }) {
@@ -47,40 +57,39 @@ export function WordOrder({ entry, token, onResult }) {
   }
 
   return (
-    <article className={`exercise-preview mcq-card ${result && !result.error ? (result.correct ? 'answered-correct' : 'answered-wrong') : ''}`}>
-      <span>{[entry.level, 'word order'].filter(Boolean).join(' · ')}</span>
+    <ExerciseShell answered={result && !result.error ? (result.correct ? 'correct' : 'wrong') : null}>
+      <ExerciseEyebrow level={entry.level} kind="word order" />
       <h2>{entry.prompt}</h2>
-      <p className="muted">Tap the words in order to build the sentence. Tap a placed word to remove it.</p>
-      <div className="word-order-answer" aria-label="Your sentence">
+      <Text variant="muted">Tap the words in order to build the sentence. Tap a placed word to remove it.</Text>
+      <TokenTray variant="answer" label="Your sentence" emptyHint="Your sentence appears here…">
         {answer.map((word, index) => (
-          <button key={`a-${index}`} className="word-token placed" onClick={() => giveBack(index)} disabled={Boolean(result)}>
+          <WordToken key={`a-${index}`} placed disabled={Boolean(result)} onClick={() => giveBack(index)}>
             {word}
-          </button>
+          </WordToken>
         ))}
-        {!answer.length && <span className="muted">Your sentence appears here…</span>}
-      </div>
-      <div className="word-order-bank" aria-label="Word bank">
+      </TokenTray>
+      <TokenTray variant="bank" label="Word bank">
         {bank.map((word, index) => (
-          <button key={`b-${index}-${word}`} className="word-token" onClick={() => take(index)} disabled={Boolean(result)}>
+          <WordToken key={`b-${index}-${word}`} disabled={Boolean(result)} onClick={() => take(index)}>
             {word}
-          </button>
+          </WordToken>
         ))}
-      </div>
+      </TokenTray>
       {!result && (
-        <button className="primary-button" onClick={submit} disabled={!answer.length}>
+        <Button variant="primary" onClick={submit} disabled={!answer.length}>
           Check answer
-        </button>
+        </Button>
       )}
       {result && !result.error && (
-        <div className={`mcq-feedback ${result.correct ? 'correct' : 'incorrect'}`}>
-          <strong>{result.correct ? 'Correct!' : 'Not quite.'}</strong>
-          {!result.correct && result.reveal && <span>Correct order: {result.reveal}</span>}
-          {!result.correct && (
-            <button className="retry-button" onClick={retry}>Try again</button>
-          )}
-        </div>
+        <Feedback
+          tone={result.correct ? 'correct' : 'incorrect'}
+          title={result.correct ? 'Correct!' : 'Not quite.'}
+          reveal={result.correct ? undefined : result.reveal}
+          revealLabel="Correct order:"
+          onRetry={result.correct ? undefined : retry}
+        />
       )}
-      {result?.error && <p className="error-message">{result.error}</p>}
-    </article>
+      {result?.error && <ErrorMessage message={result.error} />}
+    </ExerciseShell>
   );
 }

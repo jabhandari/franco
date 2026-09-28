@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import './styles.css';
 import { apiGet, apiPost } from './api/client.js';
-import { LoadingScreen, NavButton } from './components/ui.jsx';
+import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage } from './components/ui';
 import { Home } from './views/Home.jsx';
 import { Session } from './views/Session.jsx';
 import { Content } from './views/Content.jsx';
@@ -160,10 +160,7 @@ function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <button className="brand" onClick={() => navigate('home')} aria-label="Franco home">
-          <span className="brand-mark">fr</span>
-          <span>Franco</span>
-        </button>
+        <Brand onClick={() => navigate('home')} />
 
         <nav aria-label="Main navigation">
           {navItems.map((item) => (
@@ -184,10 +181,9 @@ function App() {
           <span>Your learning space</span>
         </div>
 
-        <button className="nav-button logout-button" onClick={logout}>
-          <LogOut size={18} aria-hidden="true" />
+        <Button variant="nav" onClick={logout} icon={LogOut} iconSize={18}>
           <span>Log out</span>
-        </button>
+        </Button>
         <button className="theme-toggle" onClick={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}>
           {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
           <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
@@ -213,10 +209,7 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
   return (
     <main className="auth-shell">
       <section className="auth-intro">
-        <div className="brand large">
-          <span className="brand-mark">fr</span>
-          <span>Franco</span>
-        </div>
+        <Brand large />
         <p className="eyebrow">French learning platform</p>
         <h1>Practice should come from your real learner profile.</h1>
         <p className="lede">
@@ -234,42 +227,30 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
         <h2>{isSignup ? 'Sign up' : 'Log in'}</h2>
         <form onSubmit={onSubmit}>
           {isSignup && (
-            <label>
-              Name
-              <span className="input-wrap">
-                <UserRound size={18} />
-                <input name="name" type="text" placeholder="Your name" autoComplete="name" />
-              </span>
-            </label>
+            <Field label="Name" icon={UserRound}>
+              <input name="name" type="text" placeholder="Your name" autoComplete="name" />
+            </Field>
           )}
-          <label>
-            Email
-            <span className="input-wrap">
-              <Mail size={18} />
-              <input name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
-            </span>
-          </label>
-          <label>
-            Password
-            <span className="input-wrap">
-              <Lock size={18} />
-              <input
-                name="password"
-                type="password"
-                placeholder="Password"
-                autoComplete={isSignup ? 'new-password' : 'current-password'}
-                required
-              />
-            </span>
-          </label>
-          {error && <p className="error-message">{error}</p>}
-          <button className="primary-button" type="submit" disabled={loading}>
-            {loading ? 'Connecting...' : isSignup ? 'Create account' : 'Log in'} <ChevronRight size={18} />
-          </button>
+          <Field label="Email" icon={Mail}>
+            <input name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
+          </Field>
+          <Field label="Password" icon={Lock}>
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              autoComplete={isSignup ? 'new-password' : 'current-password'}
+              required
+            />
+          </Field>
+          {error && <ErrorMessage message={error} />}
+          <Button variant="primary" type="submit" disabled={loading} icon={ChevronRight} iconSize={18} iconPosition="after">
+            {loading ? 'Connecting...' : isSignup ? 'Create account' : 'Log in'}
+          </Button>
         </form>
-        <button className="text-button" onClick={() => onModeChange(isSignup ? 'login' : 'signup')}>
+        <Button variant="text" onClick={() => onModeChange(isSignup ? 'login' : 'signup')}>
           {isSignup ? 'Already have an account? Log in' : 'Need an account? Sign up'}
-        </button>
+        </Button>
         <p className="form-note">
           Your account is securely stored and synced with your profile.
         </p>

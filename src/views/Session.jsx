@@ -2,7 +2,7 @@ import React from 'react';
 import { BookOpen, Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { ExerciseCard } from '../components/exercises/ExerciseCard.jsx';
-import { EmptyState } from '../components/ui.jsx';
+import { Button, EmptyState, Page, PageHeader, Tabs, Toolbar } from '../components/ui';
 
 const SECTIONS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -17,19 +17,20 @@ export function Session({ token }) {
   const queue = data?.queue || [];
 
   return (
-    <section className="page-stack">
-      <p className="eyebrow">Daily session</p>
-      <h1 className="page-title">{selectedSection} session queue</h1>
-      <p className="lede">
-        Work through the list in order — reviews first, then new material at your level.
-      </p>
-      <div className="section-tabs compact" role="group" aria-label="Choose session level">
-        {SECTIONS.map((section) => (
-          <button key={section} className={selectedSection === section ? 'selected' : ''} onClick={() => setSelectedSection(section)}>
-            <strong>{section}</strong>
-          </button>
-        ))}
-      </div>
+    <Page>
+      <PageHeader
+        eyebrow="Daily session"
+        title={`${selectedSection} session queue`}
+        lede="Work through the list in order — reviews first, then new material at your level."
+      />
+      <Tabs
+        variant="section"
+        compact
+        options={SECTIONS.map((section) => ({ id: section, label: section }))}
+        value={selectedSection}
+        onChange={setSelectedSection}
+        ariaLabel="Choose session level"
+      />
       {loading && <EmptyState icon={Database} title="Preparing your session" text="Loading questions for this level." />}
       {error && <EmptyState icon={Database} title="Couldn't load this session" text={error} />}
       {!loading && !error && !queue.length && (
@@ -37,10 +38,10 @@ export function Session({ token }) {
       )}
       {!loading && !error && queue.length > 0 && (
         <>
-          <div className="session-toolbar">
-            <span>{queue.length} questions{(data?.reviewsDue ?? 0) > 0 && ` · ${data.reviewsDue} reviews due`}</span>
-            <button className="reset-button" onClick={() => setResetKey((value) => value + 1)}>Reset all</button>
-          </div>
+          <Toolbar
+            meta={<>{queue.length} questions{(data?.reviewsDue ?? 0) > 0 && ` · ${data.reviewsDue} reviews due`}</>}
+            actions={<Button variant="reset" onClick={() => setResetKey((value) => value + 1)}>Reset all</Button>}
+          />
           <div className="exercise-list">
             {queue.map((entry) => (
               <ExerciseCard key={`${resetKey}-${entry.item_kind}-${entry.id}`} entry={entry} token={token} />
@@ -48,6 +49,6 @@ export function Session({ token }) {
           </div>
         </>
       )}
-    </section>
+    </Page>
   );
 }

@@ -1,9 +1,13 @@
 import React from 'react';
 import { getErrorMessage, reportAttempt, shuffle } from '../../api/client.js';
-
-function typeLabel(entry) {
-  return [entry.level, entry.skill || (entry.type || '').replace(/_/g, ' ')].filter(Boolean).join(' · ');
-}
+import {
+  ExerciseShell,
+  ExerciseEyebrow,
+  ReadingPassage,
+  OptionList,
+  Feedback,
+  ErrorMessage,
+} from '../ui';
 
 export function MultipleChoice({ entry, token, onResult }) {
   const [selected, setSelected] = React.useState(null);
@@ -30,37 +34,28 @@ export function MultipleChoice({ entry, token, onResult }) {
   }
 
   return (
-    <article className={`exercise-preview mcq-card ${result && !result.error ? (result.correct ? 'answered-correct' : 'answered-wrong') : ''}`}>
-      <span>{typeLabel(entry)}</span>
-      {entry.context && (
-        <div className="reading-passage">
-          <strong>Read the passage</strong>
-          <p>{entry.context}</p>
-        </div>
-      )}
+    <ExerciseShell answered={result && !result.error ? (result.correct ? 'correct' : 'wrong') : null}>
+      <ExerciseEyebrow level={entry.level} kind={entry.skill || (entry.type || '').replace(/_/g, ' ')} />
+      {entry.context && <ReadingPassage text={entry.context} />}
       <h2>{entry.prompt}</h2>
-      <div className="mcq-options">
-        {options.map((option) => (
-          <button
-            key={option.key}
-            className={selected === option.key ? (result && !result.error ? (result.correct ? 'correct' : 'incorrect') : '') : ''}
-            onClick={() => choose(option)}
-            disabled={Boolean(result)}
-          >
-            {option.key}. {option.text}
-          </button>
-        ))}
-      </div>
+      <OptionList
+        options={options.map((option) => ({ key: option.key, label: <>{option.key}. {option.text}</> }))}
+        selectedKey={selected}
+        answered={Boolean(result && !result.error)}
+        correct={Boolean(result?.correct)}
+        disabled={Boolean(result)}
+        onSelect={(key) => choose(options.find((option) => option.key === key))}
+      />
       {result && !result.error && (
-        <div className={`mcq-feedback ${result.correct ? 'correct' : 'incorrect'}`}>
-          <strong>{result.correct ? 'Correct!' : 'Not quite.'}</strong>
-          {!result.correct && result.reveal && <span>Correct answer: {result.reveal}</span>}
-          {!result.correct && (
-            <button className="retry-button" onClick={retry}>Try again</button>
-          )}
-        </div>
+        <Feedback
+          tone={result.correct ? 'correct' : 'incorrect'}
+          title={result.correct ? 'Correct!' : 'Not quite.'}
+          reveal={result.correct ? undefined : result.reveal}
+          revealLabel="Correct answer:"
+          onRetry={result.correct ? undefined : retry}
+        />
       )}
-      {result?.error && <p className="error-message">{result.error}</p>}
-    </article>
+      {result?.error && <ErrorMessage message={result.error} />}
+    </ExerciseShell>
   );
 }

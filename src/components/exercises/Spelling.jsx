@@ -1,5 +1,13 @@
 import React from 'react';
 import { getErrorMessage, reportAttempt } from '../../api/client.js';
+import {
+  ExerciseShell,
+  ExerciseEyebrow,
+  AnswerForm,
+  Feedback,
+  ErrorMessage,
+  AudioPlayer,
+} from '../ui';
 
 // Typed-answer renderer for spelling / cloze / free-text items, and dictation
 // when an audioUrl is provided.
@@ -28,39 +36,34 @@ export function Spelling({ entry, token, audioUrl, onResult }) {
   }
 
   return (
-    <article className={`exercise-preview mcq-card ${result && !result.error ? (result.correct ? 'answered-correct' : 'answered-wrong') : ''}`}>
-      <span>{[entry.level, isDictation ? 'dictation' : (entry.type || 'spelling').replace(/_/g, ' ')].filter(Boolean).join(' · ')}</span>
-      {audioUrl && (
-        <div className="audio-player">
-          <audio controls src={audioUrl} preload="metadata" />
-        </div>
-      )}
+    <ExerciseShell answered={result && !result.error ? (result.correct ? 'correct' : 'wrong') : null}>
+      <ExerciseEyebrow
+        level={entry.level}
+        kind={isDictation ? 'dictation' : (entry.type || 'spelling').replace(/_/g, ' ')}
+      />
+      {audioUrl && <AudioPlayer src={audioUrl} />}
       <h2>{entry.prompt}</h2>
-      <form onSubmit={submit}>
-        <textarea
-          className="free-text-input"
-          rows={isDictation ? 4 : 2}
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          placeholder={isDictation ? 'Type exactly what you hear…' : 'Type your answer…'}
-          disabled={Boolean(result)}
-        />
-        {!result && (
-          <button type="submit" className="primary-button" disabled={!value.trim()}>
-            Check answer
-          </button>
-        )}
-      </form>
+      <AnswerForm
+        rows={isDictation ? 4 : 2}
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        placeholder={isDictation ? 'Type exactly what you hear…' : 'Type your answer…'}
+        disabled={Boolean(result)}
+        submitDisabled={!value.trim()}
+        hideSubmit={Boolean(result)}
+        submitLabel="Check answer"
+        onSubmit={submit}
+      />
       {result && !result.error && (
-        <div className={`mcq-feedback ${result.correct ? 'correct' : 'incorrect'}`}>
-          <strong>{result.correct ? 'Correct!' : 'Not quite.'}</strong>
-          {!result.correct && result.reveal && <span>Expected: {result.reveal}</span>}
-          {!result.correct && (
-            <button className="retry-button" onClick={retry}>Try again</button>
-          )}
-        </div>
+        <Feedback
+          tone={result.correct ? 'correct' : 'incorrect'}
+          title={result.correct ? 'Correct!' : 'Not quite.'}
+          reveal={result.correct ? undefined : result.reveal}
+          revealLabel="Expected:"
+          onRetry={result.correct ? undefined : retry}
+        />
       )}
-      {result?.error && <p className="error-message">{result.error}</p>}
-    </article>
+      {result?.error && <ErrorMessage message={result.error} />}
+    </ExerciseShell>
   );
 }
