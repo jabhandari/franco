@@ -1028,15 +1028,16 @@ html[data-theme="light"] .topic-search input:focus { border-color:#2f54c4; }
 .breakdown-part { flex:1; border-radius:10px; padding:12px 10px; text-align:center; background:#202020; }
 .breakdown-word { display:block; font-weight:800; font-size:17px; margin-bottom:4px; color:#dce6f2; }
 .breakdown-role { font-size:11px; text-transform:uppercase; letter-spacing:.08em; font-weight:700; color:#8997a8; }
-.breakdown-part.role-subject { background:rgba(59,130,246,.14); }
-.breakdown-part.role-subject .breakdown-word { color:#7db4ff; }
-.breakdown-part.role-verb { background:rgba(94,234,212,.12); }
-.breakdown-part.role-verb .breakdown-word { color:#5eead4; }
-.breakdown-part.role-object { background:rgba(245,158,11,.14); }
-.breakdown-part.role-object .breakdown-word { color:#fbbf24; }
-.related-vocab .vocab-chip { display:inline-flex; flex-direction:column; align-items:stretch; gap:0; }
-.related-vocab .vocab-chip b { font-size:13px; }
-.related-vocab .vocab-chip > span { padding:3px 0 0; margin-top:4px; border-top:1px solid #303030; background:none; font-size:11px; color:#8997a8; }
+.breakdown-part.role-subject { background:rgba(59,130,246,.10); }
+.breakdown-part.role-subject .breakdown-word { color:#93b8f5; }
+.breakdown-part.role-verb { background:rgba(94,234,212,.08); }
+.breakdown-part.role-verb .breakdown-word { color:#7de8d6; }
+.breakdown-part.role-object { background:rgba(245,158,11,.10); }
+.breakdown-part.role-object .breakdown-word { color:#f5b942; }
+.related-vocab div { gap: 12px; }
+.related-vocab .vocab-chip { display:inline-flex; flex-direction:column; align-items:stretch; gap:0; background:#242424; border:1px solid #3a3a3a; border-radius:10px; padding:10px 16px; white-space:nowrap; }
+.related-vocab .vocab-chip b { font-weight:700; font-size:15px; color:#f0eeea; }
+.related-vocab .vocab-chip > span { padding:4px 0 0; margin-top:5px; border-top:1px solid #3a3a3a; background:none; border-radius:0; font-size:12px; color:#a3a099; }
 html[data-theme="light"] .theory-card.warning { background:#fffaf2; border-color:#f3d1a7; }
 html[data-theme="light"] .theory-card.warning strong { color:#b45309; }
 html[data-theme="light"] .breakdown-part { background:#f6f1e7; }
@@ -1048,5 +1049,38 @@ html[data-theme="light"] .breakdown-part.role-verb { background:rgba(20,184,166,
 html[data-theme="light"] .breakdown-part.role-verb .breakdown-word { color:#0f766e; }
 html[data-theme="light"] .breakdown-part.role-object { background:rgba(245,158,11,.14); }
 html[data-theme="light"] .breakdown-part.role-object .breakdown-word { color:#b45309; }
-html[data-theme="light"] .related-vocab .vocab-chip > span { border-top-color:#e7ddd1; color:#687178; }
+html[data-theme="light"] .related-vocab .vocab-chip { background:#fff; border-color:#e7ddd1; }
+html[data-theme="light"] .related-vocab .vocab-chip b { color:#243b53; }
+html[data-theme="light"] .related-vocab .vocab-chip > span { border-top-color:#efe9df; color:#8a8478; background:none; }
 @media (max-width:680px) { .breakdown-parts { flex-direction:column; } }
+
+/* Lesson content pass: full-screen lesson view (replaces the side panel) */
+.concept-modal {
+  left: 0; top: 0; right: 0; bottom: 0;
+  width: 100%; height: 100vh;
+  padding: 0;
+  background: #1b1b1b;
+  border: 0; border-radius: 0;
+  box-shadow: none;
+}
+html[data-theme="light"] .concept-modal {
+  background: #fdfbf7;
+  border: 0;
+  box-shadow: none;
+}
+.concept-modal-scroll {
+  max-width: 760px;
+  padding: 56px 32px 80px;
+  scrollbar-width: thin;
+  scrollbar-color: #3d3d3d transparent;
+}
+html[data-theme="light"] .concept-modal-scroll { scrollbar-color: #d9cfc0 transparent; }
+.concept-modal-scroll::-webkit-scrollbar { width: 8px; }
+.concept-modal-scroll::-webkit-scrollbar-track { background: transparent; }
+.concept-modal-scroll::-webkit-scrollbar-thumb { background: #3d3d3d; border-radius: 8px; border: 2px solid transparent; background-clip: content-box; }
+html[data-theme="light"] .concept-modal-scroll::-webkit-scrollbar-thumb { background: #d9cfc0; border: 2px solid transparent; background-clip: content-box; }
+.concept-modal-close { top: 14px; right: 16px; }
+@media (max-width: 680px) {
+  .concept-modal { height: 100vh; padding: 0; }
+  .concept-modal-scroll { padding: 44px 20px 64px; }
+}
