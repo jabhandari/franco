@@ -1004,3 +1004,19 @@ html[data-theme="light"] .step-card p { color:#687178; }
 .report-thanks { margin-top:10px; font-size:13px; opacity:.7; text-align:right; }
 html[data-theme="light"] .report-form { border-color:#e7ddd1; background:#fff; }
 html[data-theme="light"] .report-form select, html[data-theme="light"] .report-form textarea { border-color:#e7ddd1; background:#fff; }
+
+/* Vocabulary group search (top-right corner of the group panel) */
+.topic-group-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
+.topic-group-head h3 { margin:0; }
+.topic-search { display:flex; align-items:center; gap:6px; }
+.topic-search-btn { width:30px; height:30px; flex:none; border-radius:50%; border:1px solid #294661; background:rgba(15,26,43,.9); color:#91a3bb; display:inline-flex; align-items:center; justify-content:center; padding:0; }
+.topic-search-btn:hover { border-color:#5eead4; color:#8ff8e7; }
+.topic-search input { width:170px; padding:7px 12px; border-radius:999px; border:1px solid #294661; background:rgba(15,26,43,.9); color:#f4f8ff; font-size:13px; outline:none; }
+.topic-search input::placeholder { color:#5b7186; }
+.topic-search input:focus { border-color:#5eead4; }
+html[data-theme="light"] .topic-search-btn { background:#fffdf8; border-color:#ded4c8; color:#697178; }
+html[data-theme="light"] .topic-search-btn:hover { border-color:#2f54c4; color:#2f54c4; }
+html[data-theme="light"] .topic-search input { background:#fff; border-color:#e7ddd1; color:#232628; }
+html[data-theme="light"] .topic-search input::placeholder { color:#a8a094; }
+html[data-theme="light"] .topic-search input:focus { border-color:#2f54c4; }
+@media (max-width:680px) { .topic-search input { width:130px; } }
