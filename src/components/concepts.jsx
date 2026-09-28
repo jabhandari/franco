@@ -162,11 +162,9 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
         ))}
       </div>
       {active && (
-        <div className="concept-modal-backdrop" onClick={() => onSelectConcept(null)}>
-          <div className="concept-modal" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
-            <button className="concept-modal-close" onClick={() => onSelectConcept(null)} aria-label="Close lesson">×</button>
-            <div className="concept-modal-scroll"><ConceptDetail concept={active} /></div>
-          </div>
+        <div className="concept-modal" role="dialog" aria-modal="true">
+          <button className="concept-modal-close" onClick={() => onSelectConcept(null)} aria-label="Close lesson">×</button>
+          <div className="concept-modal-scroll"><ConceptDetail concept={active} /></div>
         </div>
       )}
     </section>

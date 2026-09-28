@@ -1054,33 +1054,32 @@ html[data-theme="light"] .related-vocab .vocab-chip b { color:#243b53; }
 html[data-theme="light"] .related-vocab .vocab-chip > span { border-top-color:#efe9df; color:#8a8478; background:none; }
 @media (max-width:680px) { .breakdown-parts { flex-direction:column; } }
 
-/* Lesson content pass: centered lesson popup (replaces the side panel) */
-.concept-modal-backdrop {
-  position: fixed; inset: 0; z-index: 50;
-  display: flex; align-items: center; justify-content: center;
-  padding: 24px;
-  background: rgba(0,0,0,.6);
-}
-html[data-theme="light"] .concept-modal-backdrop { background: rgba(35,32,25,.5); }
+/* Lesson content pass: left-anchored lesson panel */
 .concept-modal {
-  position: relative;
-  left: auto; top: auto; right: auto; bottom: auto;
-  width: min(780px, 100%); max-height: 88vh;
+  position: fixed; z-index: 50;
+  left: 0; top: 0; right: auto; bottom: 0;
+  width: min(720px, 94vw); height: 100vh;
   display: flex; flex-direction: column;
   padding: 0;
   background: #1b1b1b;
-  border: 1px solid #333; border-radius: 18px;
-  box-shadow: 0 24px 80px rgba(0,0,0,.45);
+  border: 0; border-right: 1px solid #333; border-radius: 0;
+  box-shadow: 18px 0 50px rgba(0,0,0,.38);
+  animation: lesson-in .22s ease-out;
 }
 html[data-theme="light"] .concept-modal {
   background: #fdfbf7;
-  border-color: #e7ddd1;
-  box-shadow: 0 24px 80px rgba(42,48,55,.25);
+  border-right-color: #e7ddd1;
+  box-shadow: 18px 0 50px rgba(42,48,55,.18);
+}
+@keyframes lesson-in {
+  from { transform: translateX(-48px); opacity: 0; }
+  to { transform: none; opacity: 1; }
 }
 .concept-modal-scroll {
   max-width: none;
+  height: 100%;
   margin: 0;
-  padding: 40px 44px 44px;
+  padding: 40px 44px 48px;
   scrollbar-width: thin;
   scrollbar-color: #3d3d3d transparent;
 }
@@ -1091,7 +1090,6 @@ html[data-theme="light"] .concept-modal-scroll { scrollbar-color: #d9cfc0 transp
 html[data-theme="light"] .concept-modal-scroll::-webkit-scrollbar-thumb { background: #d9cfc0; border: 2px solid transparent; background-clip: content-box; }
 .concept-modal-close { position: absolute; top: 14px; right: 16px; }
 @media (max-width: 680px) {
-  .concept-modal-backdrop { padding: 12px; }
-  .concept-modal { left: auto; width: 100%; height: auto; max-height: 94vh; padding: 0; border-radius: 14px; }
-  .concept-modal-scroll { padding: 32px 22px 40px; }
+  .concept-modal { left: 0; width: 100vw; height: 100vh; padding: 0; animation: lesson-in .2s ease-out; }
+  .concept-modal-scroll { padding: 32px 22px 48px; }
 }
