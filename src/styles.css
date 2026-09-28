@@ -900,6 +900,9 @@ html[data-theme="light"] .roadmap-table-page .roadmap-levels button { background
 html[data-theme="light"] .roadmap-heading .roadmap-levels button.selected,
 html[data-theme="light"] .roadmap-table-page .roadmap-levels button.selected { background:#edf7f4; border-color:#156064; color:#156064; }
 .map-only-page { width:100%; }
+.map-only-page {
+  row-gap: 32px;
+}
 .map-only-page .concept-map,
 .map-only-page .roadmap-table-page { width:100%; max-width:none; }
 .roadmap-table-page { padding-left:0; padding-right:0; }
@@ -913,6 +916,12 @@ html[data-theme="light"] .roadmap-table-page .roadmap-levels button.selected { b
 .roadmap-b1 .roadmap-node-1{grid-column:3;grid-row:1}.roadmap-b1 .roadmap-node-2{grid-column:3;grid-row:2}.roadmap-b1 .roadmap-node-3{grid-column:2;grid-row:3}.roadmap-b1 .roadmap-node-4{grid-column:1;grid-row:4}.roadmap-b1 .roadmap-node-5{grid-column:3;grid-row:4}.roadmap-b1 .roadmap-node-6{grid-column:4;grid-row:4}.roadmap-b1 .roadmap-node-7{grid-column:3;grid-row:5}
 @media (max-width:680px) { .roadmap-canvas { grid-template-columns:1fr; grid-template-rows:none; gap:14px; padding:18px; overflow:auto; } .roadmap-node-1,.roadmap-node-2,.roadmap-node-3,.roadmap-node-4,.roadmap-node-5,.roadmap-node-6,.roadmap-node-7,.roadmap-node-8,.roadmap-node-9,.roadmap-node-10,.roadmap-node-11,.roadmap-node-12,.roadmap-node-13,.roadmap-node-14,.roadmap-node-15 { grid-column:1; grid-row:auto; } }
 .main-content { width:min(1440px,100%); }
+
+@media (max-width:680px) {
+  .map-only-page {
+    row-gap: 22px;
+  }
+}
 
 /* ---- Modular frontend: new component styles (2026-09-27) ---- */
 .mcq-card { display:grid; gap:12px; }
@@ -929,6 +938,14 @@ html[data-theme="light"] .roadmap-table-page .roadmap-levels button.selected { b
 .word-token { padding:8px 14px; border:1px solid #315171; border-radius:999px; background:rgba(18,35,57,.8); color:#dce9f8; cursor:pointer; }
 .word-token.placed { background:rgba(94,234,212,.18); border-color:#5eead4; }
 .free-text-input { width:100%; padding:12px 14px; border:1px solid #315171; border-radius:10px; background:rgba(18,35,57,.6); color:inherit; font:inherit; resize:vertical; }
+.free-text-input::placeholder { color: #8290a0; opacity: 1; }
+html[data-theme="light"] .free-text-input {
+  background: #fff;
+  border-color: #b8c7d5;
+  color: #243b53;
+  box-shadow: inset 0 1px 2px rgba(36, 59, 83, .06);
+}
+html[data-theme="light"] .free-text-input::placeholder { color: #718096; }
 .audio-player { margin:8px 0; }
 .audio-player audio { width:100%; }
 .rubric-box { padding:12px 14px; border:1px solid #303030; border-radius:10px; background:rgba(255,255,255,.03); }
