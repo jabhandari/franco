@@ -1,7 +1,7 @@
 import React from 'react';
-import { ChevronRight, Plus, TrendingUp, ClipboardCheck } from 'lucide-react';
+import { ChevronRight, Plus, TrendingUp, ClipboardCheck, Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { EmptyState, PanelHeading, ProfileRows, RecordCount } from '../components/ui.jsx';
+import { Banner, Button, EmptyState, Panel, PanelHeader, ProfileRows, RecordCount, Text } from '../components/ui';
 
 export function Home({ userData, onStart, onPlacement }) {
   const profile = userData?.profile;
@@ -18,29 +18,29 @@ export function Home({ userData, onStart, onPlacement }) {
           <span>franco</span>
           <strong>Bonjour, {userData?.user?.name?.split(' ')[0] || 'learner'}</strong>
         </div>
-        <p className="eyebrow">Today's French</p>
+        <Text variant="eyebrow">Today's French</Text>
         <h1>Your daily French session starts here.</h1>
-        <p className="lede">
+        <Text variant="lede">
           Practice with French examples and exercises matched to your level.
-        </p>
+        </Text>
         {!placementDone && (
-          <div className="placement-banner">
-            <ClipboardCheck size={18} aria-hidden="true" />
-            <div>
-              <strong>Take the 2-minute placement quiz</strong>
-              <p>We’ll set your starting level so sessions match you.</p>
-            </div>
-            <button className="primary-button" onClick={onPlacement}>Start placement</button>
-          </div>
+          <Banner
+            icon={ClipboardCheck}
+            iconSize={18}
+            title="Take the 2-minute placement quiz"
+            text="We’ll set your starting level so sessions match you."
+            actionLabel="Start placement"
+            onAction={onPlacement}
+          />
         )}
-        <button className="primary-button wide" onClick={onStart}>
-          Start a 10-minute session <ChevronRight size={18} />
-        </button>
+        <Button variant="primary" wide onClick={onStart} icon={ChevronRight} iconSize={18} iconPosition="after">
+          Start a 10-minute session{' '}
+        </Button>
       </div>
 
       <div className="stack">
-        <section className="panel compact">
-          <PanelHeading title="Level strength" />
+        <Panel compact>
+          <PanelHeader eyebrow="Your learning" title="Level strength" aside={<Database size={20} aria-hidden="true" />} />
           {progressCount ? (
             <RecordCount count={progressCount} label="progress rows loaded" />
           ) : (
@@ -50,9 +50,9 @@ export function Home({ userData, onStart, onPlacement }) {
               text="Complete a few exercises to start building your skill profile."
             />
           )}
-        </section>
-        <section className="panel compact">
-          <PanelHeading title="Mistake recycling" />
+        </Panel>
+        <Panel compact>
+          <PanelHeader eyebrow="Your learning" title="Mistake recycling" aside={<Database size={20} aria-hidden="true" />} />
           {mistakeCount ? (
             <RecordCount count={mistakeCount} label="mistakes loaded" />
           ) : (
@@ -62,12 +62,12 @@ export function Home({ userData, onStart, onPlacement }) {
               text="Mistakes you make while practicing will appear here for review."
             />
           )}
-        </section>
-        <section className="panel compact">
-          <PanelHeading title="Learner profile" />
+        </Panel>
+        <Panel compact>
+          <PanelHeader eyebrow="Your learning" title="Learner profile" aside={<Database size={20} aria-hidden="true" />} />
           <ProfileRows profile={profile} />
-          <p className="muted small">{contentCount ? `${contentCount.toLocaleString()} legacy examples in the catalogue` : ''}</p>
-        </section>
+          <Text variant="muted" size="sm">{contentCount ? `${contentCount.toLocaleString()} legacy examples in the catalogue` : ''}</Text>
+        </Panel>
       </div>
     </section>
   );

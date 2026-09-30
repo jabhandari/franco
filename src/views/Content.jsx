@@ -3,7 +3,7 @@ import { BookOpen, PenLine, Mic, Library } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { ExerciseCard } from '../components/exercises/ExerciseCard.jsx';
 import { ConceptRoadmap, LevelGuide, TopicTracks } from '../components/concepts.jsx';
-import { EmptyState } from '../components/ui.jsx';
+import { EmptyState, ErrorMessage, Panel, PanelHeader, Tabs, Text } from '../components/ui';
 
 const SECTIONS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const LIBRARY_TABS = [
@@ -19,8 +19,8 @@ function CanonicalList({ type, section, token }) {
   );
   const items = data?.items || [];
 
-  if (loading) return <p className="muted">Loading {type.replace(/_/g, ' ')}…</p>;
-  if (error) return <p className="error-message">{error}</p>;
+  if (loading) return <Text variant="muted">Loading {type.replace(/_/g, ' ')}…</Text>;
+  if (error) return <ErrorMessage message={error} />;
   if (!items.length) {
     return (
       <EmptyState
@@ -52,25 +52,10 @@ export function Content({ token }) {
     <section className="map-only-page">
       <ConceptRoadmap level={selectedSection} token={token} onSelectSection={setSelectedSection} />
       <LevelGuide section={selectedSection} />
-      <section className="panel">
-        <div className="panel-title">
-          <div>
-            <p className="eyebrow">Study library</p>
-            <h2>More {selectedSection} content</h2>
-          </div>
-        </div>
-        <div className="tab-row">
-          {LIBRARY_TABS.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              className={`section-tab ${libraryTab === id ? 'active' : ''}`}
-              onClick={() => setLibraryTab(id)}
-            >
-              <Icon size={14} aria-hidden="true" /> {label}
-            </button>
-          ))}
-        </div>
-      </section>
+      <Panel>
+        <PanelHeader eyebrow="Study library" title={`More ${selectedSection} content`} />
+        <Tabs variant="library" options={LIBRARY_TABS} value={libraryTab} onChange={setLibraryTab} />
+      </Panel>
       {libraryTab === 'writing' && <CanonicalList type="writing_prompt" section={selectedSection} token={token} />}
       {libraryTab === 'speaking' && <CanonicalList type="speaking_prompt" section={selectedSection} token={token} />}
       {libraryTab === 'vocabulary' && <TopicTracks section={selectedSection} />}

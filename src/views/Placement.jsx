@@ -2,6 +2,7 @@ import React from 'react';
 import { ClipboardCheck } from 'lucide-react';
 import { apiPost, getErrorMessage, shuffle } from '../api/client.js';
 import { levelGuides } from '../components/concepts.jsx';
+import { ErrorMessage, ExerciseShell, Page, PageHeader, Text } from '../components/ui';
 
 // Original 10-question placement quiz, A1 → B2 gradient. The resulting CEFR
 // level is submitted to POST /api/me/placement and becomes the learner's
@@ -57,10 +58,12 @@ export function Placement({ token, onPlaced }) {
   if (result) {
     const guide = levelGuides[result.level];
     return (
-      <section className="page-stack">
-        <p className="eyebrow">Placement complete</p>
-        <h1 className="page-title">Your level: {result.level}{guide ? ` · ${guide.label}` : ''}</h1>
-        <p className="lede">You scored {result.score} out of {QUESTIONS.length}. Your sessions will now target {result.level} content.</p>
+      <Page>
+        <PageHeader
+          eyebrow="Placement complete"
+          title={<>Your level: {result.level}{guide ? ` · ${guide.label}` : ''}</>}
+          lede={`You scored ${result.score} out of ${QUESTIONS.length}. Your sessions will now target ${result.level} content.`}
+        />
         {guide && (
           <section className="level-guide panel">
             <div><span className="eyebrow">{result.level} · {guide.label}</span><h2>{guide.goal}</h2></div>
@@ -70,17 +73,18 @@ export function Placement({ token, onPlaced }) {
             </div>
           </section>
         )}
-      </section>
+      </Page>
     );
   }
 
   return (
-    <section className="page-stack">
-      <p className="eyebrow">Placement</p>
-      <h1 className="page-title">Find your starting level</h1>
-      <p className="lede">Ten quick questions, A1 to B2. Question {index + 1} of {QUESTIONS.length}.</p>
-      <article className="exercise-preview mcq-card">
-        <span>placement</span>
+    <Page>
+      <PageHeader
+        eyebrow="Placement"
+        title="Find your starting level"
+        lede={`Ten quick questions, A1 to B2. Question ${index + 1} of ${QUESTIONS.length}.`}
+      />
+      <ExerciseShell eyebrow="placement">
         <h2>{question.prompt}</h2>
         <div className="mcq-options">
           {options[index].map((option) => (
@@ -89,9 +93,9 @@ export function Placement({ token, onPlaced }) {
             </button>
           ))}
         </div>
-      </article>
-      {error && <p className="error-message">{error}</p>}
-      <p className="muted small"><ClipboardCheck size={14} aria-hidden="true" /> Your result sets your starting level — nothing is graded here.</p>
-    </section>
+      </ExerciseShell>
+      {error && <ErrorMessage message={error} />}
+      <Text variant="muted" size="sm"><ClipboardCheck size={14} aria-hidden="true" /> Your result sets your starting level — nothing is graded here.</Text>
+    </Page>
   );
 }

@@ -1,5 +1,15 @@
 import React from 'react';
 import { getErrorMessage, reportAttempt } from '../../api/client.js';
+import {
+  ExerciseShell,
+  ExerciseEyebrow,
+  AnswerForm,
+  Feedback,
+  ErrorMessage,
+  RubricBox,
+  Button,
+  Text,
+} from '../ui';
 
 // Writing prompt: free-form text graded against the server-side rubric.
 export function WritingPrompt({ entry, token, onResult }) {
@@ -21,44 +31,39 @@ export function WritingPrompt({ entry, token, onResult }) {
   }
 
   return (
-    <article className="exercise-preview mcq-card">
-      <span>{[entry.level, 'writing'].filter(Boolean).join(' · ')}</span>
+    <ExerciseShell>
+      <ExerciseEyebrow level={entry.level} kind="writing" />
       <h2>{entry.title || 'Writing prompt'}</h2>
-      <p>{entry.prompt}</p>
-      {entry.instructions && <p className="muted">{entry.instructions}</p>}
+      <Text>{entry.prompt}</Text>
+      {entry.instructions && <Text variant="muted">{entry.instructions}</Text>}
       {Object.keys(rubric).length > 0 && (
-        <div className="rubric-box">
-          <strong>Grading rubric</strong>
-          <ul>
-            {Object.entries(rubric).map(([criterion, description]) => (
-              <li key={criterion}><strong>{criterion.replace(/_/g, ' ')}</strong>: {description}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <form onSubmit={submit}>
-        <textarea
-          className="free-text-input"
-          rows={6}
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          placeholder="Write your answer in French…"
-          disabled={Boolean(result)}
+        <RubricBox
+          title="Grading rubric"
+          items={Object.entries(rubric).map(([criterion, description]) => (
+            <React.Fragment key={criterion}>
+              <strong>{criterion.replace(/_/g, ' ')}</strong>: {description}
+            </React.Fragment>
+          ))}
         />
-        {!result && (
-          <button type="submit" className="primary-button" disabled={value.trim().length < 10}>
-            Submit writing
-          </button>
-        )}
-      </form>
-      {result && !result.error && (
-        <div className="mcq-feedback correct">
-          <strong>Submitted.</strong>
-          <span>Compare your text against the rubric above — completion has been logged.</span>
-        </div>
       )}
-      {result?.error && <p className="error-message">{result.error}</p>}
-    </article>
+      <AnswerForm
+        rows={6}
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        placeholder="Write your answer in French…"
+        disabled={Boolean(result)}
+        submitDisabled={value.trim().length < 10}
+        hideSubmit={Boolean(result)}
+        submitLabel="Submit writing"
+        onSubmit={submit}
+      />
+      {result && !result.error && (
+        <Feedback tone="correct" title="Submitted.">
+          <span>Compare your text against the rubric above — completion has been logged.</span>
+        </Feedback>
+      )}
+      {result?.error && <ErrorMessage message={result.error} />}
+    </ExerciseShell>
   );
 }
 
@@ -81,30 +86,27 @@ export function SpeakingPrompt({ entry, token, onResult }) {
   }
 
   return (
-    <article className="exercise-preview mcq-card">
-      <span>{[entry.level, 'speaking'].filter(Boolean).join(' · ')}</span>
+    <ExerciseShell>
+      <ExerciseEyebrow level={entry.level} kind="speaking" />
       <h2>{entry.title || 'Speaking practice'}</h2>
-      <p>{entry.prompt}</p>
-      {entry.instructions && <p className="muted">{entry.instructions}</p>}
+      <Text>{entry.prompt}</Text>
+      {entry.instructions && <Text variant="muted">{entry.instructions}</Text>}
       {followUps.length > 0 && (
-        <div className="rubric-box">
-          <strong>Follow-up questions</strong>
-          <ul>
-            {followUps.map((question, index) => (
-              <li key={index}>{question}</li>
-            ))}
-          </ul>
-        </div>
+        <RubricBox
+          title="Follow-up questions"
+          items={followUps.map((question, index) => (
+            <React.Fragment key={index}>{question}</React.Fragment>
+          ))}
+        />
       )}
       {!result && (
         <>
-          <p className="muted">Speak your answer aloud, then mark it complete.</p>
-          <button className="primary-button" onClick={markComplete}>Mark complete</button>
+          <Text variant="muted">Speak your answer aloud, then mark it complete.</Text>
+          <Button variant="primary" onClick={markComplete}>Mark complete</Button>
         </>
       )}
       {result && !result.error && (
-        <div className="mcq-feedback correct">
-          <strong>Logged.</strong>
+        <Feedback tone="correct" title="Logged.">
           {points.length > 0 && (
             <ul>
               {points.map((point, index) => (
@@ -112,9 +114,9 @@ export function SpeakingPrompt({ entry, token, onResult }) {
               ))}
             </ul>
           )}
-        </div>
+        </Feedback>
       )}
-      {result?.error && <p className="error-message">{result.error}</p>}
-    </article>
+      {result?.error && <ErrorMessage message={result.error} />}
+    </ExerciseShell>
   );
 }

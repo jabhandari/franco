@@ -512,7 +512,7 @@ html:not([data-theme="light"]) .error-message {
   line-height: 1.8;
 }
 
-.topic-panel { display: grid; gap: 14px; }
+.panel-grid { display: grid; gap: 14px; }
 .topic-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .topic-group { padding: 14px; border: 1px solid #e7ddd1; border-radius: 8px; background: #fff; }
 .topic-group h3 { margin: 0 0 10px; color: #156064; font-size: 15px; text-transform: capitalize; }
@@ -691,7 +691,7 @@ html[data-theme="light"] .level-guide a { color:#156064; }
 .content-module > summary { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border:1px solid #303030; border-radius:11px; background:#151515; color:#f1f1f1; cursor:pointer; font-weight:700; }
 .content-module > summary small { color:#888; font-family:inherit; font-size:11px; font-weight:400; }
 .content-module[open] > summary { border-color:#555; }
-.module-action { width:max-content; margin:0 auto; }
+.button-centered { width:max-content; margin:0 auto; }
 .concept-map { display:grid; gap:18px; }
 .map-flow { display:grid; grid-template-columns:130px 1fr; gap:18px; align-items:center; }
 .map-root { display:grid; place-items:center; align-content:center; min-height:82px; border:1px solid #5eead4; border-radius:50%; background:rgba(39,112,122,.2); color:#a4ffef; font-family:ui-monospace,monospace; font-size:24px; font-weight:800; }
@@ -994,9 +994,9 @@ html[data-theme="light"] .step-card p { color:#687178; }
 
 /* Learner content reports */
 .exercise-card-wrap { display:flex; flex-direction:column; }
-.report-toggle { align-self:flex-end; margin-top:10px; opacity:.55; font-size:12.5px; min-height:0; padding:4px 2px; }
-.report-toggle:hover { opacity:1; }
-.report-toggle svg { flex:none; }
+.button-subtle { align-self:flex-end; margin-top:10px; opacity:.55; font-size:12.5px; min-height:0; padding:4px 2px; }
+.button-subtle:hover { opacity:1; }
+.button-subtle svg { flex:none; }
 .report-form { margin-top:10px; padding:12px; border:1px solid #303030; border-radius:10px; display:flex; flex-direction:column; gap:10px; background:#191919; }
 .report-form label { display:flex; flex-direction:column; gap:6px; font-size:13px; font-weight:600; }
 .report-form select, .report-form textarea { font:inherit; font-weight:400; padding:8px 10px; border:1px solid #303030; border-radius:8px; background:#111; color:inherit; }

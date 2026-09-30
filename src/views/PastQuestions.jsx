@@ -2,7 +2,20 @@ import React from 'react';
 import { Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { normalizeChoices } from '../api/client.js';
-import { EmptyState } from '../components/ui.jsx';
+import {
+  Button,
+  CollapsibleSection,
+  EmptyState,
+  ExerciseShell,
+  Feedback,
+  OptionList,
+  Page,
+  PageHeader,
+  Panel,
+  ReadingPassage,
+  Tabs,
+  Toolbar,
+} from '../components/ui';
 
 const SECTIONS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const SKILLS = ['all', 'reading', 'listening', 'language structures'];
@@ -20,34 +33,31 @@ function ExamQuestionCard({ question, selected, onSelect, onRetry }) {
   const prompt = String(question.prompt || '').trim();
   let passage = String(question.context || '').trim();
   if (passage && prompt && passage.toLowerCase().startsWith(prompt.toLowerCase())) passage = passage.slice(prompt.length).trim();
+  const answered = selected && correct ? (isCorrect ? 'correct' : 'wrong') : null;
   return (
-    <article className={`exercise-preview mcq-card ${selected && correct ? (isCorrect ? 'answered-correct' : 'answered-wrong') : ''}`}>
-      <span>{question.exam_name} - {question.skill}</span>
-      {passage && passage.toLowerCase() !== prompt.toLowerCase() && <div className="reading-passage"><strong>Read the passage</strong><p>{passage}</p></div>}
+    <ExerciseShell eyebrow={`${question.exam_name} - ${question.skill}`} answered={answered}>
+      {passage && passage.toLowerCase() !== prompt.toLowerCase() && <ReadingPassage text={passage} />}
       <h2>{prompt}</h2>
       {choices.length > 0 && (
-        <div className="mcq-options">
-          {choices.map((choice) => (
-            <button
-              key={choice.key}
-              className={selected === choice.key && correct ? (choice.key.toLowerCase() === correct ? 'correct' : 'incorrect') : ''}
-              onClick={() => onSelect(choice.key)}
-              disabled={Boolean(selected)}
-            >
-              {choice.key}. {choice.text}
-            </button>
-          ))}
-        </div>
+        <OptionList
+          options={choices.map((choice) => ({ key: choice.key, label: <>{choice.key}. {choice.text}</> }))}
+          selectedKey={selected}
+          answered={Boolean(selected && correct)}
+          correct={Boolean(selectedChoice && selectedChoice.key.toLowerCase() === correct)}
+          disabled={Boolean(selected)}
+          onSelect={onSelect}
+        />
       )}
       {selected && correct && (
-        <div className={`mcq-feedback ${isCorrect ? 'correct' : 'incorrect'}`}>
-          <strong>{isCorrect ? 'Correct!' : 'Not quite.'}</strong>
-          <span>{isCorrect ? (question.explanation || 'Well done.') : `Correct answer: ${question.answer}`}</span>
-          {!isCorrect && <button className="retry-button" onClick={onRetry}>Try again</button>}
-        </div>
+        <Feedback
+          tone={isCorrect ? 'correct' : 'incorrect'}
+          title={isCorrect ? 'Correct!' : 'Not quite.'}
+          message={isCorrect ? (question.explanation || 'Well done.') : `Correct answer: ${question.answer}`}
+          onRetry={isCorrect ? undefined : onRetry}
+        />
       )}
       {!correct && <small>{question.explanation}</small>}
-    </article>
+    </ExerciseShell>
   );
 }
 
@@ -58,14 +68,13 @@ function ExamQuestionList({ data }) {
   const reset = () => setAnswers({});
   React.useEffect(() => { setShowAll(false); setAnswers({}); }, [data.section]);
   return (
-    <details className="content-module" open>
-      <summary><span>Exam practice</span><small>{data.questions.length} questions</small></summary>
-      <section className="panel">
-        <div className="session-toolbar">
-          <span>{data.section}</span>
-          <button className="reset-button" onClick={reset}>Reset all</button>
-        </div>
-      </section>
+    <CollapsibleSection title="Exam practice" badge={`${data.questions.length} questions`} defaultOpen>
+      <Panel>
+        <Toolbar
+          meta={data.section}
+          actions={<Button variant="reset" onClick={reset}>Reset all</Button>}
+        />
+      </Panel>
       <div className="exercise-list">
         {visible.map((question) => (
           <ExamQuestionCard
@@ -78,11 +87,11 @@ function ExamQuestionList({ data }) {
         ))}
       </div>
       {data.questions.length > PAGE_SIZE && (
-        <button className="text-button module-action" onClick={() => setShowAll((value) => !value)}>
+        <Button variant="text" centered onClick={() => setShowAll((value) => !value)}>
           {showAll ? 'Show fewer questions' : `Show all ${data.questions.length} questions`}
-        </button>
+        </Button>
       )}
-    </details>
+    </CollapsibleSection>
   );
 }
 
@@ -96,29 +105,33 @@ export function PastQuestions({ token }) {
   const skillLabel = skill === 'all' ? 'All skills' : skill[0].toUpperCase() + skill.slice(1);
 
   return (
-    <section className="page-stack">
-      <p className="eyebrow">Exam archive</p>
-      <h1 className="page-title">Past questions</h1>
-      <p className="lede">Real exam-format questions from the archive. Pick an answer to check yourself — retry any you miss.</p>
-      <div className="section-tabs" role="group" aria-label="Choose a level">
-        {SECTIONS.map((s) => (
-          <button key={s} className={section === s ? 'selected' : ''} onClick={() => setSection(s)}>
-            <strong>{s}</strong>
-          </button>
-        ))}
-      </div>
-      <div className="section-tabs compact" role="group" aria-label="Choose a skill">
-        {SKILLS.map((s) => (
-          <button key={s} className={skill === s ? 'selected' : ''} onClick={() => setSkill(s)}>
-            {s === 'all' ? 'All skills' : s[0].toUpperCase() + s.slice(1)}
-          </button>
-        ))}
-      </div>
+    <Page>
+      <PageHeader
+        eyebrow="Exam archive"
+        title="Past questions"
+        lede="Real exam-format questions from the archive. Pick an answer to check yourself — retry any you miss."
+      />
+      <Tabs
+        variant="section"
+        options={SECTIONS.map((s) => ({ id: s, label: s }))}
+        value={section}
+        onChange={setSection}
+        ariaLabel="Choose a level"
+      />
+      <Tabs
+        variant="section"
+        options={SKILLS.map((s) => ({ id: s, label: s === 'all' ? 'All skills' : s[0].toUpperCase() + s.slice(1) }))}
+        value={skill}
+        onChange={setSkill}
+        compact
+        strongLabels={false}
+        ariaLabel="Choose a skill"
+      />
       {loading && <EmptyState icon={Database} title="Loading past questions" text="Fetching the exam archive." />}
       {error && <EmptyState icon={Database} title="Couldn't load past questions" text={error} />}
       {!loading && !error && (
         <ExamQuestionList data={{ questions: filtered, section: `${section} · ${skillLabel}` }} />
       )}
-    </section>
+    </Page>
   );
 }
