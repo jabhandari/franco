@@ -952,6 +952,7 @@ html[data-theme="light"] .free-text-input::placeholder { color: #718096; }
 .rubric-box ul { margin:8px 0 0; padding-left:18px; display:grid; gap:6px; font-size:13px; }
 .reveal-word { font-size:22px; font-weight:800; padding:10px 0; }
 .self-mark-row { display:flex; gap:10px; flex-wrap:wrap; }
+.self-mark-row > button { flex:1 1 160px; min-height:46px; margin-top:0; padding:12px 16px; font-size:inherit; }
 .stub-badge { display:inline-block; font-size:10px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:3px 8px; border-radius:999px; background:rgba(251,191,36,.15); color:#fbbf24; border:1px solid rgba(251,191,36,.4); margin-top:6px; }
 .concept-map-scroll { overflow-x:auto; }
 .roadmap-edge { fill:none; stroke:#94a3b8; stroke-width:2; opacity:.7; }
@@ -994,9 +995,10 @@ html[data-theme="light"] .step-card p { color:#687178; }
 
 /* Learner content reports */
 .exercise-card-wrap { display:flex; flex-direction:column; }
-.button-subtle { align-self:flex-end; margin-top:10px; opacity:.55; font-size:12.5px; min-height:0; padding:4px 2px; }
-.button-subtle:hover { opacity:1; }
-.button-subtle svg { flex:none; }
+.report-button { align-self:flex-end; display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:40px; margin-top:12px; padding:8px 12px; border:1px solid #5eead4; border-radius:9px; background:rgba(94,234,212,.12); color:#a4ffef; font-size:13px; font-weight:700; }
+.report-button:hover { background:rgba(94,234,212,.22); }
+.report-button:focus-visible { outline:2px solid currentColor; outline-offset:2px; }
+.report-button svg { flex:none; }
 .report-form { margin-top:10px; padding:12px; border:1px solid #303030; border-radius:10px; display:flex; flex-direction:column; gap:10px; background:#191919; }
 .report-form label { display:flex; flex-direction:column; gap:6px; font-size:13px; font-weight:600; }
 .report-form select, .report-form textarea { font:inherit; font-weight:400; padding:8px 10px; border:1px solid #303030; border-radius:8px; background:#111; color:inherit; }
@@ -1004,6 +1006,8 @@ html[data-theme="light"] .step-card p { color:#687178; }
 .report-thanks { margin-top:10px; font-size:13px; opacity:.7; text-align:right; }
 html[data-theme="light"] .report-form { border-color:#e7ddd1; background:#fff; }
 html[data-theme="light"] .report-form select, html[data-theme="light"] .report-form textarea { border-color:#e7ddd1; background:#fff; }
+html[data-theme="light"] .report-button { background:#edf7f4; border-color:#156064; color:#156064; }
+html[data-theme="light"] .report-button:hover { background:#d9eee8; }
 
 /* Vocabulary group search (top-right corner of the group panel) */
 .topic-group-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }

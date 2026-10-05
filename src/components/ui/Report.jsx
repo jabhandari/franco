@@ -33,7 +33,7 @@ export function ReportButton({ itemId, token }) {
   if (state === 'done') return <p className="report-thanks">Thanks — we've flagged this for review.</p>;
   if (!open) {
     return (
-      <Button variant="text" subtle onClick={() => setOpen(true)} icon={Flag} iconSize={13}>
+      <Button variant="report" onClick={() => setOpen(true)} icon={Flag} iconSize={16}>
         Report a problem
       </Button>
     );
