@@ -1,7 +1,7 @@
 import React from 'react';
 import { Database, Timer } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { safeText } from '../presenters/format.js';
+import { safeText } from '../presenters/format.presenter.js';
 import {
   Checklist,
   Chip,

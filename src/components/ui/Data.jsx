@@ -1,5 +1,5 @@
 import React from 'react';
-import { safeText, formatEnum } from '../../presenters/format.js';
+import { safeText, formatEnum } from '../../presenters/format.presenter.js';
 import { Panel } from './Panel.jsx';
 import { ProgressBar } from './ProgressBar.jsx';
 

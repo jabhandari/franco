@@ -3,8 +3,8 @@ import { BookOpen, PenLine, Mic, Library } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { ExerciseCard } from '../components/exercises/ExerciseCard.jsx';
 import { ConceptRoadmap, LevelGuide, TopicTracks } from '../components/concepts.jsx';
-import { CEFR_LEVELS as SECTIONS } from '../presenters/levels.js';
-import { humanize } from '../presenters/format.js';
+import { CEFR_LEVELS as SECTIONS } from '../presenters/levels.presenter.js';
+import { humanize } from '../presenters/format.presenter.js';
 import { Box, EmptyState, ErrorMessage, Panel, PanelHeader, Tabs, Text } from '../components/ui';
 
 const LIBRARY_TABS = [

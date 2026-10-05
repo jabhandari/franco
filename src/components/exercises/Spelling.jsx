@@ -1,13 +1,13 @@
 import React from 'react';
 import { reportAttempt } from '../../api/client.js';
-import { getErrorMessage, humanize } from '../../presenters/format.js';
+import { getErrorMessage, humanize } from '../../presenters/format.presenter.js';
 import {
   answeredState,
   hasResult,
   feedbackTone,
   feedbackTitle,
   elapsedMs,
-} from '../../presenters/attempt.js';
+} from '../../presenters/attempt.presenter.js';
 import {
   ExerciseShell,
   ExerciseEyebrow,

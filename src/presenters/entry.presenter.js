@@ -1,8 +1,8 @@
 // FRA-21 presenter: pure entry sanitization. No JSX, no hooks, no side
 // effects. Moved verbatim from src/api/client.js (re-exported there for
 // compatibility).
-import { safeText } from './format.js';
-import { normalizeChoices } from './collections.js';
+import { safeText } from './format.presenter.js';
+import { normalizeChoices } from './collections.presenter.js';
 
 // Sanitize one exercise entry at the render boundary so no renderer can
 // crash (or print raw JSON) on object-shaped API fields.

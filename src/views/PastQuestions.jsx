@@ -1,9 +1,9 @@
 import React from 'react';
 import { Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { normalizeChoices } from '../presenters/collections.js';
-import { capitalize, choiceLabel } from '../presenters/format.js';
-import { CEFR_LEVELS } from '../presenters/levels.js';
+import { normalizeChoices } from '../presenters/collections.presenter.js';
+import { capitalize, choiceLabel } from '../presenters/format.presenter.js';
+import { CEFR_LEVELS } from '../presenters/levels.presenter.js';
 import {
   Box,
   Button,

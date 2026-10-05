@@ -1,12 +1,12 @@
 import React from 'react';
 import { reportAttempt } from '../../api/client.js';
-import { getErrorMessage } from '../../presenters/format.js';
+import { getErrorMessage } from '../../presenters/format.presenter.js';
 import {
   answeredState,
   hasResult,
   feedbackTone,
   elapsedMs,
-} from '../../presenters/attempt.js';
+} from '../../presenters/attempt.presenter.js';
 import {
   Box,
   ExerciseShell,

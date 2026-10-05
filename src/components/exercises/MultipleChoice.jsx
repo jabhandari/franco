@@ -1,14 +1,14 @@
 import React from 'react';
 import { reportAttempt } from '../../api/client.js';
-import { getErrorMessage, humanize, choiceLabel } from '../../presenters/format.js';
-import { shuffle } from '../../presenters/collections.js';
+import { getErrorMessage, humanize, choiceLabel } from '../../presenters/format.presenter.js';
+import { shuffle } from '../../presenters/collections.presenter.js';
 import {
   answeredState,
   hasResult,
   feedbackTone,
   feedbackTitle,
   elapsedMs,
-} from '../../presenters/attempt.js';
+} from '../../presenters/attempt.presenter.js';
 import {
   Box,
   ExerciseShell,

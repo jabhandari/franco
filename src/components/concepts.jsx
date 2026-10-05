@@ -1,9 +1,9 @@
 import React from 'react';
 import { Database, Search, X } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { safeText, padNumber } from '../presenters/format.js';
-import { CEFR_LEVELS } from '../presenters/levels.js';
-import { describeWord } from '../presenters/words.js';
+import { safeText, padNumber } from '../presenters/format.presenter.js';
+import { CEFR_LEVELS } from '../presenters/levels.presenter.js';
+import { describeWord } from '../presenters/words.presenter.js';
 import { Badge, Box, EmptyState, ErrorMessage, Modal, Panel, Tabs, Text, TextInput } from './ui';
 
 // Restored original roadmap display: the interactive concept tree with a
@@ -15,7 +15,7 @@ import { Badge, Box, EmptyState, ErrorMessage, Modal, Panel, Tabs, Text, TextInp
 // were designed around.
 
 // Keep the LEVELS export working for any importer; the list itself lives in
-// src/presenters/levels.js (single source of truth).
+// src/presenters/levels.presenter.js (single source of truth).
 export const LEVELS = CEFR_LEVELS;
 
 export const levelGuides = {
@@ -300,7 +300,7 @@ export function ConceptRoadmap({ level, token, onSelectSection }) {
   );
 }
 
-// describeWord + POS_LABELS moved to src/presenters/words.js (FRA-21).
+// describeWord + POS_LABELS moved to src/presenters/words.presenter.js (FRA-21).
 
 // One category group inside the learning tracks. The vocabulary group gets a
 // search button in its top-right corner; expanding it filters the group's

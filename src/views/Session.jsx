@@ -2,7 +2,7 @@ import React from 'react';
 import { BookOpen, Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { ExerciseCard } from '../components/exercises/ExerciseCard.jsx';
-import { CEFR_LEVELS } from '../presenters/levels.js';
+import { CEFR_LEVELS } from '../presenters/levels.presenter.js';
 import { Box, Button, EmptyState, Page, PageHeader, Tabs, Toolbar } from '../components/ui';
 
 // Restored original session display: the full question list under the level

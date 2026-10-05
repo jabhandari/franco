@@ -1,6 +1,6 @@
 // FRA-21 presenter: pure vocabulary-word helpers moved verbatim from
 // src/components/concepts.jsx. No JSX, no hooks, no side effects.
-import { safeText } from './format.js';
+import { safeText } from './format.presenter.js';
 
 // Learner-facing labels for Lexique part-of-speech codes stored in the
 // vocabulary topic rows (e.g. {"lemma":"accord","pos":"NOM","gender":"m",...}).

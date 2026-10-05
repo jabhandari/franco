@@ -1,7 +1,7 @@
 import React from 'react';
 import { reportAttempt } from '../../api/client.js';
-import { getErrorMessage, humanize } from '../../presenters/format.js';
-import { hasResult, elapsedMs } from '../../presenters/attempt.js';
+import { getErrorMessage, humanize } from '../../presenters/format.presenter.js';
+import { hasResult, elapsedMs } from '../../presenters/attempt.presenter.js';
 import {
   Box,
   ExerciseShell,

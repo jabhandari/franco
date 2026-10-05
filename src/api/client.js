@@ -1,9 +1,9 @@
 // Pure presenters live in src/presenters/ (FRA-21); this module re-exports
 // them so every existing import from './api/client.js' keeps working.
 // New code should import from the presenter modules directly.
-export { safeText, formatEnum, getErrorMessage } from '../presenters/format.js';
-export { shuffle, normalizeChoices } from '../presenters/collections.js';
-export { sanitizeEntry } from '../presenters/entry.js';
+export { safeText, formatEnum, getErrorMessage } from '../presenters/format.presenter.js';
+export { shuffle, normalizeChoices } from '../presenters/collections.presenter.js';
+export { sanitizeEntry } from '../presenters/entry.presenter.js';
 
 function fallbackForStatus(status) {
   if (status === 401) return 'Your session expired. Please sign in again.';
@@ -28,7 +28,7 @@ async function parseApiResponse(response) {
   return payload;
 }
 
-// (moved to src/presenters/format.js — re-exported at the top of this file)
+// (moved to src/presenters/format.presenter.js — re-exported at the top of this file)
 
 export async function apiGet(path, token) {
   const headers = token ? { authorization: `Bearer ${token}` } : {};
@@ -48,7 +48,7 @@ export async function apiPost(path, body, token) {
 }
 
 // shuffle / normalizeChoices / sanitizeEntry moved to
-// src/presenters/collections.js and src/presenters/entry.js — re-exported
+// src/presenters/collections.presenter.js and src/presenters/entry.presenter.js — re-exported
 // at the top of this file.
 
 // Report an answered exercise to the adaptive engine. Every renderer calls

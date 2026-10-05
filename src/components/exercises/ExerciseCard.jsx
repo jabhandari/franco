@@ -5,7 +5,7 @@ import { Spelling } from './Spelling.jsx';
 import { PronunciationDrill } from './Listening.jsx';
 import { WritingPrompt, SpeakingPrompt } from './WritingSpeaking.jsx';
 import { Box, ReportButton } from '../ui/index.js';
-import { sanitizeEntry } from '../../presenters/entry.js';
+import { sanitizeEntry } from '../../presenters/entry.presenter.js';
 
 // One renderer per item type. Every answered item reports an attempt with
 // response + duration to the server's adaptive engine.

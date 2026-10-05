@@ -1,7 +1,7 @@
 // FRA-21 presenter: pure collection helpers. No JSX, no hooks, no side
 // effects. Moved verbatim from src/api/client.js (re-exported there for
 // compatibility).
-import { safeText } from './format.js';
+import { safeText } from './format.presenter.js';
 
 /**
  * Unbiased shuffle (Fisher-Yates). Never use Array.sort(() => Math.random() - 0.5).

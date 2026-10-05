@@ -1,8 +1,8 @@
 import React from 'react';
 import { ClipboardCheck } from 'lucide-react';
 import { apiPost } from '../api/client.js';
-import { getErrorMessage } from '../presenters/format.js';
-import { shuffle } from '../presenters/collections.js';
+import { getErrorMessage } from '../presenters/format.presenter.js';
+import { shuffle } from '../presenters/collections.presenter.js';
 import { levelGuides } from '../components/concepts.jsx';
 import { Box, ErrorMessage, ExerciseShell, Page, PageHeader, Text } from '../components/ui';
 
