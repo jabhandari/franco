@@ -9,8 +9,8 @@ const VARIANT_CLASS = {
   note: 'form-note',
 };
 
-export function Text({ variant = 'body', size, nowrap = false, as: Tag = 'p', children, ...rest }) {
-  const classes = [VARIANT_CLASS[variant] || '', size === 'sm' ? 'small' : '', nowrap ? 'nowrap' : '']
+export function Text({ variant = 'body', size, nowrap = false, as: Tag = 'p', className, children, ...rest }) {
+  const classes = [VARIANT_CLASS[variant] || '', size === 'sm' ? 'small' : '', nowrap ? 'nowrap' : '', className || '']
     .filter(Boolean)
     .join(' ');
   return <Tag className={classes || undefined} {...rest}>{children}</Tag>;

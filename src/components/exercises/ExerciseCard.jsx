@@ -4,8 +4,8 @@ import { WordOrder } from './WordOrder.jsx';
 import { Spelling } from './Spelling.jsx';
 import { PronunciationDrill } from './Listening.jsx';
 import { WritingPrompt, SpeakingPrompt } from './WritingSpeaking.jsx';
-import { ReportButton } from '../ui/index.js';
-import { sanitizeEntry } from '../../api/client.js';
+import { Box, ReportButton } from '../ui/index.js';
+import { sanitizeEntry } from '../../presenters/entry.js';
 
 // One renderer per item type. Every answered item reports an attempt with
 // response + duration to the server's adaptive engine.
@@ -54,9 +54,9 @@ export function ExerciseCard({ entry, token, onResult }) {
 function ReportableExercise({ item, token, children }) {
   const reportable = item.item_kind === 'content_item' && item.id && token;
   return (
-    <div className="exercise-card-wrap">
+    <Box className="exercise-card-wrap">
       {children}
       {reportable && <ReportButton itemId={item.id} token={token} />}
-    </div>
+    </Box>
   );
 }

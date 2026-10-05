@@ -1,5 +1,13 @@
 import React from 'react';
-import { getErrorMessage, reportAttempt } from '../../api/client.js';
+import { reportAttempt } from '../../api/client.js';
+import { getErrorMessage, humanize } from '../../presenters/format.js';
+import {
+  answeredState,
+  hasResult,
+  feedbackTone,
+  feedbackTitle,
+  elapsedMs,
+} from '../../presenters/attempt.js';
 import {
   ExerciseShell,
   ExerciseEyebrow,
@@ -7,6 +15,7 @@ import {
   Feedback,
   ErrorMessage,
   AudioPlayer,
+  Text,
 } from '../ui';
 
 // Typed-answer renderer for spelling / cloze / free-text items, and dictation
@@ -21,7 +30,7 @@ export function Spelling({ entry, token, audioUrl, onResult }) {
     event?.preventDefault();
     if (result || !value.trim()) return;
     try {
-      const res = await reportAttempt(entry, value, token, { durationMs: Date.now() - startRef.current });
+      const res = await reportAttempt(entry, value, token, { durationMs: elapsedMs(startRef.current) });
       setResult(res);
       onResult?.(res);
     } catch (error) {
@@ -36,13 +45,13 @@ export function Spelling({ entry, token, audioUrl, onResult }) {
   }
 
   return (
-    <ExerciseShell answered={result && !result.error ? (result.correct ? 'correct' : 'wrong') : null}>
+    <ExerciseShell answered={answeredState(result)}>
       <ExerciseEyebrow
         level={entry.level}
-        kind={isDictation ? 'dictation' : (entry.type || 'spelling').replace(/_/g, ' ')}
+        kind={isDictation ? 'dictation' : humanize(entry.type || 'spelling')}
       />
       {audioUrl && <AudioPlayer src={audioUrl} />}
-      <h2>{entry.prompt}</h2>
+      <Text as="h2">{entry.prompt}</Text>
       <AnswerForm
         rows={isDictation ? 4 : 2}
         value={value}
@@ -54,10 +63,10 @@ export function Spelling({ entry, token, audioUrl, onResult }) {
         submitLabel="Check answer"
         onSubmit={submit}
       />
-      {result && !result.error && (
+      {hasResult(result) && (
         <Feedback
-          tone={result.correct ? 'correct' : 'incorrect'}
-          title={result.correct ? 'Correct!' : 'Not quite.'}
+          tone={feedbackTone(result)}
+          title={feedbackTitle(result)}
           reveal={result.correct ? undefined : result.reveal}
           revealLabel="Expected:"
           onRetry={result.correct ? undefined : retry}

@@ -2,9 +2,8 @@ import React from 'react';
 import { BookOpen, Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { ExerciseCard } from '../components/exercises/ExerciseCard.jsx';
-import { Button, EmptyState, Page, PageHeader, Tabs, Toolbar } from '../components/ui';
-
-const SECTIONS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+import { CEFR_LEVELS } from '../presenters/levels.js';
+import { Box, Button, EmptyState, Page, PageHeader, Tabs, Toolbar } from '../components/ui';
 
 // Restored original session display: the full question list under the level
 // tabs, instead of the one-at-a-time stepper. The queue itself is still the
@@ -26,7 +25,7 @@ export function Session({ token }) {
       <Tabs
         variant="section"
         compact
-        options={SECTIONS.map((section) => ({ id: section, label: section }))}
+        options={CEFR_LEVELS.map((section) => ({ id: section, label: section }))}
         value={selectedSection}
         onChange={setSelectedSection}
         ariaLabel="Choose session level"
@@ -42,11 +41,11 @@ export function Session({ token }) {
             meta={<>{queue.length} questions{(data?.reviewsDue ?? 0) > 0 && ` · ${data.reviewsDue} reviews due`}</>}
             actions={<Button variant="reset" onClick={() => setResetKey((value) => value + 1)}>Reset all</Button>}
           />
-          <div className="exercise-list">
+          <Box className="exercise-list">
             {queue.map((entry) => (
               <ExerciseCard key={`${resetKey}-${entry.item_kind}-${entry.id}`} entry={entry} token={token} />
             ))}
-          </div>
+          </Box>
         </>
       )}
     </Page>

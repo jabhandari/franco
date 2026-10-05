@@ -1,5 +1,14 @@
 import React from 'react';
-import { getErrorMessage, reportAttempt, shuffle } from '../../api/client.js';
+import { reportAttempt } from '../../api/client.js';
+import { getErrorMessage } from '../../presenters/format.js';
+import { shuffle } from '../../presenters/collections.js';
+import {
+  answeredState,
+  hasResult,
+  feedbackTone,
+  feedbackTitle,
+  elapsedMs,
+} from '../../presenters/attempt.js';
 import {
   ExerciseShell,
   ExerciseEyebrow,
@@ -41,7 +50,7 @@ export function WordOrder({ entry, token, onResult }) {
   async function submit() {
     if (result || !answer.length) return;
     try {
-      const res = await reportAttempt(entry, answer, token, { durationMs: Date.now() - startRef.current });
+      const res = await reportAttempt(entry, answer, token, { durationMs: elapsedMs(startRef.current) });
       setResult(res);
       onResult?.(res);
     } catch (error) {
@@ -57,9 +66,9 @@ export function WordOrder({ entry, token, onResult }) {
   }
 
   return (
-    <ExerciseShell answered={result && !result.error ? (result.correct ? 'correct' : 'wrong') : null}>
+    <ExerciseShell answered={answeredState(result)}>
       <ExerciseEyebrow level={entry.level} kind="word order" />
-      <h2>{entry.prompt}</h2>
+      <Text as="h2">{entry.prompt}</Text>
       <Text variant="muted">Tap the words in order to build the sentence. Tap a placed word to remove it.</Text>
       <TokenTray variant="answer" label="Your sentence" emptyHint="Your sentence appears here…">
         {answer.map((word, index) => (
@@ -80,10 +89,10 @@ export function WordOrder({ entry, token, onResult }) {
           Check answer
         </Button>
       )}
-      {result && !result.error && (
+      {hasResult(result) && (
         <Feedback
-          tone={result.correct ? 'correct' : 'incorrect'}
-          title={result.correct ? 'Correct!' : 'Not quite.'}
+          tone={feedbackTone(result)}
+          title={feedbackTitle(result)}
           reveal={result.correct ? undefined : result.reveal}
           revealLabel="Correct order:"
           onRetry={result.correct ? undefined : retry}

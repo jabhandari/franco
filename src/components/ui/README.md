@@ -3,13 +3,29 @@
 Single source of truth for shared UI. Everything in this folder is a
 reusable, prop-driven component. Rules:
 
-- **No `className` or `style` props.** Components expose explicit
-  semantic/layout props instead (`direction`, `gap`, `variant`, `tone`,
-  `centered`, `nowrap`, `layout`, …) and own their visual mapping
-  internally. If a treatment has no prop yet, add one — do not reach
-  for className. The one exception is data-driven values that cannot be
-  expressed as classes (e.g. `ProgressBar`'s fill width) — those live
-  *inside* the component, never as a caller-supplied style.
+- **Strict boundary (FRA-21).** Only files inside `src/components/ui/`
+  may render native/intrinsic JSX elements (`div`, `span`, `button`, …)
+  or use `style={}` props. Everything else in `src/` composes this
+  library. Enforced by `npm run lint:ui`
+  (`scripts/lint-ui-boundary.mjs`), which parses every
+  `src/**/*.jsx|js` file's AST outside `src/components/ui/` and fails
+  on any intrinsic element or `style={` prop. (`index.html` is out of
+  scope; `React.Fragment` is fine.)
+- **No `className` or `style` props on semantic components.**
+  Components expose explicit semantic/layout props instead
+  (`direction`, `gap`, `variant`, `tone`, `centered`, `nowrap`,
+  `layout`, …) and own their visual mapping internally. If a treatment
+  has no prop yet, add one — do not reach for className. The one
+  exception is data-driven values that cannot be expressed as classes
+  (e.g. `ProgressBar`'s fill width) — those live *inside* the
+  component, never as a caller-supplied style.
+- **Primitives may take `className`.** `Box`, `Text`, and `TextInput`
+  — and only these three — accept a `className` prop so they can carry
+  the app's existing `styles.css` hooks 1:1 when replacing an intrinsic
+  element (`<div className="stack">` → `<Box className="stack">`).
+  Everything else is passed via props (`as`, `href`, `onClick`,
+  `aria-*`, layout props, …). Semantic components keep their fixed
+  internal classes.
 - **Visual contract = `src/styles.css`.** Components render the same
   classNames the app already used, so adopting them causes no visual
   regressions. Do not invent new visual variants here without a
@@ -25,9 +41,11 @@ import { Button, Panel, Stack, Text } from '../components/ui';
 
 | Component | Props | Renders |
 |---|---|---|
+| `Box` | `as` (default `div`), `className`, `display`, `direction` (`row`\|`column`), `gap` (`xs`\|`sm`\|`md`\|`lg`\|`xl`, same scale as `Stack`), `align`, `justify`, `wrap`, `id`, `role`, `title`, `type`, `disabled`, `onClick`, `onSubmit`, `href`, `target`, `rel`, `viewBox`, `preserveAspectRatio`, `d`, `aria-*` | Structural primitive: the tag given by `as` with the caller's `className`. Layout props map to an inline style owned by the component, computed only when at least one is set — otherwise no `style` attribute renders. No `style` prop, no other arbitrary props (non-`aria-*` extras are dropped). |
 | `Stack` | `as`, `display` (`flex`\|`grid`), `direction` (`row`\|`column`), `gap` (`xs`\|`sm`\|`md`\|`lg`\|`xl`), `align`, `justify`, `wrap` | Flex/grid layout primitive (inline style owned by the component) |
 | `Page` | `children` | `section.page-stack` page container |
-| `Text` | `variant` (`body`\|`muted`\|`eyebrow`\|`lede`\|`note`), `size` (`sm`), `nowrap`, `as` | Typography |
+| `Text` | `variant` (`body`\|`muted`\|`eyebrow`\|`lede`\|`note`), `size` (`sm`), `nowrap`, `as` (default `p`), `className` | Typography. `className` is appended after the variant/size classes so it can carry an existing `styles.css` hook (e.g. `concept-subtitle`, `reveal-word`, `lede-sub`). |
+| `TextInput` | `type`, `name`, `value`, `onChange`, `onKeyDown`, `placeholder`, `autoComplete`, `autoFocus`, `required`, `className`, `aria-*` | Bare `<input>` (no wrapper class) for the places that render an input directly instead of inside `Field`. |
 | `PageHeader` | `eyebrow`, `title`, `lede` | `eyebrow` + `h1.page-title` + `p.lede` |
 | `Button` | `variant` (`primary`\|`text`\|`retry`\|`reset`\|`nav`\|`report`), `wide`, `centered`, `active`, `type`, `disabled`, `loading`, `icon`, `iconSize`, `iconPosition`, `onClick` | App buttons |
 | `Panel` | `compact`, `layout` (`grid`), `as` | `section.panel` card |

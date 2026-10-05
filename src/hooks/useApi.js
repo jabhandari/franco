@@ -1,5 +1,6 @@
 import React from 'react';
-import { apiGet, getErrorMessage } from '../api/client.js';
+import { apiGet } from '../api/client.js';
+import { getErrorMessage } from '../presenters/format.js';
 
 export function useApiResource(path, token) {
   const [state, setState] = React.useState({ data: null, loading: true, error: '' });

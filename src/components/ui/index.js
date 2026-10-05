@@ -4,7 +4,9 @@
 //   import { Button, Panel, Stack, Text } from '../components/ui';
 
 export { Stack, Page } from './Stack.jsx';
+export { Box } from './Box.jsx';
 export { Text, PageHeader } from './Text.jsx';
+export { TextInput } from './TextInput.jsx';
 export { Button } from './Button.jsx';
 export { Panel, PanelHeader } from './Panel.jsx';
 export { Tabs } from './Tabs.jsx';

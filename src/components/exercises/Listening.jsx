@@ -1,6 +1,14 @@
 import React from 'react';
-import { getErrorMessage, reportAttempt } from '../../api/client.js';
+import { reportAttempt } from '../../api/client.js';
+import { getErrorMessage } from '../../presenters/format.js';
 import {
+  answeredState,
+  hasResult,
+  feedbackTone,
+  elapsedMs,
+} from '../../presenters/attempt.js';
+import {
+  Box,
   ExerciseShell,
   ExerciseEyebrow,
   AudioPlayer,
@@ -23,7 +31,7 @@ export function PronunciationDrill({ entry, token, onResult }) {
       // Self-assessment against the known word: confirming sends the expected
       // word itself, which the grader matches; "not quite" sends nothing.
       const res = await reportAttempt(entry, saidItRight ? entry.expected : '', token, {
-        durationMs: Date.now() - startRef.current,
+        durationMs: elapsedMs(startRef.current),
       });
       setResult(res);
       onResult?.(res);
@@ -38,9 +46,9 @@ export function PronunciationDrill({ entry, token, onResult }) {
   }
 
   return (
-    <ExerciseShell answered={result && !result.error ? (result.correct ? 'correct' : 'wrong') : null}>
+    <ExerciseShell answered={answeredState(result)}>
       <ExerciseEyebrow level={entry.level} kind="pronunciation drill" />
-      <h2>{entry.prompt}</h2>
+      <Text as="h2">{entry.prompt}</Text>
       <AudioPlayer
         src={audio?.url}
         transcript={audio?.transcript ? 'Transcript available after self-marking.' : undefined}
@@ -50,17 +58,17 @@ export function PronunciationDrill({ entry, token, onResult }) {
       {!revealed ? (
         <Button variant="primary" onClick={() => setRevealed(true)}>Reveal the word</Button>
       ) : (
-        <p className="reveal-word">{entry.expected}</p>
+        <Text className="reveal-word">{entry.expected}</Text>
       )}
       {revealed && !result && (
-        <div className="self-mark-row">
+        <Box className="self-mark-row">
           <Button variant="primary" onClick={() => selfMark(true)}>I said it right</Button>
           <Button variant="retry" onClick={() => selfMark(false)}>Not quite</Button>
-        </div>
+        </Box>
       )}
-      {result && !result.error && (
+      {hasResult(result) && (
         <Feedback
-          tone={result.correct ? 'correct' : 'incorrect'}
+          tone={feedbackTone(result)}
           title={result.correct ? 'Nice — logged as correct.' : 'Logged. Keep practising.'}
           onRetry={result.correct ? undefined : retry}
         />
