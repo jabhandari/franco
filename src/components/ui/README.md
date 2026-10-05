@@ -37,6 +37,21 @@ Import from the barrel:
 import { Button, Panel, Stack, Text } from '../components/ui';
 ```
 
+## Presenters
+
+Reusable helper logic lives in `src/presenters/` as pure functions (no JSX):
+
+- File naming: `<name>.presenter.js`, with colocated tests in
+  `<name>.presenter.test.js` (e.g. `format.presenter.js` +
+  `format.presenter.test.js`).
+- Only logic used **more than once** goes here. Single-use logic stays in
+  its component.
+- Every presenter module has test coverage; the `*.presenter.test.js`
+  files run as part of `npm test`.
+- Presenters never render JSX and never touch the DOM — they compute
+  values (labels, states, formatted text, sanitized entries) that
+  components consume via props.
+
 ## Components
 
 | Component | Props | Renders |
