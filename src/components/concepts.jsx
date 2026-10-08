@@ -135,8 +135,19 @@ export function RoadmapConnectors({ section, edges }) {
 
 export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectConcept, onSelectSection }) {
   const active = nodes.find((node) => node.id === activeConceptId);
+
+  // FRA-18: clicking the background collapses the lesson popup. Clicks
+  // inside the modal and on roadmap nodes are left alone — nodes already
+  // toggle themselves, and the modal has its own close button.
+  function handleBackgroundClick(event) {
+    if (!active) return;
+    if (event.target.closest('.concept-modal')) return;
+    if (event.target.closest('.roadmap-node')) return;
+    onSelectConcept(null);
+  }
+
   return (
-    <section className={`concept-map panel ${active ? 'has-modal' : ''}`}>
+    <section className={`concept-map panel ${active ? 'has-modal' : ''}`} onClick={handleBackgroundClick}>
       <div className="roadmap-heading">
         <Tabs
           variant="roadmap"
@@ -173,8 +184,18 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
 
 export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId, onSelectConcept }) {
   const active = nodes.find((node) => node.id === activeConceptId);
+
+  // FRA-18: same background-click collapse as the roadmap map — rows
+  // toggle themselves, so only true background clicks close the popup.
+  function handleBackgroundClick(event) {
+    if (!active) return;
+    if (event.target.closest('.concept-modal')) return;
+    if (event.target.closest('.roadmap-table-row')) return;
+    onSelectConcept(null);
+  }
+
   return (
-    <section className="roadmap-table-page">
+    <section className="roadmap-table-page" onClick={handleBackgroundClick}>
       <Tabs
         variant="roadmap"
         options={LEVELS.map((level) => ({ id: level, label: level }))}
