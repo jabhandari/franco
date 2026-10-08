@@ -1026,3 +1026,33 @@ html[data-theme="light"] .topic-search input { background:#fff; border-color:#e7
 html[data-theme="light"] .topic-search input::placeholder { color:#a8a094; }
 html[data-theme="light"] .topic-search input:focus { border-color:#2f54c4; }
 @media (max-width:680px) { .topic-search input { width:130px; } }
+
+/* FRA-2: review queue */
+.review-key-form { display:grid; gap:14px; }
+.review-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.review-toolbar p { margin:0; }
+.review-actions { display:flex; gap:6px; align-items:center; }
+.review-pills { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.review-pill { padding:4px 10px; border-radius:999px; background:#20242c; color:#cfd9e6; font-size:12px; font-weight:700; }
+.review-pill.flagged { display:inline-flex; align-items:center; gap:5px; background:rgba(199,66,79,.2); color:#ffb3b3; }
+.review-item h3 { margin:0 0 6px; font-size:19px; }
+.review-prompt { font-size:16px; line-height:1.55; margin:0 0 8px; }
+.review-expected { border:1px solid #303030; border-radius:10px; padding:12px 14px; background:#191919; margin:12px 0; }
+.review-expected strong { display:block; font-size:11px; text-transform:uppercase; letter-spacing:.09em; color:#5eead4; margin-bottom:6px; }
+.review-expected p { margin:0; }
+.review-choices { margin:0; padding-left:18px; display:grid; gap:4px; }
+.review-choices li.correct { font-weight:800; }
+.review-note { width:100%; box-sizing:border-box; margin-top:4px; padding:10px 12px; border-radius:8px; border:1px solid #3a3a3a; background:#14161a; color:#eef4fb; font:inherit; font-size:14px; }
+.review-note::placeholder { color:#77808d; }
+.review-item-actions { display:flex; gap:8px; align-items:center; margin-top:12px; flex-wrap:wrap; }
+.review-item-actions .text-button, .review-toolbar .text-button { width:auto; margin-top:0; padding:10px 12px; }
+.review-danger { display:inline-flex; align-items:center; gap:6px; color:#ff9c9c; }
+.review-danger:hover { color:#ffc4c4; }
+html[data-theme="light"] .review-pill { background:#edf7f4; color:#156064; }
+html[data-theme="light"] .review-pill.flagged { background:#fff0ef; color:#a64b2e; }
+html[data-theme="light"] .review-expected { background:#fffdf8; border-color:#e3d8ca; }
+html[data-theme="light"] .review-expected strong { color:#156064; }
+html[data-theme="light"] .review-note { background:#fff; border-color:#e0d5c6; color:#2c3136; }
+html[data-theme="light"] .review-note::placeholder { color:#a39a8d; }
+html[data-theme="light"] .review-danger { color:#a64b2e; }
+html[data-theme="light"] .review-danger:hover { color:#c05a36; }

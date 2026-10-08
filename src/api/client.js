@@ -43,15 +43,18 @@ export function getErrorMessage(error) {
   return 'Something went wrong. Please try again.';
 }
 
-export async function apiGet(path, token) {
-  const headers = token ? { authorization: `Bearer ${token}` } : {};
+export async function apiGet(path, token, options = {}) {
+  const headers = {};
+  if (token) headers.authorization = `Bearer ${token}`;
+  if (options.apiKey) headers['x-api-key'] = options.apiKey;
   const response = await fetch(path, { headers, cache: 'no-store' });
   return parseApiResponse(response);
 }
 
-export async function apiPost(path, body, token) {
+export async function apiPost(path, body, token, options = {}) {
   const headers = { 'content-type': 'application/json' };
   if (token) headers.authorization = `Bearer ${token}`;
+  if (options.apiKey) headers['x-api-key'] = options.apiKey;
   const response = await fetch(path, {
     method: 'POST',
     headers,

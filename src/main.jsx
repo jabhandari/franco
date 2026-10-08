@@ -27,6 +27,7 @@ import { PastQuestions } from './views/PastQuestions.jsx';
 import { Progress } from './views/Progress.jsx';
 import { Conversation } from './views/Conversation.jsx';
 import { Placement } from './views/Placement.jsx';
+import { ReviewQueue, REVIEW_KEY_STORAGE } from './views/ReviewQueue.jsx';
 
 const TOKEN_KEY = 'franco_auth_token';
 
@@ -40,7 +41,7 @@ const navItems = [
   { id: 'conversation', label: 'Conversation', icon: Mic }
 ];
 
-const viewPaths = { home: '/', placement: '/placement', session: '/session', content: '/content', past: '/past-questions', progress: '/progress', conversation: '/conversation' };
+const viewPaths = { home: '/', placement: '/placement', session: '/session', content: '/content', past: '/past-questions', progress: '/progress', conversation: '/conversation', review: '/review' };
 function viewFromPath(pathname) {
   const entry = Object.entries(viewPaths).find(([, path]) => path === pathname || (path !== '/' && pathname.startsWith(`${path}/`)));
   return entry?.[0] || 'home';
@@ -55,6 +56,12 @@ function App() {
   const [loading, setLoading] = React.useState(Boolean(authToken));
   const [error, setError] = React.useState('');
   const [theme, setTheme] = React.useState(() => localStorage.getItem('franco_theme') || 'dark');
+  // FRA-2: the Review queue nav link only appears once a review API key
+  // has been stored in this browser (the view itself manages the key).
+  const [hasReviewKey, setHasReviewKey] = React.useState(() => Boolean(localStorage.getItem(REVIEW_KEY_STORAGE)));
+  const visibleNavItems = hasReviewKey
+    ? [...navItems, { id: 'review', label: 'Review queue', icon: ShieldCheck }]
+    : navItems;
 
   function navigate(nextView, replace = false) {
     setView(nextView);
@@ -163,7 +170,7 @@ function App() {
         <Brand onClick={() => navigate('home')} />
 
         <nav aria-label="Main navigation">
-          {navItems.map((item) => (
+          {visibleNavItems.map((item) => (
             <NavButton
               key={item.id}
               icon={item.icon}
@@ -198,6 +205,7 @@ function App() {
         {view === 'past' && <PastQuestions token={authToken} />}
         {view === 'progress' && <Progress token={authToken} />}
         {view === 'conversation' && <Conversation token={authToken} />}
+        {view === 'review' && <ReviewQueue onKeyChange={setHasReviewKey} />}
       </main>
     </div>
   );
