@@ -2,10 +2,9 @@ import React from 'react';
 
 // App buttons. variant maps 1:1 to the existing button classes:
 // primary -> .primary-button, text -> .text-button, retry -> .retry-button,
-// reset -> .reset-button, nav -> .nav-button.
+// reset -> .reset-button, nav -> .nav-button, report -> .report-button.
 // wide stretches full width; centered shrinks to content and centers
-// (the old .module-action treatment); subtle applies the small,
-// low-emphasis text-button treatment (the old .report-toggle).
+// (the old .module-action treatment).
 // No className/style escape hatches.
 const VARIANT_CLASS = {
   primary: 'primary-button',
@@ -13,13 +12,13 @@ const VARIANT_CLASS = {
   retry: 'retry-button',
   reset: 'reset-button',
   nav: 'nav-button',
+  report: 'report-button',
 };
 
 export function Button({
   variant = 'primary',
   wide = false,
   centered = false,
-  subtle = false,
   active = false,
   type = 'button',
   disabled = false,
@@ -34,7 +33,6 @@ export function Button({
     VARIANT_CLASS[variant] || VARIANT_CLASS.primary,
     wide ? 'wide' : '',
     centered ? 'button-centered' : '',
-    subtle ? 'button-subtle' : '',
     active ? 'active' : '',
   ]
     .filter(Boolean)

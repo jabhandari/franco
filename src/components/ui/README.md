@@ -29,7 +29,7 @@ import { Button, Panel, Stack, Text } from '../components/ui';
 | `Page` | `children` | `section.page-stack` page container |
 | `Text` | `variant` (`body`\|`muted`\|`eyebrow`\|`lede`\|`note`), `size` (`sm`), `nowrap`, `as` | Typography |
 | `PageHeader` | `eyebrow`, `title`, `lede` | `eyebrow` + `h1.page-title` + `p.lede` |
-| `Button` | `variant` (`primary`\|`text`\|`retry`\|`reset`\|`nav`), `wide`, `centered`, `subtle`, `active`, `type`, `disabled`, `loading`, `icon`, `iconSize`, `iconPosition`, `onClick` | App buttons |
+| `Button` | `variant` (`primary`\|`text`\|`retry`\|`reset`\|`nav`\|`report`), `wide`, `centered`, `active`, `type`, `disabled`, `loading`, `icon`, `iconSize`, `iconPosition`, `onClick` | App buttons |
 | `Panel` | `compact`, `layout` (`grid`), `as` | `section.panel` card |
 | `PanelHeader` | `eyebrow`, `title`, `aside` | `div.panel-title` heading row |
 | `Tabs` | `variant` (`section`\|`library`\|`roadmap`), `options` (`{id,label,icon}[]`), `value`, `onChange`, `compact`, `ariaLabel` | Tab rows |
