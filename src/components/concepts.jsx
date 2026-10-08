@@ -171,7 +171,8 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
   );
 }
 
-export function RoadmapTable({ section, nodes, onSelectSection }) {
+export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId, onSelectConcept }) {
+  const active = nodes.find((node) => node.id === activeConceptId);
   return (
     <section className="roadmap-table-page">
       <Tabs
@@ -183,13 +184,24 @@ export function RoadmapTable({ section, nodes, onSelectSection }) {
       <div className="roadmap-table">
         <div className="roadmap-table-head"><span>Concept</span><span>Area</span><span>What you will learn</span></div>
         {nodes.map((node, index) => (
-          <div className="roadmap-table-row" key={node.id}>
+          <button
+            type="button"
+            className={`roadmap-table-row${activeConceptId === node.id ? ' active' : ''}`}
+            key={node.id}
+            aria-expanded={activeConceptId === node.id}
+            onClick={() => onSelectConcept(activeConceptId === node.id ? null : node.id)}
+          >
             <span><b>{String(index + 1).padStart(2, '0')}</b>{node.title}</span>
             <small>{node.category}</small>
             <p>{node.shortDescription}</p>
-          </div>
+          </button>
         ))}
       </div>
+      {active && (
+        <Modal closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
+          <ConceptDetail concept={active} />
+        </Modal>
+      )}
     </section>
   );
 }
@@ -270,7 +282,13 @@ export function ConceptRoadmap({ level, token, onSelectSection }) {
           onSelectSection={onSelectSection}
         />
       ) : (
-        <RoadmapTable section={level} nodes={nodes} onSelectSection={onSelectSection} />
+        <RoadmapTable
+          section={level}
+          nodes={nodes}
+          onSelectSection={onSelectSection}
+          activeConceptId={activeConceptId}
+          onSelectConcept={setActiveConceptId}
+        />
       )}
     </>
   );
