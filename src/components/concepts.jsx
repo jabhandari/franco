@@ -133,21 +133,28 @@ export function RoadmapConnectors({ section, edges }) {
   );
 }
 
+// FRA-18: clicking anywhere outside the lesson popup collapses it —
+// including page areas a section-level handler can't see (the toolbar,
+// page margins). Clicks inside the modal and on nodes/rows are excluded:
+// nodes and rows toggle selection themselves.
+function useBackgroundClose(active, onSelectConcept) {
+  React.useEffect(() => {
+    if (!active) return undefined;
+    function onDocumentClick(event) {
+      if (event.target.closest('.concept-modal')) return;
+      if (event.target.closest('.roadmap-node, .roadmap-table-row')) return;
+      onSelectConcept(null);
+    }
+    document.addEventListener('click', onDocumentClick);
+    return () => document.removeEventListener('click', onDocumentClick);
+  }, [active, onSelectConcept]);
+}
+
 export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectConcept, onSelectSection }) {
   const active = nodes.find((node) => node.id === activeConceptId);
-
-  // FRA-18: clicking the background collapses the lesson popup. Clicks
-  // inside the modal and on roadmap nodes are left alone — nodes already
-  // toggle themselves, and the modal has its own close button.
-  function handleBackgroundClick(event) {
-    if (!active) return;
-    if (event.target.closest('.concept-modal')) return;
-    if (event.target.closest('.roadmap-node')) return;
-    onSelectConcept(null);
-  }
-
+  useBackgroundClose(active, onSelectConcept);
   return (
-    <section className={`concept-map panel ${active ? 'has-modal' : ''}`} onClick={handleBackgroundClick}>
+    <section className={`concept-map panel ${active ? 'has-modal' : ''}`}>
       <div className="roadmap-heading">
         <Tabs
           variant="roadmap"
@@ -184,18 +191,9 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
 
 export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId, onSelectConcept }) {
   const active = nodes.find((node) => node.id === activeConceptId);
-
-  // FRA-18: same background-click collapse as the roadmap map — rows
-  // toggle themselves, so only true background clicks close the popup.
-  function handleBackgroundClick(event) {
-    if (!active) return;
-    if (event.target.closest('.concept-modal')) return;
-    if (event.target.closest('.roadmap-table-row')) return;
-    onSelectConcept(null);
-  }
-
+  useBackgroundClose(active, onSelectConcept);
   return (
-    <section className="roadmap-table-page" onClick={handleBackgroundClick}>
+    <section className="roadmap-table-page">
       <Tabs
         variant="roadmap"
         options={LEVELS.map((level) => ({ id: level, label: level }))}
