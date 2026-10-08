@@ -1,20 +1,50 @@
 import React from 'react';
 import { Check, CheckCircle2, Flag, KeyRound, RefreshCw, Send, X } from 'lucide-react';
 import { apiGet, apiPost, formatEnum, getErrorMessage, normalizeChoices, safeText } from '../api/client.js';
-import { Button, EmptyState, ErrorMessage, Field, PageHeader, Panel, Text } from '../components/ui';
+import { Button, EmptyState, ErrorMessage, Field, PageHeader, Panel, Tabs, Text } from '../components/ui';
 
-// FRA-2: review queue UI for pending content items. The review endpoints
+// FRA-2: review queue UI for the content bank. The review endpoints
 // authenticate with a content:review API key (x-api-key), not the learner
 // Bearer token, so the key is kept in localStorage only and never put in
 // a URL. main.jsx reads the same key to decide whether to show the nav
 // link.
 export const REVIEW_KEY_STORAGE = 'franco_review_key';
-const QUEUE_PATH = '/api/content/v1/items?status=pending_review&limit=50';
 const MAX_NOTE_LENGTH = 500;
+
+// Status tabs: the queue proper (pending), items vetted and ready to go
+// live (approved), and the live content bank (published) — rejecting a
+// published item takes it offline.
+const STATUS_TABS = [
+  { id: 'pending_review', label: 'Pending' },
+  { id: 'approved', label: 'Approved' },
+  { id: 'published', label: 'Published' },
+];
+const STATUS_COPY = {
+  pending_review: {
+    count: (n) => `${n} item${n === 1 ? '' : 's'} waiting for review`,
+    emptyTitle: 'Queue clear',
+    emptyText: 'Nothing is waiting for review. New source batches and learner-flagged items will show up here.',
+  },
+  approved: {
+    count: (n) => `${n} item${n === 1 ? '' : 's'} approved, ready to publish`,
+    emptyTitle: 'Nothing approved yet',
+    emptyText: 'Items you approve wait here until you publish them.',
+  },
+  published: {
+    count: (n) => `${n} live item${n === 1 ? '' : 's'}`,
+    emptyTitle: 'Nothing published yet',
+    emptyText: 'Published items from the content bank will show up here.',
+  },
+};
+
+function queuePath(status) {
+  return `/api/content/v1/items?status=${status}&limit=50`;
+}
 
 export function ReviewQueue({ onKeyChange }) {
   const [apiKey, setApiKey] = React.useState(() => localStorage.getItem(REVIEW_KEY_STORAGE) || '');
   const [keyDraft, setKeyDraft] = React.useState('');
+  const [status, setStatus] = React.useState('pending_review');
   const [items, setItems] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
@@ -22,12 +52,12 @@ export function ReviewQueue({ onKeyChange }) {
   const [busyId, setBusyId] = React.useState(null);
   const [rowErrors, setRowErrors] = React.useState({});
 
-  const load = React.useCallback(async (key) => {
+  const load = React.useCallback(async (key, forStatus) => {
     if (!key) return;
     setLoading(true);
     setError('');
     try {
-      const payload = await apiGet(QUEUE_PATH, null, { apiKey: key });
+      const payload = await apiGet(queuePath(forStatus), null, { apiKey: key });
       // Learner-flagged items first: they were already live and may be
       // actively wrong, so they outrank brand-new source items.
       const list = [...(payload.items || [])].sort((a, b) => (b.report_count || 0) - (a.report_count || 0));
@@ -41,8 +71,8 @@ export function ReviewQueue({ onKeyChange }) {
   }, []);
 
   React.useEffect(() => {
-    if (apiKey) load(apiKey);
-  }, [apiKey, load]);
+    if (apiKey) load(apiKey, status);
+  }, [apiKey, status, load]);
 
   function saveKey(event) {
     event.preventDefault();
@@ -109,6 +139,7 @@ export function ReviewQueue({ onKeyChange }) {
     );
   }
 
+  const copy = STATUS_COPY[status];
   return (
     <div className="page-stack">
       <div>
@@ -119,12 +150,20 @@ export function ReviewQueue({ onKeyChange }) {
         />
       </div>
 
+      <Tabs
+        variant="section"
+        ariaLabel="Content status"
+        options={STATUS_TABS}
+        value={status}
+        onChange={(next) => { setStatus(next); setItems(null); }}
+      />
+
       <div className="review-toolbar">
         <Text variant="muted">
-          {loading ? 'Loading…' : items ? `${items.length} item${items.length === 1 ? '' : 's'} waiting for review` : ''}
+          {loading ? 'Loading…' : items ? copy.count(items.length) : ''}
         </Text>
         <div className="review-actions">
-          <Button variant="text" icon={RefreshCw} iconSize={16} onClick={() => load(apiKey)} disabled={loading}>
+          <Button variant="text" icon={RefreshCw} iconSize={16} onClick={() => load(apiKey, status)} disabled={loading}>
             Refresh
           </Button>
           <Button variant="text" onClick={clearKey}>
@@ -133,14 +172,14 @@ export function ReviewQueue({ onKeyChange }) {
         </div>
       </div>
 
+      {status === 'published' && items && items.length > 0 && (
+        <Text variant="muted">Rejecting a published item takes it offline for learners immediately.</Text>
+      )}
+
       {error && <ErrorMessage message={error} />}
 
       {items && items.length === 0 && !loading && (
-        <EmptyState
-          icon={CheckCircle2}
-          title="Queue clear"
-          text="Nothing is waiting for review. New source batches and learner-flagged items will show up here."
-        />
+        <EmptyState icon={CheckCircle2} title={copy.emptyTitle} text={copy.emptyText} />
       )}
 
       {(items || []).map((item) => (
@@ -229,12 +268,16 @@ function ReviewItem({ item, note, busy, error, onNote, onAct }) {
         {error && <ErrorMessage message={error} />}
 
         <div className="review-item-actions">
-          <Button variant="text" icon={Check} iconSize={16} disabled={busy} onClick={() => onAct('approve')}>
-            Approve
-          </Button>
-          <Button variant="primary" icon={Send} iconSize={16} disabled={busy} onClick={() => onAct('publish')}>
-            Publish
-          </Button>
+          {item.status === 'pending_review' && (
+            <Button variant="text" icon={Check} iconSize={16} disabled={busy} onClick={() => onAct('approve')}>
+              Approve
+            </Button>
+          )}
+          {item.status !== 'published' && (
+            <Button variant="primary" icon={Send} iconSize={16} disabled={busy} onClick={() => onAct('publish')}>
+              Publish
+            </Button>
+          )}
           <button
             type="button"
             className="text-button review-danger"
