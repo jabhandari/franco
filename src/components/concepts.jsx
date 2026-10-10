@@ -1,8 +1,10 @@
 import React from 'react';
 import { Database, Search, X } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { safeText } from '../api/client.js';
-import { Badge, EmptyState, ErrorMessage, Modal, Panel, Tabs, Text } from './ui';
+import { safeText, padNumber } from '../presenters/format.presenter.js';
+import { CEFR_LEVELS } from '../presenters/levels.presenter.js';
+import { describeWord } from '../presenters/words.presenter.js';
+import { Badge, Box, EmptyState, ErrorMessage, Modal, Panel, Tabs, Text, TextInput } from './ui';
 
 // Restored original roadmap display: the interactive concept tree with a
 // spine, SVG connectors, numbered nodes, and a click-to-open lesson modal.
@@ -12,7 +14,9 @@ import { Badge, EmptyState, ErrorMessage, Modal, Panel, Tabs, Text } from './ui'
 // order (list_order), which the hand-tuned roadmap-node-N grid positions
 // were designed around.
 
-export const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+// Keep the LEVELS export working for any importer; the list itself lives in
+// src/presenters/levels.presenter.js (single source of truth).
+export const LEVELS = CEFR_LEVELS;
 
 export const levelGuides = {
   A1: { label: 'Breakthrough', goal: 'Handle familiar words and simple everyday phrases.', focus: 'Greetings, identity, numbers, time, articles, and present-tense verbs.', read: 'Short notices, messages, menus, and simple personal descriptions.' },
@@ -27,11 +31,11 @@ export function LevelGuide({ section }) {
   const guide = levelGuides[section];
   if (!guide) return null;
   return (
-    <section className="level-guide panel">
-      <div><span className="eyebrow">{section} · {guide.label}</span><h2>{guide.goal}</h2></div>
-      <div className="guide-columns"><div><strong>Focus</strong><p>{guide.focus}</p></div><div><strong>Reading practice</strong><p>{guide.read}</p></div></div>
-      <small>Level descriptors adapted from the <a href="https://www.coe.int/en/web/common-european-framework-reference-languages/cefr-descriptors" target="_blank" rel="noreferrer">Council of Europe CEFR descriptors</a>.</small>
-    </section>
+    <Box as="section" className="level-guide panel">
+      <Box><Text as="span" variant="eyebrow">{section} · {guide.label}</Text><Text as="h2">{guide.goal}</Text></Box>
+      <Box className="guide-columns"><Box><Text as="strong">Focus</Text><Text>{guide.focus}</Text></Box><Box><Text as="strong">Reading practice</Text><Text>{guide.read}</Text></Box></Box>
+      <Text as="small">Level descriptors adapted from the <Box as="a" href="https://www.coe.int/en/web/common-european-framework-reference-languages/cefr-descriptors" target="_blank" rel="noreferrer">Council of Europe CEFR descriptors</Box>.</Text>
+    </Box>
   );
 }
 
@@ -127,17 +131,17 @@ export function RoadmapConnectors({ section, edges }) {
   }, [section, edges]);
   if (!shape.width) return null;
   return (
-    <svg className="roadmap-connectors" viewBox={`0 0 ${shape.width} ${shape.height}`} preserveAspectRatio="none" aria-hidden="true">
-      <path d={shape.paths.join(' ')} />
-    </svg>
+    <Box as="svg" className="roadmap-connectors" viewBox={`0 0 ${shape.width} ${shape.height}`} preserveAspectRatio="none" aria-hidden="true">
+      <Box as="path" d={shape.paths.join(' ')} />
+    </Box>
   );
 }
 
 export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectConcept, onSelectSection }) {
   const active = nodes.find((node) => node.id === activeConceptId);
   return (
-    <section className={`concept-map panel ${active ? 'has-modal' : ''}`}>
-      <div className="roadmap-heading">
+    <Box as="section" className={`concept-map panel ${active ? 'has-modal' : ''}`}>
+      <Box className="roadmap-heading">
         <Tabs
           variant="roadmap"
           options={LEVELS.map((level) => ({ id: level, label: level }))}
@@ -145,109 +149,111 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
           onChange={onSelectSection}
         />
         <Badge variant="roadmap">{nodes.length} concepts</Badge>
-      </div>
-      <div className={`roadmap-canvas roadmap-${section.toLowerCase()}`}>
-        <div className="roadmap-spine" />
+      </Box>
+      <Box className={`roadmap-canvas roadmap-${section.toLowerCase()}`}>
+        <Box className="roadmap-spine" />
         <RoadmapConnectors section={section} edges={edges} />
         {nodes.map((node, index) => (
-          <button
+          <Box
+            as="button"
             className={`roadmap-node roadmap-node-${index + 1} ${activeConceptId === node.id ? 'active' : ''}`}
             key={node.id}
             onClick={() => onSelectConcept(activeConceptId === node.id ? null : node.id)}
           >
-            <span>{String(index + 1).padStart(2, '0')}</span>
-            <strong>{node.title}</strong>
-            <small>{node.category}</small>
-            <i />
-          </button>
+            <Text as="span">{padNumber(index + 1)}</Text>
+            <Text as="strong">{node.title}</Text>
+            <Text as="small">{node.category}</Text>
+            <Text as="i" />
+          </Box>
         ))}
-      </div>
+      </Box>
       {active && (
         <Modal closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
           <ConceptDetail concept={active} />
         </Modal>
       )}
-    </section>
+    </Box>
   );
 }
 
 export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId, onSelectConcept }) {
   const active = nodes.find((node) => node.id === activeConceptId);
   return (
-    <section className="roadmap-table-page">
+    <Box as="section" className="roadmap-table-page">
       <Tabs
         variant="roadmap"
         options={LEVELS.map((level) => ({ id: level, label: level }))}
         value={section}
         onChange={onSelectSection}
       />
-      <div className="roadmap-table">
-        <div className="roadmap-table-head"><span>Concept</span><span>Area</span><span>What you will learn</span></div>
+      <Box className="roadmap-table">
+        <Box className="roadmap-table-head"><Text as="span">Concept</Text><Text as="span">Area</Text><Text as="span">What you will learn</Text></Box>
         {nodes.map((node, index) => (
-          <button
+          <Box
+            as="button"
             type="button"
             className={`roadmap-table-row${activeConceptId === node.id ? ' active' : ''}`}
             key={node.id}
             aria-expanded={activeConceptId === node.id}
             onClick={() => onSelectConcept(activeConceptId === node.id ? null : node.id)}
           >
-            <span><b>{String(index + 1).padStart(2, '0')}</b>{node.title}</span>
-            <small>{node.category}</small>
-            <p>{node.shortDescription}</p>
-          </button>
+            <Text as="span"><Text as="b">{padNumber(index + 1)}</Text>{node.title}</Text>
+            <Text as="small">{node.category}</Text>
+            <Text>{node.shortDescription}</Text>
+          </Box>
         ))}
-      </div>
+      </Box>
       {active && (
         <Modal closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
           <ConceptDetail concept={active} />
         </Modal>
       )}
-    </section>
+    </Box>
   );
 }
 
 export function ConceptDetail({ concept }) {
   if (!concept) return null;
   return (
-    <article className="concept-detail">
-      <div>
-        <span className="eyebrow">{concept.category} · {concept.level}</span>
-        <h2>{safeText(concept.title)}</h2>
-        <p className="concept-subtitle">{concept.shortDescription}</p>
+    <Box as="article" className="concept-detail">
+      <Box>
+        <Text as="span" variant="eyebrow">{concept.category} · {concept.level}</Text>
+        <Text as="h2">{safeText(concept.title)}</Text>
+        <Text className="concept-subtitle">{concept.shortDescription}</Text>
         {concept.stub && <Text variant="muted" size="sm">Full lesson content for this concept is still being authored.</Text>}
-      </div>
-      <div className="theory-blocks">
+      </Box>
+      <Box className="theory-blocks">
         {concept.theory.map((block, index) => block[0] === 'table' ? (
-          <div className="theory-table" key={index}>
-            {block.slice(1).map((cell, cellIndex) => <span key={cellIndex}>{safeText(cell)}</span>)}
-          </div>
+          <Box className="theory-table" key={index}>
+            {block.slice(1).map((cell, cellIndex) => <Text as="span" key={cellIndex}>{safeText(cell)}</Text>)}
+          </Box>
         ) : (
-          <div className={`theory-card ${block[0]}`} key={index}>
-            <strong>{block[0] === 'idea' ? 'The idea' : block[0] === 'rule' ? safeText(block[1]) : block[0] === 'tip' ? 'Tip' : 'Example'}</strong>
-            <p>{safeText(block[0] === 'rule' ? block[2] : block[0] === 'example' ? block[2] : block[1])}</p>
-          </div>
+          <Box className={`theory-card ${block[0]}`} key={index}>
+            <Text as="strong">{block[0] === 'idea' ? 'The idea' : block[0] === 'rule' ? safeText(block[1]) : block[0] === 'tip' ? 'Tip' : 'Example'}</Text>
+            <Text>{safeText(block[0] === 'rule' ? block[2] : block[0] === 'example' ? block[2] : block[1])}</Text>
+          </Box>
         ))}
-      </div>
+      </Box>
       {concept.vocabulary.length > 0 && (
-        <div className="related-vocab">
-          <strong>Vocabulary</strong>
-          <div>{concept.vocabulary.map((word, index) => <span key={index}>{safeText(word)}</span>)}</div>
-        </div>
+        <Box className="related-vocab">
+          <Text as="strong">Vocabulary</Text>
+          <Box>{concept.vocabulary.map((word, index) => <Text as="span" key={index}>{safeText(word)}</Text>)}</Box>
+        </Box>
       )}
       {concept.examples.length > 0 && (
-        <div className="related-examples">
-          <strong>Examples</strong>
+        <Box className="related-examples">
+          <Text as="strong">Examples</Text>
           {concept.examples.map(([french, english], index) => (
-            <p key={index}><strong>{safeText(french)}</strong>{safeText(english) ? <span> — {safeText(english)}</span> : null}</p>
+            <Text key={index}><Text as="strong">{safeText(french)}</Text>{safeText(english) ? <Text as="span"> — {safeText(english)}</Text> : null}</Text>
           ))}
-        </div>
+        </Box>
       )}
       {concept.sources.length > 0 && (
-        <div className="concept-footer">
-          <small>Further reading: {concept.sources.map(([label, url]) => <a href={url} target="_blank" rel="noreferrer" key={url}>{label}</a>)}</small>
-        </div>
+        <Box className="concept-footer">
+          <Text as="small">Further reading: {concept.sources.map(([label, url]) => <Box as="a" href={url} target="_blank" rel="noreferrer" key={url}>{label}</Box>)}</Text>
+        </Box>
       )}
-    </article>
+    </Box>
   );
 }
 
@@ -266,12 +272,12 @@ export function ConceptRoadmap({ level, token, onSelectSection }) {
 
   return (
     <>
-      <div className="map-toolbar">
-        <span>{layoutMode === 'roadmap' ? 'Roadmap view' : 'Table view'}</span>
-        <button onClick={() => setLayoutMode((mode) => mode === 'roadmap' ? 'table' : 'roadmap')}>
+      <Box className="map-toolbar">
+        <Text as="span">{layoutMode === 'roadmap' ? 'Roadmap view' : 'Table view'}</Text>
+        <Box as="button" onClick={() => setLayoutMode((mode) => mode === 'roadmap' ? 'table' : 'roadmap')}>
           {layoutMode === 'roadmap' ? 'Show table' : 'Show roadmap'}
-        </button>
-      </div>
+        </Box>
+      </Box>
       {layoutMode === 'roadmap' ? (
         <ConceptMap
           section={level}
@@ -294,39 +300,7 @@ export function ConceptRoadmap({ level, token, onSelectSection }) {
   );
 }
 
-// Learner-facing labels for Lexique part-of-speech codes stored in the
-// vocabulary topic rows (e.g. {"lemma":"accord","pos":"NOM","gender":"m",...}).
-const POS_LABELS = {
-  NOM: 'noun', VER: 'verb', AUX: 'auxiliary verb', ADJ: 'adjective',
-  ADV: 'adverb', PRE: 'preposition', PRO: 'pronoun', CON: 'conjunction',
-  ART: 'article', DET: 'determiner', NUM: 'number',
-  INT: 'interjection', ONO: 'interjection',
-};
-
-// Turn a vocabulary topic's item value into a short human-readable
-// description. Vocabulary rows store Lexique metadata as a JSON string;
-// render it as "noun · masculine · very common (#145)" instead of raw JSON.
-// Plain-text topics (e.g. "le / la / l’ / les") render unchanged.
-function describeWord(item) {
-  if (typeof item !== 'string') return safeText(item);
-  let parsed = null;
-  try { parsed = JSON.parse(item); } catch { parsed = null; }
-  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || !parsed.pos) {
-    return safeText(item);
-  }
-  const posKey = String(parsed.pos).split(':')[0].toUpperCase();
-  const parts = [POS_LABELS[posKey] || posKey.toLowerCase()];
-  if (parsed.gender === 'm') parts.push('masculine');
-  if (parsed.gender === 'f') parts.push('feminine');
-  if (parsed.number === 's') parts.push('singular');
-  if (parsed.number === 'p') parts.push('plural');
-  const rank = Number(parsed.freq_rank);
-  if (Number.isFinite(rank) && rank > 0) {
-    const bucket = rank <= 100 ? 'very common' : rank <= 1000 ? 'common' : 'less common';
-    parts.push(`${bucket} (#${rank})`);
-  }
-  return parts.join(' · ');
-}
+// describeWord + POS_LABELS moved to src/presenters/words.presenter.js (FRA-21).
 
 // One category group inside the learning tracks. The vocabulary group gets a
 // search button in its top-right corner; expanding it filters the group's
@@ -350,14 +324,14 @@ function TopicGroup({ category, topics }) {
       });
 
   return (
-    <div className={`topic-group${topics.length > 8 ? ' topic-group--wide' : ''}`}>
-      <div className="topic-group-head">
-        <h3>{safeText(category)}</h3>
+    <Box className={`topic-group${topics.length > 8 ? ' topic-group--wide' : ''}`}>
+      <Box className="topic-group-head">
+        <Text as="h3">{safeText(category)}</Text>
         {searchable && (
-          <div className="topic-search">
+          <Box className="topic-search">
             {searchOpen ? (
               <>
-                <input
+                <TextInput
                   autoFocus
                   type="text"
                   value={query}
@@ -368,31 +342,31 @@ function TopicGroup({ category, topics }) {
                   placeholder="Search words"
                   aria-label="Search vocabulary words"
                 />
-                <button type="button" className="topic-search-btn" onClick={closeSearch} aria-label="Close search" title="Close search">
+                <Box as="button" type="button" className="topic-search-btn" onClick={closeSearch} aria-label="Close search" title="Close search">
                   <X size={15} aria-hidden="true" />
-                </button>
+                </Box>
               </>
             ) : (
-              <button type="button" className="topic-search-btn" onClick={() => setSearchOpen(true)} aria-label="Search vocabulary words" title="Search">
+              <Box as="button" type="button" className="topic-search-btn" onClick={() => setSearchOpen(true)} aria-label="Search vocabulary words" title="Search">
                 <Search size={15} aria-hidden="true" />
-              </button>
+              </Box>
             )}
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
       {visible.length === 0 ? (
         <Text variant="muted">No words match your search.</Text>
       ) : (
-        <div className="topic-words">
+        <Box className="topic-words">
           {visible.map((topic) => (
-            <div className="topic-word" key={topic.id}>
-              <strong>{safeText(topic.title)}</strong>
-              <span>{describeWord(topic.item)}</span>
-            </div>
+            <Box className="topic-word" key={topic.id}>
+              <Text as="strong">{safeText(topic.title)}</Text>
+              <Text as="span">{describeWord(topic.item)}</Text>
+            </Box>
           ))}
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }
 
@@ -408,9 +382,9 @@ export function TopicTracks({ section }) {
 
   return (
     <Panel layout="grid">
-      <h2>{section} learning tracks</h2>
+      <Text as="h2">{section} learning tracks</Text>
       <Text variant="muted">Vocabulary, spelling, and practical topics from the {section} study plan.</Text>
-      <div className="topic-grid">
+      <Box className="topic-grid">
         {categories.map((category) => (
           <TopicGroup
             key={category}
@@ -418,7 +392,7 @@ export function TopicTracks({ section }) {
             topics={topics.filter((topic) => topic.category === category)}
           />
         ))}
-      </div>
+      </Box>
     </Panel>
   );
 }

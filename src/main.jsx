@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import './styles.css';
 import { apiGet, apiPost } from './api/client.js';
-import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage } from './components/ui';
+import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput } from './components/ui';
 import { Home } from './views/Home.jsx';
 import { Session } from './views/Session.jsx';
 import { Content } from './views/Content.jsx';
@@ -158,11 +158,11 @@ function App() {
   }
 
   return (
-    <div className="app-shell">
-      <aside className="sidebar">
+    <Box className="app-shell">
+      <Box as="aside" className="sidebar">
         <Brand onClick={() => navigate('home')} />
 
-        <nav aria-label="Main navigation">
+        <Box as="nav" aria-label="Main navigation">
           {navItems.map((item) => (
             <NavButton
               key={item.id}
@@ -173,24 +173,24 @@ function App() {
               {item.label}
             </NavButton>
           ))}
-        </nav>
+        </Box>
 
-        <div className="sidebar-panel">
-          <p>Signed in as</p>
-          <strong>{session.name}</strong>
-          <span>Your learning space</span>
-        </div>
+        <Box className="sidebar-panel">
+          <Text>Signed in as</Text>
+          <Text as="strong">{session.name}</Text>
+          <Text as="span">Your learning space</Text>
+        </Box>
 
         <Button variant="nav" onClick={logout} icon={LogOut} iconSize={18}>
-          <span>Log out</span>
+          <Text as="span">Log out</Text>
         </Button>
-        <button className="theme-toggle" onClick={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}>
+        <Box as="button" className="theme-toggle" onClick={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}>
           {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
-          <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
-        </button>
-      </aside>
+          <Text as="span">{theme === 'dark' ? 'Light mode' : 'Dark mode'}</Text>
+        </Box>
+      </Box>
 
-      <main className={`main-content ${view === 'content' ? 'wide-content' : ''}`}>
+      <Box as="main" className={`main-content ${view === 'content' ? 'wide-content' : ''}`}>
         {view === 'home' && <Home userData={userData} onStart={() => navigate('session')} onPlacement={() => navigate('placement')} />}
         {view === 'placement' && <Placement token={authToken} onPlaced={() => refreshUserData()} />}
         {view === 'session' && <Session token={authToken} />}
@@ -198,8 +198,8 @@ function App() {
         {view === 'past' && <PastQuestions token={authToken} />}
         {view === 'progress' && <Progress token={authToken} />}
         {view === 'conversation' && <Conversation token={authToken} />}
-      </main>
-    </div>
+      </Box>
+    </Box>
   );
 }
 
@@ -207,35 +207,35 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
   const isSignup = mode === 'signup';
 
   return (
-    <main className="auth-shell">
-      <section className="auth-intro">
+    <Box as="main" className="auth-shell">
+      <Box as="section" className="auth-intro">
         <Brand large />
-        <p className="eyebrow">French learning platform</p>
-        <h1>Practice should come from your real learner profile.</h1>
-        <p className="lede">
+        <Text variant="eyebrow">French learning platform</Text>
+        <Text as="h1">Practice should come from your real learner profile.</Text>
+        <Text variant="lede">
           Sign in first to keep your lessons, progress, and review history connected to your account.
-        </p>
-        <div className="auth-principles">
-          <span><Database size={17} /> Database-first learner data</span>
-          <span><ShieldCheck size={17} /> User-specific progress</span>
-          <span><BookOpen size={17} /> UD French GSD content sections</span>
-        </div>
-      </section>
+        </Text>
+        <Box className="auth-principles">
+          <Text as="span"><Database size={17} /> Database-first learner data</Text>
+          <Text as="span"><ShieldCheck size={17} /> User-specific progress</Text>
+          <Text as="span"><BookOpen size={17} /> UD French GSD content sections</Text>
+        </Box>
+      </Box>
 
-      <section className="auth-card">
-        <p className="eyebrow">{isSignup ? 'Create account' : 'Welcome back'}</p>
-        <h2>{isSignup ? 'Sign up' : 'Log in'}</h2>
-        <form onSubmit={onSubmit}>
+      <Box as="section" className="auth-card">
+        <Text variant="eyebrow">{isSignup ? 'Create account' : 'Welcome back'}</Text>
+        <Text as="h2">{isSignup ? 'Sign up' : 'Log in'}</Text>
+        <Box as="form" onSubmit={onSubmit}>
           {isSignup && (
             <Field label="Name" icon={UserRound}>
-              <input name="name" type="text" placeholder="Your name" autoComplete="name" />
+              <TextInput name="name" type="text" placeholder="Your name" autoComplete="name" />
             </Field>
           )}
           <Field label="Email" icon={Mail}>
-            <input name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
+            <TextInput name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
           </Field>
           <Field label="Password" icon={Lock}>
-            <input
+            <TextInput
               name="password"
               type="password"
               placeholder="Password"
@@ -247,15 +247,15 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
           <Button variant="primary" type="submit" disabled={loading} icon={ChevronRight} iconSize={18} iconPosition="after">
             {loading ? 'Connecting...' : isSignup ? 'Create account' : 'Log in'}
           </Button>
-        </form>
+        </Box>
         <Button variant="text" onClick={() => onModeChange(isSignup ? 'login' : 'signup')}>
           {isSignup ? 'Already have an account? Log in' : 'Need an account? Sign up'}
         </Button>
-        <p className="form-note">
+        <Text variant="note">
           Your account is securely stored and synced with your profile.
-        </p>
-      </section>
-    </main>
+        </Text>
+      </Box>
+    </Box>
   );
 }
 

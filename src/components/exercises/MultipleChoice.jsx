@@ -1,12 +1,23 @@
 import React from 'react';
-import { getErrorMessage, reportAttempt, shuffle } from '../../api/client.js';
+import { reportAttempt } from '../../api/client.js';
+import { getErrorMessage, humanize, choiceLabel } from '../../presenters/format.presenter.js';
+import { shuffle } from '../../presenters/collections.presenter.js';
 import {
+  answeredState,
+  hasResult,
+  feedbackTone,
+  feedbackTitle,
+  elapsedMs,
+} from '../../presenters/attempt.presenter.js';
+import {
+  Box,
   ExerciseShell,
   ExerciseEyebrow,
   ReadingPassage,
   OptionList,
   Feedback,
   ErrorMessage,
+  Text,
 } from '../ui';
 
 export function MultipleChoice({ entry, token, onResult }) {
@@ -19,7 +30,7 @@ export function MultipleChoice({ entry, token, onResult }) {
     if (result) return;
     setSelected(choice.key);
     try {
-      const res = await reportAttempt(entry, choice.key, token, { durationMs: Date.now() - startRef.current });
+      const res = await reportAttempt(entry, choice.key, token, { durationMs: elapsedMs(startRef.current) });
       setResult(res);
       onResult?.(res);
     } catch (error) {
@@ -34,22 +45,22 @@ export function MultipleChoice({ entry, token, onResult }) {
   }
 
   return (
-    <ExerciseShell answered={result && !result.error ? (result.correct ? 'correct' : 'wrong') : null}>
-      <ExerciseEyebrow level={entry.level} kind={entry.skill || (entry.type || '').replace(/_/g, ' ')} />
+    <ExerciseShell answered={answeredState(result)}>
+      <ExerciseEyebrow level={entry.level} kind={entry.skill || humanize(entry.type)} />
       {entry.context && <ReadingPassage text={entry.context} />}
-      <h2>{entry.prompt}</h2>
+      <Text as="h2">{entry.prompt}</Text>
       <OptionList
-        options={options.map((option) => ({ key: option.key, label: <>{option.key}. {option.text}</> }))}
+        options={options.map((option) => ({ key: option.key, label: choiceLabel(option) }))}
         selectedKey={selected}
-        answered={Boolean(result && !result.error)}
+        answered={hasResult(result)}
         correct={Boolean(result?.correct)}
         disabled={Boolean(result)}
         onSelect={(key) => choose(options.find((option) => option.key === key))}
       />
-      {result && !result.error && (
+      {hasResult(result) && (
         <Feedback
-          tone={result.correct ? 'correct' : 'incorrect'}
-          title={result.correct ? 'Correct!' : 'Not quite.'}
+          tone={feedbackTone(result)}
+          title={feedbackTitle(result)}
           reveal={result.correct ? undefined : result.reveal}
           revealLabel="Correct answer:"
           onRetry={result.correct ? undefined : retry}
