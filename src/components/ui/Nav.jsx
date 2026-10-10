@@ -12,7 +12,7 @@ export function NavButton({ icon, active = false, onClick, children }) {
 }
 
 // Brand mark. Renders a button when onClick is given, otherwise a div.
-export function Brand({ large = false, onClick, label = 'Franco' }) {
+export function Brand({ large = false, onClick, label = 'Franco · preview test' }) {
   const classes = `brand${large ? ' large' : ''}`;
   const inner = (
     <>
