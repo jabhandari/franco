@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   BookOpen,
+  BarChart3,
   ChevronRight,
   CirclePlay,
   ClipboardCheck,
@@ -12,13 +13,16 @@ import {
   Mail,
   Mic,
   ShieldCheck,
+  Target,
   TrendingUp,
   UserRound,
   Sun,
-  Moon
+  Moon,
+  Zap
 } from 'lucide-react';
 import './styles.css';
 import { apiGet, apiPost } from './api/client.js';
+import { ThemeProvider, useTheme } from 'next-themes';
 import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput } from './components/ui';
 import { Home } from './views/Home.jsx';
 import { Session } from './views/Session.jsx';
@@ -54,7 +58,7 @@ function App() {
   const [view, setView] = React.useState(() => viewFromPath(window.location.pathname));
   const [loading, setLoading] = React.useState(Boolean(authToken));
   const [error, setError] = React.useState('');
-  const [theme, setTheme] = React.useState(() => localStorage.getItem('franco_theme') || 'dark');
+  const { resolvedTheme: theme, setTheme } = useTheme();
 
   function navigate(nextView, replace = false) {
     setView(nextView);
@@ -66,11 +70,6 @@ function App() {
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
-
-  React.useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem('franco_theme', theme);
-  }, [theme]);
 
   function refreshUserData() {
     if (!authToken) return;
@@ -184,7 +183,7 @@ function App() {
         <Button variant="nav" onClick={logout} icon={LogOut} iconSize={18}>
           <Text as="span">Log out</Text>
         </Button>
-        <Box as="button" className="theme-toggle" onClick={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}>
+        <Box as="button" className="theme-toggle" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
           {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
           <Text as="span">{theme === 'dark' ? 'Light mode' : 'Dark mode'}</Text>
         </Box>
@@ -207,56 +206,80 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
   const isSignup = mode === 'signup';
 
   return (
-    <Box as="main" className="auth-shell">
-      <Box as="section" className="auth-intro">
-        <Brand large />
-        <Text variant="eyebrow">French learning platform</Text>
-        <Text as="h1">Practice should come from your real learner profile.</Text>
-        <Text variant="lede">
-          Sign in first to keep your lessons, progress, and review history connected to your account.
-        </Text>
-        <Box className="auth-principles">
-          <Text as="span"><Database size={17} /> Database-first learner data</Text>
-          <Text as="span"><ShieldCheck size={17} /> User-specific progress</Text>
-          <Text as="span"><BookOpen size={17} /> UD French GSD content sections</Text>
+    <Box as="main" className="auth-page">
+      <Box className="auth-topbar">
+        <Box className="auth-brand-wrap">
+          <Text as="span" className="auth-brand-mark">fr</Text>
+          <Text as="strong" className="auth-brand-name">Franco</Text>
+          <Text as="span" className="auth-brand-subtitle">FRENCH LEARNING PLATFORM</Text>
         </Box>
       </Box>
 
-      <Box as="section" className="auth-card">
-        <Text variant="eyebrow">{isSignup ? 'Create account' : 'Welcome back'}</Text>
-        <Text as="h2">{isSignup ? 'Sign up' : 'Log in'}</Text>
-        <Box as="form" onSubmit={onSubmit}>
-          {isSignup && (
-            <Field label="Name" icon={UserRound}>
-              <TextInput name="name" type="text" placeholder="Your name" autoComplete="name" />
-            </Field>
-          )}
-          <Field label="Email" icon={Mail}>
-            <TextInput name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
-          </Field>
-          <Field label="Password" icon={Lock}>
-            <TextInput
-              name="password"
-              type="password"
-              placeholder="Password"
-              autoComplete={isSignup ? 'new-password' : 'current-password'}
-              required
-            />
-          </Field>
-          {error && <ErrorMessage message={error} />}
-          <Button variant="primary" type="submit" disabled={loading} icon={ChevronRight} iconSize={18} iconPosition="after">
-            {loading ? 'Connecting...' : isSignup ? 'Create account' : 'Log in'}
-          </Button>
+      <Box className="auth-shell">
+        <Box as="section" className="auth-intro">
+          <Text as="p" className="auth-kicker">APPRENDRE. PROGRESSER. RÉUSSIR.</Text>
+          <Text as="h1" className="auth-hero-title"><Text as="span" className="auth-hero-line">A little French,</Text><Text as="span" className="auth-hero-line">every day.</Text></Text>
+          <Text className="auth-hero-copy">
+            Build confidence through lessons, practice and review that fit your level.
+          </Text>
+
+          <Box
+            as="button"
+            type="button"
+            className="auth-practice-panel"
+            aria-label="Today's practice"
+          >
+            <Box as="span" className="auth-practice-icon"><BookOpen size={26} /></Box>
+            <Box as="span" className="auth-practice-copy">
+              <Text as="span" className="auth-practice-label">TODAY'S PRACTICE</Text>
+              <Text as="strong">Les habitudes quotidiennes</Text>
+              <Text as="small">Learn to talk about your daily routine.</Text>
+            </Box>
+            <ChevronRight className="auth-practice-arrow" size={25} aria-hidden="true" />
+          </Box>
         </Box>
-        <Button variant="text" onClick={() => onModeChange(isSignup ? 'login' : 'signup')}>
-          {isSignup ? 'Already have an account? Log in' : 'Need an account? Sign up'}
-        </Button>
-        <Text variant="note">
-          Your account is securely stored and synced with your profile.
-        </Text>
+
+        <Box as="section" className="auth-card">
+          <Text variant="eyebrow">{isSignup ? 'Create your account' : 'Welcome back'}</Text>
+          <Text as="h2">{isSignup ? 'Start learning with Franco' : 'Log in to Franco'}</Text>
+          <Text className="auth-card-subtitle">{isSignup ? 'Build a practice habit that fits your life.' : 'Pick up where you left off.'}</Text>
+          <Box as="form" onSubmit={onSubmit}>
+            {isSignup && (
+              <Field label="Name" icon={UserRound}>
+                <TextInput name="name" type="text" placeholder="Your name" autoComplete="name" />
+              </Field>
+            )}
+            <Field label="Email" icon={Mail}>
+              <TextInput name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
+            </Field>
+            <Field label="Password" icon={Lock}>
+              <TextInput
+                name="password"
+                type="password"
+                placeholder="Password"
+                autoComplete={isSignup ? 'new-password' : 'current-password'}
+                required
+              />
+            </Field>
+            {!isSignup && <Text as="span" className="auth-forgot">Forgot password?</Text>}
+            {error && <ErrorMessage message={error} />}
+            <Button variant="primary" wide type="submit" disabled={loading} icon={ChevronRight} iconSize={18} iconPosition="after">
+              {loading ? 'Connecting...' : isSignup ? 'Create account' : 'Log in'}
+            </Button>
+          </Box>
+          <Box className="auth-divider"><Box as="span" />or<Box as="span" /></Box>
+          <Box as="button" type="button" className="auth-secondary" onClick={() => onModeChange(isSignup ? 'login' : 'signup')}>
+            {isSignup ? 'Already have an account? ' : 'New to Franco? '}
+            <Text as="span">{isSignup ? 'Log in' : 'Create an account'}</Text>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );
 }
 
-createRoot(document.getElementById('root')).render(<App />);
+createRoot(document.getElementById('root')).render(
+  <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem storageKey="franco_theme">
+    <App />
+  </ThemeProvider>
+);
