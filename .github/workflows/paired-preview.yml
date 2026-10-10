@@ -59,6 +59,44 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify Cloudflare auth
+        run: npx -y wrangler whoami
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      # The backend URL is deterministic (franco-pr-<N>.onrender.com), so the
+      # frontend build does NOT need to wait for the backend to come up.
+      # We only wait before posting the comment, so both links work.
+      - name: Build frontend against PR backend
+        run: npm run build
+        env:
+          VITE_API_URL: https://franco-pr-${{ env.PR_NUMBER }}.onrender.com
+
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        run: |
+          set +e
+          out=$(npx -y wrangler pages deploy dist \
+            --project-name=franco-dsh \
+            --branch="pr-${PR_NUMBER}" 2>&1)
+          code=$?
+          set -e
+          echo "$out"
+          if [ $code -ne 0 ]; then
+            echo "::error::wrangler pages deploy failed with exit code $code (output above)."
+            exit 1
+          fi
+          url=$(echo "$out" | grep -oE 'https://[a-z0-9.-]+\.franco-dsh\.pages\.dev' | head -1)
+          if [ -z "$url" ]; then
+            echo "::error::Could not parse deployment URL from wrangler output."
+            exit 1
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: Wait for Render backend preview
         run: |
           url="https://franco-pr-${PR_NUMBER}.onrender.com/api/health"
@@ -74,28 +112,6 @@ jobs:
           done
           echo "::error::Render backend preview never became healthy."
           exit 1
-
-      - name: Build frontend against PR backend
-        run: npm run build
-        env:
-          VITE_API_URL: https://franco-pr-${{ env.PR_NUMBER }}.onrender.com
-
-      - name: Deploy to Cloudflare Pages
-        id: deploy
-        run: |
-          out=$(npx -y wrangler pages deploy dist \
-            --project-name=franco-dsh \
-            --branch="pr-${PR_NUMBER}" 2>&1)
-          echo "$out"
-          url=$(echo "$out" | grep -oE 'https://[a-z0-9.-]+\.franco-dsh\.pages\.dev' | head -1)
-          if [ -z "$url" ]; then
-            echo "::error::Could not parse deployment URL from wrangler output."
-            exit 1
-          fi
-          echo "url=$url" >> "$GITHUB_OUTPUT"
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Post or update PR comment
         env:
