@@ -1,0 +1,43 @@
+name: CI
+
+# Gate every pull request: UI boundary lint, tests, and a production build
+# must all pass before a PR can look mergeable. Runs only on GitHub's free
+# Actions tier with first-party actions — no paid or third-party actions.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+# A newer push to the same PR supersedes the run still in flight.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: lint:ui · test · build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node (version pinned by .nvmrc)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: UI boundary check (FRA-21)
+        run: npm run lint:ui
+
+      - name: Test suite
+        run: npm test
+
+      - name: Production build
+        run: npm run build
