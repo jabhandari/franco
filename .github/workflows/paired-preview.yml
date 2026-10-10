@@ -1,0 +1,159 @@
+# Paired PR preview — label-gated (FRA-34)
+#
+# Adding the `render-preview` label to a PR spins up a fully connected preview:
+#   - Render builds the backend preview from the PR branch
+#     (https://franco-pr-<N>.onrender.com) — handled by Render itself.
+#   - This workflow waits for that backend, builds the frontend from the PR
+#     branch with VITE_API_URL pointed at it, and deploys it via Wrangler.
+#   - One PR comment carries both links and is updated in place on re-runs.
+#
+# Removing the label or closing the PR tears the frontend preview down.
+# Render deprovisions its own preview automatically.
+#
+# Cloudflare's native automatic Pages preview builds should stay OFF for this
+# project (a preview without the per-PR VITE_API_URL can't reach any backend).
+# Production still deploys from main as usual.
+#
+# Required repository secrets:
+#   CLOUDFLARE_API_TOKEN   — token with Account / Cloudflare Pages / Edit
+#   CLOUDFLARE_ACCOUNT_ID  — account ID from the Cloudflare dashboard
+
+name: Paired PR preview
+
+on:
+  pull_request:
+    types: [labeled, unlabeled, synchronize, closed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to (re)build a paired preview for'
+        required: true
+        type: number
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  preview:
+    name: Build and deploy paired preview
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'render-preview') ||
+      (github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'render-preview'))
+    runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.pr_number || github.event.pull_request.number }}
+    steps:
+      - name: Check out PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/pull/{0}/head', inputs.pr_number) || github.event.pull_request.head.sha }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Wait for Render backend preview
+        run: |
+          url="https://franco-pr-${PR_NUMBER}.onrender.com/api/health"
+          echo "Waiting for $url"
+          for i in $(seq 1 40); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$url" || true)
+            if [ "$code" = "200" ]; then
+              echo "Backend preview is live."
+              exit 0
+            fi
+            echo "Attempt $i/40 — not ready yet."
+            sleep 15
+          done
+          echo "::error::Render backend preview never became healthy."
+          exit 1
+
+      - name: Build frontend against PR backend
+        run: npm run build
+        env:
+          VITE_API_URL: https://franco-pr-${{ env.PR_NUMBER }}.onrender.com
+
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        run: |
+          out=$(npx -y wrangler pages deploy dist \
+            --project-name=franco-dsh \
+            --branch="pr-${PR_NUMBER}" 2>&1)
+          echo "$out"
+          url=$(echo "$out" | grep -oE 'https://[a-z0-9.-]+\.franco-dsh\.pages\.dev' | head -1)
+          if [ -z "$url" ]; then
+            echo "::error::Could not parse deployment URL from wrangler output."
+            exit 1
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Post or update PR comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          marker='<!-- franco-paired-preview -->'
+          frontend='${{ steps.deploy.outputs.url }}'
+          backend="https://franco-pr-${PR_NUMBER}.onrender.com"
+          body=$(printf '%s\n## Paired PR preview\n\n- Frontend: %s\n- Backend API: %s\n\n_Built from this PR'"'"'s latest commit. Rebuilt automatically on push while the `render-preview` label is on._' "$marker" "$frontend" "$backend")
+          tmp=$(mktemp)
+          printf '%s\n' "$body" > "$tmp"
+          existing=$(gh pr view "$PR_NUMBER" --json comments \
+            --jq --arg m "$marker" '.comments[] | select(.body | contains($m)) | .databaseId' | head -1)
+          if [ -n "$existing" ]; then
+            gh api -X PATCH "repos/${{ github.repository }}/issues/comments/$existing" -F "body=@$tmp" >/dev/null
+            echo "Updated existing preview comment."
+          else
+            gh pr comment "$PR_NUMBER" --body-file "$tmp"
+            echo "Posted new preview comment."
+          fi
+          rm "$tmp"
+
+  cleanup:
+    name: Tear down paired preview
+    if: >
+      github.event.action == 'unlabeled' && github.event.label.name == 'render-preview' ||
+      github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - name: Delete Pages preview deployment
+        # Best effort — Render deprovisions its own preview automatically.
+        continue-on-error: true
+        run: |
+          account='${{ secrets.CLOUDFLARE_ACCOUNT_ID }}'
+          token='${{ secrets.CLOUDFLARE_API_TOKEN }}'
+          branch="pr-${PR_NUMBER}"
+          ids=$(curl -s -H "Authorization: Bearer $token" \
+            "https://api.cloudflare.com/client/v4/accounts/$account/pages/projects/franco-dsh/deployments?per_page=100" \
+            | jq -r --arg b "$branch" '.result[] | select(.deployment_trigger.metadata.branch == $b) | .id')
+          for id in $ids; do
+            echo "Deleting Pages deployment $id (branch $branch)"
+            curl -s -X DELETE -H "Authorization: Bearer $token" \
+              "https://api.cloudflare.com/client/v4/accounts/$account/pages/projects/franco-dsh/deployments/$id" >/dev/null
+          done
+
+      - name: Mark PR comment as torn down
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          marker='<!-- franco-paired-preview -->'
+          existing=$(gh pr view "$PR_NUMBER" --json comments \
+            --jq --arg m "$marker" '.comments[] | select(.body | contains($m)) | .databaseId' | head -1)
+          if [ -n "$existing" ]; then
+            tmp=$(mktemp)
+            printf '%s\n## Paired PR preview\n\n_Torn down — the `render-preview` label was removed or the PR was closed._\n' "$marker" > "$tmp"
+            gh api -X PATCH "repos/${{ github.repository }}/issues/comments/$existing" -F "body=@$tmp" >/dev/null
+            rm "$tmp"
+            echo "Marked preview comment as torn down."
+          fi
