@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import './styles.css';
 import { apiGet, apiPost } from './api/client.js';
+import { ThemeProvider, useTheme } from 'next-themes';
 import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput } from './components/ui';
 import { Home } from './views/Home.jsx';
 import { Session } from './views/Session.jsx';
@@ -32,10 +33,6 @@ import { Conversation } from './views/Conversation.jsx';
 import { Placement } from './views/Placement.jsx';
 
 const TOKEN_KEY = 'franco_auth_token';
-
-function systemTheme() {
-  return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-}
 
 const navItems = [
   { id: 'home', label: 'Home', icon: HomeIcon },
@@ -61,12 +58,7 @@ function App() {
   const [view, setView] = React.useState(() => viewFromPath(window.location.pathname));
   const [loading, setLoading] = React.useState(Boolean(authToken));
   const [error, setError] = React.useState('');
-  const [themeOverride, setThemeOverride] = React.useState(() => {
-    const saved = localStorage.getItem('franco_theme_override');
-    return saved === 'light' || saved === 'dark' ? saved : null;
-  });
-  const [systemThemeValue, setSystemThemeValue] = React.useState(systemTheme);
-  const theme = themeOverride || systemThemeValue;
+  const { resolvedTheme: theme, setTheme } = useTheme();
 
   function navigate(nextView, replace = false) {
     setView(nextView);
@@ -78,23 +70,6 @@ function App() {
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
-
-  React.useEffect(() => {
-    const media = window.matchMedia?.('(prefers-color-scheme: light)');
-    if (!media) return undefined;
-    const onChange = () => {
-      if (!themeOverride) setSystemThemeValue(media.matches ? 'light' : 'dark');
-    };
-    media.addEventListener?.('change', onChange);
-    return () => media.removeEventListener?.('change', onChange);
-  }, [themeOverride]);
-
-  React.useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    if (themeOverride) localStorage.setItem('franco_theme_override', themeOverride);
-    else localStorage.removeItem('franco_theme_override');
-    localStorage.removeItem('franco_theme');
-  }, [theme, themeOverride]);
 
   function refreshUserData() {
     if (!authToken) return;
@@ -208,7 +183,7 @@ function App() {
         <Button variant="nav" onClick={logout} icon={LogOut} iconSize={18}>
           <Text as="span">Log out</Text>
         </Button>
-        <Box as="button" className="theme-toggle" onClick={() => setThemeOverride(theme === 'dark' ? 'light' : 'dark')}>
+        <Box as="button" className="theme-toggle" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
           {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
           <Text as="span">{theme === 'dark' ? 'Light mode' : 'Dark mode'}</Text>
         </Box>
@@ -234,7 +209,7 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
     <Box as="main" className="auth-page">
       <Box className="auth-topbar">
         <Box className="auth-brand-wrap">
-          <span className="auth-brand-mark">fr</span>
+          <Text as="span" className="auth-brand-mark">fr</Text>
           <Text as="strong" className="auth-brand-name">Franco</Text>
           <Text as="span" className="auth-brand-subtitle">FRENCH LEARNING PLATFORM</Text>
         </Box>
@@ -243,7 +218,7 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
       <Box className="auth-shell">
         <Box as="section" className="auth-intro">
           <Text as="p" className="auth-kicker">APPRENDRE. PROGRESSER. RÉUSSIR.</Text>
-          <Text as="h1" className="auth-hero-title">A little French,<br />every day.</Text>
+          <Text as="h1" className="auth-hero-title"><Text as="span" className="auth-hero-line">A little French,</Text><Text as="span" className="auth-hero-line">every day.</Text></Text>
           <Text className="auth-hero-copy">
             Build confidence through lessons, practice and review that fit your level.
           </Text>
@@ -254,12 +229,12 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
             className="auth-practice-panel"
             aria-label="Today's practice"
           >
-            <span className="auth-practice-icon"><BookOpen size={26} /></span>
-            <span className="auth-practice-copy">
+            <Box as="span" className="auth-practice-icon"><BookOpen size={26} /></Box>
+            <Box as="span" className="auth-practice-copy">
               <Text as="span" className="auth-practice-label">TODAY'S PRACTICE</Text>
               <Text as="strong">Les habitudes quotidiennes</Text>
               <Text as="small">Learn to talk about your daily routine.</Text>
-            </span>
+            </Box>
             <ChevronRight className="auth-practice-arrow" size={25} aria-hidden="true" />
           </Box>
         </Box>
@@ -292,10 +267,10 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
               {loading ? 'Connecting...' : isSignup ? 'Create account' : 'Log in'}
             </Button>
           </Box>
-          <Box className="auth-divider"><span />or<span /></Box>
+          <Box className="auth-divider"><Box as="span" />or<Box as="span" /></Box>
           <Box as="button" type="button" className="auth-secondary" onClick={() => onModeChange(isSignup ? 'login' : 'signup')}>
             {isSignup ? 'Already have an account? ' : 'New to Franco? '}
-            <span>{isSignup ? 'Log in' : 'Create an account'}</span>
+            <Text as="span">{isSignup ? 'Log in' : 'Create an account'}</Text>
           </Box>
         </Box>
       </Box>
@@ -303,60 +278,8 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
   );
 }
 
-function LegacyAuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
-  const isSignup = mode === 'signup';
-
-  return (
-    <Box as="main" className="auth-shell">
-      <Box as="section" className="auth-intro">
-        <Brand large />
-        <Text variant="eyebrow">French learning platform</Text>
-        <Text as="h4">APPRENDRE. PROGRESSER. RÉUTILISER</Text>
-        <Text variant="lede">
-          Sign in first to keep your lessons, progress, and review history connected to your account.
-        </Text>
-        <Box className="auth-principles">
-          <Text as="span"><Database size={17} /> Database-first learner data</Text>
-          <Text as="span"><ShieldCheck size={17} /> User-specific progress</Text>
-          <Text as="span"><BookOpen size={17} /> UD French GSD content sections</Text>
-        </Box>
-      </Box>
-
-      <Box as="section" className="auth-card">
-        <Text variant="eyebrow">{isSignup ? 'Create account' : 'Welcome back'}</Text>
-        <Text as="h2">{isSignup ? 'Sign up' : 'Log in'}</Text>
-        <Box as="form" onSubmit={onSubmit}>
-          {isSignup && (
-            <Field label="Name" icon={UserRound}>
-              <TextInput name="name" type="text" placeholder="Your name" autoComplete="name" />
-            </Field>
-          )}
-          <Field label="Email" icon={Mail}>
-            <TextInput name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
-          </Field>
-          <Field label="Password" icon={Lock}>
-            <TextInput
-              name="password"
-              type="password"
-              placeholder="Password"
-              autoComplete={isSignup ? 'new-password' : 'current-password'}
-              required
-            />
-          </Field>
-          {error && <ErrorMessage message={error} />}
-          <Button variant="primary" type="submit" disabled={loading} icon={ChevronRight} iconSize={18} iconPosition="after">
-            {loading ? 'Connecting...' : isSignup ? 'Create account' : 'Log in'}
-          </Button>
-        </Box>
-        <Button variant="text" onClick={() => onModeChange(isSignup ? 'login' : 'signup')}>
-          {isSignup ? 'Already have an account? Log in' : 'Need an account? Sign up'}
-        </Button>
-        <Text variant="note">
-          Your account is securely stored and synced with your profile.
-        </Text>
-      </Box>
-    </Box>
-  );
-}
-
-createRoot(document.getElementById('root')).render(<App />);
+createRoot(document.getElementById('root')).render(
+  <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem storageKey="franco_theme">
+    <App />
+  </ThemeProvider>
+);
