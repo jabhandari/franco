@@ -48,3 +48,5 @@ erDiagram
 ```
 
 The diagram shows the foreign keys present in the export. Some logical associations (for example, `attempts.exercise_id`) are plain text columns without declared foreign keys in that schema.
+
+The speech usage ledger is created by supabase/migrations/002_speech_transcriptions.sql or the API startup migration. It stores quota usage and a transcript hash, never audio or plaintext transcripts.

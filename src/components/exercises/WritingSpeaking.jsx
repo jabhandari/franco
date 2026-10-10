@@ -3,14 +3,12 @@ import { reportAttempt } from '../../api/client.js';
 import { getErrorMessage, humanize } from '../../presenters/format.presenter.js';
 import { hasResult, elapsedMs } from '../../presenters/attempt.presenter.js';
 import {
-  Box,
   ExerciseShell,
   ExerciseEyebrow,
   AnswerForm,
   Feedback,
   ErrorMessage,
   RubricBox,
-  Button,
   Text,
 } from '../ui';
 
@@ -70,56 +68,4 @@ export function WritingPrompt({ entry, token, onResult }) {
   );
 }
 
-// Speaking prompt: topic + follow-up questions, marked complete when done.
-export function SpeakingPrompt({ entry, token, onResult }) {
-  const [result, setResult] = React.useState(null);
-  const startRef = React.useRef(Date.now());
-  const points = entry.expectedPoints || [];
-  const followUps = entry.followUpQuestions || [];
-
-  async function markComplete() {
-    if (result) return;
-    try {
-      const res = await reportAttempt(entry, 'completed', token, { durationMs: elapsedMs(startRef.current) });
-      setResult(res);
-      onResult?.(res);
-    } catch (error) {
-      setResult({ error: getErrorMessage(error) });
-    }
-  }
-
-  return (
-    <ExerciseShell>
-      <ExerciseEyebrow level={entry.level} kind="speaking" />
-      <Text as="h2">{entry.title || 'Speaking practice'}</Text>
-      <Text>{entry.prompt}</Text>
-      {entry.instructions && <Text variant="muted">{entry.instructions}</Text>}
-      {followUps.length > 0 && (
-        <RubricBox
-          title="Follow-up questions"
-          items={followUps.map((question, index) => (
-            <React.Fragment key={index}>{question}</React.Fragment>
-          ))}
-        />
-      )}
-      {!result && (
-        <>
-          <Text variant="muted">Speak your answer aloud, then mark it complete.</Text>
-          <Button variant="primary" onClick={markComplete}>Mark complete</Button>
-        </>
-      )}
-      {hasResult(result) && (
-        <Feedback tone="correct" title="Logged.">
-          {points.length > 0 && (
-            <Box as="ul">
-              {points.map((point, index) => (
-                <Box as="li" key={index}>{point}</Box>
-              ))}
-            </Box>
-          )}
-        </Feedback>
-      )}
-      {result?.error && <ErrorMessage message={result.error} />}
-    </ExerciseShell>
-  );
-}
+export { SpeakingPrompt } from './SpeakingPrompt.jsx';

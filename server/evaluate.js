@@ -87,3 +87,6 @@ export function gradeExerciseItem(row, response) {
   }
   return normalizeText(response) === normalizeText(row.answer);
 }
+
+// Alignment is practice feedback, never a speaking grade.
+export { speechFeedback } from '../shared/speech-feedback.js';
