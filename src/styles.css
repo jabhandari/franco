@@ -639,31 +639,27 @@ html:not([data-theme="light"]) .topic-item { background:transparent; border-colo
 html:not([data-theme="light"]) .topic-item strong { color:#dce6f2; }
 html:not([data-theme="light"]) .topic-item span { color:#999; }
 .session-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
-html:not([data-theme="light"]) .record-count { background:#151515; border-color:#303030; min-height:150px; }
+html:not([data-theme="light"]) .record-count { background:#151515; border-color:#303030; }
 html:not([data-theme="light"]) .record-count strong { color:#5eead4; }
 html:not([data-theme="light"]) .record-count span { color:#999; }
 @media (max-width:680px) { .session-stats { grid-template-columns:1fr; } }
 html[data-theme="light"] .section-tabs button { background:#fffdf8; border-color:#ded4c8; color:#243b53; }
 html[data-theme="light"] .empty-state { background:#fff; border-color:#d6cbbd; color:#566069; }
 
-/* Reference-inspired workspace layout */
+/* Reference-inspired workspace layout. FRA-23: this block may only restyle
+   colors/backgrounds/borders — geometry (width, padding, margins, gaps,
+   font sizes, min-heights) must stay identical across themes, so layout
+   metrics live in the shared base rules only. */
 html:not([data-theme="light"]) body { background:#111; color:#eee; }
-html:not([data-theme="light"]) .sidebar { background:#111; border-right:1px solid #2d2d2d; padding:22px 10px; }
-html:not([data-theme="light"]) .main-content { width:min(850px,100%); padding:28px 18px 70px; }
-html:not([data-theme="light"]) .main-content.wide-content { width:min(1440px,100%); }
-html:not([data-theme="light"]) .page-stack { gap:18px; }
-html:not([data-theme="light"]) .brand { font-size:17px; }
-html:not([data-theme="light"]) .brand-mark { width:34px; height:34px; border-radius:8px; box-shadow:none; }
-html:not([data-theme="light"]) .nav-button { min-height:40px; border-radius:6px; padding:8px 10px; font-size:13px; }
+html:not([data-theme="light"]) .sidebar { background:#111; border-right:1px solid #2d2d2d; }
+html:not([data-theme="light"]) .brand-mark { border-radius:8px; box-shadow:none; }
+html:not([data-theme="light"]) .nav-button { border-radius:6px; }
 html:not([data-theme="light"]) .nav-button:hover,html:not([data-theme="light"]) .nav-button.active { background:#202020; border-color:#3a3a3a; }
 html:not([data-theme="light"]) .sidebar-panel { background:#171717; border-color:#303030; box-shadow:none; }
 html:not([data-theme="light"]) .panel,html:not([data-theme="light"]) .daily-panel,html:not([data-theme="light"]) .exercise-preview,html:not([data-theme="light"]) .example-card { background:#151515; border-color:#303030; border-radius:14px; box-shadow:none; }
-html:not([data-theme="light"]) .daily-panel { padding:22px; }
-html:not([data-theme="light"]) .daily-art { min-height:130px; margin-bottom:22px; padding:22px; border-radius:12px; background:#1b1b1b; border:1px solid #303030; }
+html:not([data-theme="light"]) .daily-art { border-radius:12px; background:#1b1b1b; border:1px solid #303030; }
 html:not([data-theme="light"]) .daily-art:after { display:none; }
-html:not([data-theme="light"]) .daily-art strong { font-size:clamp(34px,5vw,54px); letter-spacing:-.06em; }
-html:not([data-theme="light"]) h1,html:not([data-theme="light"]) h2,html:not([data-theme="light"]) h3 { color:#f5f5f5; letter-spacing:-.01em; }
-html:not([data-theme="light"]) h1 { font-size:clamp(30px,4vw,48px); }
+html:not([data-theme="light"]) h1,html:not([data-theme="light"]) h2,html:not([data-theme="light"]) h3 { color:#f5f5f5; }
 html:not([data-theme="light"]) .lede,html:not([data-theme="light"]) .muted { color:#999; }
 html:not([data-theme="light"]) .metric { background:#191919; border-color:#303030; }
 html:not([data-theme="light"]) .metric strong { color:#fff; }
