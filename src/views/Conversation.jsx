@@ -1,7 +1,7 @@
 import React from 'react';
 import { Database, Timer } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { safeText } from '../api/client.js';
+import { safeText } from '../presenters/format.presenter.js';
 import {
   Checklist,
   Chip,
@@ -42,7 +42,7 @@ export function Conversation({ token }) {
         lede={
           <>
             Deux minutes de français continu, construites autour de vos objectifs du moment.
-            <span className="lede-sub"> A two-minute speaking drill built around your current targets — out loud, with a partner, or into a voice recorder.</span>
+            <Text as="span" className="lede-sub"> A two-minute speaking drill built around your current targets — out loud, with a partner, or into a voice recorder.</Text>
           </>
         }
       />

@@ -2,6 +2,7 @@ import React from 'react';
 import { Database, TrendingUp } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import {
+  Box,
   EmptyState,
   ErrorMessage,
   Page,
@@ -18,11 +19,11 @@ function MasteryBars({ rows }) {
   if (!rows.length) return <Text variant="muted">Answer exercises to start building concept mastery.</Text>;
   const sorted = [...rows].sort((a, b) => Number(b.mastery) - Number(a.mastery)).slice(0, 12);
   return (
-    <div>
+    <Box>
       {sorted.map((row) => (
         <ProgressBar key={row.concept_id} label={row.concept_id} percent={Math.round(Number(row.mastery) * 100)} />
       ))}
-    </div>
+    </Box>
   );
 }
 
@@ -47,7 +48,7 @@ export function Progress({ token }) {
       {error && <ErrorMessage message={error} />}
 
       {!loading && !error && (
-        <div className="stack">
+        <Box className="stack">
           <Panel compact>
             <PanelHeader eyebrow="Your learning" title="Review queue" aside={<Database size={20} aria-hidden="true" />} />
             <StatGroup>
@@ -67,7 +68,7 @@ export function Progress({ token }) {
               text="Complete a session to see your progress here."
             />
           )}
-        </div>
+        </Box>
       )}
     </Page>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChevronRight, Plus, TrendingUp, ClipboardCheck, Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { Banner, Button, EmptyState, Panel, PanelHeader, ProfileRows, RecordCount, Text } from '../components/ui';
+import { Banner, Box, Button, EmptyState, Panel, PanelHeader, ProfileRows, RecordCount, Text } from '../components/ui';
 
 export function Home({ userData, onStart, onPlacement }) {
   const profile = userData?.profile;
@@ -12,14 +12,14 @@ export function Home({ userData, onStart, onPlacement }) {
   const placementDone = profile?.placement_status === 'complete';
 
   return (
-    <section className="home-grid">
-      <div className="daily-panel">
-        <div className="daily-art" aria-hidden="true">
-          <span>franco</span>
-          <strong>Bonjour, {userData?.user?.name?.split(' ')[0] || 'learner'}</strong>
-        </div>
+    <Box as="section" className="home-grid">
+      <Box className="daily-panel">
+        <Box className="daily-art" aria-hidden="true">
+          <Text as="span">franco</Text>
+          <Text as="strong">Bonjour, {userData?.user?.name?.split(' ')[0] || 'learner'}</Text>
+        </Box>
         <Text variant="eyebrow">Today's French</Text>
-        <h1>Your daily French session starts here.</h1>
+        <Text as="h1">Your daily French session starts here.</Text>
         <Text variant="lede">
           Practice with French examples and exercises matched to your level.
         </Text>
@@ -36,9 +36,9 @@ export function Home({ userData, onStart, onPlacement }) {
         <Button variant="primary" wide onClick={onStart} icon={ChevronRight} iconSize={18} iconPosition="after">
           Start a 10-minute session{' '}
         </Button>
-      </div>
+      </Box>
 
-      <div className="stack">
+      <Box className="stack">
         <Panel compact>
           <PanelHeader eyebrow="Your learning" title="Level strength" aside={<Database size={20} aria-hidden="true" />} />
           {progressCount ? (
@@ -68,7 +68,7 @@ export function Home({ userData, onStart, onPlacement }) {
           <ProfileRows profile={profile} />
           <Text variant="muted" size="sm">{contentCount ? `${contentCount.toLocaleString()} legacy examples in the catalogue` : ''}</Text>
         </Panel>
-      </div>
-    </section>
+      </Box>
+    </Box>
   );
 }

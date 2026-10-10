@@ -1,8 +1,11 @@
 import React from 'react';
 import { Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { normalizeChoices } from '../api/client.js';
+import { normalizeChoices } from '../presenters/collections.presenter.js';
+import { capitalize, choiceLabel } from '../presenters/format.presenter.js';
+import { CEFR_LEVELS } from '../presenters/levels.presenter.js';
 import {
+  Box,
   Button,
   CollapsibleSection,
   EmptyState,
@@ -14,10 +17,11 @@ import {
   Panel,
   ReadingPassage,
   Tabs,
+  Text,
   Toolbar,
 } from '../components/ui';
 
-const SECTIONS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+const SECTIONS = CEFR_LEVELS;
 const SKILLS = ['all', 'reading', 'listening', 'language structures'];
 const PAGE_SIZE = 12;
 
@@ -37,10 +41,10 @@ function ExamQuestionCard({ question, selected, onSelect, onRetry }) {
   return (
     <ExerciseShell eyebrow={`${question.exam_name} - ${question.skill}`} answered={answered}>
       {passage && passage.toLowerCase() !== prompt.toLowerCase() && <ReadingPassage text={passage} />}
-      <h2>{prompt}</h2>
+      <Text as="h2">{prompt}</Text>
       {choices.length > 0 && (
         <OptionList
-          options={choices.map((choice) => ({ key: choice.key, label: <>{choice.key}. {choice.text}</> }))}
+          options={choices.map((choice) => ({ key: choice.key, label: choiceLabel(choice) }))}
           selectedKey={selected}
           answered={Boolean(selected && correct)}
           correct={Boolean(selectedChoice && selectedChoice.key.toLowerCase() === correct)}
@@ -56,7 +60,7 @@ function ExamQuestionCard({ question, selected, onSelect, onRetry }) {
           onRetry={isCorrect ? undefined : onRetry}
         />
       )}
-      {!correct && <small>{question.explanation}</small>}
+      {!correct && <Text as="small">{question.explanation}</Text>}
     </ExerciseShell>
   );
 }
@@ -75,7 +79,7 @@ function ExamQuestionList({ data }) {
           actions={<Button variant="reset" onClick={reset}>Reset all</Button>}
         />
       </Panel>
-      <div className="exercise-list">
+      <Box className="exercise-list">
         {visible.map((question) => (
           <ExamQuestionCard
             key={question.id}
@@ -85,7 +89,7 @@ function ExamQuestionList({ data }) {
             onRetry={() => setAnswers(({ [question.id]: _removed, ...rest }) => rest)}
           />
         ))}
-      </div>
+      </Box>
       {data.questions.length > PAGE_SIZE && (
         <Button variant="text" centered onClick={() => setShowAll((value) => !value)}>
           {showAll ? 'Show fewer questions' : `Show all ${data.questions.length} questions`}
@@ -102,7 +106,7 @@ export function PastQuestions({ token }) {
   const { data, loading, error } = useApiResource(`/api/exam/questions?section=${section}`, token);
   const all = data?.questions || [];
   const filtered = skill === 'all' ? all : all.filter((q) => (q.skill || 'reading').toLowerCase() === skill);
-  const skillLabel = skill === 'all' ? 'All skills' : skill[0].toUpperCase() + skill.slice(1);
+  const skillLabel = skill === 'all' ? 'All skills' : capitalize(skill);
 
   return (
     <Page>
@@ -120,7 +124,7 @@ export function PastQuestions({ token }) {
       />
       <Tabs
         variant="section"
-        options={SKILLS.map((s) => ({ id: s, label: s === 'all' ? 'All skills' : s[0].toUpperCase() + s.slice(1) }))}
+        options={SKILLS.map((s) => ({ id: s, label: s === 'all' ? 'All skills' : capitalize(s) }))}
         value={skill}
         onChange={setSkill}
         compact

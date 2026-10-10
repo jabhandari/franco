@@ -1,11 +1,11 @@
 import React from 'react';
 import { Check, CheckCircle2, Flag, KeyRound, RefreshCw, Send, X } from 'lucide-react';
 import { apiGet, apiPost, formatEnum, getErrorMessage, normalizeChoices, safeText } from '../api/client.js';
-import { Button, EmptyState, ErrorMessage, Field, PageHeader, Panel, Tabs, Text } from '../components/ui';
+import { Box, Button, EmptyState, ErrorMessage, Field, Page, PageHeader, Panel, Tabs, Text, TextInput } from '../components/ui';
 
 // FRA-2: review queue UI for the content bank. The review endpoints
 // authenticate with a content:review API key (x-api-key), not the learner
-// Bearer token, so the key is kept in localStorage only and never put in
+// Bearer <redacted>, so the key is kept in localStorage only and never put in
 // a URL. main.jsx reads the same key to decide whether to show the nav
 // link.
 export const REVIEW_KEY_STORAGE = 'franco_review_key';
@@ -108,18 +108,16 @@ export function ReviewQueue({ onKeyChange }) {
 
   if (!apiKey) {
     return (
-      <div className="page-stack">
-        <div>
-          <PageHeader
-            eyebrow="Content review"
-            title="Review queue"
-            lede="Approve, publish, or reject new source items and questions learners have flagged. This needs a content review API key."
-          />
-        </div>
+      <Page>
+        <PageHeader
+          eyebrow="Content review"
+          title="Review queue"
+          lede="Approve, publish, or reject new source items and questions learners have flagged. This needs a content review API key."
+        />
         <Panel>
-          <form className="review-key-form" onSubmit={saveKey}>
+          <Box as="form" className="review-key-form" onSubmit={saveKey}>
             <Field label="Review API key" icon={KeyRound}>
-              <input
+              <TextInput
                 type="password"
                 value={keyDraft}
                 onChange={(event) => setKeyDraft(event.target.value)}
@@ -133,22 +131,20 @@ export function ReviewQueue({ onKeyChange }) {
             <Text variant="note">
               The key is stored only in this browser and sent only as a request header to this app — never in a URL.
             </Text>
-          </form>
+          </Box>
         </Panel>
-      </div>
+      </Page>
     );
   }
 
   const copy = STATUS_COPY[status];
   return (
-    <div className="page-stack">
-      <div>
-        <PageHeader
-          eyebrow="Content review"
-          title="Review queue"
-          lede="New items from content sources land here as pending review, and so do published questions that learners keep flagging. Publishing is what grows the question bank."
-        />
-      </div>
+    <Page>
+      <PageHeader
+        eyebrow="Content review"
+        title="Review queue"
+        lede="New items from content sources land here as pending review, and so do published questions that learners keep flagging. Publishing is what grows the question bank."
+      />
 
       <Tabs
         variant="section"
@@ -158,19 +154,19 @@ export function ReviewQueue({ onKeyChange }) {
         onChange={(next) => { setStatus(next); setItems(null); }}
       />
 
-      <div className="review-toolbar">
+      <Box className="review-toolbar">
         <Text variant="muted">
           {loading ? 'Loading…' : items ? copy.count(items.length) : ''}
         </Text>
-        <div className="review-actions">
+        <Box className="review-actions">
           <Button variant="text" icon={RefreshCw} iconSize={16} onClick={() => load(apiKey, status)} disabled={loading}>
             Refresh
           </Button>
           <Button variant="text" onClick={clearKey}>
             Remove key
           </Button>
-        </div>
-      </div>
+        </Box>
+      </Box>
 
       {status === 'published' && items && items.length > 0 && (
         <Text variant="muted">Rejecting a published item takes it offline for learners immediately.</Text>
@@ -193,7 +189,7 @@ export function ReviewQueue({ onKeyChange }) {
           onAct={(action) => act(item, action)}
         />
       ))}
-    </div>
+    </Page>
   );
 }
 
@@ -210,56 +206,56 @@ function ReviewItem({ item, note, busy, error, onNote, onAct }) {
 
   return (
     <Panel>
-      <article className="review-item">
-        <div className="review-pills">
-          <span className="review-pill">{formatEnum(item.type) || 'Item'}</span>
-          {item.level && <span className="review-pill">{item.level}</span>}
-          {item.source && <span className="review-pill">{item.source}</span>}
-          {item.external_id && <span className="review-pill">{item.external_id}</span>}
+      <Box as="article" className="review-item">
+        <Box className="review-pills">
+          <Box as="span" className="review-pill">{formatEnum(item.type) || 'Item'}</Box>
+          {item.level && <Box as="span" className="review-pill">{item.level}</Box>}
+          {item.source && <Box as="span" className="review-pill">{item.source}</Box>}
+          {item.external_id && <Box as="span" className="review-pill">{item.external_id}</Box>}
           {flagged && (
-            <span className="review-pill flagged">
+            <Box as="span" className="review-pill flagged">
               <Flag size={12} aria-hidden="true" />
               {item.report_count} learner report{item.report_count === 1 ? '' : 's'}
-            </span>
+            </Box>
           )}
-        </div>
+        </Box>
 
-        {item.title && <h3>{item.title}</h3>}
-        <p className="review-prompt">{safeText(item.prompt)}</p>
+        {item.title && <Text as="h3">{item.title}</Text>}
+        <Text as="p" className="review-prompt">{safeText(item.prompt)}</Text>
         {item.context && safeText(item.context) !== safeText(item.prompt) && (
           <Text variant="muted">{safeText(item.context)}</Text>
         )}
         {item.instructions && <Text variant="muted">{safeText(item.instructions)}</Text>}
 
         {(choices.length > 0 || expected || expectedPoints.length > 0) && (
-          <div className="review-expected">
-            <strong>Answer / expected</strong>
+          <Box className="review-expected">
+            <Text as="strong">Answer / expected</Text>
             {choices.length > 0 && (
-              <ul className="review-choices">
+              <Box as="ul" className="review-choices">
                 {choices.map((choice) => (
-                  <li key={choice.key} className={isCorrectChoice(choice) ? 'correct' : ''}>
+                  <Box as="li" key={choice.key} className={isCorrectChoice(choice) ? 'correct' : undefined}>
                     {choice.key}. {choice.text}
                     {isCorrectChoice(choice) ? ' ✓' : ''}
-                  </li>
+                  </Box>
                 ))}
-              </ul>
+              </Box>
             )}
-            {expected && choices.length === 0 && <p>{expected}</p>}
+            {expected && choices.length === 0 && <Text as="p">{expected}</Text>}
             {expectedPoints.length > 0 && (
-              <ul className="review-choices">
+              <Box as="ul" className="review-choices">
                 {expectedPoints.map((point) => (
-                  <li key={point}>{point}</li>
+                  <Box as="li" key={point}>{point}</Box>
                 ))}
-              </ul>
+              </Box>
             )}
-          </div>
+          </Box>
         )}
 
-        <input
+        {/* TextInput drops maxLength by design; the 500-char cap is enforced in act(). */}
+        <TextInput
           className="review-note"
           type="text"
           value={note}
-          maxLength={MAX_NOTE_LENGTH}
           onChange={(event) => onNote(event.target.value)}
           placeholder="Reviewer note (optional, saved with the decision)"
           aria-label="Reviewer note"
@@ -267,7 +263,7 @@ function ReviewItem({ item, note, busy, error, onNote, onAct }) {
 
         {error && <ErrorMessage message={error} />}
 
-        <div className="review-item-actions">
+        <Box className="review-item-actions">
           {item.status === 'pending_review' && (
             <Button variant="text" icon={Check} iconSize={16} disabled={busy} onClick={() => onAct('approve')}>
               Approve
@@ -278,16 +274,17 @@ function ReviewItem({ item, note, busy, error, onNote, onAct }) {
               Publish
             </Button>
           )}
-          <button
+          <Box
+            as="button"
             type="button"
             className="text-button review-danger"
             disabled={busy}
             onClick={() => onAct('reject')}
           >
             <X size={16} aria-hidden="true" /> Reject
-          </button>
-        </div>
-      </article>
+          </Box>
+        </Box>
+      </Box>
     </Panel>
   );
 }

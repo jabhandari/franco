@@ -3,9 +3,10 @@ import { BookOpen, PenLine, Mic, Library } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { ExerciseCard } from '../components/exercises/ExerciseCard.jsx';
 import { ConceptRoadmap, LevelGuide, TopicTracks } from '../components/concepts.jsx';
-import { EmptyState, ErrorMessage, Panel, PanelHeader, Tabs, Text } from '../components/ui';
+import { CEFR_LEVELS as SECTIONS } from '../presenters/levels.presenter.js';
+import { humanize } from '../presenters/format.presenter.js';
+import { Box, EmptyState, ErrorMessage, Panel, PanelHeader, Tabs, Text } from '../components/ui';
 
-const SECTIONS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const LIBRARY_TABS = [
   { id: 'writing', label: 'Writing', icon: PenLine },
   { id: 'speaking', label: 'Speaking', icon: Mic },
@@ -19,20 +20,20 @@ function CanonicalList({ type, section, token }) {
   );
   const items = data?.items || [];
 
-  if (loading) return <Text variant="muted">Loading {type.replace(/_/g, ' ')}…</Text>;
+  if (loading) return <Text variant="muted">Loading {humanize(type)}…</Text>;
   if (error) return <ErrorMessage message={error} />;
   if (!items.length) {
     return (
       <EmptyState
         icon={BookOpen}
-        title={`No published ${type.replace(/_/g, ' ')} yet`}
+        title={`No published ${humanize(type)} yet`}
         text="Items appear here once reviewed and published. Check back soon."
       />
     );
   }
 
   return (
-    <div className="stack">
+    <Box className="stack">
       {items.map((item) => (
         <ExerciseCard
           key={item.id}
@@ -40,7 +41,7 @@ function CanonicalList({ type, section, token }) {
           token={token}
         />
       ))}
-    </div>
+    </Box>
   );
 }
 
@@ -49,7 +50,7 @@ export function Content({ token }) {
   const [libraryTab, setLibraryTab] = React.useState('vocabulary');
 
   return (
-    <section className="map-only-page">
+    <Box as="section" className="map-only-page">
       <ConceptRoadmap level={selectedSection} token={token} onSelectSection={setSelectedSection} />
       <LevelGuide section={selectedSection} />
       <Panel>
@@ -59,6 +60,6 @@ export function Content({ token }) {
       {libraryTab === 'writing' && <CanonicalList type="writing_prompt" section={selectedSection} token={token} />}
       {libraryTab === 'speaking' && <CanonicalList type="speaking_prompt" section={selectedSection} token={token} />}
       {libraryTab === 'vocabulary' && <TopicTracks section={selectedSection} />}
-    </section>
+    </Box>
   );
 }

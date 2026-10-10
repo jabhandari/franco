@@ -1,8 +1,10 @@
 import React from 'react';
 import { ClipboardCheck } from 'lucide-react';
-import { apiPost, getErrorMessage, shuffle } from '../api/client.js';
+import { apiPost } from '../api/client.js';
+import { getErrorMessage } from '../presenters/format.presenter.js';
+import { shuffle } from '../presenters/collections.presenter.js';
 import { levelGuides } from '../components/concepts.jsx';
-import { ErrorMessage, ExerciseShell, Page, PageHeader, Text } from '../components/ui';
+import { Box, ErrorMessage, ExerciseShell, Page, PageHeader, Text } from '../components/ui';
 
 // Original 10-question placement quiz, A1 → B2 gradient. The resulting CEFR
 // level is submitted to POST /api/me/placement and becomes the learner's
@@ -65,13 +67,13 @@ export function Placement({ token, onPlaced }) {
           lede={`You scored ${result.score} out of ${QUESTIONS.length}. Your sessions will now target ${result.level} content.`}
         />
         {guide && (
-          <section className="level-guide panel">
-            <div><span className="eyebrow">{result.level} · {guide.label}</span><h2>{guide.goal}</h2></div>
-            <div className="guide-columns">
-              <div><strong>What to focus on</strong><p>{guide.focus}</p></div>
-              <div><strong>Reading practice</strong><p>{guide.read}</p></div>
-            </div>
-          </section>
+          <Box as="section" className="level-guide panel">
+            <Box><Text as="span" variant="eyebrow">{result.level} · {guide.label}</Text><Text as="h2">{guide.goal}</Text></Box>
+            <Box className="guide-columns">
+              <Box><Text as="strong">What to focus on</Text><Text>{guide.focus}</Text></Box>
+              <Box><Text as="strong">Reading practice</Text><Text>{guide.read}</Text></Box>
+            </Box>
+          </Box>
         )}
       </Page>
     );
@@ -85,14 +87,14 @@ export function Placement({ token, onPlaced }) {
         lede={`Ten quick questions, A1 to B2. Question ${index + 1} of ${QUESTIONS.length}.`}
       />
       <ExerciseShell eyebrow="placement">
-        <h2>{question.prompt}</h2>
-        <div className="mcq-options">
+        <Text as="h2">{question.prompt}</Text>
+        <Box className="mcq-options">
           {options[index].map((option) => (
-            <button key={option.key} onClick={() => choose(option.key)}>
+            <Box as="button" key={option.key} onClick={() => choose(option.key)}>
               {option.key}. {option.text}
-            </button>
+            </Box>
           ))}
-        </div>
+        </Box>
       </ExerciseShell>
       {error && <ErrorMessage message={error} />}
       <Text variant="muted" size="sm"><ClipboardCheck size={14} aria-hidden="true" /> Your result sets your starting level — nothing is graded here.</Text>

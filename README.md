@@ -90,14 +90,22 @@ npm run import:tv5
 - Sessions are adaptive: `GET /api/me/session-plan?section=A1` returns a queue ordered by due SM-2 reviews, then new items at the learner's level, then weak-concept items, then exam practice and legacy drills. The client renders the queue in server order — no client-side shuffling of the queue itself (MCQ options still use Fisher–Yates).
 - Every answered exercise reports `{ item_kind, item_id|legacy_ref, response, duration_ms, hint_used }` to `POST /api/me/attempts`, which grades server-side, updates SM-2 state (`learner_item_state`) and concept mastery, and reveals the correct answer only after grading.
 - One renderer per item type lives in `src/components/exercises/`: multiple choice (reading/grammar), tap-to-order word order, typed spelling/dictation, pronunciation drills with audio + self-marking, writing prompts with rubrics, and speaking prompts with follow-ups.
-- The Content view has Roadmap, Writing, Speaking, and Vocabulary tabs for levels A1–C2. Roadmap concepts, writing/speaking items, and vocabulary topics come from the canonical track (`/api/content/v1/concepts`, `/api/content/v1/items`, `/api/content/topics?section=...`).
+- The Content view has Roadmap, Writing, Speaking, and Vocabulary tabs for levels A1–C2. Speaking lessons provide task-specific model phrases, word comparison, and a separate open-answer prompt within the existing Speaking tab. Roadmap concepts, writing/speaking items, and vocabulary topics come from the canonical track (`/api/content/v1/concepts`, `/api/content/v1/items`, `/api/content/topics?section=...`).
 - A 10-question placement quiz (`/placement`) sets the learner's CEFR level via `POST /api/me/placement`; the profile refreshes immediately after.
 - Concept data is seeded from `scripts/concept-data.mjs` (rich authored A1 lessons; A2–C2 stubs clearly marked) via `npm run seed:concepts`; prerequisite edges drive the roadmap connectors.
 - Past questions show all skills (reading, listening, language structures) with section tabs A1–C2.
 - No fake user progress or mistakes are rendered.
 
+## Optional speaking transcription
+
+The full FRA-10 implementation and setup guide is [docs/FRA-10-speaking-transcription-plan.md](docs/FRA-10-speaking-transcription-plan.md). Create a Groq project and API key in the [GroqCloud Console](https://console.groq.com/keys), enable Zero Data Retention in [Data Controls](https://console.groq.com/settings/data-controls), and confirm current limits on the [Limits page](https://console.groq.com/settings/limits).
+
+Copy the speech variables from [.env.example](.env.example) into the API environment, set GROQ_API_KEY there, and set SPEECH_TRANSCRIPTION_ENABLED=true. Keep the key out of Vite variables and browser code. The API startup migration creates the usage ledger; the equivalent SQL is in [supabase/migrations/002_speech_transcriptions.sql](supabase/migrations/002_speech_transcriptions.sql) for manual deployment. Speech recording requires HTTPS or localhost. The six original speaking tasks include short model phrases for guided word comparison; open answers show a transcript without a correctness score. When recording is unavailable, speaking prompts can still be completed without it.
+
 ## Learner API (implemented)
 
+- `GET /api/speech/status` — authenticated transcription availability
+- `POST /api/speech/transcribe?item_id=...` — authenticated audio upload and practice feedback
 - `GET /api/me` — user + profile
 - `GET /api/me/session-plan?section=A1` — adaptive queue (reviews → new → weak concepts → exam → drills)
 - `POST /api/me/attempts` — grade an answer, update SM-2 + mastery, reveal the answer
