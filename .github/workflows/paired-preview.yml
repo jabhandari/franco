@@ -78,7 +78,7 @@ jobs:
         run: |
           set +e
           out=$(npx -y wrangler pages deploy dist \
-            --project-name=franco-dsh \
+            --project-name=franco \
             --branch="pr-${PR_NUMBER}" 2>&1)
           code=$?
           set -e
@@ -87,7 +87,7 @@ jobs:
             echo "::error::wrangler pages deploy failed with exit code $code (output above)."
             exit 1
           fi
-          url=$(echo "$out" | grep -oE 'https://[a-z0-9.-]+\.franco-dsh\.pages\.dev' | head -1)
+          url=$(echo "$out" | grep -oE 'https://[a-z0-9.-]+\.pages\.dev' | head -1)
           if [ -z "$url" ]; then
             echo "::error::Could not parse deployment URL from wrangler output."
             exit 1
@@ -151,12 +151,12 @@ jobs:
           token='${{ secrets.CLOUDFLARE_API_TOKEN }}'
           branch="pr-${PR_NUMBER}"
           ids=$(curl -s -H "Authorization: Bearer $token" \
-            "https://api.cloudflare.com/client/v4/accounts/$account/pages/projects/franco-dsh/deployments?per_page=100" \
+            "https://api.cloudflare.com/client/v4/accounts/$account/pages/projects/franco/deployments?per_page=100" \
             | jq -r --arg b "$branch" '.result[] | select(.deployment_trigger.metadata.branch == $b) | .id')
           for id in $ids; do
             echo "Deleting Pages deployment $id (branch $branch)"
             curl -s -X DELETE -H "Authorization: Bearer $token" \
-              "https://api.cloudflare.com/client/v4/accounts/$account/pages/projects/franco-dsh/deployments/$id" >/dev/null
+              "https://api.cloudflare.com/client/v4/accounts/$account/pages/projects/franco/deployments/$id" >/dev/null
           done
 
       - name: Mark PR comment as torn down
