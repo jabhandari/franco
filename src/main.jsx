@@ -187,13 +187,15 @@ function App() {
           <Text as="span">Your learning space</Text>
         </Box>
 
-        <Box as="button" className="theme-toggle" onClick={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}>
-          {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
-          <Text as="span">{theme === 'dark' ? 'Light mode' : 'Dark mode'}</Text>
+        <Box className="sidebar-actions">
+          <Box as="button" className="theme-toggle" onClick={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}>
+            {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
+            <Text as="span">{theme === 'dark' ? 'Light mode' : 'Dark mode'}</Text>
+          </Box>
+          <Button variant="nav" onClick={logout} icon={LogOut} iconSize={18}>
+            <Text as="span">Log out</Text>
+          </Button>
         </Box>
-        <Button variant="nav" onClick={logout} icon={LogOut} iconSize={18}>
-          <Text as="span">Log out</Text>
-        </Button>
       </Box>
 
       <Box as="main" className={`main-content ${view === 'content' ? 'wide-content' : ''}`}>

@@ -73,6 +73,13 @@ nav {
   gap: 6px;
 }
 
+/* Bottom-of-sidebar actions (theme toggle + log out): same 6px rhythm as
+   the nav above, instead of the sidebar's 28px section gap. */
+.sidebar-actions {
+  display: grid;
+  gap: 6px;
+}
+
 .nav-button {
   min-height: 44px;
   display: flex;
@@ -552,6 +559,17 @@ summary {
   }
 
   .sidebar > .nav-button {
+    width: auto;
+    flex: 0 0 auto;
+  }
+
+  .sidebar-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .sidebar-actions .nav-button {
     width: auto;
     flex: 0 0 auto;
   }
