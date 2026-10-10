@@ -135,24 +135,27 @@ export function RoadmapConnectors({ section, edges }) {
 
 // FRA-18: clicking anywhere outside the lesson popup collapses it —
 // including page areas a section-level handler can't see (the toolbar,
-// page margins). Clicks inside the modal and on nodes/rows are excluded:
-// nodes and rows toggle selection themselves.
-function useBackgroundClose(active, onSelectConcept) {
+// page margins). "Outside" is decided by the dialog's own DOM node
+// (dialogRef.current.contains), never by matching CSS class names.
+// Node/row clicks don't need an exclusion here: their handlers call
+// stopPropagation, so a click that selects or toggles a lesson never
+// reaches this listener at all.
+function useBackgroundClose(active, dialogRef, onSelectConcept) {
   React.useEffect(() => {
     if (!active) return undefined;
     function onDocumentClick(event) {
-      if (event.target.closest('.concept-modal')) return;
-      if (event.target.closest('.roadmap-node, .roadmap-table-row')) return;
+      if (dialogRef.current?.contains(event.target)) return;
       onSelectConcept(null);
     }
     document.addEventListener('click', onDocumentClick);
     return () => document.removeEventListener('click', onDocumentClick);
-  }, [active, onSelectConcept]);
+  }, [active, dialogRef, onSelectConcept]);
 }
 
 export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectConcept, onSelectSection }) {
   const active = nodes.find((node) => node.id === activeConceptId);
-  useBackgroundClose(active, onSelectConcept);
+  const dialogRef = React.useRef(null);
+  useBackgroundClose(active, dialogRef, onSelectConcept);
   return (
     <section className={`concept-map panel ${active ? 'has-modal' : ''}`}>
       <div className="roadmap-heading">
@@ -171,7 +174,7 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
           <button
             className={`roadmap-node roadmap-node-${index + 1} ${activeConceptId === node.id ? 'active' : ''}`}
             key={node.id}
-            onClick={() => onSelectConcept(activeConceptId === node.id ? null : node.id)}
+            onClick={(event) => { event.stopPropagation(); onSelectConcept(activeConceptId === node.id ? null : node.id); }}
           >
             <span>{String(index + 1).padStart(2, '0')}</span>
             <strong>{node.title}</strong>
@@ -181,7 +184,7 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
         ))}
       </div>
       {active && (
-        <Modal closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
+        <Modal ref={dialogRef} closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
           <ConceptDetail concept={active} />
         </Modal>
       )}
@@ -191,7 +194,8 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
 
 export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId, onSelectConcept }) {
   const active = nodes.find((node) => node.id === activeConceptId);
-  useBackgroundClose(active, onSelectConcept);
+  const dialogRef = React.useRef(null);
+  useBackgroundClose(active, dialogRef, onSelectConcept);
   return (
     <section className="roadmap-table-page">
       <Tabs
@@ -208,7 +212,7 @@ export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId,
             className={`roadmap-table-row${activeConceptId === node.id ? ' active' : ''}`}
             key={node.id}
             aria-expanded={activeConceptId === node.id}
-            onClick={() => onSelectConcept(activeConceptId === node.id ? null : node.id)}
+            onClick={(event) => { event.stopPropagation(); onSelectConcept(activeConceptId === node.id ? null : node.id); }}
           >
             <span><b>{String(index + 1).padStart(2, '0')}</b>{node.title}</span>
             <small>{node.category}</small>
@@ -217,7 +221,7 @@ export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId,
         ))}
       </div>
       {active && (
-        <Modal closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
+        <Modal ref={dialogRef} closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
           <ConceptDetail concept={active} />
         </Modal>
       )}

@@ -43,7 +43,7 @@ import { Button, Panel, Stack, Text } from '../components/ui';
 | `SkeletonBar` | `label` | `ProgressBar skeleton` (legacy alias) |
 | `EmptyState` | `icon`, `title`, `text`, `action` | `div.empty-state` |
 | `LoadingScreen` | — | Auth-style loading splash |
-| `Modal` | `onClose`, `closeLabel`, `children` | `div.concept-modal` dialog |
+| `Modal` | `onClose`, `closeLabel`, `children`, + `ref` (forwardRef to the dialog node, for ref-based outside-click checks) | `div.concept-modal` dialog; Escape closes while open |
 | `NavButton` | `icon`, `active`, `onClick` | Sidebar nav button |
 | `Brand` | `large`, `onClick`, `label` | `fr` brand mark |
 | `RecordCount` | `count`, `label` | Big-number stat |
