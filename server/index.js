@@ -6,9 +6,10 @@ import { sm2Update, masteryDelta } from './sm2.js';
 import { evaluate, gradeExamQuestion, gradeExerciseItem, normalizeText } from './evaluate.js';
 import { SpeechError, speechConfig, audioMime, readAudio, audioDuration, transcribeSpeech, validateSpeakingCompletion } from './speech.js';
 import { getSpeakingLesson } from '../shared/speaking-lessons.js';
+import { getPort, getHost, corsOrigin } from './config.js';
 
-const PORT = Number(process.env.PORT || 8787); const hashToken = (v) => createHash('sha256').update(v).digest('hex');
-const json = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-origin': 'http://127.0.0.1:5173', 'access-control-allow-headers': 'content-type, authorization', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-expose-headers': 'retry-after', ...headers }); res.end(JSON.stringify(body)); };
+const PORT = getPort(); const HOST = getHost(); const hashToken = (v) => createHash('sha256').update(v).digest('hex');
+const json = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-headers': 'content-type, authorization', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-expose-headers': 'retry-after', ...headers }); res.end(JSON.stringify(body)); };
 const body = (req) => new Promise((resolve, reject) => { let b = ''; req.on('data', c => b += c); req.on('end', () => { try { resolve(b ? JSON.parse(b) : {}) } catch (e) { reject(e) } }); });
 const password = (p, s = randomBytes(16).toString('hex')) => ({ salt: s, hash: pbkdf2Sync(p, s, 120000, 64, 'sha512').toString('hex') });
 async function user(req) { const h = req.headers.authorization || ''; if (!h.startsWith('Bearer ')) return null; const r = await query('SELECT u.id,u.email,u.name,s.expires_at FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=?', [hashToken(h.slice(7))]); return r[0] && new Date(r[0].expires_at) > new Date() ? r[0] : null; }
@@ -242,6 +243,7 @@ async function ingestBatch(batch) {
 async function main() {
     await migrate(); createServer(async (req, res) => {
         try {
+            res.setHeader('access-control-allow-origin', corsOrigin(req.headers.origin));
             if (req.method === 'OPTIONS') return json(res, 204, {}); const u = new URL(req.url, `http://${req.headers.host}`);
             if (req.method === 'GET' && u.pathname === '/api/health') return json(res, 200, { ok: true, database: 'supabase-postgres' });
             if (req.method === 'GET' && u.pathname === '/api/speech/status') { const viewer = await user(req); if (!viewer) return json(res, 401, { error: 'Authentication required.' }); const config = speechConfig(); return json(res, 200, { available: config.enabled, max_seconds: config.maxSeconds }); }
@@ -401,6 +403,6 @@ async function main() {
             if (req.method === 'GET' && (u.pathname === '/api/me/session-plan' || /^\/api\/me\/session-plan\/(A1|A2|B1|B2|C1|C2)$/i.test(u.pathname))) { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const pathSection = u.pathname.match(/session-plan\/(A1|A2|B1|B2|C1|C2)$/i)?.[1]; const profile = (await query('SELECT current_level FROM learner_profiles WHERE user_id=?', [x.id]))[0]; const level = (pathSection || u.searchParams.get('section') || profile?.current_level || 'A1').toUpperCase(); return json(res, 200, await buildSessionPlan(x.id, level)); }
             return json(res, 404, { error: 'Not found.' });
         } catch (e) { console.error(e); return json(res, 500, { error: e.message }); }
-    }).listen(PORT, '127.0.0.1', () => console.log(`Franco API listening on http://127.0.0.1:${PORT}`));
+    }).listen(PORT, HOST, () => console.log(`Franco API listening on http://${HOST}:${PORT}`));
 }
 main().catch(e => { console.error(e); process.exit(1) });
