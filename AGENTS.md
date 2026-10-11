@@ -135,6 +135,22 @@ Operating rules:
   min-heights). Layout metrics live in the shared base rules so both themes
   lay out identically (FRA-23). The standard page width is the broad layout
   (`.main-content` capped at 1440px).
+- **TypeScript migration (incremental).** New frontend files are `.ts`/`.tsx`;
+  convert an existing file when you touch it (convert-on-touch).
+  `tsconfig.json` runs with `allowJs` until the closeout ticket flips
+  `strict` on. `npm run typecheck` (`tsc --noEmit`) must pass — it is a CI
+  gate, same as `lint:ui`.
+- **Types live in `src/types.ts`.** Shared/domain types go there — import
+  them, never redefine the same shape twice. Types used by only one module
+  live in that module. During parallel migration waves, treat `src/types.ts`
+  as read-only (define ticket-local types in your module and note them for
+  the closeout ticket to consolidate) — parallel branches editing one file
+  will conflict.
+- **No escape hatches.** No `as` assertions (ever, unless explicitly
+  justified with a comment at the usage site), no explicit `any`. Prefer
+  precise types over `unknown`; `unknown` is acceptable only where the value
+  is genuinely unknowable at the boundary (e.g. caught errors) and must be
+  narrowed immediately, never passed through. Everything has a type.
 
 ## Architecture
 
@@ -196,11 +212,12 @@ Node is pinned (`22.12.0`, `.nvmrc` — use `nvm use`). Install with
 | Run app + API together | `npm run dev` |
 | Web only / API only | `npm run web` / `npm run api` |
 | UI boundary lint (mandatory) | `npm run lint:ui` |
+| Type check (mandatory) | `npm run typecheck` |
 | Full test suite | `npm test` |
 | Production build | `npm run build` |
 
-Every change must pass `lint:ui`, `npm test`, and `npm run build` before it
-is proposed. Content pipeline scripts (`import:*`, `publish:founding`,
+Every change must pass `lint:ui`, `npm run typecheck`, `npm test`, and
+`npm run build` before it is proposed. Content pipeline scripts (`import:*`, `publish:founding`,
 `sync:founding`, `seed:concepts`) are data operations — run them only when
 the ticket is about content, and say which ones you ran.
 
