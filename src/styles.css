@@ -1387,6 +1387,31 @@ html:not([data-theme="light"]) .auth-page .auth-brand-subtitle { color:#888; }
   color: #687178;
 }
 
+/* Sidebar rail (desktop): the sidebar collapses to a 64px icon rail and
+   expands to 250px on hover. Like the nav, brand and theme toggle, the
+   chip keeps the full 228px expanded width so its layout never reflows;
+   collapsed, only the flame shows — the card box and text stay hidden
+   until the sidebar expands, instead of being squeezed into the rail. */
+@media (min-width: 1041px) {
+  .streak-chip {
+    width: 228px;
+    flex: none;
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+  .sidebar:not(:hover) .streak-chip {
+    background: transparent;
+    border-color: transparent;
+  }
+  .streak-chip-text {
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+  .sidebar:hover .streak-chip-text,
+  .sidebar:focus-within .streak-chip-text {
+    opacity: 1;
+  }
+}
+
 .streak-hero {
   display: flex;
   align-items: center;

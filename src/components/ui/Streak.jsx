@@ -18,12 +18,15 @@ function bestLabel(longestStreak) {
   return `Best: ${best} day${best === 1 ? '' : 's'}`;
 }
 
-// Compact flame chip for the sidebar, under the nav.
+// Compact flame chip for the sidebar, under the nav. In the collapsed
+// icon rail only the flame is visible (see .streak-chip in styles.css),
+// so the full label also goes on the title for hover discovery.
 export function StreakChip({ streak }) {
   if (!streak) return null;
   const current = Number(streak.currentStreak) || 0;
+  const title = current > 0 ? `${streakLabel(current)} · ${bestLabel(streak.longestStreak)}` : 'No streak yet · Study today to start';
   return (
-    <div className="streak-chip">
+    <div className="streak-chip" title={title}>
       <Flame size={20} color={FLAME_COLOR} fill={FLAME_FILL} aria-hidden="true" />
       <span className="streak-chip-text">
         <strong>{current > 0 ? streakLabel(current) : 'No streak yet'}</strong>
