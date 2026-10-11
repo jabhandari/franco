@@ -8,6 +8,10 @@ export function query(sql, params = []) { let i = 0; return pool.query(sql.repla
 export async function migrate() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY,email TEXT NOT NULL UNIQUE,name TEXT NOT NULL,password_hash TEXT NOT NULL,password_salt TEXT NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
+    -- FRA-56: first/last name columns. Backfilled from the name column below;
+    -- name stays the derived display name ("First Last").
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name TEXT;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name TEXT;
     CREATE TABLE IF NOT EXISTS sessions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,token_hash TEXT NOT NULL UNIQUE,expires_at TIMESTAMPTZ NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE TABLE IF NOT EXISTS learner_profiles (user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,current_level TEXT,learning_goal TEXT,placement_status TEXT NOT NULL DEFAULT 'not_started',created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE TABLE IF NOT EXISTS user_skill_estimates (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,cefr_level TEXT NOT NULL,skill TEXT NOT NULL,strength REAL,updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),UNIQUE(user_id,cefr_level,skill));
@@ -63,6 +67,15 @@ export async function migrate() {
     CREATE INDEX IF NOT EXISTS speech_transcriptions_user_time_idx ON speech_transcriptions(user_id,created_at DESC);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_time_idx ON speech_transcriptions(created_at DESC);
   `);
+  // FRA-56: backfill first_name/last_name for rows created before the columns
+  // existed. First token -> first_name, remainder -> last_name; single-token
+  // legacy names (e.g. the old email-prefix default) become first_name only.
+  // Existing users are otherwise untouched.
+  const { splitLegacyName } = await import('./user-names.js');
+  for (const row of await query('SELECT id, name FROM users WHERE first_name IS NULL')) {
+    const [first, last] = splitLegacyName(row.name);
+    await query('UPDATE users SET first_name=?,last_name=? WHERE id=?', [first, last, row.id]);
+  }
   for (const [code, ordinal] of [['A1',1],['A2',2],['B1',3],['B2',4],['C1',5],['C2',6]]) await query('INSERT INTO cefr_levels(code,ordinal) VALUES(?,?) ON CONFLICT(code) DO NOTHING', [code, ordinal]);
   await query("INSERT INTO schema_migrations(version) VALUES('content-v1') ON CONFLICT(version) DO NOTHING");
   if (process.env.CONTENT_API_KEY) {

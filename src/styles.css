@@ -1200,6 +1200,8 @@ html[data-theme="light"] .speaking-lesson .speaking-feedback-note { color:#576b6
 .auth-page .auth-card h2 { margin:0 0 10px; color:#10213a; font-size:31px; letter-spacing:-.055em; }
 .auth-card-subtitle { max-width:330px; margin:0 0 25px; color:#6e7b90; font-size:16px; line-height:1.4; }
 .auth-page .auth-card form { gap:18px; }
+.auth-name-row { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+@media (max-width:480px) { .auth-name-row { grid-template-columns:1fr; } }
 .auth-page .auth-card label { gap:8px; color:#182841; font-size:14px; }
 .auth-page .input-wrap { min-height:50px; border-color:#d9dce0; border-radius:9px; color:#8390a1; }
 .auth-page .input-wrap:focus-within { border-color:#46b9c1; box-shadow:0 0 0 3px rgba(70,185,193,.12); }
