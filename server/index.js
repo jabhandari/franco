@@ -299,14 +299,21 @@ async function main() {
             const batchMatch = u.pathname.match(/^\/api\/content\/v1\/batches\/([^/]+)$/);
             if (req.method === 'GET' && batchMatch) { const batch = (await query('SELECT * FROM content_batches WHERE id=?', [batchMatch[1]]))[0]; return batch ? json(res, 200, { ...batch, items: await query('SELECT i.id,i.external_id,i.item_type,i.status,i.cefr_level FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=1 WHERE r.batch_id=? ORDER BY i.created_at', [batch.id]) }) : json(res, 404, { error: 'Batch not found.' }); }
             if (req.method === 'GET' && u.pathname === '/api/content/v1/items') {
-                const params = []; const where = ["i.status='published'"];
+                const LIST_STATUSES = ['published', 'pending_review', 'approved', 'rejected'];
+                const status = u.searchParams.get('status') || 'published';
+                if (!LIST_STATUSES.includes(status)) return json(res, 400, { error: 'Unknown status filter.' });
+                // Non-published listings are the review queue: they expose
+                // unreviewed content, so they require a content:review key.
+                if (status !== 'published' && !(await apiKey(req, 'content:review'))) return json(res, 401, { error: 'A scoped content API key is required.' });
+                const params = []; const where = [];
+                params.push(status); where.push(`i.status=$${params.length}`);
                 if (u.searchParams.get('level')) { params.push(u.searchParams.get('level').toUpperCase()); where.push(`i.cefr_level=$${params.length}`); }
                 if (u.searchParams.get('type')) { params.push(u.searchParams.get('type')); where.push(`i.item_type=$${params.length}`); }
                 const limit = Math.min(100, Math.max(1, Number(u.searchParams.get('limit') || 25)));
-                const rows = await query(`SELECT i.id,i.external_id,i.item_type,i.cefr_level,i.difficulty_score,i.status,i.created_at,r.title,r.prompt,r.instructions,r.context,r.response_json,r.evaluation_json,r.metadata_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE ${where.join(' AND ')} ORDER BY i.updated_at DESC LIMIT ${limit}`, params);
+                const rows = await query(`SELECT i.id,i.external_id,i.item_type,i.cefr_level,i.difficulty_score,i.status,i.created_at,i.source_id,s.name AS source_name,r.batch_id,r.title,r.prompt,r.instructions,r.context,r.response_json,r.evaluation_json,r.metadata_json,(SELECT COUNT(*)::int FROM content_reports cr WHERE cr.item_id=i.id) AS report_count FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision LEFT JOIN content_sources s ON s.id=i.source_id WHERE ${where.join(' AND ')} ORDER BY i.updated_at DESC LIMIT ${limit}`, params);
                 const mediaByItem = {};
                 if (rows.length) { const media = await query('SELECT item_id,kind,url,duration_seconds,transcript FROM media_assets WHERE item_id=ANY(?)', [rows.map((r) => r.id)]); for (const m of media) { (mediaByItem[m.item_id] = mediaByItem[m.item_id] || []).push({ kind: m.kind, url: m.url, duration_seconds: m.duration_seconds, transcript: m.transcript }); } }
-                return json(res, 200, { items: rows.map((r) => shapeContentItem(r, null, mediaByItem)) });
+                return json(res, 200, { items: rows.map((r) => ({ ...shapeContentItem(r, null, mediaByItem), status: r.status, external_id: r.external_id, source: r.source_name || null, batch_id: r.batch_id || null, report_count: r.report_count || 0 })) });
             }
             if (req.method === 'GET' && u.pathname === '/api/content/v1/concepts') {
                 const concepts = await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status,metadata_json FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST, list_order NULLS LAST, title");
