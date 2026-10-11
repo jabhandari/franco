@@ -124,6 +124,11 @@ jobs:
           if [ -f AGENTS.md ]; then
             SYS_MSG="$SYS_MSG $(printf '\n\nRepository AGENTS.md (always-on agent conventions) follows. Enforce its code-related rules when reviewing (UI boundary, presenters, skills, repo hygiene). Ignore sections about session management, orchestration, and output discipline.\n\n')$(cat AGENTS.md)"
           fi
+          # Groq's free tier caps requests at 8000 TPM; the full prompt
+          # (AGENTS.md + 60k-char diff) is ~9600 tokens, so Groq gets a slim
+          # version: curated prompt only, shorter diff.
+          GROQ_SYS_MSG="$(cat .github/ai-pr-review-prompt.md)"
+          GROQ_USER_MSG="$(python3 -c 'import sys; sys.stdout.write(open("/tmp/user-msg.txt").read(20000))')"
           # Gemini request body (same for every model/key).
           jq -n --arg sys "$SYS_MSG" \
                 --arg msg "$(cat /tmp/user-msg.txt)" \
@@ -140,7 +145,10 @@ jobs:
               echo "gemini $model ($label key): HTTP $HTTP (attempt $attempt)"
               if [ "$HTTP" = "200" ]; then return 0; fi
               jq -r '.error.message // "no error detail"' /tmp/resp.json
-              if [ "$attempt" = "1" ]; then sleep 60; fi
+              case "$HTTP" in
+                429|500|502|503|504) [ "$attempt" = "1" ] && sleep 60 ;;
+                *) echo "non-retryable HTTP $HTTP, moving to next provider"; return 1 ;;
+              esac
             done
             return 1
           }
@@ -148,7 +156,7 @@ jobs:
           # Returns 0 on HTTP 200.
           try_groq() {
             local key="$1" attempt HTTP
-            jq -n --arg sys "$SYS_MSG" --arg msg "$(cat /tmp/user-msg.txt)" --arg model "$GROQ_MODEL" \
+            jq -n --arg sys "$GROQ_SYS_MSG" --arg msg "$GROQ_USER_MSG" --arg model "$GROQ_MODEL" \
               '{model:$model, messages:[{role:"system",content:$sys},{role:"user",content:$msg}], temperature:0.2, max_tokens:4096}' > /tmp/groq-req.json
             for attempt in 1 2; do
               HTTP=$(curl -s -o /tmp/groq-resp.json -w '%{http_code}' -X POST "https://api.groq.com/openai/v1/chat/completions" \
@@ -159,7 +167,10 @@ jobs:
                 return 0
               fi
               jq -r '.error.message // "no error detail"' /tmp/groq-resp.json
-              if [ "$attempt" = "1" ]; then sleep 60; fi
+              case "$HTTP" in
+                429|500|502|503|504) [ "$attempt" = "1" ] && sleep 60 ;;
+                *) echo "non-retryable HTTP $HTTP, moving to next provider"; return 1 ;;
+              esac
             done
             return 1
           }
