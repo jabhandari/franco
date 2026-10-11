@@ -4,6 +4,7 @@
 export { safeText, formatEnum, getErrorMessage } from '../presenters/format.presenter.js';
 export { shuffle, normalizeChoices } from '../presenters/collections.presenter.js';
 export { sanitizeEntry } from '../presenters/entry.presenter.js';
+import { browserTimeZone } from '../presenters/streak.presenter.js';
 
 function fallbackForStatus(status) {
   if (status === 401) return 'Your session expired. Please sign in again.';
@@ -90,6 +91,9 @@ export function reportAttempt(entry, response, token, extra = {}) {
     duration_ms: extra.durationMs ?? null,
     hint_used: Boolean(extra.hintUsed),
     session_id: extra.sessionId ?? null,
+    // FRA-44: the learner's IANA timezone, so the server can roll the
+    // attempt into the correct learner-local activity day.
+    timezone: browserTimeZone(),
   };
   if (entry.item_kind === 'content_item') payload.item_id = entry.id;
   else payload.legacy_ref = entry.id;

@@ -24,7 +24,8 @@ import {
 import './styles.css';
 import { apiGet, apiPost } from './api/client.js';
 import { ThemeProvider, useTheme } from 'next-themes';
-import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput } from './components/ui';
+import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput, StreakChip } from './components/ui';
+import { streakPath } from './presenters/streak.presenter.js';
 import { Home } from './views/Home.jsx';
 import { Learn } from './views/Learn.jsx';
 import { Session } from './views/Session.jsx';
@@ -61,6 +62,7 @@ function App() {
   const [session, setSession] = React.useState(null);
   const [authToken, setAuthToken] = React.useState(() => sessionStorage.getItem(TOKEN_KEY));
   const [userData, setUserData] = React.useState(null);
+  const [streak, setStreak] = React.useState(null);
   const [view, setView] = React.useState(() => viewFromPath(window.location.pathname));
   const [sessionLevel, setSessionLevel] = React.useState(null);
   const [loading, setLoading] = React.useState(Boolean(authToken));
@@ -98,6 +100,7 @@ function App() {
         setSession(null);
         setUserData(null);
       });
+    apiGet(streakPath(), authToken).then(setStreak).catch(() => {});
   }
 
   React.useEffect(() => {
@@ -122,6 +125,25 @@ function App() {
         if (!cancelled) setLoading(false);
       });
 
+    return () => {
+      cancelled = true;
+    };
+  }, [authToken]);
+
+  // FRA-44: streak read model for the sidebar chip and the Home hero.
+  React.useEffect(() => {
+    if (!authToken) {
+      setStreak(null);
+      return;
+    }
+    let cancelled = false;
+    apiGet(streakPath(), authToken)
+      .then((payload) => {
+        if (!cancelled) setStreak(payload);
+      })
+      .catch(() => {
+        if (!cancelled) setStreak(null);
+      });
     return () => {
       cancelled = true;
     };
@@ -203,6 +225,8 @@ function App() {
           ))}
         </Box>
 
+        <StreakChip streak={streak} />
+
         <Box className="sidebar-panel">
           <Text>Signed in as</Text>
           <Text as="strong">{session.name}</Text>
@@ -221,7 +245,7 @@ function App() {
       </Box>
 
       <Box as="main" className={`main-content ${view === 'content' ? 'wide-content' : ''}`}>
-        {view === 'home' && <Home userData={userData} onStart={() => navigate('session')} onPlacement={() => navigate('placement')} />}
+        {view === 'home' && <Home userData={userData} streak={streak} onStart={() => navigate('session')} onPlacement={() => navigate('placement')} />}
         {view === 'learn' && <Learn token={authToken} onQuiz={(level) => { setSessionLevel(level); navigate('session'); }} />}
         {view === 'placement' && <Placement token={authToken} onPlaced={() => refreshUserData()} />}
         {view === 'session' && <Session key={sessionLevel || 'default'} token={authToken} initialLevel={sessionLevel} />}

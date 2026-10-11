@@ -66,6 +66,17 @@ export async function migrate() {
     CREATE TABLE IF NOT EXISTS speech_transcriptions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,item_id TEXT REFERENCES content_items(id) ON DELETE SET NULL,model TEXT NOT NULL,duration_seconds DOUBLE PRECISION NOT NULL CHECK (duration_seconds > 0),status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','succeeded','no_speech','provider_error')),provider_request_id TEXT,error_code TEXT,transcript_hash TEXT,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),completed_at TIMESTAMPTZ);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_user_time_idx ON speech_transcriptions(user_id,created_at DESC);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_time_idx ON speech_transcriptions(created_at DESC);
+    -- FRA-44: one row per learner per active (learner-local) day, rolled up
+    -- from learning_attempts by the attempts handler. Streaks and the
+    -- activity heatmap derive from this table at read time.
+    CREATE TABLE IF NOT EXISTS learner_activity_days (user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, activity_date DATE NOT NULL, attempts_count INTEGER NOT NULL DEFAULT 0, first_activity_at TIMESTAMPTZ NOT NULL, last_activity_at TIMESTAMPTZ NOT NULL, PRIMARY KEY(user_id, activity_date));
+    -- One-time backfill so existing learners do not start from zero. Dates
+    -- are derived in UTC (a one-time approximation); live rows use the
+    -- learner's timezone. Idempotent: DO NOTHING leaves live rows untouched.
+    INSERT INTO learner_activity_days(user_id, activity_date, attempts_count, first_activity_at, last_activity_at)
+    SELECT user_id, (created_at AT TIME ZONE 'UTC')::date, COUNT(*)::int, MIN(created_at), MAX(created_at)
+    FROM learning_attempts GROUP BY user_id, (created_at AT TIME ZONE 'UTC')::date
+    ON CONFLICT(user_id, activity_date) DO NOTHING;
   `);
   // FRA-56: backfill first_name/last_name for rows created before the columns
   // existed. First token -> first_name, remainder -> last_name; single-token

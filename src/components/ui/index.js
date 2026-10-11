@@ -21,6 +21,7 @@ export { Modal } from './Modal.jsx';
 export { LoadingScreen } from './Loading.jsx';
 export { NavButton, Brand } from './Nav.jsx';
 export { RecordCount, StatGroup, ProfileRows, DataContract, ProgressRecords } from './Data.jsx';
+export { StreakChip, StreakHero, StreakHeatmap, StreakPanel } from './Streak.jsx';
 export { Checklist } from './Checklist.jsx';
 export { Steps } from './Steps.jsx';
 export { Chip } from './Chip.jsx';

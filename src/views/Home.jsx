@@ -1,9 +1,9 @@
 import React from 'react';
 import { ChevronRight, Plus, TrendingUp, ClipboardCheck, Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { Banner, Box, Button, EmptyState, Panel, PanelHeader, ProfileRows, RecordCount, Text } from '../components/ui';
+import { Banner, Box, Button, EmptyState, Panel, PanelHeader, ProfileRows, RecordCount, StreakHero, Text } from '../components/ui';
 
-export function Home({ userData, onStart, onPlacement }) {
+export function Home({ userData, streak, onStart, onPlacement }) {
   const profile = userData?.profile;
   const progressCount = userData?.progress?.length || 0;
   const mistakeCount = userData?.mistakes?.length || 0;
@@ -23,6 +23,7 @@ export function Home({ userData, onStart, onPlacement }) {
         <Text variant="lede">
           Practice with French examples and exercises matched to your level.
         </Text>
+        <StreakHero streak={streak} />
         {!placementDone && (
           <Banner
             icon={ClipboardCheck}

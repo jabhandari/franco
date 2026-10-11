@@ -3,6 +3,7 @@ import { createServer } from 'node:http';
 import { query, pool, migrate, createProfileForUser } from './database.js';
 import { CONTENT_SCHEMA_VERSION, normalizeItem, schemaDocument, validateBatch } from './content-contract.js';
 import { sm2Update, masteryDelta } from './sm2.js';
+import { localDateString, normalizeTimeZone, shiftDate, summarizeActivity } from './streak.js';
 import { evaluate, gradeExamQuestion, gradeExerciseItem, normalizeText } from './evaluate.js';
 import { SpeechError, speechConfig, audioMime, readAudio, audioDuration, transcribeSpeech, validateSpeakingCompletion } from './speech.js';
 import { getSpeakingLesson } from '../shared/speaking-lessons.js';
@@ -347,6 +348,7 @@ async function main() {
                 return json(res, 200, { concepts: concepts.map((c) => ({ id: c.id, slug: c.slug, title: c.title, description: c.description, concept_type: c.concept_type, level_code: c.level_code, parent_id: c.parent_id, status: c.status, metadata: c.metadata_json || {}, prerequisites: prereqs.filter((p) => p.concept_id === c.id).map((p) => slugById.get(p.prerequisite_concept_id)).filter(Boolean) })) });
             }
             if (req.method === 'GET' && u.pathname === '/api/me/progress') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { items: await query('SELECT * FROM learner_item_state WHERE user_id=? ORDER BY due_at', [x.id]), concepts: await query('SELECT * FROM learner_concept_mastery WHERE user_id=? ORDER BY mastery', [x.id]), attempts: await query('SELECT * FROM learning_attempts WHERE user_id=? ORDER BY created_at DESC LIMIT 100', [x.id]) }); }
+            if (req.method === 'GET' && u.pathname === '/api/me/streak') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const timeZone = normalizeTimeZone(u.searchParams.get('tz')); const today = localDateString(new Date(), timeZone); const rows = await query('SELECT activity_date, attempts_count FROM learner_activity_days WHERE user_id=? ORDER BY activity_date', [x.id]); const summary = summarizeActivity(rows, today); const windowStart = shiftDate(today, -370); return json(res, 200, { currentStreak: summary.currentStreak, longestStreak: summary.longestStreak, studiedToday: summary.studiedToday, activeDays: summary.activeDays, totalAttempts: summary.totalAttempts, today, days: summary.days.filter((day) => day.date >= windowStart) }); }
             if (req.method === 'GET' && u.pathname === '/api/me/review-due') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { items: await query("SELECT i.*,r.prompt,r.response_json,r.evaluation_json,s.due_at FROM learner_item_state s JOIN content_items i ON i.id=s.item_id JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE s.user_id=? AND i.status='published' AND s.due_at<=NOW() ORDER BY s.due_at LIMIT 50", [x.id]) }); }
             if (req.method === 'POST' && u.pathname === '/api/me/attempts') {
               const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const b = await body(req); if (b.response === undefined) return json(res, 400, { error: 'response is required.' });
@@ -377,6 +379,11 @@ async function main() {
               else { correct = gradeExerciseItem(legacyRow, b.response); score = correct ? 1 : 0; }
               const attemptNumber = Number((await query('SELECT COUNT(*)::int AS count FROM learning_attempts WHERE user_id=? AND item_kind=? AND COALESCE(legacy_ref, item_id)=?', [x.id, itemKind, target?.id ?? legacyRow.id]))[0].count) + 1;
               const attempt = (await query('INSERT INTO learning_attempts(id,user_id,item_id,item_kind,legacy_ref,revision,response_json,evaluation_json,score,duration_ms,correct,attempt_number,session_id,hint_used) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING *', [randomUUID(), x.id, target?.id ?? null, itemKind, legacyRow?.id ?? null, target?.revision ?? 1, JSON.stringify(b.response), JSON.stringify({ correct, evaluator: target?.evaluation_json?.mode ?? itemKind }), score, b.duration_ms ?? null, correct, attemptNumber, b.session_id ?? null, Boolean(b.hint_used)]))[0];
+              // FRA-44: roll the attempt into the learner's activity day.
+              // The client sends its IANA timezone; the day boundary is the
+              // learner-local calendar date of the attempt.
+              const activityDate = localDateString(attempt.created_at, b.timezone);
+              await query('INSERT INTO learner_activity_days(user_id,activity_date,attempts_count,first_activity_at,last_activity_at) VALUES(?,?,1,?,?) ON CONFLICT(user_id,activity_date) DO UPDATE SET attempts_count=learner_activity_days.attempts_count+1,first_activity_at=LEAST(learner_activity_days.first_activity_at,EXCLUDED.first_activity_at),last_activity_at=GREATEST(learner_activity_days.last_activity_at,EXCLUDED.last_activity_at)', [x.id, activityDate, attempt.created_at, attempt.created_at]);
               let nextDueAt = null;
               if (target) {
                 const old = (await query('SELECT * FROM learner_item_state WHERE user_id=? AND item_id=?', [x.id, target.id]))[0];
