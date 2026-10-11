@@ -8,7 +8,11 @@ import {
   feedbackTitle,
   elapsedMs,
 } from '../../presenters/attempt.presenter.js';
-import {
+import * as UIRaw from '../ui';
+
+// delete once FRA-63 lands: unconverted JS UI components don't resolve as
+// plain `any` for JSX props under allowJs, so alias them loose here.
+const {
   ExerciseShell,
   ExerciseEyebrow,
   AnswerForm,
@@ -16,21 +20,44 @@ import {
   ErrorMessage,
   AudioPlayer,
   Text,
-} from '../ui';
+}: Record<string, React.ComponentType<any>> = UIRaw;
+
+// Minimal local content-item shapes (FRA-64). The canonical API types are
+// owned by FRA-61 — see "Notes for FRA-68" in the PR description.
+export interface SpellingItem {
+  level?: string;
+  type?: string;
+  prompt?: string;
+  [key: string]: unknown;
+}
+
+export interface AttemptResult {
+  correct?: boolean;
+  reveal?: unknown;
+  error?: string;
+  [key: string]: unknown;
+}
+
+interface SpellingProps {
+  entry: SpellingItem;
+  token?: string | null;
+  audioUrl?: string;
+  onResult?: (result: AttemptResult) => void;
+}
 
 // Typed-answer renderer for spelling / cloze / free-text items, and dictation
 // when an audioUrl is provided.
-export function Spelling({ entry, token, audioUrl, onResult }) {
-  const [value, setValue] = React.useState('');
-  const [result, setResult] = React.useState(null);
-  const startRef = React.useRef(Date.now());
+export function Spelling({ entry, token, audioUrl, onResult }: SpellingProps) {
+  const [value, setValue] = React.useState<string>('');
+  const [result, setResult] = React.useState<AttemptResult | null>(null);
+  const startRef = React.useRef<number>(Date.now());
   const isDictation = Boolean(audioUrl);
 
-  async function submit(event) {
+  async function submit(event?: React.SyntheticEvent) {
     event?.preventDefault();
     if (result || !value.trim()) return;
     try {
-      const res = await reportAttempt(entry, value, token, { durationMs: elapsedMs(startRef.current) });
+      const res: AttemptResult = await reportAttempt(entry, value, token, { durationMs: elapsedMs(startRef.current) });
       setResult(res);
       onResult?.(res);
     } catch (error) {
@@ -55,7 +82,7 @@ export function Spelling({ entry, token, audioUrl, onResult }) {
       <AnswerForm
         rows={isDictation ? 4 : 2}
         value={value}
-        onChange={(event) => setValue(event.target.value)}
+        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => setValue(event.target.value)}
         placeholder={isDictation ? 'Type exactly what you hear…' : 'Type your answer…'}
         disabled={Boolean(result)}
         submitDisabled={!value.trim()}

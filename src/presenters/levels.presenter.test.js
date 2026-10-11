@@ -12,7 +12,7 @@ assert(
   'CEFR_LEVELS: A1..C2 in order'
 );
 {
-  const conceptsSrc = readFileSync(new URL('../components/concepts.jsx', import.meta.url), 'utf8');
+  const conceptsSrc = readFileSync(new URL('../components/concepts.tsx', import.meta.url), 'utf8');
   assert(
     /from '\.\.\/presenters\/levels\.presenter\.js'/.test(conceptsSrc) && /export const LEVELS = CEFR_LEVELS;/.test(conceptsSrc),
     'concepts LEVELS export still aliases CEFR_LEVELS'
@@ -33,7 +33,7 @@ assert(clbForCefr('Z9') === null, "clbForCefr('Z9') falls back to null");
 assert(formatLevelWithClb('B2') === 'B2 (CLB 7)', "formatLevelWithClb('B2') is 'B2 (CLB 7)'");
 assert(formatLevelWithClb('Z9') === 'Z9', "formatLevelWithClb('Z9') falls back to bare level");
 {
-  const conceptsSrc = readFileSync(new URL('../components/concepts.jsx', import.meta.url), 'utf8');
+  const conceptsSrc = readFileSync(new URL('../components/concepts.tsx', import.meta.url), 'utf8');
   assert(
     /formatLevelWithClb\(section\)/.test(conceptsSrc),
     'LevelGuide eyebrow renders the CEFR · CLB label'

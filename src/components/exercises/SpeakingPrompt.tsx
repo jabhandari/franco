@@ -2,7 +2,55 @@ import React from 'react';
 import { getErrorMessage, getSpeechStatus, reportAttempt, uploadSpeech } from '../../api/client.js';
 import { getSpeakingLesson } from '../../../shared/speaking-lessons.js';
 import { speechFeedback } from '../../../shared/speech-feedback.js';
-import { AudioPlayer, Box, Button, Feedback, Text } from '../ui';
+import * as UIRaw from '../ui';
+
+// delete once FRA-63 lands: unconverted JS UI components don't resolve as
+// plain `any` for JSX props under allowJs, so alias them loose here.
+const {
+  AudioPlayer,
+  Box,
+  Button,
+  Feedback,
+  Text,
+}: Record<string, React.ComponentType<any>> = UIRaw;
+
+// Minimal local content-item shapes (FRA-64). The canonical API types are
+// owned by FRA-61 — see "Notes for FRA-68" in the PR description.
+export interface SpeakingPromptItem {
+  id?: string | number | null;
+  external_id?: string | null;
+  level?: string;
+  title?: string;
+  prompt?: string;
+  instructions?: string;
+  expectedPoints?: string[];
+  followUpQuestions?: string[];
+  [key: string]: unknown;
+}
+
+export interface SpeechWordToken {
+  text: string;
+  status: string;
+}
+
+export interface TranscriptionResult {
+  transcript?: string;
+  transcription_id?: string | number | null;
+  feedback?: unknown;
+  quota?: {
+    user_requests_remaining_today?: number;
+    user_audio_seconds_remaining_today?: number;
+  } | null;
+  [key: string]: unknown;
+}
+
+interface SpeakingPromptProps {
+  entry: SpeakingPromptItem;
+  token?: string | null;
+  onResult?: (result: unknown) => void;
+}
+
+type RecorderPhase = 'idle' | 'requesting' | 'recording' | 'ready' | 'uploading';
 
 const MAX_BYTES = 8388608;
 const FORMATS = [
@@ -13,7 +61,7 @@ const FORMATS = [
   'audio/ogg',
 ];
 
-function WordTokens({ title, tokens }) {
+function WordTokens({ title, tokens }: { title: string; tokens: SpeechWordToken[] }) {
   return (
     <Box className="speech-token-row">
       <Text as="strong">{title}</Text>
@@ -28,35 +76,35 @@ function WordTokens({ title, tokens }) {
   );
 }
 
-export function SpeakingPrompt({ entry, token, onResult }) {
+export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) {
   const lesson = getSpeakingLesson(entry.external_id, entry.id);
-  const [mode, setMode] = React.useState(lesson ? 'guided' : 'free');
-  const [phraseIndex, setPhraseIndex] = React.useState(0);
+  const [mode, setMode] = React.useState<string>(lesson ? 'guided' : 'free');
+  const [phraseIndex, setPhraseIndex] = React.useState<number>(0);
   const phrase = lesson?.phrases[phraseIndex];
-  const [result, setResult] = React.useState(null);
-  const [completionError, setCompletionError] = React.useState('');
-  const [recordingError, setRecordingError] = React.useState('');
-  const [phase, setPhase] = React.useState('idle');
-  const [elapsed, setElapsed] = React.useState(0);
-  const [blob, setBlob] = React.useState(null);
-  const [previewUrl, setPreviewUrl] = React.useState('');
-  const [transcription, setTranscription] = React.useState(null);
+  const [result, setResult] = React.useState<unknown>(null);
+  const [completionError, setCompletionError] = React.useState<string>('');
+  const [recordingError, setRecordingError] = React.useState<string>('');
+  const [phase, setPhase] = React.useState<RecorderPhase>('idle');
+  const [elapsed, setElapsed] = React.useState<number>(0);
+  const [blob, setBlob] = React.useState<Blob | null>(null);
+  const [previewUrl, setPreviewUrl] = React.useState<string>('');
+  const [transcription, setTranscription] = React.useState<TranscriptionResult | null>(null);
   const shownFeedback = mode === 'guided' && phrase && transcription
     ? speechFeedback(phrase.french, transcription.transcript) : transcription?.feedback;
-  const [quota, setQuota] = React.useState(null);
-  const [serverAvailable, setServerAvailable] = React.useState(null);
-  const [maxSeconds, setMaxSeconds] = React.useState(60);
-  const startedAt = React.useRef(Date.now());
-  const mounted = React.useRef(true);
-  const completed = React.useRef(false);
-  const stream = React.useRef(null);
-  const recorder = React.useRef(null);
-  const chunks = React.useRef([]);
-  const interval = React.useRef(null);
-  const cutoff = React.useRef(null);
-  const preview = React.useRef(null);
-  const points = entry.expectedPoints || [];
-  const followUps = entry.followUpQuestions || [];
+  const [quota, setQuota] = React.useState<TranscriptionResult['quota']>(null);
+  const [serverAvailable, setServerAvailable] = React.useState<boolean | null>(null);
+  const [maxSeconds, setMaxSeconds] = React.useState<number>(60);
+  const startedAt = React.useRef<number>(Date.now());
+  const mounted = React.useRef<boolean>(true);
+  const completed = React.useRef<boolean>(false);
+  const stream = React.useRef<MediaStream | null>(null);
+  const recorder = React.useRef<MediaRecorder | null>(null);
+  const chunks = React.useRef<Blob[]>([]);
+  const interval = React.useRef<number | null>(null);
+  const cutoff = React.useRef<number | null>(null);
+  const preview = React.useRef<string | null>(null);
+  const points: string[] = entry.expectedPoints || [];
+  const followUps: string[] = entry.followUpQuestions || [];
   const browserSupported = typeof window !== 'undefined' && window.isSecureContext &&
     Boolean(navigator.mediaDevices?.getUserMedia) && typeof MediaRecorder !== 'undefined';
 
@@ -166,7 +214,7 @@ export function SpeakingPrompt({ entry, token, onResult }) {
     setRecordingError('');
     setPhase('uploading');
     try {
-      const response = await uploadSpeech(entry.id, blob, token, mode === 'guided' ? phrase?.id : null);
+      const response: TranscriptionResult = await uploadSpeech(entry.id, blob, token, mode === 'guided' ? phrase?.id : null);
       if (!mounted.current || completed.current) return;
       setTranscription(response);
       setQuota(response.quota);
@@ -183,7 +231,7 @@ export function SpeakingPrompt({ entry, token, onResult }) {
     if (result) return;
     setCompletionError('');
     try {
-      const response = { completed: true };
+      const response: Record<string, unknown> = { completed: true };
       if (transcription) {
         response.transcript = transcription.transcript;
         response.transcription_id = transcription.transcription_id;
@@ -204,7 +252,7 @@ export function SpeakingPrompt({ entry, token, onResult }) {
   }
 
   const choosingDisabled = phase === 'recording' || phase === 'requesting' || phase === 'uploading';
-  function choosePractice(nextMode, nextIndex = phraseIndex) {
+  function choosePractice(nextMode: string, nextIndex: number = phraseIndex) {
     if (choosingDisabled) return;
     releasePreview();
     setTranscription(null);

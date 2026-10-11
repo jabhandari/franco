@@ -9,7 +9,11 @@ import {
   feedbackTitle,
   elapsedMs,
 } from '../../presenters/attempt.presenter.js';
-import {
+import * as UIRaw from '../ui';
+
+// delete once FRA-63 lands: unconverted JS UI components don't resolve as
+// plain `any` for JSX props under allowJs, so alias them loose here.
+const {
   ExerciseShell,
   ExerciseEyebrow,
   Feedback,
@@ -18,16 +22,38 @@ import {
   Text,
   WordToken,
   TokenTray,
-} from '../ui';
+}: Record<string, React.ComponentType<any>> = UIRaw;
+
+// Minimal local content-item shapes (FRA-64). The canonical API types are
+// owned by FRA-61 — see "Notes for FRA-68" in the PR description.
+export interface WordOrderItem {
+  level?: string;
+  prompt?: string;
+  tokens?: string[];
+  [key: string]: unknown;
+}
+
+export interface AttemptResult {
+  correct?: boolean;
+  reveal?: unknown;
+  error?: string;
+  [key: string]: unknown;
+}
+
+interface WordOrderProps {
+  entry: WordOrderItem;
+  token?: string | null;
+  onResult?: (result: AttemptResult) => void;
+}
 
 // Tap-to-order sentence builder for word_order items.
-export function WordOrder({ entry, token, onResult }) {
-  const [bank, setBank] = React.useState(() => shuffle(entry.tokens || []));
-  const [answer, setAnswer] = React.useState([]);
-  const [result, setResult] = React.useState(null);
-  const startRef = React.useRef(Date.now());
+export function WordOrder({ entry, token, onResult }: WordOrderProps) {
+  const [bank, setBank] = React.useState<string[]>(() => shuffle(entry.tokens || []));
+  const [answer, setAnswer] = React.useState<string[]>([]);
+  const [result, setResult] = React.useState<AttemptResult | null>(null);
+  const startRef = React.useRef<number>(Date.now());
 
-  function take(index) {
+  function take(index: number) {
     if (result) return;
     setBank((prev) => {
       const next = [...prev];
@@ -37,7 +63,7 @@ export function WordOrder({ entry, token, onResult }) {
     });
   }
 
-  function giveBack(index) {
+  function giveBack(index: number) {
     if (result) return;
     setAnswer((prev) => {
       const next = [...prev];
@@ -50,7 +76,7 @@ export function WordOrder({ entry, token, onResult }) {
   async function submit() {
     if (result || !answer.length) return;
     try {
-      const res = await reportAttempt(entry, answer, token, { durationMs: elapsedMs(startRef.current) });
+      const res: AttemptResult = await reportAttempt(entry, answer, token, { durationMs: elapsedMs(startRef.current) });
       setResult(res);
       onResult?.(res);
     } catch (error) {

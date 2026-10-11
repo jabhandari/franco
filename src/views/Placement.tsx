@@ -3,7 +3,7 @@ import { ClipboardCheck } from 'lucide-react';
 import { apiPost } from '../api/client.js';
 import { getErrorMessage } from '../presenters/format.presenter.js';
 import { shuffle } from '../presenters/collections.presenter.js';
-import { levelGuides } from '../components/concepts.jsx';
+import { levelGuides } from '../components/concepts';
 import { formatLevelWithClb } from '../presenters/levels.presenter.js';
 import { Box as BoxJsx, ErrorMessage as ErrorMessageJsx, ExerciseShell as ExerciseShellJsx, Page as PageJsx, PageHeader as PageHeaderJsx, Text as TextJsx } from '../components/ui';
 

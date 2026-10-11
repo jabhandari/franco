@@ -4,7 +4,72 @@ import { useApiResource } from '../hooks/useApi.js';
 import { safeText, padNumber } from '../presenters/format.presenter.js';
 import { CEFR_LEVELS, formatLevelWithClb } from '../presenters/levels.presenter.js';
 import { describeWord } from '../presenters/words.presenter.js';
-import { Badge, Box, EmptyState, ErrorMessage, Modal, Panel, Tabs, Text, TextInput } from './ui';
+import * as UIRaw from './ui';
+
+// delete once FRA-63 lands: unconverted JS UI components don't resolve as
+// plain `any` for JSX props under allowJs, so alias them loose here.
+const {
+  Badge,
+  Box,
+  EmptyState,
+  ErrorMessage,
+  Modal,
+  Panel,
+  Tabs,
+  Text,
+  TextInput,
+}: Record<string, React.ComponentType<any>> = UIRaw;
+
+// Minimal local API shapes (FRA-64). The canonical API types are owned by
+// FRA-61 — see "Notes for FRA-68" in the PR description.
+export interface ConceptMetadata {
+  theory?: unknown[];
+  vocabulary?: unknown[];
+  examples?: unknown[];
+  sources?: unknown[];
+  stub?: boolean;
+  [key: string]: unknown;
+}
+
+export interface ApiConcept {
+  slug?: string;
+  title?: string;
+  concept_type?: string;
+  level_code?: string;
+  description?: string;
+  metadata?: ConceptMetadata;
+  prerequisites?: string[];
+  list_order?: number | null;
+  [key: string]: unknown;
+}
+
+export interface ConceptNode {
+  id: string;
+  title: string;
+  category: string;
+  level: string;
+  shortDescription: string;
+  theory: any[];
+  vocabulary: any[];
+  examples: any[];
+  sources: any[];
+  stub: boolean;
+}
+
+export interface VocabularyTopic {
+  id: string | number;
+  title?: string;
+  category?: string;
+  item?: unknown;
+  [key: string]: unknown;
+}
+
+interface LevelGuideInfo {
+  label: string;
+  goal: string;
+  focus: string;
+  read: string;
+}
 
 // Restored original roadmap display: the interactive concept tree with a
 // spine, SVG connectors, numbered nodes, and a click-to-open lesson modal.
@@ -18,7 +83,7 @@ import { Badge, Box, EmptyState, ErrorMessage, Modal, Panel, Tabs, Text, TextInp
 // src/presenters/levels.presenter.js (single source of truth).
 export const LEVELS = CEFR_LEVELS;
 
-export const levelGuides = {
+export const levelGuides: Record<string, LevelGuideInfo> = {
   A1: { label: 'Breakthrough', goal: 'Handle familiar words and simple everyday phrases.', focus: 'Greetings, identity, numbers, time, articles, and present-tense verbs.', read: 'Short notices, messages, menus, and simple personal descriptions.' },
   A2: { label: 'Waystage', goal: 'Understand the main point in predictable everyday situations.', focus: 'Routine tasks, past events, descriptions, directions, and common connectors.', read: 'Short emails, schedules, advertisements, and straightforward stories.' },
   B1: { label: 'Threshold', goal: 'Follow the essential meaning of clear speech and texts on familiar topics.', focus: 'Opinions, experiences, explanations, narrative tenses, and paragraph structure.', read: 'Articles, interviews, personal accounts, and practical workplace texts.' },
@@ -27,7 +92,7 @@ export const levelGuides = {
   C2: { label: 'Mastery', goal: 'Understand virtually everything with ease and express yourself with precision.', focus: 'Fine shades of meaning, idiomatic control, and effortless adaptation to context.', read: 'Anything: abstract, literary, and technically dense material.' },
 };
 
-export function LevelGuide({ section }) {
+export function LevelGuide({ section }: { section: string }) {
   const guide = levelGuides[section];
   if (!guide) return null;
   return (
@@ -40,7 +105,7 @@ export function LevelGuide({ section }) {
 }
 
 // Adapt an API concept to the node shape the roadmap components render.
-function toNode(concept) {
+function toNode(concept: ApiConcept): ConceptNode {
   const meta = concept.metadata || {};
   return {
     id: safeText(concept.slug),
@@ -80,7 +145,7 @@ const CANONICAL_ORDER = [
 ];
 const canonicalIndex = new Map(CANONICAL_ORDER.map((slug, index) => [slug, index]));
 
-function levelNodes(concepts, level) {
+function levelNodes(concepts: ApiConcept[], level: string): { nodes: ConceptNode[]; edges: [number, number][] } {
   const FALLBACK_ORDER = Number.MAX_SAFE_INTEGER;
   const raw = concepts
     .filter((concept) => concept.level_code === level)
@@ -92,7 +157,7 @@ function levelNodes(concepts, level) {
     });
   const nodes = raw.map(toNode);
   const index = new Map(nodes.map((node, i) => [node.id, i]));
-  const edges = [];
+  const edges: [number, number][] = [];
   for (const concept of raw) {
     for (const prereq of concept.prerequisites || []) {
       if (index.has(prereq) && index.has(concept.slug)) {
@@ -103,8 +168,8 @@ function levelNodes(concepts, level) {
   return { nodes, edges };
 }
 
-export function RoadmapConnectors({ section, edges }) {
-  const [shape, setShape] = React.useState({ width: 0, height: 0, paths: [] });
+export function RoadmapConnectors({ section, edges }: { section: string; edges: [number, number][] }) {
+  const [shape, setShape] = React.useState<{ width: number; height: number; paths: string[] }>({ width: 0, height: 0, paths: [] });
   React.useLayoutEffect(() => {
     const update = () => {
       const canvas = document.querySelector(`.roadmap-${section.toLowerCase()}`);
@@ -144,10 +209,14 @@ export function RoadmapConnectors({ section, edges }) {
 // Node/row clicks don't need an exclusion here: their handlers call
 // stopPropagation, so a click that selects or toggles a lesson never
 // reaches this listener at all.
-function useBackgroundClose(active, dialogRef, onSelectConcept) {
+function useBackgroundClose(
+  active: ConceptNode | null | undefined,
+  dialogRef: React.RefObject<any>,
+  onSelectConcept: (id: string | null) => void,
+) {
   React.useEffect(() => {
     if (!active) return undefined;
-    function onDocumentClick(event) {
+    function onDocumentClick(event: MouseEvent) {
       if (dialogRef.current?.contains(event.target)) return;
       onSelectConcept(null);
     }
@@ -156,9 +225,18 @@ function useBackgroundClose(active, dialogRef, onSelectConcept) {
   }, [active, dialogRef, onSelectConcept]);
 }
 
-export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectConcept, onSelectSection }) {
+interface ConceptMapProps {
+  section: string;
+  nodes: ConceptNode[];
+  edges: [number, number][];
+  activeConceptId: string | null;
+  onSelectConcept: (id: string | null) => void;
+  onSelectSection: (section: string) => void;
+}
+
+export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectConcept, onSelectSection }: ConceptMapProps) {
   const active = nodes.find((node) => node.id === activeConceptId);
-  const dialogRef = React.useRef(null);
+  const dialogRef = React.useRef<any>(null);
   useBackgroundClose(active, dialogRef, onSelectConcept);
   return (
     <Box as="section" className={`concept-map panel ${active ? 'has-modal' : ''}`}>
@@ -179,7 +257,7 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
             as="button"
             className={`roadmap-node roadmap-node-${index + 1} ${activeConceptId === node.id ? 'active' : ''}`}
             key={node.id}
-            onClick={(event) => { event.stopPropagation(); onSelectConcept(activeConceptId === node.id ? null : node.id); }}
+            onClick={(event: React.MouseEvent) => { event.stopPropagation(); onSelectConcept(activeConceptId === node.id ? null : node.id); }}
           >
             <Text as="span">{padNumber(index + 1)}</Text>
             <Text as="strong">{node.title}</Text>
@@ -197,9 +275,11 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
   );
 }
 
-export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId, onSelectConcept }) {
+type RoadmapTableProps = Omit<ConceptMapProps, 'edges'>;
+
+export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId, onSelectConcept }: RoadmapTableProps) {
   const active = nodes.find((node) => node.id === activeConceptId);
-  const dialogRef = React.useRef(null);
+  const dialogRef = React.useRef<any>(null);
   useBackgroundClose(active, dialogRef, onSelectConcept);
   return (
     <Box as="section" className="roadmap-table-page">
@@ -218,7 +298,7 @@ export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId,
             className={`roadmap-table-row${activeConceptId === node.id ? ' active' : ''}`}
             key={node.id}
             aria-expanded={activeConceptId === node.id}
-            onClick={(event) => { event.stopPropagation(); onSelectConcept(activeConceptId === node.id ? null : node.id); }}
+            onClick={(event: React.MouseEvent) => { event.stopPropagation(); onSelectConcept(activeConceptId === node.id ? null : node.id); }}
           >
             <Text as="span"><Text as="b">{padNumber(index + 1)}</Text>{node.title}</Text>
             <Text as="small">{node.category}</Text>
@@ -235,7 +315,7 @@ export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId,
   );
 }
 
-export function ConceptDetail({ concept }) {
+export function ConceptDetail({ concept }: { concept: ConceptNode | null | undefined }) {
   if (!concept) return null;
   return (
     <Box as="article" className="concept-detail">
@@ -282,12 +362,12 @@ export function ConceptDetail({ concept }) {
 
 // Fetches canonical concepts once and renders the roadmap for a level,
 // with the original roadmap/table view toggle.
-export function ConceptRoadmap({ level, token, onSelectSection }) {
+export function ConceptRoadmap({ level, token, onSelectSection }: { level: string; token?: string | null; onSelectSection: (section: string) => void }) {
   const { data, loading, error } = useApiResource('/api/content/v1/concepts', token);
-  const [activeConceptId, setActiveConceptId] = React.useState(null);
-  const [layoutMode, setLayoutMode] = React.useState('roadmap');
+  const [activeConceptId, setActiveConceptId] = React.useState<string | null>(null);
+  const [layoutMode, setLayoutMode] = React.useState<string>('roadmap');
   React.useEffect(() => setActiveConceptId(null), [level]);
-  const concepts = data?.concepts || [];
+  const concepts: ApiConcept[] = data?.concepts || [];
   const { nodes, edges } = React.useMemo(() => levelNodes(concepts, level), [concepts, level]);
 
   if (loading) return <EmptyState icon={Database} title="Loading curriculum" text="Pulling up the lesson roadmap." />;
@@ -328,9 +408,9 @@ export function ConceptRoadmap({ level, token, onSelectSection }) {
 // One category group inside the learning tracks. The vocabulary group gets a
 // search button in its top-right corner; expanding it filters the group's
 // words live as the learner types.
-function TopicGroup({ category, topics }) {
-  const [searchOpen, setSearchOpen] = React.useState(false);
-  const [query, setQuery] = React.useState('');
+function TopicGroup({ category, topics }: { category: string; topics: VocabularyTopic[]; key?: string | number | null }) {
+  const [searchOpen, setSearchOpen] = React.useState<boolean>(false);
+  const [query, setQuery] = React.useState<string>('');
   const searchable = category === 'vocabulary';
 
   const closeSearch = () => {
@@ -358,8 +438,8 @@ function TopicGroup({ category, topics }) {
                   autoFocus
                   type="text"
                   value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  onKeyDown={(event) => {
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)}
+                  onKeyDown={(event: React.KeyboardEvent) => {
                     if (event.key === 'Escape') closeSearch();
                   }}
                   placeholder="Search words"
@@ -394,9 +474,9 @@ function TopicGroup({ category, topics }) {
 }
 
 // Vocabulary topics for a CEFR section, backed by the server.
-export function TopicTracks({ section }) {
+export function TopicTracks({ section }: { section: string }) {
   const { data, loading, error } = useApiResource(`/api/content/topics?section=${section}`);
-  const topics = data?.topics || [];
+  const topics: VocabularyTopic[] = data?.topics || [];
   const categories = [...new Set(topics.map((topic) => topic.category))];
 
   if (loading) return <Text variant="muted">Loading topics…</Text>;

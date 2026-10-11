@@ -7,7 +7,11 @@ import {
   feedbackTone,
   elapsedMs,
 } from '../../presenters/attempt.presenter.js';
-import {
+import * as UIRaw from '../ui';
+
+// delete once FRA-63 lands: unconverted JS UI components don't resolve as
+// plain `any` for JSX props under allowJs, so alias them loose here.
+const {
   Box,
   ExerciseShell,
   ExerciseEyebrow,
@@ -16,21 +20,50 @@ import {
   ErrorMessage,
   Button,
   Text,
-} from '../ui';
+}: Record<string, React.ComponentType<any>> = UIRaw;
+
+// Minimal local content-item shapes (FRA-64). The canonical API types are
+// owned by FRA-61 — see "Notes for FRA-68" in the PR description.
+export interface MediaAsset {
+  kind?: string;
+  url?: string;
+  transcript?: string;
+  [key: string]: unknown;
+}
+
+export interface PronunciationDrillItem {
+  level?: string;
+  prompt?: string;
+  expected?: string;
+  media?: MediaAsset[];
+  [key: string]: unknown;
+}
+
+export interface AttemptResult {
+  correct?: boolean;
+  error?: string;
+  [key: string]: unknown;
+}
+
+interface PronunciationDrillProps {
+  entry: PronunciationDrillItem;
+  token?: string | null;
+  onResult?: (result: AttemptResult) => void;
+}
 
 // Pronunciation drill: listen, repeat aloud, then honestly self-mark.
-export function PronunciationDrill({ entry, token, onResult }) {
-  const [revealed, setRevealed] = React.useState(false);
-  const [result, setResult] = React.useState(null);
-  const startRef = React.useRef(Date.now());
+export function PronunciationDrill({ entry, token, onResult }: PronunciationDrillProps) {
+  const [revealed, setRevealed] = React.useState<boolean>(false);
+  const [result, setResult] = React.useState<AttemptResult | null>(null);
+  const startRef = React.useRef<number>(Date.now());
   const audio = (entry.media || []).find((m) => m.kind === 'audio') || (entry.media || [])[0];
 
-  async function selfMark(saidItRight) {
+  async function selfMark(saidItRight: boolean) {
     if (result) return;
     try {
       // Self-assessment against the known word: confirming sends the expected
       // word itself, which the grader matches; "not quite" sends nothing.
-      const res = await reportAttempt(entry, saidItRight ? entry.expected : '', token, {
+      const res: AttemptResult = await reportAttempt(entry, saidItRight ? entry.expected : '', token, {
         durationMs: elapsedMs(startRef.current),
       });
       setResult(res);

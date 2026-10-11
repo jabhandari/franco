@@ -9,8 +9,11 @@ import {
   feedbackTitle,
   elapsedMs,
 } from '../../presenters/attempt.presenter.js';
-import {
-  Box,
+import * as UIRaw from '../ui';
+
+// delete once FRA-63 lands: unconverted JS UI components don't resolve as
+// plain `any` for JSX props under allowJs, so alias them loose here.
+const {
   ExerciseShell,
   ExerciseEyebrow,
   ReadingPassage,
@@ -18,19 +21,49 @@ import {
   Feedback,
   ErrorMessage,
   Text,
-} from '../ui';
+}: Record<string, React.ComponentType<any>> = UIRaw;
 
-export function MultipleChoice({ entry, token, onResult }) {
-  const [selected, setSelected] = React.useState(null);
-  const [result, setResult] = React.useState(null);
-  const [options] = React.useState(() => shuffle(entry.choices || []));
-  const startRef = React.useRef(Date.now());
+// Minimal local content-item shapes (FRA-64). The canonical API types are
+// owned by FRA-61 — see "Notes for FRA-68" in the PR description.
+export interface MultipleChoiceOption {
+  key: string;
+  [key: string]: unknown;
+}
 
-  async function choose(choice) {
+export interface MultipleChoiceItem {
+  level?: string;
+  skill?: string;
+  type?: string;
+  prompt?: string;
+  context?: string;
+  choices?: MultipleChoiceOption[];
+  [key: string]: unknown;
+}
+
+export interface AttemptResult {
+  correct?: boolean;
+  reveal?: unknown;
+  error?: string;
+  [key: string]: unknown;
+}
+
+interface MultipleChoiceProps {
+  entry: MultipleChoiceItem;
+  token?: string | null;
+  onResult?: (result: AttemptResult) => void;
+}
+
+export function MultipleChoice({ entry, token, onResult }: MultipleChoiceProps) {
+  const [selected, setSelected] = React.useState<string | null>(null);
+  const [result, setResult] = React.useState<AttemptResult | null>(null);
+  const [options] = React.useState<MultipleChoiceOption[]>(() => shuffle(entry.choices || []));
+  const startRef = React.useRef<number>(Date.now());
+
+  async function choose(choice: MultipleChoiceOption) {
     if (result) return;
     setSelected(choice.key);
     try {
-      const res = await reportAttempt(entry, choice.key, token, { durationMs: elapsedMs(startRef.current) });
+      const res: AttemptResult = await reportAttempt(entry, choice.key, token, { durationMs: elapsedMs(startRef.current) });
       setResult(res);
       onResult?.(res);
     } catch (error) {
@@ -55,7 +88,7 @@ export function MultipleChoice({ entry, token, onResult }) {
         answered={hasResult(result)}
         correct={Boolean(result?.correct)}
         disabled={Boolean(result)}
-        onSelect={(key) => choose(options.find((option) => option.key === key))}
+        onSelect={(key: string) => choose(options.find((option) => option.key === key))}
       />
       {hasResult(result) && (
         <Feedback
