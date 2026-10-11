@@ -80,6 +80,10 @@ Reusable helper logic lives in `src/presenters/` as pure functions (no JSX):
 | `NavButton` | `icon`, `active`, `onClick` | Sidebar nav button |
 | `Brand` | `large`, `onClick`, `label` | `fr` brand mark |
 | `RecordCount` | `count`, `label` | Big-number stat |
+| `StreakChip` | `streak` | Sidebar flame chip (FRA-44) |
+| `StreakHero` | `streak` | Home daily-panel streak summary / empty strip (FRA-44) |
+| `StreakHeatmap` | `days`, `today` | GitHub-style activity heatmap (FRA-44) |
+| `StreakPanel` | `streak` | Progress consistency panel: stats + heatmap (FRA-44) |
 | `StatGroup` | `children` | `div.session-stats` |
 | `ProfileRows` | `profile` | `div.record-list` rows |
 | `DataContract` | `title`, `items` | `section.panel` + `ul.clean-list` |

@@ -357,4 +357,12 @@ CREATE TABLE public.concept_prerequisites (
   CONSTRAINT concept_prerequisites_pkey PRIMARY KEY (concept_id, prerequisite_concept_id),
   CONSTRAINT concept_prerequisites_concept_id_fkey FOREIGN KEY (concept_id) REFERENCES public.concepts(id),
   CONSTRAINT concept_prerequisites_prerequisite_concept_id_fkey FOREIGN KEY (prerequisite_concept_id) REFERENCES public.concepts(id)
+);CREATE TABLE public.learner_activity_days (
+  user_id text NOT NULL,
+  activity_date date NOT NULL,
+  attempts_count integer NOT NULL DEFAULT 0,
+  first_activity_at timestamp with time zone NOT NULL,
+  last_activity_at timestamp with time zone NOT NULL,
+  CONSTRAINT learner_activity_days_pkey PRIMARY KEY (user_id, activity_date),
+  CONSTRAINT learner_activity_days_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
 );

@@ -1566,3 +1566,264 @@ html:not([data-theme="light"]) .progress-ring .ring-track {
   margin-top: 0;
   padding-left: 0;
 }
+
+/* FRA-44: daily streak — sidebar chip, Home hero, Progress heatmap.
+   Geometry lives in these base rules only; the dark block at the end
+   changes colors and nothing else (FRA-23). */
+.streak-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #e3d8ca;
+  border-radius: 8px;
+  background: #f3ecdd;
+}
+.streak-chip svg {
+  flex: none;
+}
+.streak-chip-text strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.15;
+  color: #1f2830;
+}
+.streak-chip-text span {
+  display: block;
+  font-size: 12px;
+  color: #687178;
+}
+
+/* Sidebar rail (desktop): the sidebar collapses to a 64px icon rail and
+   expands to 250px on hover. Like the nav, brand and theme toggle, the
+   chip keeps the full 228px expanded width so its layout never reflows;
+   collapsed, only the flame shows — the card box and text stay hidden
+   until the sidebar expands, instead of being squeezed into the rail. */
+@media (min-width: 1041px) {
+  .streak-chip {
+    width: 228px;
+    flex: none;
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+  .sidebar:not(:hover) .streak-chip {
+    background: transparent;
+    border-color: transparent;
+  }
+  .streak-chip-text {
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+  .sidebar:hover .streak-chip-text,
+  .sidebar:focus-within .streak-chip-text {
+    opacity: 1;
+  }
+}
+
+.streak-hero {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+.streak-flame-badge {
+  width: 64px;
+  height: 64px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: rgba(245, 158, 11, 0.14);
+}
+.streak-big {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #1f2830;
+}
+.streak-big small {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: #687178;
+}
+.streak-sub {
+  margin: 5px 0 0;
+  font-size: 13.5px;
+  color: #687178;
+}
+.streak-sub strong {
+  color: #156064;
+}
+.streak-today-pill {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid #e3d8ca;
+  border-radius: 999px;
+  background: #f3ecdd;
+  color: #156064;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.streak-empty {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px dashed #e3d8ca;
+  border-radius: 10px;
+  color: #687178;
+  font-size: 13.5px;
+}
+.streak-empty strong {
+  display: block;
+  font-size: 14px;
+  color: #1f2830;
+}
+.streak-empty .flame-off {
+  flex: none;
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+.streak-stats4 .session-stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 680px) {
+  .streak-stats4 .session-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.heat-wrap {
+  overflow-x: auto;
+  margin-top: 14px;
+  padding-bottom: 4px;
+}
+.heat-months {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 11px;
+  gap: 3px;
+  height: 14px;
+  margin: 0 0 5px 30px;
+  font-size: 11px;
+  color: #687178;
+}
+.heat-body {
+  display: flex;
+  gap: 6px;
+}
+.heat-days {
+  display: grid;
+  grid-template-rows: repeat(7, 11px);
+  gap: 3px;
+  width: 24px;
+  font-size: 9.5px;
+  color: #687178;
+}
+.heat-days span {
+  line-height: 11px;
+}
+.heat-grid {
+  display: grid;
+  grid-template-rows: repeat(7, 11px);
+  grid-auto-flow: column;
+  grid-auto-columns: 11px;
+  gap: 3px;
+}
+.heat-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2.5px;
+  background: #ede7da;
+}
+.heat-cell.l1 { background: #bfe3db; }
+.heat-cell.l2 { background: #69decb; }
+.heat-cell.l3 { background: #2ea88a; }
+.heat-cell.l4 { background: #156064; }
+.heat-cell.today {
+  outline: 2px solid #156064;
+  outline-offset: 0;
+}
+.heat-cell.future {
+  background: transparent;
+}
+.heat-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #687178;
+}
+.heat-legend .heat-cell {
+  width: 10px;
+  height: 10px;
+}
+.streak-note {
+  margin-top: 10px;
+}
+
+html:not([data-theme="light"]) .streak-chip {
+  background: #1b1b1b;
+  border-color: #303030;
+}
+html:not([data-theme="light"]) .streak-chip-text strong {
+  color: #f5f5f5;
+}
+html:not([data-theme="light"]) .streak-chip-text span {
+  color: #999;
+}
+html:not([data-theme="light"]) .streak-flame-badge {
+  background: rgba(240, 79, 119, 0.16);
+}
+html:not([data-theme="light"]) .streak-big {
+  color: #f5f5f5;
+}
+html:not([data-theme="light"]) .streak-big small {
+  color: #999;
+}
+html:not([data-theme="light"]) .streak-sub {
+  color: #999;
+}
+html:not([data-theme="light"]) .streak-sub strong {
+  color: #5eead4;
+}
+html:not([data-theme="light"]) .streak-today-pill {
+  background: #1b1b1b;
+  border-color: #303030;
+  color: #5eead4;
+}
+html:not([data-theme="light"]) .streak-empty {
+  border-color: #303030;
+  color: #999;
+}
+html:not([data-theme="light"]) .streak-empty strong {
+  color: #f5f5f5;
+}
+html:not([data-theme="light"]) .heat-months,
+html:not([data-theme="light"]) .heat-days,
+html:not([data-theme="light"]) .heat-legend {
+  color: #999;
+}
+html:not([data-theme="light"]) .heat-cell {
+  background: #202020;
+}
+html:not([data-theme="light"]) .heat-cell.l1 { background: #0f4c46; }
+html:not([data-theme="light"]) .heat-cell.l2 { background: #157f72; }
+html:not([data-theme="light"]) .heat-cell.l3 { background: #2ea88a; }
+html:not([data-theme="light"]) .heat-cell.l4 { background: #5eead4; }
+html:not([data-theme="light"]) .heat-cell.today {
+  outline-color: #5eead4;
+}
+html:not([data-theme="light"]) .heat-cell.future {
+  background: transparent;
+}
