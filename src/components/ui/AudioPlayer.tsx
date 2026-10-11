@@ -1,11 +1,11 @@
 import React from 'react';
 
-export interface AudioPlayerProps {
+export type AudioPlayerProps = {
   src?: string;
   transcript?: string;
   emptyText?: string;
   key?: React.Key;
-}
+};
 
 // Audio block: div.audio-player with an <audio> element and an optional
 // transcript footnote. Without a src, renders just the fallback paragraph.

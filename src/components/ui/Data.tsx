@@ -5,17 +5,17 @@ import { ProgressBar } from './ProgressBar';
 
 // Minimal local view of the learner profile row these rows render.
 // (Full learner/profile types belong to the API-client ticket — FRA-61.)
-export interface LearnerProfile {
+export type LearnerProfile = {
   placement_status?: string | null;
   current_level?: string | null;
   learning_goal?: string | null;
-}
+};
 
-export interface RecordCountProps {
+export type RecordCountProps = {
   count?: React.ReactNode;
   label?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Big-number stat tile.
 export function RecordCount({ count, label }: RecordCountProps) {
@@ -27,20 +27,20 @@ export function RecordCount({ count, label }: RecordCountProps) {
   );
 }
 
-export interface StatGroupProps {
+export type StatGroupProps = {
   children?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Grid wrapper for RecordCount tiles.
 export function StatGroup({ children }: StatGroupProps) {
   return <div className="session-stats">{children}</div>;
 }
 
-export interface ProfileRowsProps {
+export type ProfileRowsProps = {
   profile?: LearnerProfile | null;
   key?: React.Key;
-}
+};
 
 // Label/value rows for a learner profile.
 export function ProfileRows({ profile }: ProfileRowsProps) {
@@ -62,11 +62,11 @@ export function ProfileRows({ profile }: ProfileRowsProps) {
   );
 }
 
-export interface DataContractProps {
+export type DataContractProps = {
   title?: React.ReactNode;
   items: React.ReactNode[];
   key?: React.Key;
-}
+};
 
 // Titled panel with a plain bullet list.
 export function DataContract({ title, items }: DataContractProps) {
@@ -84,15 +84,15 @@ export function DataContract({ title, items }: DataContractProps) {
 
 // Minimal local view of one CEFR x skill progress row.
 // (Canonical content-progress types belong to the API-client ticket — FRA-61.)
-export interface ProgressRow {
+export type ProgressRow = {
   cefr_level?: string | null;
   skill?: string | null;
-}
+};
 
-export interface ProgressRecordsProps {
+export type ProgressRecordsProps = {
   progress: ProgressRow[];
   key?: React.Key;
-}
+};
 
 // CEFR x skill progress grid of compact panels.
 export function ProgressRecords({ progress }: ProgressRecordsProps) {

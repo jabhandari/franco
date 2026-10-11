@@ -11,7 +11,7 @@ export type StackGap = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
 // Aria attribute values are caller-provided primitives by definition.
 type AriaValue = string | number | boolean | undefined;
 
-export interface StackProps {
+export type StackProps = {
   as?: React.ElementType;
   display?: React.CSSProperties['display'];
   direction?: React.CSSProperties['flexDirection'];
@@ -24,7 +24,7 @@ export interface StackProps {
   // Extra props spread onto the tag, but only aria-* attributes are
   // part of the contract.
   [ariaProp: `aria-${string}`]: AriaValue;
-}
+};
 
 export function Stack({
   as: Tag = 'div',
@@ -48,10 +48,10 @@ export function Stack({
   return <Tag style={style} {...rest}>{children}</Tag>;
 }
 
-export interface PageProps {
+export type PageProps = {
   children?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Page-level container. Replaces <section className="page-stack">.
 export function Page({ children }: PageProps) {

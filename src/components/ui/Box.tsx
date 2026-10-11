@@ -21,7 +21,7 @@ const GAP_SCALE: Record<string, number> = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32
 
 export type BoxGap = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
 
-export interface BoxProps {
+export type BoxProps = {
   as?: React.ElementType;
   className?: string;
   display?: React.CSSProperties['display'];
@@ -47,7 +47,7 @@ export interface BoxProps {
   key?: React.Key;
   // Only aria-* attributes pass through from any extra props.
   [ariaProp: `aria-${string}`]: AriaValue;
-}
+};
 
 export function Box({
   as: Tag = 'div',

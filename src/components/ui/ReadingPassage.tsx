@@ -1,11 +1,11 @@
 import React from 'react';
 
-export interface ReadingPassageProps {
+export type ReadingPassageProps = {
   title?: string;
   text?: string;
   children?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Reading passage block: div.reading-passage with a kicker + paragraph.
 export function ReadingPassage({ title = 'Read the passage', text, children }: ReadingPassageProps) {

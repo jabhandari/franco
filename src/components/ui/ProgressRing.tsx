@@ -1,11 +1,11 @@
 import React from 'react';
 
-export interface ProgressRingProps {
+export type ProgressRingProps = {
   percent?: number;
   size?: number;
   label?: string;
   key?: React.Key;
-}
+};
 
 // FRA-47: SVG progress ring for the Learn level cards. Geometry is
 // data-driven and owned by this component — callers pass a percent (0-100),

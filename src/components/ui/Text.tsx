@@ -14,7 +14,7 @@ const VARIANT_CLASS: Record<TextVariant, string> = {
   note: 'form-note',
 };
 
-export interface TextProps {
+export type TextProps = {
   variant?: TextVariant;
   size?: string;
   nowrap?: boolean;
@@ -26,7 +26,7 @@ export interface TextProps {
   // Extra props pass through to the tag (this component spreads ...rest),
   // but only aria-* attributes are part of the contract.
   [ariaProp: `aria-${string}`]: AriaValue;
-}
+};
 
 export function Text({ variant = 'body', size, nowrap = false, as: Tag = 'p', className, children, ...rest }: TextProps) {
   const classes = [VARIANT_CLASS[variant] || '', size === 'sm' ? 'small' : '', nowrap ? 'nowrap' : '', className || '']
@@ -35,12 +35,12 @@ export function Text({ variant = 'body', size, nowrap = false, as: Tag = 'p', cl
   return <Tag className={classes || undefined} {...rest}>{children}</Tag>;
 }
 
-export interface PageHeaderProps {
+export type PageHeaderProps = {
   eyebrow?: React.ReactNode;
   title: React.ReactNode;
   lede?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Standard page header: kicker + title + intro paragraph.
 export function PageHeader({ eyebrow, title, lede }: PageHeaderProps) {

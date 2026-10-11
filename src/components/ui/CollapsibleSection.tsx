@@ -1,12 +1,12 @@
 import React from 'react';
 
-export interface CollapsibleSectionProps {
+export type CollapsibleSectionProps = {
   title?: React.ReactNode;
   badge?: React.ReactNode;
   defaultOpen?: boolean;
   children?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Expandable section: details.content-module + summary with title + badge.
 export function CollapsibleSection({ title, badge, defaultOpen = false, children }: CollapsibleSectionProps) {

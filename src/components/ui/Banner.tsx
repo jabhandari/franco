@@ -2,7 +2,7 @@ import React from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { Button } from './Button';
 
-export interface BannerProps {
+export type BannerProps = {
   icon?: LucideIcon | null;
   iconSize?: number;
   title?: React.ReactNode;
@@ -10,7 +10,7 @@ export interface BannerProps {
   actionLabel?: string;
   onAction?: () => void;
   key?: React.Key;
-}
+};
 
 // Call-to-action banner: icon + title/text + primary action.
 export function Banner({ icon: Icon = null, iconSize = 20, title, text, actionLabel, onAction }: BannerProps) {

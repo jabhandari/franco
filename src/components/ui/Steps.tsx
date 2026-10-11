@@ -1,14 +1,14 @@
 import React from 'react';
 
-export interface Step {
+export type Step = {
   title?: string;
   text?: React.ReactNode;
-}
+};
 
-export interface StepsProps {
+export type StepsProps = {
   steps?: Step[];
   key?: React.Key;
-}
+};
 
 // Numbered step cards: div.steps-row > div.step-card × n.
 export function Steps({ steps = [] }: StepsProps) {

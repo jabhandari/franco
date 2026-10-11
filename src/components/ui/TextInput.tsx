@@ -7,7 +7,7 @@ type AriaValue = string | number | boolean | undefined;
 // Field (label + icon), but a few places (auth screen, vocabulary search)
 // render the input directly — this is that bare input. className is allowed
 // so it can carry an existing styles.css hook like any other primitive.
-export interface TextInputProps {
+export type TextInputProps = {
   type?: string;
   name?: string;
   value?: string;
@@ -22,7 +22,7 @@ export interface TextInputProps {
   key?: React.Key;
   // Only aria-* attributes pass through from any extra props.
   [ariaProp: `aria-${string}`]: AriaValue;
-}
+};
 
 export function TextInput({
   type = 'text',

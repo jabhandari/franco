@@ -21,7 +21,7 @@ const VARIANT_CLASS: Record<ButtonVariant, string> = {
   report: 'report-button',
 };
 
-export interface ButtonProps {
+export type ButtonProps = {
   variant?: ButtonVariant;
   wide?: boolean;
   centered?: boolean;
@@ -38,7 +38,7 @@ export interface ButtonProps {
   // Extra props spread onto the <button> (e.g. aria-label), but only
   // aria-* attributes are part of the contract.
   [ariaProp: `aria-${string}`]: AriaValue;
-}
+};
 
 export function Button({
   variant = 'primary',

@@ -16,12 +16,12 @@ const FLAME_FILL = '#f4604e';
 
 // Minimal local view of the streak payload.
 // (Canonical streak types belong to the API-client ticket — FRA-61.)
-export interface StreakDay {
+export type StreakDay = {
   date: string;
   attempts: number;
-}
+};
 
-export interface StreakPayload {
+export type StreakPayload = {
   currentStreak?: number | null;
   longestStreak?: number | null;
   studiedToday?: boolean;
@@ -29,17 +29,17 @@ export interface StreakPayload {
   totalAttempts?: number | null;
   today?: string;
   days?: StreakDay[];
-}
+};
 
 function bestLabel(longestStreak: number | null | undefined) {
   const best = Number(longestStreak) || 0;
   return `Best: ${best} day${best === 1 ? '' : 's'}`;
 }
 
-export interface StreakChipProps {
+export type StreakChipProps = {
   streak?: StreakPayload | null;
   key?: React.Key;
-}
+};
 
 // Compact flame chip for the sidebar, under the nav. In the collapsed
 // icon rail only the flame is visible (see .streak-chip in styles.css),
@@ -59,10 +59,10 @@ export function StreakChip({ streak }: StreakChipProps) {
   );
 }
 
-export interface StreakHeroProps {
+export type StreakHeroProps = {
   streak?: StreakPayload | null;
   key?: React.Key;
-}
+};
 
 // Streak summary for the Home daily panel, above the session button.
 // Brand-new learners get the empty strip instead of a zero hero.
@@ -106,11 +106,11 @@ export function StreakHero({ streak }: StreakHeroProps) {
   );
 }
 
-export interface StreakHeatmapProps {
+export type StreakHeatmapProps = {
   days?: StreakDay[];
   today?: string;
   key?: React.Key;
-}
+};
 
 // GitHub-style activity heatmap: week columns, Sunday..Saturday rows,
 // intensity buckets from the streak presenter.
@@ -154,10 +154,10 @@ export function StreakHeatmap({ days, today }: StreakHeatmapProps) {
   );
 }
 
-export interface StreakPanelProps {
+export type StreakPanelProps = {
   streak?: StreakPayload | null;
   key?: React.Key;
-}
+};
 
 // Full consistency panel for the Progress view: streak stats + heatmap,
 // or the empty state for learners with no activity yet.

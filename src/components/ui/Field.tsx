@@ -4,7 +4,7 @@ import type { LucideIcon } from 'lucide-react';
 // Aria attribute values are caller-provided primitives by definition.
 type AriaValue = string | number | boolean | undefined;
 
-export interface FieldProps {
+export type FieldProps = {
   label?: React.ReactNode;
   icon?: LucideIcon | null;
   iconSize?: number;
@@ -30,7 +30,7 @@ export interface FieldProps {
   inputMode?: 'text' | 'numeric' | 'decimal' | 'tel' | 'search' | 'email' | 'url';
   key?: React.Key;
   [ariaProp: `aria-${string}`]: AriaValue;
-}
+};
 
 // Labeled input with an icon: label > span.input-wrap > icon + input.
 export function Field({ label, icon: Icon = null, iconSize = 18, children, ...inputProps }: FieldProps) {
@@ -45,7 +45,7 @@ export function Field({ label, icon: Icon = null, iconSize = 18, children, ...in
   );
 }
 
-export interface TextareaProps {
+export type TextareaProps = {
   rows?: number;
   value?: string;
   defaultValue?: string;
@@ -60,7 +60,7 @@ export interface TextareaProps {
   required?: boolean;
   key?: React.Key;
   [ariaProp: `aria-${string}`]: AriaValue;
-}
+};
 
 // Free-text answer box: textarea.free-text-input.
 export function Textarea({ rows = 3, ...rest }: TextareaProps) {

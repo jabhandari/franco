@@ -1,10 +1,10 @@
 import React from 'react';
 
-export interface RubricBoxProps {
+export type RubricBoxProps = {
   title?: React.ReactNode;
   items?: React.ReactNode[];
   key?: React.Key;
-}
+};
 
 // Grading rubric / info box: div.rubric-box with a title and a list.
 // items are caller-rendered <li> nodes (e.g. <li><strong>label</strong>: text</li>).

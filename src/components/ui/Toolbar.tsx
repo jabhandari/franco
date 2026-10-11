@@ -1,10 +1,10 @@
 import React from 'react';
 
-export interface ToolbarProps {
+export type ToolbarProps = {
   meta?: React.ReactNode;
   actions?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Meta row with trailing actions: div.session-toolbar.
 export function Toolbar({ meta, actions = null }: ToolbarProps) {

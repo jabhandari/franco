@@ -1,11 +1,11 @@
 import React from 'react';
 
-export interface ProgressBarProps {
+export type ProgressBarProps = {
   label?: React.ReactNode;
   percent?: number;
   skeleton?: boolean;
   key?: React.Key;
-}
+};
 
 // Mastery/progress meter: div.skill-row > span + div.bar > div.fill + strong.
 // The fill width is data-driven and owned by this component (the only
@@ -27,10 +27,10 @@ export function ProgressBar({ label, percent = 0, skeleton = false }: ProgressBa
   );
 }
 
-export interface SkeletonBarProps {
+export type SkeletonBarProps = {
   label?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Legacy alias for the loading-state meter row.
 export function SkeletonBar({ label }: SkeletonBarProps) {

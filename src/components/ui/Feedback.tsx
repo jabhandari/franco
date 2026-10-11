@@ -3,7 +3,7 @@ import { Button } from './Button';
 
 export type FeedbackTone = 'info' | 'correct' | 'incorrect';
 
-export interface FeedbackProps {
+export type FeedbackProps = {
   tone?: FeedbackTone;
   title?: React.ReactNode;
   message?: React.ReactNode;
@@ -13,7 +13,7 @@ export interface FeedbackProps {
   retryLabel?: string;
   children?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Answer feedback box: .mcq-feedback.correct | .mcq-feedback.incorrect.
 // tone 'info' renders the box without a tone class.
@@ -48,11 +48,11 @@ export function Feedback({
   );
 }
 
-export interface ErrorMessageProps {
+export type ErrorMessageProps = {
   message?: React.ReactNode;
   children?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Block-level error text: p.error-message.
 export function ErrorMessage({ message, children }: ErrorMessageProps) {

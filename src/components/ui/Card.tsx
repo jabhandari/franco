@@ -1,11 +1,11 @@
 import React from 'react';
 
-export interface CardProps {
+export type CardProps = {
   onClick?: () => void;
   ariaLabel?: string;
   children?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Card — themed content card for grid layouts (e.g. level picker).
 // Renders a <button> when onClick is given (full keyboard semantics),

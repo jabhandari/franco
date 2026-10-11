@@ -1,13 +1,13 @@
 import React from 'react';
 import type { LucideIcon } from 'lucide-react';
 
-export interface EmptyStateProps {
+export type EmptyStateProps = {
   icon?: LucideIcon | null;
   title?: React.ReactNode;
   text?: React.ReactNode;
   action?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Dashed placeholder panel for empty/loading/error states.
 export function EmptyState({ icon: Icon, title, text, action = null }: EmptyStateProps) {

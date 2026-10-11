@@ -3,7 +3,7 @@
 //
 //   import { Button, Panel, Stack, Text } from '../components/ui';
 //
-// Prop types ship alongside each component (`export interface XProps`);
+// Prop types ship alongside each component (`export type XProps`);
 // import types with `import type { ButtonProps } from '../components/ui'`.
 
 export { Stack, Page } from './Stack';

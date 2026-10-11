@@ -1,11 +1,11 @@
 import React from 'react';
 
-export interface ModalProps {
+export type ModalProps = {
   onClose: () => void;
   closeLabel?: string;
   children?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // App modal: fixed drawer with a close button and scrollable body.
 // forwardRef: callers get the dialog's DOM node, so outside-click handling

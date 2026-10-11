@@ -2,11 +2,11 @@ import React from 'react';
 import { Button } from './Button';
 import { Textarea } from './Field';
 
-export interface ExerciseEyebrowProps {
+export type ExerciseEyebrowProps = {
   level?: React.ReactNode;
   kind?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Kicker line for exercise cards: "A1 · dictation".
 export function ExerciseEyebrow({ level, kind }: ExerciseEyebrowProps) {
@@ -15,12 +15,12 @@ export function ExerciseEyebrow({ level, kind }: ExerciseEyebrowProps) {
 
 export type AnsweredState = 'correct' | 'wrong';
 
-export interface ExerciseShellProps {
+export type ExerciseShellProps = {
   eyebrow?: React.ReactNode;
   answered?: AnsweredState | null;
   children?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Standard exercise card wrapper: article.exercise-preview.mcq-card with
 // an optional answered-correct / answered-wrong state class.
@@ -35,12 +35,12 @@ export function ExerciseShell({ eyebrow, answered = null, children }: ExerciseSh
   );
 }
 
-export interface ExerciseOption {
+export type ExerciseOption = {
   key: string;
   label: React.ReactNode;
-}
+};
 
-export interface OptionListProps {
+export type OptionListProps = {
   options?: ExerciseOption[];
   selectedKey?: string;
   answered?: boolean;
@@ -48,7 +48,7 @@ export interface OptionListProps {
   disabled?: boolean;
   onSelect: (key: string) => void;
   key?: React.Key;
-}
+};
 
 // Choice buttons: div.mcq-options. After answering, the selected option
 // gets .correct / .incorrect based on the `correct` result.
@@ -74,7 +74,7 @@ export function OptionList({ options = [], selectedKey, answered = false, correc
   );
 }
 
-export interface AnswerFormProps {
+export type AnswerFormProps = {
   rows?: number;
   value?: string;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
@@ -87,7 +87,7 @@ export interface AnswerFormProps {
   submitting?: boolean;
   onSubmit: () => void;
   key?: React.Key;
-}
+};
 
 // Free-text answer form: textarea + primary submit button.
 export function AnswerForm({

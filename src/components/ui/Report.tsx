@@ -14,11 +14,11 @@ const REPORT_REASONS: Array<{ id: string; label: string }> = [
 
 export type ReportState = 'idle' | 'sending' | 'done' | 'error';
 
-export interface ReportButtonProps {
+export type ReportButtonProps = {
   itemId: string | number;
   token?: string | null;
   key?: React.Key;
-}
+};
 
 // Learner QA: flagging a suspect item files a report; enough distinct reports
 // auto-demote the item back to pending_review for human re-review.

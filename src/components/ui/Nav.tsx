@@ -2,13 +2,13 @@ import React from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { Button } from './Button';
 
-export interface NavButtonProps {
+export type NavButtonProps = {
   icon?: LucideIcon | null;
   active?: boolean;
   onClick?: () => void;
   children?: React.ReactNode;
   key?: React.Key;
-}
+};
 
 // Sidebar navigation button. Thin wrapper over Button variant="nav"
 // that keeps the icon-before-label convention.
@@ -20,12 +20,12 @@ export function NavButton({ icon, active = false, onClick, children }: NavButton
   );
 }
 
-export interface BrandProps {
+export type BrandProps = {
   large?: boolean;
   onClick?: () => void;
   label?: string;
   key?: React.Key;
-}
+};
 
 // Brand mark. Renders a button when onClick is given, otherwise a div.
 export function Brand({ large = false, onClick, label = 'Franco' }: BrandProps) {

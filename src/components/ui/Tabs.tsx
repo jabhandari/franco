@@ -3,13 +3,13 @@ import type { LucideIcon } from 'lucide-react';
 
 export type TabsVariant = 'section' | 'library' | 'roadmap';
 
-export interface TabOption {
+export type TabOption = {
   id: string;
   label: React.ReactNode;
   icon?: LucideIcon | null;
-}
+};
 
-export interface TabsProps {
+export type TabsProps = {
   variant?: TabsVariant;
   options?: TabOption[];
   value?: string;
@@ -18,7 +18,7 @@ export interface TabsProps {
   strongLabels?: boolean;
   ariaLabel?: string;
   key?: React.Key;
-}
+};
 
 // Unified tab rows. variant picks the existing CSS pattern:
 //   section -> .section-tabs (+ .compact), active class 'selected', <strong> labels
