@@ -6,12 +6,12 @@
 // update here too.
 //
 // Clean-code rules (enforced in code review):
+// - Prefer `type` over `interface`; avoid `interface`.
 // - No `as` assertions. Ever, unless explicitly justified with a comment
 //   at the usage site explaining why proper typing is impossible.
-// - No explicit `any`.
-// - Prefer precise types over `unknown`. `unknown` is acceptable only
-//   where the value is genuinely unknowable at the boundary (e.g. caught
-//   errors) and it must be narrowed immediately — never passed through.
+// - Never `any` or `unknown` — not as annotations, generic defaults, or
+//   index-signature values. Investigate the server response and call sites
+//   and define the real type instead.
 
 /** CEFR levels, ascending. Matches `CEFR_LEVELS` in server/content-contract.js. */
 export type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
@@ -40,38 +40,38 @@ export type EvaluationMode =
 export type ContentItemStatus = 'pending_review' | 'approved' | 'published' | 'rejected';
 
 /** Public user shape returned by signup/login, /api/me, and /api/me/profile. */
-export interface UserPayload {
+export type UserPayload = {
   id: string;
   email: string;
   name: string;
   first_name: string | null;
   last_name: string | null;
-}
+};
 
-/** POST /api/auth/signup and /api/auth/login response. */
-export interface AuthResponse {
+/** POST /api/auth/signup and POST /api/auth/login. */
+export type AuthResponse = {
   token: string;
   user: UserPayload;
-}
+};
 
 /** Shape of `{ error: string }` failure responses across the API. */
-export interface ApiError {
+export type ApiError = {
   error: string;
-}
+};
 
 /** CEFR metadata block on content items. */
-export interface CefrMeta {
+export type CefrMeta = {
   level: CefrLevel;
   method: 'source' | 'human_review' | 'heuristic' | 'model' | 'mixed';
   confidence?: number | null;
-}
+};
 
 /** Minimal content-item shape shared by the review queue and exercises. */
-export interface ContentItemSummary {
+export type ContentItemSummary = {
   id: string;
   external_id: string;
   item_type: ContentItemType;
   status: ContentItemStatus;
   cefr_level: CefrLevel;
   prompt: string;
-}
+};

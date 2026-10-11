@@ -20,7 +20,8 @@ Give every franco PR the same review, in the same order, against the conventions
    - Confirm `npm run lint:ui` passes — run it; don't eyeball this.
 - **TypeScript clean-code** (any change touching `.ts`/`.tsx`):
    - Shared/domain types come from `src/types.ts` — flag any locally redefined shape that already lives there.
-   - No `as` assertions (blocker, unless explicitly justified with a comment at the usage site). No explicit `any` (blocker). No `unknown` used as a dodge — acceptable only where the value is genuinely unknowable at the boundary (e.g. caught errors) and narrowed immediately.
+   - Prefer `type` over `interface` — flag `interface` declarations (blocker unless a genuine use case like declaration merging).
+   - No `as` assertions (blocker, unless explicitly justified with a comment at the usage site). Never `any` or `unknown` — not as annotations, generic defaults, or index-signature values (blocker). Payloads with unclear shapes must be investigated (server response + call sites) and typed for real. At genuine type boundaries (catch clauses, `response.json()`), the parameter must not be annotated — narrow immediately with a type guard or `instanceof`.
    - Everything has a type: no implicit `any`, no untyped exports. Confirm `npm run typecheck` passes — run it; don't eyeball this.
 4. **FRA-16 library use.** New UI composes library components from `src/components/ui` (import from the index, not individual files). A new presentational pattern that appears twice belongs in the library, not copied into a second view.
 5. **Presenters.** Helper logic used more than once lives in `src/presenters/` as `<name>.presenter.js` with a colocated `<name>.presenter.test.js`. Single-use logic may stay in its component. Presenter tests must run as part of `npm test`.

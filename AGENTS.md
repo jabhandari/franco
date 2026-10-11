@@ -147,10 +147,16 @@ Operating rules:
   the closeout ticket to consolidate) — parallel branches editing one file
   will conflict.
 - **No escape hatches.** No `as` assertions (ever, unless explicitly
-  justified with a comment at the usage site), no explicit `any`. Prefer
-  precise types over `unknown`; `unknown` is acceptable only where the value
-  is genuinely unknowable at the boundary (e.g. caught errors) and must be
-  narrowed immediately, never passed through. Everything has a type.
+  justified with a comment at the usage site). Never use `any` or `unknown`
+  — not as annotations, not as generic defaults, not as index-signature
+  values. When a payload's shape isn't obvious, investigate the server
+  response and the call sites and define the real type (it may be a large
+  union or a detailed object — that's fine). At genuine type boundaries
+  (catch clauses, `response.json()`), do not annotate the parameter;
+  narrow immediately with a type guard or `instanceof` instead.
+  Everything has a type.
+- **Prefer `type` over `interface`.** Avoid `interface` wherever possible;
+  use `type` aliases for object shapes, unions, and intersections.
 
 ## Architecture
 
