@@ -9,8 +9,10 @@ import { Box, Button, EmptyState, Page, PageHeader, Tabs, Toolbar } from '../com
 // tabs, instead of the one-at-a-time stepper. The queue itself is still the
 // adaptive server-ordered one (due reviews, new items, weak concepts — never
 // client-side random), and every card reports its answer to /api/me/attempts.
-export function Session({ token }) {
-  const [selectedSection, setSelectedSection] = React.useState('A1');
+// FRA-47: initialLevel preselects the level when the Learn view's quiz entry
+// point navigates here.
+export function Session({ token, initialLevel }) {
+  const [selectedSection, setSelectedSection] = React.useState(initialLevel || 'A1');
   const [resetKey, setResetKey] = React.useState(0);
   const { data, loading, error } = useApiResource(`/api/me/session-plan?section=${selectedSection}`, token);
   const queue = data?.queue || [];

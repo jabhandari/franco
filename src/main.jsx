@@ -7,6 +7,7 @@ import {
   CirclePlay,
   ClipboardCheck,
   Database,
+  GraduationCap,
   Home as HomeIcon,
   Lock,
   LogOut,
@@ -25,6 +26,7 @@ import { apiGet, apiPost } from './api/client.js';
 import { ThemeProvider, useTheme } from 'next-themes';
 import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput } from './components/ui';
 import { Home } from './views/Home.jsx';
+import { Learn } from './views/Learn.jsx';
 import { Session } from './views/Session.jsx';
 import { Content } from './views/Content.jsx';
 import { PastQuestions } from './views/PastQuestions.jsx';
@@ -37,6 +39,7 @@ const TOKEN_KEY = 'franco_auth_token';
 
 const navItems = [
   { id: 'home', label: 'Home', icon: HomeIcon },
+  { id: 'learn', label: 'Learn', icon: GraduationCap },
   { id: 'placement', label: 'Placement', icon: ClipboardCheck },
   { id: 'session', label: 'Session', icon: CirclePlay },
   { id: 'content', label: 'Content', icon: BookOpen },
@@ -45,7 +48,7 @@ const navItems = [
   { id: 'conversation', label: 'Conversation', icon: Mic }
 ];
 
-const viewPaths = { home: '/', placement: '/placement', session: '/session', content: '/content', past: '/past-questions', progress: '/progress', conversation: '/conversation', review: '/review' };
+const viewPaths = { home: '/', learn: '/learn', placement: '/placement', session: '/session', content: '/content', past: '/past-questions', progress: '/progress', conversation: '/conversation', review: '/review' };
 function viewFromPath(pathname) {
   const entry = Object.entries(viewPaths).find(([, path]) => path === pathname || (path !== '/' && pathname.startsWith(`${path}/`)));
   return entry?.[0] || 'home';
@@ -57,6 +60,7 @@ function App() {
   const [authToken, setAuthToken] = React.useState(() => sessionStorage.getItem(TOKEN_KEY));
   const [userData, setUserData] = React.useState(null);
   const [view, setView] = React.useState(() => viewFromPath(window.location.pathname));
+  const [sessionLevel, setSessionLevel] = React.useState(null);
   const [loading, setLoading] = React.useState(Boolean(authToken));
   const [error, setError] = React.useState('');
   const { resolvedTheme: theme, setTheme } = useTheme();
@@ -200,8 +204,9 @@ function App() {
 
       <Box as="main" className={`main-content ${view === 'content' ? 'wide-content' : ''}`}>
         {view === 'home' && <Home userData={userData} onStart={() => navigate('session')} onPlacement={() => navigate('placement')} />}
+        {view === 'learn' && <Learn token={authToken} onQuiz={(level) => { setSessionLevel(level); navigate('session'); }} />}
         {view === 'placement' && <Placement token={authToken} onPlaced={() => refreshUserData()} />}
-        {view === 'session' && <Session token={authToken} />}
+        {view === 'session' && <Session key={sessionLevel || 'default'} token={authToken} initialLevel={sessionLevel} />}
         {view === 'content' && <Content token={authToken} />}
         {view === 'past' && <PastQuestions token={authToken} />}
         {view === 'progress' && <Progress token={authToken} />}

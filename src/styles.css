@@ -1407,3 +1407,160 @@ html:not([data-theme="light"]) .auth-page .auth-brand-subtitle { color:#888; }
   .auth-page .auth-intro { top:-72px; }
   .auth-page .auth-card { top:-110px; }
 }
+
+/* FRA-47: Learn view — CEFR level-first navigation. */
+.learn-view .eyebrow {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.learn-view .page-title {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+.learn-view h2 {
+  font-size: 28px;
+  margin: 0 0 10px;
+}
+.learn-view .lede {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+/* Exercise cards in the Learn browsing context are previews, not the full
+   practice experience — keep them compact. */
+.learn-view .exercise-preview {
+  padding: 16px 18px;
+}
+.learn-view .exercise-preview h2 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+/* Pronunciation drill: compact layout for single-word drills */
+.exercise-preview .pronunciation-drill h2 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+.exercise-preview .pronunciation-drill .audio-player {
+  margin: 8px 0;
+}
+.exercise-preview .pronunciation-drill .reveal-word {
+  font-size: 20px;
+  padding: 6px 0;
+}
+/* Space between skill tabs and the content below */
+.learn-skill-content {
+  margin-top: 24px;
+}
+.learn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 26px 0 34px;
+}
+
+/* Card (src/components/ui/Card.jsx): themed clickable/static card.
+   Light and dark variants; mobile stacks via the grid above. */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 12px;
+  border: 1px solid #e3d8ca;
+  border-radius: 14px;
+  background: #fffdf8;
+  color: inherit;
+  text-align: center;
+  box-shadow: 0 18px 36px rgba(42,48,55,.06);
+}
+html:not([data-theme="light"]) .card {
+  background: #151515;
+  border-color: #303030;
+  box-shadow: none;
+}
+.card-clickable {
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.card-clickable:hover {
+  border-color: #156064;
+  transform: translateY(-2px);
+}
+html:not([data-theme="light"]) .card-clickable:hover {
+  border-color: #4aa8ad;
+}
+.card-title {
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+.card-subtitle {
+  font-size: 12px;
+  color: #687178;
+  margin: 0;
+}
+html:not([data-theme="light"]) .card-subtitle {
+  color: #999;
+}
+.card-meta {
+  font-size: 12px;
+  color: #687178;
+  margin: 0;
+}
+html:not([data-theme="light"]) .card-meta {
+  color: #999;
+}
+
+.progress-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-ring .ring-track {
+  fill: none;
+  stroke: #e9e2d4;
+}
+html:not([data-theme="light"]) .progress-ring .ring-track {
+  stroke: #333;
+}
+
+.progress-ring .ring-fill {
+  fill: none;
+  stroke: #156064;
+}
+
+.progress-ring .ring-label {
+  position: absolute;
+  font-size: 15px;
+  color: #156064;
+}
+
+.learn-detail-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 12px 0 20px;
+}
+
+.skill-tab-count {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.75;
+  margin-left: 4px;
+}
+
+.learn-back {
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.learn-back .text-button {
+  width: auto;
+  margin-top: 0;
+  padding-left: 0;
+}
