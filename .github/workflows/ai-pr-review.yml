@@ -164,19 +164,25 @@ jobs:
             return 1
           }
           # Chain: Groq -> Gemini primary model -> Gemini fallback model,
-          # trying primary then backup key for each Gemini model.
+          # trying primary then backup key for each Gemini model. A provider
+          # is accepted only if it returns non-empty review text: an HTTP 200
+          # with blocked/empty content falls through to the next option.
           REVIEWER=""
-          if [ -n "${GROQ_API_KEY:-}" ] && try_groq "$GROQ_API_KEY"; then
+          if [ -n "${GROQ_API_KEY:-}" ] && try_groq "$GROQ_API_KEY" && [ -s /tmp/review.md ]; then
             REVIEWER="Groq $GROQ_MODEL"
           else
             for model in "$GEMINI_MODEL" "$GEMINI_MODEL_FALLBACK"; do
-              if try_gemini "$model" "$GEMINI_API_KEY" "primary"; then
+              for keydef in "primary:$GEMINI_API_KEY" "backup:${GEMINI_API_KEY_BACKUP:-}"; do
+                label="${keydef%%:*}"; key="${keydef#*:}"
+                [ -n "$key" ] || continue
+                try_gemini "$model" "$key" "$label" || continue
                 jq -r '.candidates[0].content.parts[0].text // empty' /tmp/resp.json > /tmp/review.md
-                REVIEWER="Gemini $model (primary key)"; break
-              elif [ -n "${GEMINI_API_KEY_BACKUP:-}" ] && try_gemini "$model" "$GEMINI_API_KEY_BACKUP" "backup"; then
-                jq -r '.candidates[0].content.parts[0].text // empty' /tmp/resp.json > /tmp/review.md
-                REVIEWER="Gemini $model (backup key)"; break
-              fi
+                if [ -s /tmp/review.md ]; then
+                  REVIEWER="Gemini $model ($label key)"
+                  break 2
+                fi
+                echo "gemini $model ($label key): empty content, trying next"
+              done
             done
           fi
           if [ -z "$REVIEWER" ]; then
