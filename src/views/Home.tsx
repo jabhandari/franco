@@ -1,25 +1,32 @@
 import React from 'react';
 import { ChevronRight, Plus, TrendingUp, ClipboardCheck, Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
+import type { UserPayload } from '../types.js';
 import { Banner as BannerJsx, Box as BoxJsx, Button as ButtonJsx, EmptyState as EmptyStateJsx, Panel as PanelJsx, PanelHeader as PanelHeaderJsx, ProfileRows as ProfileRowsJsx, RecordCount as RecordCountJsx, StreakHero as StreakHeroJsx, Text as TextJsx } from '../components/ui';
 
 // FRA-66 interim bridge: src/components/ui/ is still .jsx (typed by FRA-63),
-// and tsc infers required-any props from allowJs sources. Each import is
-// pinned to the minimal prop subset this view passes, so JSX is checked
-// against real props instead of the inferred ones.
+// so these imports carry no prop types. Each is pinned to the minimal prop
+// subset this view passes via an explicit annotation (no `as`) so JSX is
+// checked against real props instead of the inferred ones.
 // Justification: proper component typing is impossible until FRA-63 ships
 // real prop types for src/components/ui — delete this block then. Box's
-// props vary too widely for a minimal interface, so it bridges as
-// ComponentType<Record<string, unknown>>.
-interface BannerProps {
+// props vary too widely for a minimal interface, so it bridges on the
+// per-view prop subset only.
+type BannerProps = {
   icon?: React.ElementType;
   iconSize?: number;
   title?: string;
   text?: string;
   actionLabel?: string;
   onAction?: () => void;
-}
-interface ButtonProps {
+};
+type BoxProps = {
+  as?: string;
+  className?: string;
+  children?: React.ReactNode;
+  'aria-hidden'?: boolean | 'true' | 'false';
+};
+type ButtonProps = {
   variant?: string;
   wide?: boolean;
   onClick?: () => void;
@@ -27,92 +34,128 @@ interface ButtonProps {
   iconSize?: number;
   iconPosition?: string;
   children?: React.ReactNode;
-}
-interface EmptyStateProps {
+};
+type EmptyStateProps = {
   icon?: React.ElementType;
   title?: string;
   text?: string;
-}
-interface PanelProps {
+};
+type PanelProps = {
   compact?: boolean;
   children?: React.ReactNode;
-}
-interface PanelHeaderProps {
+};
+type PanelHeaderProps = {
   eyebrow?: string;
   title?: string;
   aside?: React.ReactNode;
-}
-interface ProfileRowsProps {
+};
+type ProfileRowsProps = {
   profile?: LearnerProfile | null;
-}
-interface RecordCountProps {
+};
+type RecordCountProps = {
   count?: number;
   label?: string;
-}
-interface StreakHeroProps {
+};
+type StreakHeroProps = {
   streak?: StreakSummary | null;
-}
-interface TextProps {
+};
+type TextProps = {
   as?: string;
   variant?: string;
   size?: string;
   children?: React.ReactNode;
-}
-const Banner = BannerJsx as React.ComponentType<BannerProps>;
-const Box = BoxJsx as React.ComponentType<Record<string, unknown>>;
-const Button = ButtonJsx as React.ComponentType<ButtonProps>;
-const EmptyState = EmptyStateJsx as React.ComponentType<EmptyStateProps>;
-const Panel = PanelJsx as React.ComponentType<PanelProps>;
-const PanelHeader = PanelHeaderJsx as React.ComponentType<PanelHeaderProps>;
-const ProfileRows = ProfileRowsJsx as React.ComponentType<ProfileRowsProps>;
-const RecordCount = RecordCountJsx as React.ComponentType<RecordCountProps>;
-const StreakHero = StreakHeroJsx as React.ComponentType<StreakHeroProps>;
-const Text = TextJsx as React.ComponentType<TextProps>;
+};
+const Banner: React.ComponentType<BannerProps> = BannerJsx;
+const Box: React.ComponentType<BoxProps> = BoxJsx;
+const Button: React.ComponentType<ButtonProps> = ButtonJsx;
+const EmptyState: React.ComponentType<EmptyStateProps> = EmptyStateJsx;
+const Panel: React.ComponentType<PanelProps> = PanelJsx;
+const PanelHeader: React.ComponentType<PanelHeaderProps> = PanelHeaderJsx;
+const ProfileRows: React.ComponentType<ProfileRowsProps> = ProfileRowsJsx;
+const RecordCount: React.ComponentType<RecordCountProps> = RecordCountJsx;
+const StreakHero: React.ComponentType<StreakHeroProps> = StreakHeroJsx;
+const Text: React.ComponentType<TextProps> = TextJsx;
 
-// --- Local interfaces (FRA-66; for FRA-68: centralize into shared API types) ---
+// --- Local types (FRA-66; for FRA-68: centralize into shared API types) ---
 
-/** The learner profile row behind `userData.profile`; shape owned by main.jsx's read model. */
-interface LearnerProfile {
+/** learner_profiles row behind `userData.profile` (GET /api/me). */
+type LearnerProfile = {
+  user_id?: string;
+  current_level?: string | null;
+  learning_goal?: string | null;
   placement_status?: string | null;
-  [key: string]: unknown;
-}
+  created_at?: string;
+  updated_at?: string;
+};
 
-/** Aggregate passed from the app shell (GET /api/me aggregate in main.jsx). */
-interface HomeUserData {
-  user?: { name?: string | null } | null;
+/**
+ * GET /api/me (and auth) aggregate. progress/mistakes are always empty
+ * arrays in the server response today — `never[]` says exactly that.
+ */
+type HomeUserData = {
+  user?: UserPayload | null;
   profile?: LearnerProfile | null;
-  progress?: unknown[];
-  mistakes?: unknown[];
-}
+  progress?: never[];
+  mistakes?: never[];
+};
+
+/** One day in the streak activity window (server/streak.js summarizeActivity). */
+type StreakDay = {
+  date: string;
+  attempts: number;
+};
 
 /** Streak read model from GET /api/me/streak (consumed by StreakHero). */
-interface StreakSummary {
+type StreakSummary = {
   currentStreak?: number | null;
-  [key: string]: unknown;
-}
+  longestStreak?: number | null;
+  studiedToday?: boolean;
+  activeDays?: number;
+  totalAttempts?: number;
+  today?: string;
+  days?: StreakDay[];
+};
 
-/** GET /api/content/sections — CEFR sections with example counts. */
-interface ContentSectionsResponse {
-  sections?: Array<{ example_count?: number | string | null }>;
-}
+/**
+ * One row of GET /api/content/sections. node-postgres returns COUNT(*)
+ * and AVG() aggregates as strings, so counts accept both.
+ */
+type ContentSectionRow = {
+  section: string;
+  example_count: number | string;
+  exercise_count?: number | string | null;
+  average_tokens?: number | string | null;
+};
 
-interface HomeProps {
+/** GET /api/content/sections response. */
+type ContentSectionsResponse = {
+  source?: {
+    name?: string | null;
+    url?: string | null;
+    license?: string | null;
+    attribution?: string | null;
+    imported_at?: string;
+  } | null;
+  sections?: ContentSectionRow[];
+  note?: string;
+};
+
+type HomeProps = {
   userData?: HomeUserData | null;
   streak?: StreakSummary | null;
   onStart: () => void;
   onPlacement: () => void;
-}
+};
 
 export function Home({ userData, streak, onStart, onPlacement }: HomeProps) {
   const profile = userData?.profile;
   const progressCount = userData?.progress?.length || 0;
   const mistakeCount = userData?.mistakes?.length || 0;
   const { data: contentData } = useApiResource('/api/content/sections');
-  // Justification: useApiResource is still untyped .js (typed by FRA-65);
-  // the GET /api/content/sections shape can't be expressed at the boundary
-  // until then, so the locally declared ContentSectionsResponse is asserted.
-  const sections: ContentSectionsResponse['sections'] =
-    (contentData as ContentSectionsResponse | null)?.sections;
+  // useApiResource is still untyped .js (typed by FRA-65); the response
+  // shape is captured by annotation (no `as`) at the boundary.
+  const sectionsData: ContentSectionsResponse | null = contentData;
+  const sections = sectionsData?.sections;
   const contentCount = sections?.reduce((sum, section) => sum + Number(section.example_count || 0), 0) || 0;
   const placementDone = profile?.placement_status === 'complete';
 

@@ -8,75 +8,82 @@ import { formatLevelWithClb } from '../presenters/levels.presenter.js';
 import { Box as BoxJsx, ErrorMessage as ErrorMessageJsx, ExerciseShell as ExerciseShellJsx, Page as PageJsx, PageHeader as PageHeaderJsx, Text as TextJsx } from '../components/ui';
 
 // FRA-66 interim bridge: src/components/ui/ is still .jsx (typed by FRA-63),
-// and tsc infers required-any props from allowJs sources. Each import is
-// pinned to the minimal prop subset this view passes, so JSX is checked
-// against real props instead of the inferred ones.
+// so these imports carry no prop types. Each is pinned to the minimal prop
+// subset this view passes via an explicit annotation (no `as`) so JSX is
+// checked against real props instead of the inferred ones.
 // Justification: proper component typing is impossible until FRA-63 ships
 // real prop types for src/components/ui — delete this block then. Box's
-// props vary too widely for a minimal interface, so it bridges as
-// ComponentType<Record<string, unknown>>.
-interface ErrorMessageProps {
+// props vary too widely for a minimal interface, so it bridges on the
+// per-view prop subset only.
+type BoxProps = {
+  as?: string;
+  className?: string;
+  onClick?: () => void;
+  children?: React.ReactNode;
+};
+type ErrorMessageProps = {
   message?: string;
-}
-interface ExerciseShellProps {
+};
+type ExerciseShellProps = {
   eyebrow?: string;
   children?: React.ReactNode;
-}
-interface PageProps {
+};
+type PageProps = {
   children?: React.ReactNode;
-}
-interface PageHeaderProps {
+};
+type PageHeaderProps = {
   eyebrow?: string;
   title?: React.ReactNode;
   lede?: string;
-}
-interface TextProps {
+};
+type TextProps = {
   as?: string;
   variant?: string;
   size?: string;
   children?: React.ReactNode;
-}
-const Box = BoxJsx as React.ComponentType<Record<string, unknown>>;
-const ErrorMessage = ErrorMessageJsx as React.ComponentType<ErrorMessageProps>;
-const ExerciseShell = ExerciseShellJsx as React.ComponentType<ExerciseShellProps>;
-const Page = PageJsx as React.ComponentType<PageProps>;
-const PageHeader = PageHeaderJsx as React.ComponentType<PageHeaderProps>;
-const Text = TextJsx as React.ComponentType<TextProps>;
+};
+const Box: React.ComponentType<BoxProps> = BoxJsx;
+const ErrorMessage: React.ComponentType<ErrorMessageProps> = ErrorMessageJsx;
+const ExerciseShell: React.ComponentType<ExerciseShellProps> = ExerciseShellJsx;
+const Page: React.ComponentType<PageProps> = PageJsx;
+const PageHeader: React.ComponentType<PageHeaderProps> = PageHeaderJsx;
+const Text: React.ComponentType<TextProps> = TextJsx;
 
-// --- Local interfaces (FRA-66; for FRA-68: centralize into shared API types) ---
+// --- Local types (FRA-66; for FRA-68: centralize into shared API types) ---
 
 /** One MCQ choice in the placement quiz. */
-interface PlacementChoice {
+type PlacementChoice = {
   key: string;
   text: string;
-}
+};
 
 /** One static placement question; answer is the winning choice key. */
-interface PlacementQuestion {
+type PlacementQuestion = {
   prompt: string;
   choices: PlacementChoice[];
   answer: string;
-}
+};
 
 /** CEFR code returned by levelForScore. */
 type PlacementLevel = 'A1' | 'A2' | 'B1' | 'B2';
 
 /** POST /api/me/placement response. */
-interface PlacementResponse {
-  placement_status?: string;
-}
+type PlacementResponse = {
+  level: string;
+  placement_status: string;
+};
 
 /** Result state once the quiz is submitted. */
-interface PlacementResult {
+type PlacementResult = {
   score: number;
   level: PlacementLevel;
   placementStatus?: string;
-}
+};
 
-interface PlacementProps {
+type PlacementProps = {
   token?: string | null;
   onPlaced?: () => void;
-}
+};
 
 // Original 10-question placement quiz, A1 → B2 gradient. The resulting CEFR
 // level is submitted to POST /api/me/placement and becomes the learner's
@@ -125,6 +132,8 @@ export function Placement({ token, onPlaced }: PlacementProps) {
       setResult({ score, level, placementStatus: res.placement_status });
       onPlaced?.();
     } catch (e) {
+      // getErrorMessage is the null-safe normalizer for caught values —
+      // the catch parameter stays unannotated per the type-boundary rule.
       setError(getErrorMessage(e));
     }
   }
