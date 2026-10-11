@@ -3,17 +3,41 @@ import { Database, Timer } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { safeText } from '../presenters/format.presenter.js';
 import {
-  Checklist,
-  Chip,
-  EmptyState,
-  LoadingSpinner,
-  Page,
-  PageHeader,
-  Panel,
-  PanelHeader,
-  Steps,
-  Text,
+  Checklist as _Checklist,
+  Chip as _Chip,
+  EmptyState as _EmptyState,
+  Page as _Page,
+  PageHeader as _PageHeader,
+  Panel as _Panel,
+  PanelHeader as _PanelHeader,
+  Steps as _Steps,
+  Text as _Text,
 } from '../components/ui';
+
+// FRA-66 pattern: unconverted .jsx components don't resolve as `any` for JSX
+// props under allowJs — tsc over-infers required props from destructuring.
+// Alias to loose component types; delete once FRA-63 lands with real prop types.
+const Checklist = _Checklist as React.ComponentType<any>;
+const Chip = _Chip as React.ComponentType<any>;
+const EmptyState = _EmptyState as React.ComponentType<any>;
+const Page = _Page as React.ComponentType<any>;
+const PageHeader = _PageHeader as React.ComponentType<any>;
+const Panel = _Panel as React.ComponentType<any>;
+const PanelHeader = _PanelHeader as React.ComponentType<any>;
+const Steps = _Steps as React.ComponentType<any>;
+const Text = _Text as React.ComponentType<any>;
+
+// FRA-67: local interface for the /api/me/conversation-targets payload.
+interface ConversationTarget {
+  id: string;
+  title?: string;
+  section?: string;
+  text?: string;
+}
+
+interface ConversationProps {
+  token?: string | null;
+}
 
 // Guided speaking practice. There is no scripted chatbot here: the server
 // picks a roleplay scenario from your weakest concepts (or starter concepts
@@ -25,13 +49,13 @@ const STEPS = [
   { title: 'Enregistrez-vous', text: 'Réécoutez-vous et notez vos hésitations : c’est votre prochaine révision. Listen back — your hesitations are your next review.' },
 ];
 
-export function Conversation({ token }) {
+export function Conversation({ token }: ConversationProps) {
   const { data, loading, error } = useApiResource('/api/me/conversation-targets', token);
-  const [checked, setChecked] = React.useState({});
+  const [checked, setChecked] = React.useState<Record<string, boolean>>({});
   React.useEffect(() => setChecked({}), [data?.scenario]);
-  const toggle = (id) => setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
-  const targets = (data?.targets || []).filter(
-    (target) => target && (safeText(target.title) || safeText(target.section)),
+  const toggle = (id: string) => setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
+  const targets: ConversationTarget[] = (data?.targets || []).filter(
+    (target: ConversationTarget) => target && (safeText(target.title) || safeText(target.section)),
   );
   const done = targets.filter((target) => checked[target.id]).length;
 

@@ -29,12 +29,12 @@ import { streakPath } from './presenters/streak.presenter.js';
 import { Home } from './views/Home.js';
 import { Learn } from './views/Learn.jsx';
 import { Session } from './views/Session.js';
-import { Content } from './views/Content.jsx';
-import { PastQuestions } from './views/PastQuestions.jsx';
+import { Content } from './views/Content.js';
+import { PastQuestions } from './views/PastQuestions.js';
 import { Progress } from './views/Progress.js';
-import { Conversation } from './views/Conversation.jsx';
+import { Conversation } from './views/Conversation.js';
 import { Placement } from './views/Placement.js';
-import { ReviewQueue, REVIEW_KEY_STORAGE } from './views/ReviewQueue.jsx';
+import { ReviewQueue, REVIEW_KEY_STORAGE } from './views/ReviewQueue.js';
 import { Profile } from './views/Profile.jsx';
 
 const TOKEN_KEY = 'franco_auth_token';

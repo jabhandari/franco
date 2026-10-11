@@ -5,22 +5,69 @@ import { normalizeChoices } from '../presenters/collections.presenter.js';
 import { capitalize, choiceLabel } from '../presenters/format.presenter.js';
 import { CEFR_LEVELS, formatLevelWithClb } from '../presenters/levels.presenter.js';
 import {
-  Box,
-  Button,
-  CollapsibleSection,
-  EmptyState,
-  ExerciseShell,
-  Feedback,
-  LoadingSpinner,
-  OptionList,
-  Page,
-  PageHeader,
-  Panel,
-  ReadingPassage,
-  Tabs,
-  Text,
-  Toolbar,
+  Box as _Box,
+  Button as _Button,
+  CollapsibleSection as _CollapsibleSection,
+  EmptyState as _EmptyState,
+  ExerciseShell as _ExerciseShell,
+  Feedback as _Feedback,
+  OptionList as _OptionList,
+  Page as _Page,
+  PageHeader as _PageHeader,
+  Panel as _Panel,
+  ReadingPassage as _ReadingPassage,
+  Tabs as _Tabs,
+  Text as _Text,
+  Toolbar as _Toolbar,
 } from '../components/ui';
+
+// FRA-66 pattern: unconverted .jsx components don't resolve as `any` for JSX
+// props under allowJs — tsc over-infers required props from destructuring.
+// Alias to loose component types; delete once FRA-63 lands with real prop types.
+const Box = _Box as React.ComponentType<any>;
+const Button = _Button as React.ComponentType<any>;
+const CollapsibleSection = _CollapsibleSection as React.ComponentType<any>;
+const EmptyState = _EmptyState as React.ComponentType<any>;
+const ExerciseShell = _ExerciseShell as React.ComponentType<any>;
+const Feedback = _Feedback as React.ComponentType<any>;
+const OptionList = _OptionList as React.ComponentType<any>;
+const Page = _Page as React.ComponentType<any>;
+const PageHeader = _PageHeader as React.ComponentType<any>;
+const Panel = _Panel as React.ComponentType<any>;
+const ReadingPassage = _ReadingPassage as React.ComponentType<any>;
+const Tabs = _Tabs as React.ComponentType<any>;
+const Text = _Text as React.ComponentType<any>;
+const Toolbar = _Toolbar as React.ComponentType<any>;
+
+// FRA-67: local interfaces for the /api/exam/questions payload. The exam
+// archive row shape stays owned by its ticket (see "Notes for FRA-68").
+interface ExamQuestion {
+  id: string | number;
+  exam_name?: string;
+  skill?: string;
+  prompt?: string;
+  context?: string;
+  choices?: unknown;
+  choices_json?: unknown;
+  answer?: string | null;
+  explanation?: string;
+}
+
+interface ExamQuestionCardProps {
+  key?: React.Key;
+  question: ExamQuestion;
+  selected: string | null;
+  onSelect: (value: string) => void;
+  onRetry: () => void;
+}
+
+interface ExamQuestionListProps {
+  data: { questions: ExamQuestion[]; section: string };
+}
+
+interface PastQuestionsProps {
+  token?: string | null;
+}
 
 const SECTIONS = CEFR_LEVELS;
 const SKILLS = ['all', 'reading', 'listening', 'language structures'];
@@ -30,7 +77,7 @@ const PAGE_SIZE = 12;
 // module with the reading-passage card, correct/incorrect states, and retry.
 // Skill tabs are new (the original was reading-only).
 
-function ExamQuestionCard({ question, selected, onSelect, onRetry }) {
+function ExamQuestionCard({ question, selected, onSelect, onRetry }: ExamQuestionCardProps) {
   const choices = React.useMemo(() => normalizeChoices(question.choices ?? question.choices_json), [question.choices, question.choices_json]);
   const correct = question.answer ? String(question.answer).trim().toLowerCase() : null;
   const selectedChoice = choices.find((choice) => choice.key === selected || choice.text === selected);
@@ -66,9 +113,9 @@ function ExamQuestionCard({ question, selected, onSelect, onRetry }) {
   );
 }
 
-function ExamQuestionList({ data }) {
+function ExamQuestionList({ data }: ExamQuestionListProps) {
   const [showAll, setShowAll] = React.useState(false);
-  const [answers, setAnswers] = React.useState({});
+  const [answers, setAnswers] = React.useState<Record<string, string>>({});
   const visible = showAll ? data.questions : data.questions.slice(0, PAGE_SIZE);
   const reset = () => setAnswers({});
   React.useEffect(() => { setShowAll(false); setAnswers({}); }, [data.section]);
@@ -100,12 +147,12 @@ function ExamQuestionList({ data }) {
   );
 }
 
-export function PastQuestions({ token }) {
+export function PastQuestions({ token }: PastQuestionsProps) {
   const [section, setSection] = React.useState('A1');
   const [skill, setSkill] = React.useState('all');
 
   const { data, loading, error } = useApiResource(`/api/exam/questions?section=${section}`, token);
-  const all = data?.questions || [];
+  const all: ExamQuestion[] = data?.questions || [];
   const filtered = skill === 'all' ? all : all.filter((q) => (q.skill || 'reading').toLowerCase() === skill);
   const skillLabel = skill === 'all' ? 'All skills' : capitalize(skill);
 

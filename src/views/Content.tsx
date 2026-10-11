@@ -5,7 +5,32 @@ import { ExerciseCard } from '../components/exercises/ExerciseCard';
 import { ConceptRoadmap, LevelGuide, TopicTracks } from '../components/concepts';
 import { CEFR_LEVELS as SECTIONS } from '../presenters/levels.presenter.js';
 import { humanize } from '../presenters/format.presenter.js';
-import { Box, EmptyState, ErrorMessage, LoadingSpinner, Panel, PanelHeader, Tabs } from '../components/ui';
+import {
+  Box,
+  EmptyState,
+  ErrorMessage,
+  Panel,
+  PanelHeader,
+  Tabs,
+  Text,
+} from '../components/ui';
+
+// FRA-67: local interface. Canonical ownership of the content-item shape
+// belongs to a later ticket; kept minimal here (see "Notes for FRA-68").
+interface ContentItem {
+  id: string | number;
+  [key: string]: unknown;
+}
+
+interface CanonicalListProps {
+  type: string;
+  section: string;
+  token?: string | null;
+}
+
+interface ContentProps {
+  token?: string | null;
+}
 
 const LIBRARY_TABS = [
   { id: 'writing', label: 'Writing', icon: PenLine },
@@ -13,12 +38,12 @@ const LIBRARY_TABS = [
   { id: 'vocabulary', label: 'Vocabulary', icon: Library },
 ];
 
-function CanonicalList({ type, section, token }) {
+function CanonicalList({ type, section, token }: CanonicalListProps) {
   const { data, loading, error } = useApiResource(
     `/api/content/v1/items?type=${type}&level=${section}&limit=20`,
     token
   );
-  const items = data?.items || [];
+  const items: ContentItem[] = data?.items || [];
 
   if (loading) return <LoadingSpinner label={`Loading ${humanize(type)}…`} />;
   if (error) return <ErrorMessage message={error} />;
@@ -45,7 +70,7 @@ function CanonicalList({ type, section, token }) {
   );
 }
 
-export function Content({ token }) {
+export function Content({ token }: ContentProps) {
   const [selectedSection, setSelectedSection] = React.useState('A1');
   const [libraryTab, setLibraryTab] = React.useState('vocabulary');
 
