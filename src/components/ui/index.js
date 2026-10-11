@@ -9,6 +9,7 @@ export { Text, PageHeader } from './Text.jsx';
 export { TextInput } from './TextInput.jsx';
 export { Button } from './Button.jsx';
 export { Panel, PanelHeader } from './Panel.jsx';
+export { Card } from './Card.jsx';
 export { Tabs } from './Tabs.jsx';
 export { Badge, QueueKindLabel } from './Badge.jsx';
 export { Feedback, ErrorMessage } from './Feedback.jsx';

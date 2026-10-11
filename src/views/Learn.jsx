@@ -18,16 +18,14 @@ import { ExerciseCard } from '../components/exercises/ExerciseCard.jsx';
 import {
   Box,
   Button,
+  Card,
   EmptyState,
   ErrorMessage,
   Page,
   PageHeader,
-  Panel,
-  PanelHeader,
   ProgressRing,
-  Tabs,
   Text,
-  Toolbar,
+  Tabs,
 } from '../components/ui';
 
 // FRA-47: CEFR level-first navigation. Level cards carry a progress ring
@@ -42,26 +40,21 @@ function LevelCards({ levels, countsByLevel, mastery, onSelect }) {
         const total = countsByLevel?.[level]?.total ?? 0;
         const levelMasterySummary = mastery?.[level] || { total: 0, mastered: 0, avgMastery: 0 };
         return (
-          <Box
-            as="button"
-            type="button"
-            className="level-card"
+          <Card
             key={level}
             onClick={() => onSelect(level)}
-            aria-label={`${level}, ${CLB_BY_CEFR[level] ?? ''}, ${total} activities`}
+            ariaLabel={`${level}, ${CLB_BY_CEFR[level] ?? ''}, ${total} activities`}
           >
-            <Box className="level-card-head">
-              <Text as="strong">{level}</Text>
-              {CLB_BY_CEFR[level] && <Text as="span">{CLB_BY_CEFR[level]}</Text>}
-            </Box>
+            <Text className="card-title">{level}</Text>
+            {CLB_BY_CEFR[level] && <Text className="card-subtitle">{CLB_BY_CEFR[level]}</Text>}
             <ProgressRing
               percent={Math.round(levelMasterySummary.avgMastery * 100)}
               label={`${level} mastery: ${levelMasterySummary.mastered} of ${levelMasterySummary.total} concepts mastered`}
             />
-            <Text as="span" className="level-card-meta">
+            <Text className="card-meta">
               {total} {total === 1 ? 'activity' : 'activities'} · {levelMasterySummary.mastered}/{levelMasterySummary.total} concepts
             </Text>
-          </Box>
+          </Card>
         );
       })}
     </Box>
@@ -70,7 +63,11 @@ function LevelCards({ levels, countsByLevel, mastery, onSelect }) {
 
 function SkillItems({ level, skill, token }) {
   const { data, loading, error } = useApiResource(`/api/content/v1/items?level=${level}&limit=100`, token);
-  const items = (data?.items || []).filter((item) => skillForItemType(item.item_type) === skill);
+  // The items API shapes rows with `type` (not `item_type`); fall back to
+  // `item_type` for forward-compatibility.
+  const items = (data?.items || []).filter(
+    (item) => skillForItemType(item.type ?? item.item_type) === skill
+  );
   const tab = SKILL_TABS.find((t) => t.id === skill);
 
   if (loading) return <Text variant="muted">Loading {tab?.label} activities…</Text>;
@@ -115,7 +112,7 @@ function LevelDetail({ level, token, onBack, onQuiz }) {
       </Box>
       <Box className="learn-detail-head">
         <Box>
-          <Text as="span" variant="eyebrow">{level}{CLB_BY_CEFR[level] ? ` · ${CLB_BY_CEFR[level]}` : ''}</Text>
+          <Text variant="eyebrow">{level}{CLB_BY_CEFR[level] ? ` · ${CLB_BY_CEFR[level]}` : ''}</Text>
           <Text as="h2">Learn {level}</Text>
         </Box>
         <Button variant="primary" onClick={() => onQuiz(level)} icon={Play} iconSize={16}>
@@ -130,7 +127,7 @@ function LevelDetail({ level, token, onBack, onQuiz }) {
           label: (
             <>
               {tab.label}
-              <Text as="span" className="skill-tab-count">
+              <Text className="skill-tab-count">
                 {countsLoading ? '…' : countsForSkill(byType, tab.id)}
               </Text>
             </>
@@ -140,7 +137,6 @@ function LevelDetail({ level, token, onBack, onQuiz }) {
         onChange={setSkill}
         ariaLabel={`Choose a ${level} skill`}
       />
-      <Box as="div" />
       {SKILL_ITEM_TYPES[skill] && (
         <SkillItems level={level} skill={skill} token={token} />
       )}
@@ -200,15 +196,6 @@ export function Learn({ token, onQuiz }) {
           onQuiz={onQuiz}
         />
       )}
-      <Panel>
-        <PanelHeader eyebrow="How it works" title="Honest shelves" />
-        <Text variant="muted">
-          Counts come straight from the published content library — a skill tab showing 0 means
-          nothing is published there yet, not that it's hidden. Your progress rings reflect
-          concept mastery from every exercise you've answered.
-        </Text>
-      </Panel>
     </Page>
   );
 }
-
