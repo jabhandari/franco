@@ -1,6 +1,6 @@
 // Unit checks for the entry presenter: sanitizeEntry, moved verbatim from
 // ExerciseCard (behavior parity with the old inline version).
-import { sanitizeEntry } from './entry.presenter.js';
+import { sanitizeEntry } from './entry.presenter.ts';
 
 function assert(cond, message) {
   if (!cond) throw new Error(`FAIL: ${message}`);

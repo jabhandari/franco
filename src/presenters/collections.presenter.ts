@@ -1,14 +1,19 @@
 // FRA-21 presenter: pure collection helpers. No JSX, no hooks, no side
 // effects. Moved verbatim from src/api/client.js (re-exported there for
 // compatibility).
-import { safeText } from './format.presenter.js';
+import { safeText } from './format.presenter.ts';
+
+/** A normalized multiple-choice option. */
+export interface Choice {
+  key: string;
+  text: string;
+}
 
 /**
  * Unbiased shuffle (Fisher-Yates). Never use Array.sort(() => Math.random() - 0.5).
- * @param {Array} items
- * @returns {Array} a new shuffled array; the input is not mutated
+ * @returns a new shuffled array; the input is not mutated
  */
-export function shuffle(items) {
+export function shuffle<T>(items: readonly T[]): T[] {
   const array = [...items];
   for (let i = array.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -20,21 +25,25 @@ export function shuffle(items) {
 /**
  * Choices may arrive as [{key,text}], a JSON string, or an {A: "..."} map.
  * Object-shaped values collapse to '' rather than "[object Object]".
- * @param {*} raw
- * @returns {Array<{key: string, text: string}>}
  */
-export function normalizeChoices(raw) {
-  let choices = raw;
+export function normalizeChoices(raw: unknown): Choice[] {
+  let choices: unknown = raw;
   if (typeof choices === 'string') {
     try { choices = JSON.parse(choices); } catch { return []; }
   }
   if (Array.isArray(choices)) {
-    return choices
-      .map((c) => ({ key: safeText(c && c.key !== undefined ? c.key : c && c.id), text: safeText(c && c.text) }))
+    return (choices as unknown[])
+      .map((c) => {
+        const rec = c as { key?: unknown; id?: unknown; text?: unknown } | null;
+        const keyRaw = rec && rec.key !== undefined ? rec.key : rec && rec.id;
+        return { key: safeText(keyRaw), text: safeText(rec && rec.text) };
+      })
       .filter((c) => c.text);
   }
   if (choices && typeof choices === 'object') {
-    return Object.entries(choices).map(([key, text]) => ({ key: safeText(key, key), text: safeText(text) })).filter((c) => c.text);
+    return Object.entries(choices as Record<string, unknown>)
+      .map(([key, text]) => ({ key: safeText(key, key), text: safeText(text) }))
+      .filter((c) => c.text);
   }
   return [];
 }

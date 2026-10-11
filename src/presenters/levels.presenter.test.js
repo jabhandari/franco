@@ -1,5 +1,5 @@
 // Unit checks for the levels presenter: shared CEFR level list.
-import { CEFR_LEVELS, CLB_BY_CEFR, clbForCefr, formatLevelWithClb } from './levels.presenter.js';
+import { CEFR_LEVELS, CLB_BY_CEFR, clbForCefr, formatLevelWithClb } from './levels.presenter.ts';
 import { readFileSync } from 'node:fs';
 
 function assert(cond, message) {

@@ -1,6 +1,6 @@
 // Unit checks for the words presenter: vocabulary helpers moved verbatim
 // from the concepts view.
-import { POS_LABELS, describeWord } from './words.presenter.js';
+import { POS_LABELS, describeWord } from './words.presenter.ts';
 
 function assert(cond, message) {
   if (!cond) throw new Error(`FAIL: ${message}`);

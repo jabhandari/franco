@@ -6,6 +6,11 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    // FRA-62: converted .ts modules import each other with explicit '.ts'
+    // specifiers (Node's type-stripping does not remap '.js' -> '.ts', and
+    // the colocated .test.js files are executed by plain node). Works with
+    // bundler resolution + noEmit; esbuild/Vite accept it as-is.
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "allowJs": true,
     "checkJs": false,
