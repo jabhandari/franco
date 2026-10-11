@@ -3,7 +3,7 @@ import { Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { normalizeChoices } from '../presenters/collections.presenter.js';
 import { capitalize, choiceLabel } from '../presenters/format.presenter.js';
-import { CEFR_LEVELS } from '../presenters/levels.presenter.js';
+import { CEFR_LEVELS, formatLevelWithClb } from '../presenters/levels.presenter.js';
 import {
   Box,
   Button,
@@ -113,7 +113,7 @@ export function PastQuestions({ token }) {
       <PageHeader
         eyebrow="Exam archive"
         title="Past questions"
-        lede="Real exam-format questions from the archive. Pick an answer to check yourself — retry any you miss."
+        lede="Real exam-format questions from the archive. Pick an answer to check yourself — retry any you miss. Levels carry their Canadian Language Benchmark (CLB) equivalents for TEF/TCF Canada."
       />
       <Tabs
         variant="section"
@@ -134,7 +134,7 @@ export function PastQuestions({ token }) {
       {loading && <EmptyState icon={Database} title="Loading past questions" text="Fetching the exam archive." />}
       {error && <EmptyState icon={Database} title="Couldn't load past questions" text={error} />}
       {!loading && !error && (
-        <ExamQuestionList data={{ questions: filtered, section: `${section} · ${skillLabel}` }} />
+        <ExamQuestionList data={{ questions: filtered, section: `${formatLevelWithClb(section)} · ${skillLabel}` }} />
       )}
     </Page>
   );

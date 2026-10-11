@@ -2,7 +2,7 @@ import React from 'react';
 import { Database, Search, X } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { safeText, padNumber } from '../presenters/format.presenter.js';
-import { CEFR_LEVELS } from '../presenters/levels.presenter.js';
+import { CEFR_LEVELS, formatLevelWithClb } from '../presenters/levels.presenter.js';
 import { describeWord } from '../presenters/words.presenter.js';
 import { Badge, Box, EmptyState, ErrorMessage, Modal, Panel, Tabs, Text, TextInput } from './ui';
 
@@ -32,7 +32,7 @@ export function LevelGuide({ section }) {
   if (!guide) return null;
   return (
     <Box as="section" className="level-guide panel">
-      <Box><Text as="span" variant="eyebrow">{section} · {guide.label}</Text><Text as="h2">{guide.goal}</Text></Box>
+      <Box><Text as="span" variant="eyebrow">{formatLevelWithClb(section)} · {guide.label}</Text><Text as="h2">{guide.goal}</Text></Box>
       <Box className="guide-columns"><Box><Text as="strong">Focus</Text><Text>{guide.focus}</Text></Box><Box><Text as="strong">Reading practice</Text><Text>{guide.read}</Text></Box></Box>
       <Text as="small">Level descriptors adapted from the <Box as="a" href="https://www.coe.int/en/web/common-european-framework-reference-languages/cefr-descriptors" target="_blank" rel="noreferrer">Council of Europe CEFR descriptors</Box>.</Text>
     </Box>
