@@ -1,5 +1,6 @@
 import { createHash, pbkdf2Sync, randomBytes, randomUUID } from 'node:crypto';
 import { createServer } from 'node:http';
+import { readdir, readFile } from 'node:fs/promises';
 import { query, pool, migrate, createProfileForUser } from './database.js';
 import { CONTENT_SCHEMA_VERSION, normalizeItem, schemaDocument, validateBatch } from './content-contract.js';
 import { sm2Update, masteryDelta } from './sm2.js';
@@ -240,8 +241,32 @@ async function ingestBatch(batch) {
   await query('UPDATE content_batches SET status=?,completed_at=NOW() WHERE id=?', [itemStatus, batchId]);
   return { status: 202, body: { batch_id: batchId, schema_version: batch.schema_version, status: itemStatus, item_count: batch.items.length, created, duplicates } };
 }
+// Committed content batches (content/batches/*.json) are ingested on boot
+// through the same ingestBatch() path as the API, so merging a PR that adds
+// a batch file lands its items in pending_review for the /review queue with
+// no manual POST. Idempotent via idempotency_key; a bad file warns and never
+// blocks boot.
+async function syncCommittedBatches() {
+  const dir = new URL('../content/batches/', import.meta.url);
+  let files;
+  try {
+    files = (await readdir(dir)).filter(f => f.endsWith('.json') && !f.endsWith('.manifest.json')).sort();
+  } catch {
+    return;
+  }
+  for (const file of files) {
+    try {
+      const batch = JSON.parse(await readFile(new URL(file, dir), 'utf8'));
+      const result = await ingestBatch(batch);
+      if (result.status >= 400) console.warn(`[content] ${file}: skipped (${result.body.error})`);
+      else console.log(`[content] ${file}: ${result.body.status}${result.body.idempotent_replay ? ' (already ingested)' : ` (${result.body.item_count} items)`}`);
+    } catch (error) {
+      console.warn(`[content] ${file}: skipped (${error.message})`);
+    }
+  }
+}
 async function main() {
-    await migrate(); createServer(async (req, res) => {
+    await migrate(); await syncCommittedBatches(); createServer(async (req, res) => {
         try {
             res.setHeader('access-control-allow-origin', corsOrigin(req.headers.origin));
             if (req.method === 'OPTIONS') return json(res, 204, {}); const u = new URL(req.url, `http://${req.headers.host}`);
