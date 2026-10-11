@@ -5,6 +5,7 @@ import React from 'react';
 //   stub    -> .stub-badge
 //   timer   -> .timer-chip
 //   roadmap -> .roadmap-badge
+//   status  -> .status-badge .status-{kind}    (kind: mastered|learning|locked)
 const QUEUE_LABELS = {
   review: 'Due review',
   new: 'New',
@@ -18,11 +19,12 @@ const VARIANT_CLASS = {
   stub: 'stub-badge',
   timer: 'timer-chip',
   roadmap: 'roadmap-badge',
+  status: 'status-badge',
 };
 
 export function Badge({ variant = 'queue', kind, icon: Icon = null, iconSize = 14, children }) {
   const base = VARIANT_CLASS[variant] || VARIANT_CLASS.queue;
-  const classes = variant === 'queue' && kind ? `${base} ${base}-${kind}` : base;
+  const classes = (variant === 'queue' || variant === 'status') && kind ? `${base} ${base}-${kind}` : base;
   const label = variant === 'queue' ? (QUEUE_LABELS[kind] || kind) : children;
   return (
     <span className={classes}>

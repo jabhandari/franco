@@ -865,6 +865,22 @@ html[data-theme="light"] .roadmap-connectors path { stroke:#8d95a8; opacity:.72;
 .roadmap-table-row b { color:#aeb9ff; font:11px ui-monospace,monospace; }
 .roadmap-table-row small { color:#aeb9ff; text-transform:uppercase; font-size:10px; }
 .roadmap-table-row p { margin:0; color:#9ba8ba; font-size:13px; }
+/* FRA-48: per-level concept breakdown table (concept -> skill -> status). */
+.concept-status-summary { margin:12px 0 4px; }
+.concept-table { margin-top:12px; border:1px solid #2c2c2c; border-radius:12px; overflow:hidden; background:#151515; }
+.concept-table-head,.concept-table-row { display:grid; grid-template-columns:1.4fr .8fr .8fr; gap:18px; align-items:center; padding:14px 20px; }
+.concept-table-head { color:#8997a8; font-size:11px; text-transform:uppercase; letter-spacing:.08em; border-bottom:1px solid #2c2c2c; }
+.concept-table-row { border:0; border-bottom:1px solid #242424; color:#e5e7eb; text-align:left; font:inherit; background:none; width:100%; cursor:pointer; }
+.concept-table-row:last-child { border-bottom:0; }
+.concept-table-row:hover { background:#1c2646; }
+.concept-table-row.active { background:#1c2f56; box-shadow:inset 3px 0 0 #5eead4; }
+.concept-table-row span { display:flex; gap:12px; align-items:center; font-weight:700; }
+.concept-table-row b { color:#aeb9ff; font:11px ui-monospace,monospace; }
+.concept-table-row small { color:#aeb9ff; text-transform:uppercase; font-size:10px; }
+.status-badge { display:inline-flex; align-items:center; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
+.status-badge.status-mastered { background:#123f2a; color:#5eead4; }
+.status-badge.status-learning { background:#3a2f12; color:#fbbf24; }
+.status-badge.status-locked { background:#2a2a2a; color:#8a8f98; }
 html[data-theme="light"] .map-toolbar { color:#687178; }
 html[data-theme="light"] .map-toolbar button { background:#fff; border-color:#cbd9e4; color:#243b53; }
 html[data-theme="light"] .roadmap-table { background:#fffdf8; border-color:#e3d8ca; }

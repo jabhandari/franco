@@ -40,7 +40,8 @@ export function LevelGuide({ section }) {
 }
 
 // Adapt an API concept to the node shape the roadmap components render.
-function toNode(concept) {
+// Exported for reuse by the concept breakdown table (FRA-48).
+export function toNode(concept) {
   const meta = concept.metadata || {};
   return {
     id: safeText(concept.slug),

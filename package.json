@@ -15,7 +15,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "test:content-contract": "node scripts/test-content-contract.mjs",
     "test:learning-engine": "node scripts/test-learning-engine.mjs",
-    "test": "node scripts/test-content-contract.mjs && node scripts/test-learning-engine.mjs && node src/presenters/attempt.presenter.test.js && node src/presenters/levels.presenter.test.js && node src/presenters/format.presenter.test.js && node src/presenters/collections.presenter.test.js && node src/presenters/entry.presenter.test.js && node src/presenters/words.presenter.test.js && node scripts/test-speech.mjs && node scripts/test-server-config.mjs",
+    "test": "node scripts/test-content-contract.mjs && node scripts/test-learning-engine.mjs && node src/presenters/attempt.presenter.test.js && node src/presenters/levels.presenter.test.js && node src/presenters/format.presenter.test.js && node src/presenters/collections.presenter.test.js && node src/presenters/entry.presenter.test.js && node src/presenters/words.presenter.test.js && node src/presenters/concept-status.presenter.test.js && node scripts/test-speech.mjs && node scripts/test-server-config.mjs",
     "lint:ui": "node scripts/lint-ui-boundary.mjs",
     "seed:concepts": "node --env-file=.env scripts/seed-concepts.mjs",
     "import:normalized": "node --env-file=.env scripts/import-normalized-content.mjs",

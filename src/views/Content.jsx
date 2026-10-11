@@ -3,6 +3,7 @@ import { BookOpen, PenLine, Mic, Library } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { ExerciseCard } from '../components/exercises/ExerciseCard.jsx';
 import { ConceptRoadmap, LevelGuide, TopicTracks } from '../components/concepts.jsx';
+import { ConceptStatusTable } from '../components/ConceptStatusTable.jsx';
 import { CEFR_LEVELS as SECTIONS } from '../presenters/levels.presenter.js';
 import { humanize } from '../presenters/format.presenter.js';
 import { Box, EmptyState, ErrorMessage, Panel, PanelHeader, Tabs, Text } from '../components/ui';
@@ -53,6 +54,7 @@ export function Content({ token }) {
     <Box as="section" className="map-only-page">
       <ConceptRoadmap level={selectedSection} token={token} onSelectSection={setSelectedSection} />
       <LevelGuide section={selectedSection} />
+      <ConceptStatusTable level={selectedSection} onSelectLevel={setSelectedSection} token={token} />
       <Panel>
         <PanelHeader eyebrow="Study library" title={`More ${selectedSection} content`} />
         <Tabs variant="library" options={LIBRARY_TABS} value={libraryTab} onChange={setLibraryTab} />
