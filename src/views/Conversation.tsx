@@ -14,17 +14,20 @@ import {
   Text,
 } from '../components/ui';
 
-// FRA-67: local interface for the /api/me/conversation-targets payload.
-interface ConversationTarget {
+// FRA-67: local type for the GET /api/me/conversation-targets payload.
+// Targets are built from concept rows as { id, section, title, text } in
+// server/index.js; canonical ownership belongs to a later ticket (see
+// "Notes for FRA-68").
+type ConversationTarget = {
   id: string;
-  title?: string;
-  section?: string;
-  text?: string;
-}
+  section: string;
+  title: string;
+  text: string;
+};
 
-interface ConversationProps {
+type ConversationProps = {
   token?: string | null;
-}
+};
 
 // Guided speaking practice. There is no scripted chatbot here: the server
 // picks a roleplay scenario from your weakest concepts (or starter concepts

@@ -15,33 +15,49 @@ import {
   TextInput,
 } from '../components/ui';
 
-// FRA-67: local interfaces for the review-queue payloads. Canonical ownership
-// of the content-item shape belongs to a later ticket (see "Notes for FRA-68").
+// Input contract of normalizeChoices() in
+// src/presenters/collections.presenter.js: a JSON string, an array of
+// choice objects, a key->text map, or null.
+type RawChoice = {
+  key?: string | number;
+  id?: string | number;
+  text?: string | number | null;
+};
+type ChoicesInput = string | RawChoice[] | Record<string, string | number | null> | null | undefined;
+
+// Output contract of normalizeChoices(): filtered { key, text } pairs.
+type NormalizedChoice = { key: string; text: string };
+
+// FRA-67: local types for the review-queue payloads. ReviewQueueItem models
+// GET /api/content/v1/items?status=… — the same shaped item as Content.tsx's
+// list (shapeContentItem() in server/index.js); only the fields this view
+// reads are included. Canonical ownership of the content-item shape belongs
+// to a later ticket (see "Notes for FRA-68").
 type ReviewStatus = 'pending_review' | 'approved' | 'published';
 type ReviewAction = 'approve' | 'publish' | 'reject';
 
-interface ReviewQueueItem {
+type ReviewQueueItem = {
   id: string;
   status: string;
-  type?: string;
-  level?: string;
-  source?: string;
-  external_id?: string;
-  report_count?: number;
-  title?: string;
-  prompt?: unknown;
-  context?: unknown;
-  instructions?: unknown;
-  choices?: unknown;
-  expected?: unknown;
-  expected_points?: unknown;
-}
+  type: string | null;
+  level: string | null;
+  source: string | null;
+  external_id: string | null;
+  report_count: number;
+  title: string | null;
+  prompt: string | null;
+  context: string | null;
+  instructions: string | null;
+  choices: ChoicesInput;
+  expected: string | null;
+  expected_points: string[] | null;
+};
 
-interface ReviewQueueProps {
+type ReviewQueueProps = {
   onKeyChange?: (hasKey: boolean) => void;
-}
+};
 
-interface ReviewItemProps {
+type ReviewItemProps = {
   key?: React.Key;
   item: ReviewQueueItem;
   note: string;
@@ -49,7 +65,7 @@ interface ReviewItemProps {
   error: string;
   onNote: (value: string) => void;
   onAct: (action: ReviewAction) => void;
-}
+};
 
 // FRA-2: review queue UI for the content bank. The review endpoints
 // authenticate with a content:review API key (x-api-key), not the learner
@@ -248,7 +264,7 @@ function ReviewItem({ item, note, busy, error, onNote, onAct }: ReviewItemProps)
     ? item.expected_points.filter((point): point is string => typeof point === 'string')
     : [];
   const flagged = (item.report_count || 0) > 0;
-  const isCorrectChoice = (choice: { key: string; text: string }) => {
+  const isCorrectChoice = (choice: NormalizedChoice) => {
     if (!expected) return false;
     const target = expected.trim().toLowerCase();
     return choice.key.trim().toLowerCase() === target || choice.text.trim().toLowerCase() === target;
@@ -282,7 +298,7 @@ function ReviewItem({ item, note, busy, error, onNote, onAct }: ReviewItemProps)
             <Text as="strong">Answer / expected</Text>
             {choices.length > 0 && (
               <Box as="ul" className="review-choices">
-                {choices.map((choice) => (
+                {choices.map((choice: NormalizedChoice) => (
                   <Box as="li" key={choice.key} className={isCorrectChoice(choice) ? 'correct' : undefined}>
                     {choice.key}. {choice.text}
                     {isCorrectChoice(choice) ? ' ✓' : ''}

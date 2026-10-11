@@ -21,35 +21,50 @@ import {
   Toolbar,
 } from '../components/ui';
 
-// FRA-67: local interfaces for the /api/exam/questions payload. The exam
-// archive row shape stays owned by its ticket (see "Notes for FRA-68").
-interface ExamQuestion {
-  id: string | number;
-  exam_name?: string;
-  skill?: string;
-  prompt?: string;
-  context?: string;
-  choices?: unknown;
-  choices_json?: unknown;
-  answer?: string | null;
-  explanation?: string;
-}
+// Input contract of normalizeChoices() in
+// src/presenters/collections.presenter.js: a JSON string, an array of
+// choice objects, a key->text map, or null.
+type RawChoice = {
+  key?: string | number;
+  id?: string | number;
+  text?: string | number | null;
+};
+type ChoicesInput = string | RawChoice[] | Record<string, string | number | null> | null | undefined;
 
-interface ExamQuestionCardProps {
+// Output contract of normalizeChoices(): filtered { key, text } pairs.
+type NormalizedChoice = { key: string; text: string };
+
+// FRA-67: local type for the GET /api/exam/questions payload — SELECT *,
+// choices_json AS choices FROM exam_questions (see server/index.js and
+// supabase/schema.sql). The exam archive row shape stays owned by its
+// ticket (see "Notes for FRA-68").
+type ExamQuestion = {
+  id: string;
+  exam_name: string;
+  skill: string;
+  prompt: string;
+  context: string | null;
+  choices: ChoicesInput;
+  choices_json: ChoicesInput;
+  answer: string | null;
+  explanation: string | null;
+};
+
+type ExamQuestionCardProps = {
   key?: React.Key;
   question: ExamQuestion;
   selected: string | null;
   onSelect: (value: string) => void;
   onRetry: () => void;
-}
+};
 
-interface ExamQuestionListProps {
+type ExamQuestionListProps = {
   data: { questions: ExamQuestion[]; section: string };
-}
+};
 
-interface PastQuestionsProps {
+type PastQuestionsProps = {
   token?: string | null;
-}
+};
 
 const SECTIONS = CEFR_LEVELS;
 const SKILLS = ['all', 'reading', 'listening', 'language structures'];
@@ -62,7 +77,7 @@ const PAGE_SIZE = 12;
 function ExamQuestionCard({ question, selected, onSelect, onRetry }: ExamQuestionCardProps) {
   const choices = React.useMemo(() => normalizeChoices(question.choices ?? question.choices_json), [question.choices, question.choices_json]);
   const correct = question.answer ? String(question.answer).trim().toLowerCase() : null;
-  const selectedChoice = choices.find((choice) => choice.key === selected || choice.text === selected);
+  const selectedChoice = choices.find((choice: NormalizedChoice) => choice.key === selected || choice.text === selected);
   const isCorrect = Boolean(selected && correct && (String(selected).trim().toLowerCase() === correct || selectedChoice?.key?.toLowerCase() === correct));
   const prompt = String(question.prompt || '').trim();
   let passage = String(question.context || '').trim();
@@ -74,7 +89,7 @@ function ExamQuestionCard({ question, selected, onSelect, onRetry }: ExamQuestio
       <Text as="h2">{prompt}</Text>
       {choices.length > 0 && (
         <OptionList
-          options={choices.map((choice) => ({ key: choice.key, label: choiceLabel(choice) }))}
+          options={choices.map((choice: NormalizedChoice) => ({ key: choice.key, label: choiceLabel(choice) }))}
           selectedKey={selected}
           answered={Boolean(selected && correct)}
           correct={Boolean(selectedChoice && selectedChoice.key.toLowerCase() === correct)}
@@ -147,7 +162,7 @@ export function PastQuestions({ token }: PastQuestionsProps) {
       />
       <Tabs
         variant="section"
-        options={SECTIONS.map((s) => ({ id: s, label: s }))}
+        options={SECTIONS.map((s: string) => ({ id: s, label: s }))}
         value={section}
         onChange={setSection}
         ariaLabel="Choose a level"
