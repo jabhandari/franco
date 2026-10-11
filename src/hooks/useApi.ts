@@ -3,11 +3,11 @@ import { apiGet } from '../api/client.js';
 import { getErrorMessage } from '../presenters/format.presenter.js';
 
 /** Return shape of {@link useApiResource}. */
-export interface ApiResourceState<T> {
+export type ApiResourceState<T> = {
   data: T | null;
   loading: boolean;
   error: string;
-}
+};
 
 export function useApiResource<T = unknown>(path: string, token?: string | null): ApiResourceState<T> {
   const [state, setState] = React.useState<ApiResourceState<T>>({ data: null, loading: true, error: '' });
@@ -24,7 +24,7 @@ export function useApiResource<T = unknown>(path: string, token?: string | null)
       .then((data: T) => {
         if (!cancelled) setState({ data, loading: false, error: '' });
       })
-      .catch((error: unknown) => {
+      .catch((error) => {
         if (!cancelled) setState({ data: null, loading: false, error: getErrorMessage(error) });
       });
 
