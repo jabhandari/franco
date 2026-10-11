@@ -1,8 +1,9 @@
 name: CI
 
-# Gate every pull request: UI boundary lint, tests, and a production build
-# must all pass before a PR can look mergeable. Runs only on GitHub's free
-# Actions tier with first-party actions — no paid or third-party actions.
+# Gate every pull request: UI boundary lint, TypeScript typecheck, tests, and
+# a production build must all pass before a PR can look mergeable. Runs only
+# on GitHub's free Actions tier with first-party actions — no paid or
+# third-party actions.
 
 on:
   pull_request:
@@ -18,7 +19,7 @@ concurrency:
 
 jobs:
   checks:
-    name: lint:ui · test · build
+    name: lint:ui · typecheck · test · build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,6 +36,9 @@ jobs:
 
       - name: UI boundary check (FRA-21)
         run: npm run lint:ui
+
+      - name: TypeScript typecheck
+        run: npm run typecheck
 
       - name: Test suite
         run: npm test
