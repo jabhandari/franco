@@ -369,6 +369,12 @@ async function main() {
                 const rj = target.response_json || {};
                 const ej = target.evaluation_json || {};
                 reveal = rj.answer ?? rj.expected ?? ej.answer ?? ej.expected ?? (Array.isArray(rj.tokens) ? rj.tokens.join(' ') : null);
+                // FRA-7: for multiple-choice, reveal the correct choice's text
+                // (the right sentence), not just its key.
+                if (target.item_type === 'multiple_choice' && Array.isArray(rj.choices)) {
+                  const correctChoice = rj.choices.find((c) => String(c.id) === String(reveal));
+                  if (correctChoice && correctChoice.text) reveal = correctChoice.text;
+                }
               } else if (legacyRow) {
                 reveal = legacyRow.answer ?? null;
               }
