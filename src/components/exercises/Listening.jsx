@@ -47,6 +47,7 @@ export function PronunciationDrill({ entry, token, onResult }) {
 
   return (
     <ExerciseShell answered={answeredState(result)}>
+      <Box className="pronunciation-drill">
       <ExerciseEyebrow level={entry.level} kind="pronunciation drill" />
       <Text as="h2">{entry.prompt}</Text>
       <AudioPlayer
@@ -74,6 +75,7 @@ export function PronunciationDrill({ entry, token, onResult }) {
         />
       )}
       {result?.error && <ErrorMessage message={result.error} />}
+      </Box>
     </ExerciseShell>
   );
 }

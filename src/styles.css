@@ -1418,6 +1418,18 @@ html:not([data-theme="light"]) .auth-page .auth-brand-subtitle { color:#888; }
   font-size: 20px;
   margin-bottom: 8px;
 }
+/* Pronunciation drill: compact layout for single-word drills */
+.exercise-preview .pronunciation-drill h2 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+.exercise-preview .pronunciation-drill .audio-player {
+  margin: 8px 0;
+}
+.exercise-preview .pronunciation-drill .reveal-word {
+  font-size: 20px;
+  padding: 6px 0;
+}
 /* Space between skill tabs and the content below */
 .learn-skill-content {
   margin-top: 24px;
