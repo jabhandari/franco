@@ -3,6 +3,14 @@
 // from src/api/client.js (re-exported there for compatibility).
 
 /**
+ * Narrow an unknown API value to a plain string-keyed record. Arrays are
+ * not records. Lets callers avoid `as` assertions at the render boundary.
+ */
+export function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+/**
  * Render unknown API values safely. Learners never see raw JSON or
  * "[object Object]": objects, arrays, and booleans collapse to the fallback.
  */
@@ -25,8 +33,8 @@ export function formatEnum(value: unknown): string {
  * Normalize any caught error into a concise learner-facing message.
  */
 export function getErrorMessage(error: unknown): string {
-  const message = error && typeof error === 'object' && 'message' in error
-    ? safeText((error as { message?: unknown }).message).trim()
+  const message = isRecord(error) && 'message' in error
+    ? safeText(error.message).trim()
     : '';
   if (message) return message;
   return 'Something went wrong. Please try again.';

@@ -1,7 +1,7 @@
 // FRA-21 presenter: pure collection helpers. No JSX, no hooks, no side
 // effects. Moved verbatim from src/api/client.js (re-exported there for
 // compatibility).
-import { safeText } from './format.presenter.ts';
+import { safeText, isRecord } from './format.presenter.ts';
 
 /** A normalized multiple-choice option. */
 export interface Choice {
@@ -32,16 +32,17 @@ export function normalizeChoices(raw: unknown): Choice[] {
     try { choices = JSON.parse(choices); } catch { return []; }
   }
   if (Array.isArray(choices)) {
-    return (choices as unknown[])
-      .map((c) => {
-        const rec = c as { key?: unknown; id?: unknown; text?: unknown } | null;
+    const list: unknown[] = choices;
+    return list
+      .map((c: unknown) => {
+        const rec: Record<string, unknown> | null = isRecord(c) ? c : null;
         const keyRaw = rec && rec.key !== undefined ? rec.key : rec && rec.id;
         return { key: safeText(keyRaw), text: safeText(rec && rec.text) };
       })
       .filter((c) => c.text);
   }
-  if (choices && typeof choices === 'object') {
-    return Object.entries(choices as Record<string, unknown>)
+  if (isRecord(choices)) {
+    return Object.entries(choices)
       .map(([key, text]) => ({ key: safeText(key, key), text: safeText(text) }))
       .filter((c) => c.text);
   }

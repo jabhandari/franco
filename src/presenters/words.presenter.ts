@@ -1,6 +1,6 @@
 // FRA-21 presenter: pure vocabulary-word helpers moved verbatim from
 // src/components/concepts.jsx. No JSX, no hooks, no side effects.
-import { safeText } from './format.presenter.ts';
+import { safeText, isRecord } from './format.presenter.ts';
 
 // Learner-facing labels for Lexique part-of-speech codes stored in the
 // vocabulary topic rows (e.g. {"lemma":"accord","pos":"NOM","gender":"m",...}).
@@ -30,10 +30,10 @@ export function describeWord(item: unknown): string {
   if (typeof item !== 'string') return safeText(item);
   let parsed: unknown = null;
   try { parsed = JSON.parse(item); } catch { parsed = null; }
-  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || !(parsed as LexiqueMeta).pos) {
+  if (!isRecord(parsed) || !parsed.pos) {
     return safeText(item);
   }
-  const word = parsed as LexiqueMeta;
+  const word: LexiqueMeta = parsed;
   const posKey = String(word.pos).split(':')[0].toUpperCase();
   const parts: string[] = [POS_LABELS[posKey] || posKey.toLowerCase()];
   if (word.gender === 'm') parts.push('masculine');
