@@ -29,6 +29,12 @@ type ErrorMessageProps = {
   message?: string;
 };
 
+type LoadingSpinnerProps = {
+  size?: UIRaw.LoadingSpinnerSize;
+  label?: string;
+  centered?: boolean;
+};
+
 type ModalProps = {
   closeLabel?: string;
   onClose?: () => void;
@@ -74,6 +80,7 @@ const Badge = UIRaw.Badge as React.ComponentType<BadgeProps>;
 const Box = UIRaw.Box as React.ComponentType<BoxProps>;
 const EmptyState = UIRaw.EmptyState as React.ComponentType<EmptyStateProps>;
 const ErrorMessage = UIRaw.ErrorMessage as React.ComponentType<ErrorMessageProps>;
+const LoadingSpinner = UIRaw.LoadingSpinner as React.ComponentType<LoadingSpinnerProps>;
 const Modal = UIRaw.Modal as React.ComponentType<ModalProps>;
 const Panel = UIRaw.Panel as React.ComponentType<PanelProps>;
 const Tabs = UIRaw.Tabs as React.ComponentType<TabsProps>;
@@ -440,7 +447,7 @@ export function ConceptRoadmap({ level, token, onSelectSection }: { level: strin
   const concepts: ApiConcept[] = data?.concepts || [];
   const { nodes, edges } = React.useMemo(() => levelNodes(concepts, level), [concepts, level]);
 
-  if (loading) return <EmptyState icon={Database} title="Loading curriculum" text="Pulling up the lesson roadmap." />;
+  if (loading) return <LoadingSpinner label="Loading curriculum — pulling up the lesson roadmap." />;
   if (error) return <EmptyState icon={Database} title="Couldn't load the curriculum" text={error} />;
 
   return (
@@ -549,7 +556,7 @@ export function TopicTracks({ section }: { section: string }) {
   const topics: VocabularyTopic[] = data?.topics || [];
   const categories = [...new Set(topics.map((topic) => topic.category))];
 
-  if (loading) return <Text variant="muted">Loading topics…</Text>;
+  if (loading) return <LoadingSpinner label="Loading topics…" />;
   if (error) return <ErrorMessage message={error} />;
   if (!topics.length) return <Text variant="muted">No vocabulary topics yet for {section}.</Text>;
 

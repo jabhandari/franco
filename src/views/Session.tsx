@@ -3,7 +3,8 @@ import { BookOpen, Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { ExerciseCard as ExerciseCardJsx } from '../components/exercises/ExerciseCard.jsx';
 import { CEFR_LEVELS } from '../presenters/levels.presenter.js';
-import { Box as BoxJsx, Button as ButtonJsx, EmptyState as EmptyStateJsx, Page as PageJsx, PageHeader as PageHeaderJsx, Tabs as TabsJsx, Toolbar as ToolbarJsx } from '../components/ui';
+import { Box as BoxJsx, Button as ButtonJsx, EmptyState as EmptyStateJsx, Page as PageJsx, PageHeader as PageHeaderJsx, Tabs as TabsJsx, Toolbar as ToolbarJsx, LoadingSpinner as LoadingSpinnerJsx } from '../components/ui';
+import type { LoadingSpinnerSize } from '../components/ui';
 
 // FRA-66 interim bridge: these are still .jsx (ExerciseCard: FRA-65,
 // src/components/ui: FRA-63), so these imports carry no prop types. Each is
@@ -33,6 +34,11 @@ type ExerciseCardProps = {
   entry: SessionQueueEntry;
   token?: string | null;
 };
+type LoadingSpinnerProps = {
+  size?: LoadingSpinnerSize;
+  label?: string;
+  centered?: boolean;
+};
 type PageProps = {
   children?: React.ReactNode;
 };
@@ -58,6 +64,7 @@ type ToolbarProps = {
   actions?: React.ReactNode;
 };
 const ExerciseCard: React.ComponentType<ExerciseCardProps> = ExerciseCardJsx;
+const LoadingSpinner: React.ComponentType<LoadingSpinnerProps> = LoadingSpinnerJsx;
 const Box: React.ComponentType<BoxProps> = BoxJsx;
 const Button: React.ComponentType<ButtonProps> = ButtonJsx;
 const EmptyState: React.ComponentType<EmptyStateProps> = EmptyStateJsx;
@@ -202,7 +209,7 @@ export function Session({ token, initialLevel }: SessionProps) {
         onChange={setSelectedSection}
         ariaLabel="Choose session level"
       />
-      {loading && <EmptyState icon={Database} title="Preparing your session" text="Loading questions for this level." />}
+      {loading && <LoadingSpinner label="Preparing your session — loading questions for this level." />}
       {error && <EmptyState icon={Database} title="Couldn't load this session" text={error} />}
       {!loading && !error && !queue.length && (
         <EmptyState icon={BookOpen} title="No exercises yet" text="Nothing is queued for this level yet. Try another level or check back after your next review window." />

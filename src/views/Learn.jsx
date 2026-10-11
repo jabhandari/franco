@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, ChevronLeft, Database, GraduationCap, Play } from 'lucide-react';
+import { BookOpen, ChevronLeft, GraduationCap, Play } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { CEFR_LEVELS } from '../presenters/levels.presenter.js';
 // FRA-50 adds the canonical CLB mapping to levels.presenter.js; the
@@ -21,6 +21,7 @@ import {
   Card,
   EmptyState,
   ErrorMessage,
+  LoadingSpinner,
   Page,
   PageHeader,
   ProgressRing,
@@ -70,7 +71,7 @@ function SkillItems({ level, skill, token }) {
   );
   const tab = SKILL_TABS.find((t) => t.id === skill);
 
-  if (loading) return <Text variant="muted">Loading {tab?.label} activities…</Text>;
+  if (loading) return <LoadingSpinner label={`Loading ${tab?.label} activities…`} />;
   if (error) return <ErrorMessage message={error} />;
   if (!items.length) {
     return (
@@ -181,7 +182,7 @@ export function Learn({ token, onQuiz }) {
       />
       {conceptsError && <ErrorMessage message={conceptsError} />}
       {(conceptsLoading || progressLoading) && (
-        <EmptyState icon={Database} title="Loading levels" text="Pulling your progress and the content counts." />
+        <LoadingSpinner label="Loading levels — pulling your progress and the content counts." />
       )}
       {!conceptsLoading && !progressLoading && !selectedLevel && (
         <LevelCards
