@@ -34,6 +34,7 @@ import { Progress } from './views/Progress.jsx';
 import { Conversation } from './views/Conversation.jsx';
 import { Placement } from './views/Placement.jsx';
 import { ReviewQueue, REVIEW_KEY_STORAGE } from './views/ReviewQueue.jsx';
+import { Profile } from './views/Profile.jsx';
 
 const TOKEN_KEY = 'franco_auth_token';
 
@@ -45,10 +46,15 @@ const navItems = [
   { id: 'content', label: 'Content', icon: BookOpen },
   { id: 'past', label: 'Past questions', icon: BookOpen },
   { id: 'progress', label: 'Progress', icon: TrendingUp },
-  { id: 'conversation', label: 'Conversation', icon: Mic }
+  { id: 'conversation', label: 'Conversation', icon: Mic },
+  { id: 'profile', label: 'Profile', icon: UserRound }
 ];
 
+<<<<<<< HEAD
 const viewPaths = { home: '/', learn: '/learn', placement: '/placement', session: '/session', content: '/content', past: '/past-questions', progress: '/progress', conversation: '/conversation', review: '/review' };
+=======
+const viewPaths = { home: '/', placement: '/placement', session: '/session', content: '/content', past: '/past-questions', progress: '/progress', conversation: '/conversation', review: '/review', profile: '/profile' };
+>>>>>>> dd1c2b7 (FRA-56: collect first/last name at signup; editable profile)
 function viewFromPath(pathname) {
   const entry = Object.entries(viewPaths).find(([, path]) => path === pathname || (path !== '/' && pathname.startsWith(`${path}/`)));
   return entry?.[0] || 'home';
@@ -129,15 +135,26 @@ function App() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const email = formData.get('email')?.toString().trim();
-    const name = formData.get('name')?.toString().trim();
+    const firstName = formData.get('first_name')?.toString().trim();
+    const lastName = formData.get('last_name')?.toString().trim();
     const password = formData.get('password')?.toString() || '';
     const endpoint = authView === 'signup' ? '/api/auth/signup' : '/api/auth/login';
 
-    setLoading(true);
     setError('');
+    if (authView === 'signup' && (!firstName || !lastName)) {
+      setError('Please enter your first and last name.');
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      const payload = await apiPost(endpoint, { email, name, password });
+      const payload = await apiPost(
+        endpoint,
+        authView === 'signup'
+          ? { email, first_name: firstName, last_name: lastName, password }
+          : { email, password },
+      );
       sessionStorage.setItem(TOKEN_KEY, payload.token);
       setAuthToken(payload.token);
       setSession(payload.user);
@@ -157,6 +174,11 @@ function App() {
     sessionStorage.removeItem(TOKEN_KEY);
     setAuthView('login');
     navigate('home', true);
+  }
+
+  function handleProfileSaved(user) {
+    setSession(user);
+    setUserData((prev) => (prev ? { ...prev, user } : prev));
   }
 
   if (loading && authToken && !session) {
@@ -212,6 +234,7 @@ function App() {
         {view === 'progress' && <Progress token={authToken} />}
         {view === 'conversation' && <Conversation token={authToken} />}
         {view === 'review' && <ReviewQueue onKeyChange={setHasReviewKey} />}
+        {view === 'profile' && <Profile token={authToken} user={session} onSaved={handleProfileSaved} />}
       </Box>
     </Box>
   );
@@ -260,9 +283,14 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
           <Text className="auth-card-subtitle">{isSignup ? 'Build a practice habit that fits your life.' : 'Pick up where you left off.'}</Text>
           <Box as="form" onSubmit={onSubmit}>
             {isSignup && (
-              <Field label="Name" icon={UserRound}>
-                <TextInput name="name" type="text" placeholder="Your name" autoComplete="name" />
-              </Field>
+              <>
+                <Field label="First name" icon={UserRound}>
+                  <TextInput name="first_name" type="text" placeholder="Marie" autoComplete="given-name" required />
+                </Field>
+                <Field label="Last name" icon={UserRound}>
+                  <TextInput name="last_name" type="text" placeholder="Curie" autoComplete="family-name" required />
+                </Field>
+              </>
             )}
             <Field label="Email" icon={Mail}>
               <TextInput name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
