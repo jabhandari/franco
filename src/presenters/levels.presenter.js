@@ -17,9 +17,9 @@ export function clbForCefr(level) {
   return Object.prototype.hasOwnProperty.call(CLB_BY_CEFR, level) ? CLB_BY_CEFR[level] : null;
 }
 
-// 'B2 - CLB 7' style label for level cards; falls back to the bare level
+// 'B2 (CLB 7)' style label for level cards; falls back to the bare level
 // when the mapping has no entry.
 export function formatLevelWithClb(level) {
   const clb = clbForCefr(level);
-  return clb ? `${level} · CLB ${clb}` : level;
+  return clb ? `${level} (CLB ${clb})` : level;
 }

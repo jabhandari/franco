@@ -30,7 +30,7 @@ assert(clbForCefr('B2') === '7', "clbForCefr('B2') is '7'");
 assert(clbForCefr('A1') === '1–2', "clbForCefr('A1') is '1–2'");
 assert(clbForCefr('C2') === '10–12', "clbForCefr('C2') is '10–12'");
 assert(clbForCefr('Z9') === null, "clbForCefr('Z9') falls back to null");
-assert(formatLevelWithClb('B2') === 'B2 · CLB 7', "formatLevelWithClb('B2') is 'B2 · CLB 7'");
+assert(formatLevelWithClb('B2') === 'B2 (CLB 7)', "formatLevelWithClb('B2') is 'B2 (CLB 7)'");
 assert(formatLevelWithClb('Z9') === 'Z9', "formatLevelWithClb('Z9') falls back to bare level");
 {
   const conceptsSrc = readFileSync(new URL('../components/concepts.jsx', import.meta.url), 'utf8');
