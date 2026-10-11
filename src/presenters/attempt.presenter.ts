@@ -2,13 +2,17 @@
 // Used by every exercise renderer (MultipleChoice, Spelling, WordOrder,
 // PronunciationDrill) so the answered/feedback expressions live in one place.
 // No JSX, no hooks, no side effects.
+import type { JsonValue } from './format.presenter.ts';
 
-/** The attempt result shape these projections read (may carry { error }). */
-export interface AttemptResult {
-  correct?: unknown;
-  error?: unknown;
-  [key: string]: unknown;
-}
+/**
+ * The attempt result shape these projections read: the graded-attempt JSON
+ * from POST /api/me/attempts ({ correct, score, reveal, next_due_at,
+ * attempt }) on success, or { error } when reporting failed.
+ */
+export type AttemptResult = Record<string, JsonValue> & {
+  correct?: boolean;
+  error?: string;
+};
 
 export type AnsweredState = 'correct' | 'wrong' | null;
 export type FeedbackTone = 'correct' | 'incorrect';

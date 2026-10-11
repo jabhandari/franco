@@ -1,13 +1,13 @@
 // FRA-21 presenter: pure collection helpers. No JSX, no hooks, no side
 // effects. Moved verbatim from src/api/client.js (re-exported there for
 // compatibility).
-import { safeText, isRecord } from './format.presenter.ts';
+import { safeText, isRecord, type JsonValue } from './format.presenter.ts';
 
 /** A normalized multiple-choice option. */
-export interface Choice {
+export type Choice = {
   key: string;
   text: string;
-}
+};
 
 /**
  * Unbiased shuffle (Fisher-Yates). Never use Array.sort(() => Math.random() - 0.5).
@@ -26,16 +26,16 @@ export function shuffle<T>(items: readonly T[]): T[] {
  * Choices may arrive as [{key,text}], a JSON string, or an {A: "..."} map.
  * Object-shaped values collapse to '' rather than "[object Object]".
  */
-export function normalizeChoices(raw: unknown): Choice[] {
-  let choices: unknown = raw;
+export function normalizeChoices(raw: JsonValue): Choice[] {
+  let choices: JsonValue = raw;
   if (typeof choices === 'string') {
     try { choices = JSON.parse(choices); } catch { return []; }
   }
   if (Array.isArray(choices)) {
-    const list: unknown[] = choices;
+    const list: JsonValue[] = choices;
     return list
-      .map((c: unknown) => {
-        const rec: Record<string, unknown> | null = isRecord(c) ? c : null;
+      .map((c: JsonValue) => {
+        const rec: Record<string, JsonValue> | null = isRecord(c) ? c : null;
         const keyRaw = rec && rec.key !== undefined ? rec.key : rec && rec.id;
         return { key: safeText(keyRaw), text: safeText(rec && rec.text) };
       })

@@ -1,6 +1,6 @@
 // FRA-21 presenter: pure vocabulary-word helpers moved verbatim from
 // src/components/concepts.jsx. No JSX, no hooks, no side effects.
-import { safeText, isRecord } from './format.presenter.ts';
+import { safeText, isRecord, type JsonValue } from './format.presenter.ts';
 
 // Learner-facing labels for Lexique part-of-speech codes stored in the
 // vocabulary topic rows (e.g. {"lemma":"accord","pos":"NOM","gender":"m",...}).
@@ -12,13 +12,12 @@ export const POS_LABELS: Record<string, string> = {
 };
 
 /** Lexique metadata fields read from a parsed vocabulary JSON string. */
-export interface LexiqueMeta {
-  pos?: unknown;
-  gender?: unknown;
-  number?: unknown;
-  freq_rank?: unknown;
-  [key: string]: unknown;
-}
+export type LexiqueMeta = Record<string, JsonValue> & {
+  pos?: JsonValue;
+  gender?: JsonValue;
+  number?: JsonValue;
+  freq_rank?: JsonValue;
+};
 
 /**
  * Turn a vocabulary topic's item value into a short human-readable
@@ -26,9 +25,9 @@ export interface LexiqueMeta {
  * render it as "noun · masculine · very common (#145)" instead of raw JSON.
  * Plain-text topics (e.g. "le / la / l’ / les") render unchanged.
  */
-export function describeWord(item: unknown): string {
+export function describeWord(item: JsonValue): string {
   if (typeof item !== 'string') return safeText(item);
-  let parsed: unknown = null;
+  let parsed: JsonValue = null;
   try { parsed = JSON.parse(item); } catch { parsed = null; }
   if (!isRecord(parsed) || !parsed.pos) {
     return safeText(item);

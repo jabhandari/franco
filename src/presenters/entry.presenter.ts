@@ -1,7 +1,7 @@
 // FRA-21 presenter: pure entry sanitization. No JSX, no hooks, no side
 // effects. Moved verbatim from src/api/client.js (re-exported there for
 // compatibility).
-import { safeText, isRecord } from './format.presenter.ts';
+import { safeText, isRecord, type JsonValue } from './format.presenter.ts';
 import { normalizeChoices } from './collections.presenter.ts';
 import type { Choice } from './collections.presenter.ts';
 
@@ -17,17 +17,17 @@ const ENTRY_TEXT_LIST_FIELDS = [
 ];
 
 /** A sanitized exercise entry: text fields coerced to strings, lists scrubbed. */
-export interface SanitizedEntry extends Record<string, unknown> {
+export type SanitizedEntry = Record<string, JsonValue> & {
   choices?: Choice[];
   rubric?: Record<string, string>;
-  media?: Array<Record<string, unknown> & { url: string }>;
-}
+  media?: Array<Record<string, JsonValue> & { url: string }>;
+};
 
 /**
  * @param entry raw exercise entry (or anything)
  * @returns sanitized entry ({} for non-objects)
  */
-export function sanitizeEntry(entry: unknown): SanitizedEntry {
+export function sanitizeEntry(entry: JsonValue): SanitizedEntry {
   if (!isRecord(entry)) return {};
   const out: SanitizedEntry = { ...entry };
   for (const field of ENTRY_TEXT_FIELDS) {
@@ -35,8 +35,8 @@ export function sanitizeEntry(entry: unknown): SanitizedEntry {
   }
   for (const field of ENTRY_TEXT_LIST_FIELDS) {
     if (Array.isArray(out[field])) {
-      const list: unknown[] = out[field];
-      out[field] = list.map((value: unknown) => safeText(value)).filter(Boolean);
+      const list: JsonValue[] = out[field];
+      out[field] = list.map((value: JsonValue) => safeText(value)).filter(Boolean);
     } else if (field in out) {
       out[field] = [];
     }
@@ -50,9 +50,9 @@ export function sanitizeEntry(entry: unknown): SanitizedEntry {
     out.rubric = {};
   }
   if (Array.isArray(out.media)) {
-    const list: unknown[] = out.media;
+    const list: JsonValue[] = out.media;
     out.media = list
-      .filter((m: unknown): m is Record<string, unknown> => m !== null && typeof m === 'object')
+      .filter((m: JsonValue): m is Record<string, JsonValue> => m !== null && typeof m === 'object')
       .map((m) => ({ ...m, url: safeText(m.url) }));
   }
   return out;
