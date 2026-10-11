@@ -1389,3 +1389,102 @@ html:not([data-theme="light"]) .auth-page .auth-brand-subtitle { color:#888; }
   .auth-page .auth-intro { top:-72px; }
   .auth-page .auth-card { top:-110px; }
 }
+
+/* FRA-47: Learn view — CEFR level-first navigation. */
+.learn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+  margin: 18px 0 26px;
+}
+
+.level-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 12px;
+  border: 1px solid #ded4c8;
+  border-radius: 14px;
+  background: #fffdf8;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.level-card:hover {
+  border-color: #156064;
+  transform: translateY(-2px);
+}
+
+.level-card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.level-card-head strong {
+  font-size: 22px;
+  letter-spacing: 0.02em;
+}
+
+.level-card-head span {
+  font-size: 12px;
+  color: #687178;
+}
+
+.level-card-meta {
+  font-size: 12px;
+  color: #687178;
+}
+
+.progress-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-ring .ring-track {
+  fill: none;
+  stroke: #e9e2d4;
+}
+
+.progress-ring .ring-fill {
+  fill: none;
+  stroke: #156064;
+}
+
+.progress-ring .ring-label {
+  position: absolute;
+  font-size: 15px;
+  color: #156064;
+}
+
+.learn-detail-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 6px 0 14px;
+}
+
+.skill-tab-count {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.75;
+  margin-left: 4px;
+}
+
+.learn-back {
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+.learn-back .text-button {
+  width: auto;
+  margin-top: 0;
+  padding-left: 0;
+}

@@ -315,6 +315,28 @@ async function main() {
                 if (rows.length) { const media = await query('SELECT item_id,kind,url,duration_seconds,transcript FROM media_assets WHERE item_id=ANY(?)', [rows.map((r) => r.id)]); for (const m of media) { (mediaByItem[m.item_id] = mediaByItem[m.item_id] || []).push({ kind: m.kind, url: m.url, duration_seconds: m.duration_seconds, transcript: m.transcript }); } }
                 return json(res, 200, { items: rows.map((r) => ({ ...shapeContentItem(r, null, mediaByItem), status: r.status, external_id: r.external_id, source: r.source_name || null, batch_id: r.batch_id || null, report_count: r.report_count || 0 })) });
             }
+            if (req.method === 'GET' && u.pathname === '/api/content/v1/item-counts') {
+                // FRA-47: real published-content counts per level and item type,
+                // powering the Learn view's level cards and skill-tab badges.
+                const levelParam = (u.searchParams.get('level') || '').toUpperCase();
+                const params = [];
+                const where = ["i.status='published'"];
+                if (levelParam) { params.push(levelParam); where.push(`i.cefr_level=$${params.length}`); }
+                const rows = await query(`SELECT i.cefr_level AS level, i.item_type AS type, COUNT(*) AS n FROM content_items i WHERE ${where.join(' AND ')} GROUP BY i.cefr_level, i.item_type`, params);
+                if (levelParam) {
+                    const byType = {};
+                    for (const row of rows) byType[row.type] = Number(row.n);
+                    return json(res, 200, { level: levelParam, total: rows.reduce((s, r) => s + Number(r.n), 0), byType });
+                }
+                const counts = {};
+                for (const row of rows) {
+                    const entry = (counts[row.level] = counts[row.level] || { total: 0, byType: {} });
+                    const n = Number(row.n);
+                    entry.byType[row.type] = n;
+                    entry.total += n;
+                }
+                return json(res, 200, { counts });
+            }
             if (req.method === 'GET' && u.pathname === '/api/content/v1/concepts') {
                 const concepts = await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status,metadata_json FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST, list_order NULLS LAST, title");
                 const prereqs = await query('SELECT concept_id,prerequisite_concept_id FROM concept_prerequisites');

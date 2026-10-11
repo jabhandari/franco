@@ -14,6 +14,7 @@ export { Badge, QueueKindLabel } from './Badge.jsx';
 export { Feedback, ErrorMessage } from './Feedback.jsx';
 export { Field, Textarea } from './Field.jsx';
 export { ProgressBar, SkeletonBar } from './ProgressBar.jsx';
+export { ProgressRing } from './ProgressRing.jsx';
 export { EmptyState } from './EmptyState.jsx';
 export { Modal } from './Modal.jsx';
 export { LoadingScreen } from './Loading.jsx';
