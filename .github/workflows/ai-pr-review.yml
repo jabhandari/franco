@@ -1,0 +1,223 @@
+# FRA-33: free AI PR reviewer (Gemini Flash, $0)
+#
+# Posts an advisory review + plain-language summary on every PR.
+# - Triggers: PR opened, new pushes, manual dispatch.
+# - Advisory only: posts a comment, never approves, never blocks merge.
+# - Noise controls: skips when the diff is unchanged since the last review;
+#   previous findings are fed back so the model doesn't repeat them.
+# - Model is configurable without code changes (see env below).
+name: AI PR review (Gemini)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to review
+        required: true
+        type: number
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ai-pr-review-${{ github.event.pull_request.number || inputs.pr_number }}
+  cancel-in-progress: true
+
+env:
+  # Change models later without touching code: repo Settings →
+  # Secrets and variables → Actions → Variables tab → new variable.
+  # Each falls back to the default below when its variable is unset.
+  GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.8-flash' }}
+  GEMINI_MODEL_FALLBACK: ${{ vars.GEMINI_MODEL_FALLBACK || 'gemini-3.5-flash-lite' }}
+  GROQ_MODEL: ${{ vars.GROQ_MODEL || 'openai/gpt-oss-120b' }}
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve PR refs
+        id: refs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PR_NUMBER="${{ inputs.pr_number }}"
+            BASE_SHA=$(gh pr view "$PR_NUMBER" --json baseRefOid --jq .baseRefOid)
+            HEAD_SHA=$(gh pr view "$PR_NUMBER" --json headRefOid --jq .headRefOid)
+          else
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          fi
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "base_sha=$BASE_SHA" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if already reviewed
+        id: skip
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ steps.refs.outputs.pr_number }}"
+          HEAD_SHA="${{ steps.refs.outputs.head_sha }}"
+          LAST=$(gh pr view "$PR_NUMBER" --json comments \
+            --jq '[.comments[] | select(.body | contains("AI code review (advisory)"))] | last | .body // ""')
+          REVIEWED_SHA=$(printf '%s' "$LAST" | sed -n 's/.*<!-- ai-review-sha:\([0-9a-f]*\) -->.*/\1/p')
+          if [ -n "$REVIEWED_SHA" ] && [ "$REVIEWED_SHA" = "$HEAD_SHA" ]; then
+            echo "Head $HEAD_SHA already reviewed — skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            printf '%s' "$LAST" > /tmp/prev-review.md
+          fi
+
+      - name: Build diff and prompt
+        if: steps.skip.outputs.skip != 'true'
+        run: |
+          set -euo pipefail
+          BASE_SHA="${{ steps.refs.outputs.base_sha }}"
+          HEAD_SHA="${{ steps.refs.outputs.head_sha }}"
+          git diff "$BASE_SHA" "$HEAD_SHA" -- . ':(exclude)package-lock.json' ':(exclude)dist' \
+            | python3 -c 'import sys; sys.stdout.write(sys.stdin.read(60000))' > /tmp/pr.diff
+          {
+            echo "PR title: $(gh pr view "${{ steps.refs.outputs.pr_number }}" --json title --jq .title)"
+            echo ""
+            echo "PR body:"
+            gh pr view "${{ steps.refs.outputs.pr_number }}" --json body --jq .body
+            echo ""
+            echo "Diff (truncated to 60k chars):"
+            cat /tmp/pr.diff
+          } > /tmp/user-msg.txt
+          if [ -s /tmp/prev-review.md ]; then
+            {
+              echo ""
+              echo "Previous review findings (do NOT repeat these):"
+              head -c 4000 /tmp/prev-review.md
+            } >> /tmp/user-msg.txt
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Call reviewer
+        id: review
+        if: steps.skip.outputs.skip != 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # Optional second key (e.g. a teammate's). Used only if the primary
+          # key fails after its retry. Each account stays within its own quota.
+          GEMINI_API_KEY_BACKUP: ${{ secrets.GEMINI_API_KEY_BACKUP }}
+          # Optional Groq key (free tier, no card). Tried first; when unset the
+          # workflow skips straight to Gemini.
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          set -euo pipefail
+          SYS_MSG="$(cat .github/ai-pr-review-prompt.md)"
+          if [ -f AGENTS.md ]; then
+            SYS_MSG="$SYS_MSG $(printf '\n\nRepository AGENTS.md (always-on agent conventions) follows. Enforce its code-related rules when reviewing (UI boundary, presenters, skills, repo hygiene). Ignore sections about session management, orchestration, and output discipline.\n\n')$(cat AGENTS.md)"
+          fi
+          # Groq's free tier caps requests at 8000 TPM; the full prompt
+          # (AGENTS.md + 60k-char diff) is ~9600 tokens, so Groq gets a slim
+          # version: curated prompt only, shorter diff.
+          GROQ_SYS_MSG="$(cat .github/ai-pr-review-prompt.md)"
+          GROQ_USER_MSG="$(python3 -c 'import sys; sys.stdout.write(open("/tmp/user-msg.txt").read(20000))')"
+          # Gemini request body (same for every model/key).
+          jq -n --arg sys "$SYS_MSG" \
+                --arg msg "$(cat /tmp/user-msg.txt)" \
+            '{system_instruction:{parts:[{text:$sys}]},
+              contents:[{parts:[{text:$msg}]}],
+              generationConfig:{temperature:0.2,maxOutputTokens:4096}}' > /tmp/gemini-req.json
+          # Try one Gemini model with one key. Returns 0 on HTTP 200.
+          try_gemini() {
+            local model="$1" key="$2" label="$3" attempt HTTP
+            local url="https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent"
+            for attempt in 1 2; do
+              HTTP=$(curl -s -o /tmp/resp.json -w '%{http_code}' -X POST "$url?key=${key}" \
+                -H 'Content-Type: application/json' -d @/tmp/gemini-req.json)
+              echo "gemini $model ($label key): HTTP $HTTP (attempt $attempt)"
+              if [ "$HTTP" = "200" ]; then return 0; fi
+              jq -r '.error.message // "no error detail"' /tmp/resp.json
+              case "$HTTP" in
+                429|500|502|503|504) [ "$attempt" = "1" ] && sleep 60 ;;
+                *) echo "non-retryable HTTP $HTTP, moving to next provider"; return 1 ;;
+              esac
+            done
+            return 1
+          }
+          # Try Groq (OpenAI-compatible). Writes /tmp/review.md on success.
+          # Returns 0 on HTTP 200.
+          try_groq() {
+            local key="$1" attempt HTTP
+            jq -n --arg sys "$GROQ_SYS_MSG" --arg msg "$GROQ_USER_MSG" --arg model "$GROQ_MODEL" \
+              '{model:$model, messages:[{role:"system",content:$sys},{role:"user",content:$msg}], temperature:0.2, max_tokens:4096}' > /tmp/groq-req.json
+            for attempt in 1 2; do
+              HTTP=$(curl -s -o /tmp/groq-resp.json -w '%{http_code}' -X POST "https://api.groq.com/openai/v1/chat/completions" \
+                -H "Authorization: Bearer ${key}" -H 'Content-Type: application/json' -d @/tmp/groq-req.json)
+              echo "groq $GROQ_MODEL: HTTP $HTTP (attempt $attempt)"
+              if [ "$HTTP" = "200" ]; then
+                jq -r '.choices[0].message.content // empty' /tmp/groq-resp.json > /tmp/review.md
+                return 0
+              fi
+              jq -r '.error.message // "no error detail"' /tmp/groq-resp.json
+              case "$HTTP" in
+                429|500|502|503|504) [ "$attempt" = "1" ] && sleep 60 ;;
+                *) echo "non-retryable HTTP $HTTP, moving to next provider"; return 1 ;;
+              esac
+            done
+            return 1
+          }
+          # Chain: Groq -> Gemini primary model -> Gemini fallback model,
+          # trying primary then backup key for each Gemini model. A provider
+          # is accepted only if it returns non-empty review text: an HTTP 200
+          # with blocked/empty content falls through to the next option.
+          REVIEWER=""
+          if [ -n "${GROQ_API_KEY:-}" ] && try_groq "$GROQ_API_KEY" && [ -s /tmp/review.md ]; then
+            REVIEWER="Groq $GROQ_MODEL"
+          else
+            for model in "$GEMINI_MODEL" "$GEMINI_MODEL_FALLBACK"; do
+              for keydef in "primary:$GEMINI_API_KEY" "backup:${GEMINI_API_KEY_BACKUP:-}"; do
+                label="${keydef%%:*}"; key="${keydef#*:}"
+                [ -n "$key" ] || continue
+                try_gemini "$model" "$key" "$label" || continue
+                jq -r '.candidates[0].content.parts[0].text // empty' /tmp/resp.json > /tmp/review.md
+                if [ -s /tmp/review.md ]; then
+                  REVIEWER="Gemini $model ($label key)"
+                  break 2
+                fi
+                echo "gemini $model ($label key): empty content, trying next"
+              done
+            done
+          fi
+          if [ -z "$REVIEWER" ]; then
+            echo "::error::All review providers failed (Groq, Gemini $GEMINI_MODEL / $GEMINI_MODEL_FALLBACK)."
+            exit 1
+          fi
+          echo "Reviewed with $REVIEWER."
+          echo "reviewer=$REVIEWER" >> "$GITHUB_OUTPUT"
+          [ -s /tmp/review.md ] || { echo "Empty review text"; exit 1; }
+
+      - name: Post review comment
+        if: steps.skip.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          PR_NUMBER="${{ steps.refs.outputs.pr_number }}"
+          HEAD_SHA="${{ steps.refs.outputs.head_sha }}"
+          {
+            echo "## AI code review (advisory)"
+            echo ""
+            cat /tmp/review.md
+            echo ""
+            echo "<sub>Reviewer: ${{ steps.review.outputs.reviewer }} · reviewed commit \`${HEAD_SHA}\` · advisory only — does not block or approve.</sub>"
+            echo "<!-- ai-review-sha:${HEAD_SHA} -->"
+          } > /tmp/comment.md
+          gh pr comment "$PR_NUMBER" --body-file /tmp/comment.md
