@@ -9,6 +9,9 @@ import type { LucideIcon } from 'lucide-react';
 // No className/style escape hatches.
 export type ButtonVariant = 'primary' | 'text' | 'retry' | 'reset' | 'nav' | 'report';
 
+// Aria attribute values are caller-provided primitives by definition.
+type AriaValue = string | number | boolean | undefined;
+
 const VARIANT_CLASS: Record<ButtonVariant, string> = {
   primary: 'primary-button',
   text: 'text-button',
@@ -34,7 +37,7 @@ export interface ButtonProps {
   key?: React.Key;
   // Extra props spread onto the <button> (e.g. aria-label), but only
   // aria-* attributes are part of the contract.
-  [ariaProp: `aria-${string}`]: unknown;
+  [ariaProp: `aria-${string}`]: AriaValue;
 }
 
 export function Button({

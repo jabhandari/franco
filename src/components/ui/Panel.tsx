@@ -1,5 +1,8 @@
 import React from 'react';
 
+// Aria attribute values are caller-provided primitives by definition.
+type AriaValue = string | number | boolean | undefined;
+
 export interface PanelProps {
   compact?: boolean;
   layout?: 'grid';
@@ -8,7 +11,7 @@ export interface PanelProps {
   key?: React.Key;
   // Extra props spread onto the tag, but only aria-* attributes are
   // part of the contract.
-  [ariaProp: `aria-${string}`]: unknown;
+  [ariaProp: `aria-${string}`]: AriaValue;
 }
 
 // Card container. Renders section.panel (+ .compact). layout="grid" switches

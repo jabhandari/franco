@@ -14,6 +14,9 @@ import React from 'react';
 //
 // gap scale (same tokens as Stack — do not invent a second scale):
 // xs=4, sm=8, md=16, lg=24, xl=32
+// Aria attribute values are caller-provided primitives by definition.
+type AriaValue = string | number | boolean | undefined;
+
 const GAP_SCALE: Record<string, number> = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };
 
 export type BoxGap = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
@@ -43,7 +46,7 @@ export interface BoxProps {
   d?: string;
   key?: React.Key;
   // Only aria-* attributes pass through from any extra props.
-  [ariaProp: `aria-${string}`]: unknown;
+  [ariaProp: `aria-${string}`]: AriaValue;
 }
 
 export function Box({
@@ -73,7 +76,7 @@ export function Box({
 }: BoxProps) {
   // Explicit allowlist: only aria-* passes through from the rest props.
   // Anything else a caller sneaks in is dropped, never spread onto the DOM.
-  const ariaProps: Record<string, unknown> = {};
+  const ariaProps: Record<string, AriaValue> = {};
   for (const key of Object.keys(rest)) {
     if (key.startsWith('aria-')) ariaProps[key] = rest[key];
   }

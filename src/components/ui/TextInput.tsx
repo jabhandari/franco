@@ -1,5 +1,8 @@
 import React from 'react';
 
+// Aria attribute values are caller-provided primitives by definition.
+type AriaValue = string | number | boolean | undefined;
+
 // Bare input with no wrapper class. The app's forms usually wrap inputs in
 // Field (label + icon), but a few places (auth screen, vocabulary search)
 // render the input directly — this is that bare input. className is allowed
@@ -18,7 +21,7 @@ export interface TextInputProps {
   className?: string;
   key?: React.Key;
   // Only aria-* attributes pass through from any extra props.
-  [ariaProp: `aria-${string}`]: unknown;
+  [ariaProp: `aria-${string}`]: AriaValue;
 }
 
 export function TextInput({
@@ -35,7 +38,7 @@ export function TextInput({
   ...rest
 }: TextInputProps) {
   // Explicit allowlist: only aria-* passes through from the rest props.
-  const ariaProps: Record<string, unknown> = {};
+  const ariaProps: Record<string, AriaValue> = {};
   for (const key of Object.keys(rest)) {
     if (key.startsWith('aria-')) ariaProps[key] = rest[key];
   }

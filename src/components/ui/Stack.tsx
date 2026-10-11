@@ -8,6 +8,9 @@ const GAP_SCALE: Record<string, number> = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32
 
 export type StackGap = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
 
+// Aria attribute values are caller-provided primitives by definition.
+type AriaValue = string | number | boolean | undefined;
+
 export interface StackProps {
   as?: React.ElementType;
   display?: React.CSSProperties['display'];
@@ -20,7 +23,7 @@ export interface StackProps {
   key?: React.Key;
   // Extra props spread onto the tag, but only aria-* attributes are
   // part of the contract.
-  [ariaProp: `aria-${string}`]: unknown;
+  [ariaProp: `aria-${string}`]: AriaValue;
 }
 
 export function Stack({

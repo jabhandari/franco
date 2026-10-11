@@ -1,6 +1,9 @@
 import React from 'react';
 import type { LucideIcon } from 'lucide-react';
 
+// Aria attribute values are caller-provided primitives by definition.
+type AriaValue = string | number | boolean | undefined;
+
 export interface FieldProps {
   label?: React.ReactNode;
   icon?: LucideIcon | null;
@@ -26,7 +29,7 @@ export interface FieldProps {
   pattern?: string;
   inputMode?: 'text' | 'numeric' | 'decimal' | 'tel' | 'search' | 'email' | 'url';
   key?: React.Key;
-  [ariaProp: `aria-${string}`]: unknown;
+  [ariaProp: `aria-${string}`]: AriaValue;
 }
 
 // Labeled input with an icon: label > span.input-wrap > icon + input.
@@ -56,7 +59,7 @@ export interface TextareaProps {
   autoFocus?: boolean;
   required?: boolean;
   key?: React.Key;
-  [ariaProp: `aria-${string}`]: unknown;
+  [ariaProp: `aria-${string}`]: AriaValue;
 }
 
 // Free-text answer box: textarea.free-text-input.

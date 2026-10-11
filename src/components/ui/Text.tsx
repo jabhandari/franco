@@ -3,6 +3,9 @@ import React from 'react';
 // Typography. variant maps to the app's existing text classes.
 export type TextVariant = 'body' | 'muted' | 'eyebrow' | 'lede' | 'note';
 
+// Aria attribute values are caller-provided primitives by definition.
+type AriaValue = string | number | boolean | undefined;
+
 const VARIANT_CLASS: Record<TextVariant, string> = {
   body: '',
   muted: 'muted',
@@ -22,7 +25,7 @@ export interface TextProps {
   key?: React.Key;
   // Extra props pass through to the tag (this component spreads ...rest),
   // but only aria-* attributes are part of the contract.
-  [ariaProp: `aria-${string}`]: unknown;
+  [ariaProp: `aria-${string}`]: AriaValue;
 }
 
 export function Text({ variant = 'body', size, nowrap = false, as: Tag = 'p', className, children, ...rest }: TextProps) {

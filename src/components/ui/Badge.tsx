@@ -35,7 +35,7 @@ export interface BadgeProps {
 export function Badge({ variant = 'queue', kind, icon: Icon = null, iconSize = 14, children }: BadgeProps) {
   const base = VARIANT_CLASS[variant] || VARIANT_CLASS.queue;
   const classes = variant === 'queue' && kind ? `${base} ${base}-${kind}` : base;
-  const label = variant === 'queue' ? (QUEUE_LABELS[kind ?? ''] || kind) : children;
+  const label = variant === 'queue' ? (QUEUE_LABELS[kind] || kind) : children;
   return (
     <span className={classes}>
       {Icon ? <Icon size={iconSize} aria-hidden="true" /> : null}

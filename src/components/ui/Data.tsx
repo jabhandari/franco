@@ -64,7 +64,7 @@ export function ProfileRows({ profile }: ProfileRowsProps) {
 
 export interface DataContractProps {
   title?: React.ReactNode;
-  items?: React.ReactNode[];
+  items: React.ReactNode[];
   key?: React.Key;
 }
 
@@ -74,7 +74,7 @@ export function DataContract({ title, items }: DataContractProps) {
     <Panel>
       <h2>{title}</h2>
       <ul className="clean-list">
-        {(items ?? []).map((item) => (
+        {items.map((item) => (
           <li key={item}>{item}</li>
         ))}
       </ul>
@@ -90,7 +90,7 @@ export interface ProgressRow {
 }
 
 export interface ProgressRecordsProps {
-  progress?: ProgressRow[];
+  progress: ProgressRow[];
   key?: React.Key;
 }
 
@@ -98,7 +98,7 @@ export interface ProgressRecordsProps {
 export function ProgressRecords({ progress }: ProgressRecordsProps) {
   return (
     <div className="progress-grid">
-      {(progress ?? []).map((row) => (
+      {progress.map((row) => (
         <Panel compact key={`${safeText(row.cefr_level)}-${safeText(row.skill)}`}>
           <h2>{safeText(row.cefr_level)}</h2>
           <p className="muted">{safeText(row.skill)}</p>
