@@ -109,6 +109,9 @@ jobs:
         if: steps.skip.outputs.skip != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # Optional second key (e.g. a teammate's). Used only if the primary
+          # key fails after its retry. Each account stays within its own quota.
+          GEMINI_API_KEY_BACKUP: ${{ secrets.GEMINI_API_KEY_BACKUP }}
         run: |
           set -euo pipefail
           jq -n --arg sys "$(cat .github/ai-pr-review-prompt.md)" \
@@ -117,14 +120,27 @@ jobs:
               contents:[{parts:[{text:$msg}]}],
               generationConfig:{temperature:0.2,maxOutputTokens:4096}}' > /tmp/req.json
           URL="https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent"
-          for attempt in 1 2; do
-            HTTP=$(curl -s -o /tmp/resp.json -w '%{http_code}' -X POST "$URL?key=${GEMINI_API_KEY}" \
-              -H 'Content-Type: application/json' -d @/tmp/req.json)
-            if [ "$HTTP" = "200" ]; then break; fi
-            echo "Gemini API returned $HTTP (attempt $attempt)"
-            jq -r '.error.message // "no error detail"' /tmp/resp.json
-            [ "$attempt" = "1" ] && sleep 60 || exit 1
-          done
+          # Try one key, with a single 60s retry on failure. Returns 0 on success.
+          try_key() {
+            local key="$1" label="$2" attempt HTTP
+            for attempt in 1 2; do
+              HTTP=$(curl -s -o /tmp/resp.json -w '%{http_code}' -X POST "$URL?key=${key}" \
+                -H 'Content-Type: application/json' -d @/tmp/req.json)
+              echo "$label key: HTTP $HTTP (attempt $attempt)"
+              if [ "$HTTP" = "200" ]; then return 0; fi
+              jq -r '.error.message // "no error detail"' /tmp/resp.json
+              if [ "$attempt" = "1" ]; then sleep 60; fi
+            done
+            return 1
+          }
+          if try_key "$GEMINI_API_KEY" "primary"; then
+            echo "Reviewed with primary key."
+          elif [ -n "${GEMINI_API_KEY_BACKUP:-}" ] && try_key "$GEMINI_API_KEY_BACKUP" "backup"; then
+            echo "Primary key failed; reviewed with backup key."
+          else
+            echo "::error::Gemini API failed with all configured keys."
+            exit 1
+          fi
           jq -r '.candidates[0].content.parts[0].text // empty' /tmp/resp.json > /tmp/review.md
           [ -s /tmp/review.md ] || { echo "Empty review text"; exit 1; }
 
