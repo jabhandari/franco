@@ -12,8 +12,10 @@ import {
   ProgressBar,
   RecordCount,
   StatGroup,
+  StreakPanel,
   Text,
 } from '../components/ui';
+import { streakPath } from '../presenters/streak.presenter.js';
 
 function MasteryBars({ rows }) {
   if (!rows.length) return <Text variant="muted">Answer exercises to start building concept mastery.</Text>;
@@ -30,6 +32,7 @@ function MasteryBars({ rows }) {
 export function Progress({ token }) {
   const { data, loading, error } = useApiResource('/api/me/progress', token);
   const { data: reviewData } = useApiResource('/api/me/review-due', token);
+  const { data: streakData } = useApiResource(streakPath(), token);
 
   const concepts = data?.concepts || [];
   const attempts = data?.attempts || [];
@@ -61,6 +64,7 @@ export function Progress({ token }) {
             <PanelHeader eyebrow="Your learning" title="Concept mastery" aside={<Database size={20} aria-hidden="true" />} />
             <MasteryBars rows={concepts} />
           </Panel>
+          <StreakPanel streak={streakData} />
           {!attempts.length && !concepts.length && (
             <EmptyState
               icon={TrendingUp}
