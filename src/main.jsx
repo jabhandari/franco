@@ -283,14 +283,14 @@ function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
           <Text className="auth-card-subtitle">{isSignup ? 'Build a practice habit that fits your life.' : 'Pick up where you left off.'}</Text>
           <Box as="form" onSubmit={onSubmit}>
             {isSignup && (
-              <>
+              <Box className="auth-name-row">
                 <Field label="First name" icon={UserRound}>
                   <TextInput name="first_name" type="text" placeholder="Marie" autoComplete="given-name" required />
                 </Field>
                 <Field label="Last name" icon={UserRound}>
                   <TextInput name="last_name" type="text" placeholder="Curie" autoComplete="family-name" required />
                 </Field>
-              </>
+              </Box>
             )}
             <Field label="Email" icon={Mail}>
               <TextInput name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
