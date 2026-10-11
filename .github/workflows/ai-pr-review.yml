@@ -114,7 +114,20 @@ jobs:
           GEMINI_API_KEY_BACKUP: ${{ secrets.GEMINI_API_KEY_BACKUP }}
         run: |
           set -euo pipefail
-          jq -n --arg sys "$(cat .github/ai-pr-review-prompt.md)" \
+          SYS_MSG="$(cat .github/ai-pr-review-prompt.md)"
+          if [ -f AGENTS.md ]; then
+            SYS_MSG="$SYS_MSG
+
+---
+
+Repository AGENTS.md (always-on agent conventions) follows. Enforce its
+code-related rules when reviewing (UI boundary, presenters, skills,
+repo hygiene). Ignore sections about session management, orchestration,
+and output discipline — they do not apply to PR review.
+
+$(cat AGENTS.md)"
+          fi
+          jq -n --arg sys "$SYS_MSG" \
                 --arg msg "$(cat /tmp/user-msg.txt)" \
             '{system_instruction:{parts:[{text:$sys}]},
               contents:[{parts:[{text:$msg}]}],
