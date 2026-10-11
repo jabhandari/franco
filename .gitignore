@@ -6,3 +6,4 @@ data/
 npm-debug.log*
 
 !.env.example
+content/batches/
