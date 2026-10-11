@@ -1,14 +1,65 @@
 import React from 'react';
 import { ChevronRight, Plus, TrendingUp, ClipboardCheck, Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { Banner, Box, Button, EmptyState, Panel, PanelHeader, ProfileRows, RecordCount, StreakHero, Text } from '../components/ui';
+import { Banner as BannerJsx, Box as BoxJsx, Button as ButtonJsx, EmptyState as EmptyStateJsx, Panel as PanelJsx, PanelHeader as PanelHeaderJsx, ProfileRows as ProfileRowsJsx, RecordCount as RecordCountJsx, StreakHero as StreakHeroJsx, Text as TextJsx } from '../components/ui';
 
-export function Home({ userData, streak, onStart, onPlacement }) {
+// FRA-66 interim bridge: src/components/ui/ is still .jsx (typed by FRA-63),
+// and tsc infers required-any props from allowJs sources. Cast to untyped
+// components so JSX usage isn't checked against those inferred props.
+// Delete this block once FRA-63 ships real component prop types.
+const Banner: React.ComponentType<any> = BannerJsx;
+const Box: React.ComponentType<any> = BoxJsx;
+const Button: React.ComponentType<any> = ButtonJsx;
+const EmptyState: React.ComponentType<any> = EmptyStateJsx;
+const Panel: React.ComponentType<any> = PanelJsx;
+const PanelHeader: React.ComponentType<any> = PanelHeaderJsx;
+const ProfileRows: React.ComponentType<any> = ProfileRowsJsx;
+const RecordCount: React.ComponentType<any> = RecordCountJsx;
+const StreakHero: React.ComponentType<any> = StreakHeroJsx;
+const Text: React.ComponentType<any> = TextJsx;
+
+// --- Local interfaces (FRA-66; for FRA-68: centralize into shared API types) ---
+
+/** The learner profile row behind `userData.profile`; shape owned by main.jsx's read model. */
+interface LearnerProfile {
+  placement_status?: string | null;
+  [key: string]: unknown;
+}
+
+/** Aggregate passed from the app shell (GET /api/me aggregate in main.jsx). */
+interface HomeUserData {
+  user?: { name?: string | null } | null;
+  profile?: LearnerProfile | null;
+  progress?: unknown[];
+  mistakes?: unknown[];
+}
+
+/** Streak read model from GET /api/me/streak (consumed by StreakHero). */
+interface StreakSummary {
+  currentStreak?: number | null;
+  [key: string]: unknown;
+}
+
+/** GET /api/content/sections — CEFR sections with example counts. */
+interface ContentSectionsResponse {
+  sections?: Array<{ example_count?: number | string | null }>;
+}
+
+interface HomeProps {
+  userData?: HomeUserData | null;
+  streak?: StreakSummary | null;
+  onStart: () => void;
+  onPlacement: () => void;
+}
+
+export function Home({ userData, streak, onStart, onPlacement }: HomeProps) {
   const profile = userData?.profile;
   const progressCount = userData?.progress?.length || 0;
   const mistakeCount = userData?.mistakes?.length || 0;
   const { data: contentData } = useApiResource('/api/content/sections');
-  const contentCount = contentData?.sections?.reduce((sum, section) => sum + section.example_count, 0) || 0;
+  const sections: ContentSectionsResponse['sections'] =
+    (contentData as ContentSectionsResponse | null)?.sections;
+  const contentCount = sections?.reduce((sum, section) => sum + Number(section.example_count || 0), 0) || 0;
   const placementDone = profile?.placement_status === 'complete';
 
   return (

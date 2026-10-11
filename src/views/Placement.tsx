@@ -5,12 +5,58 @@ import { getErrorMessage } from '../presenters/format.presenter.js';
 import { shuffle } from '../presenters/collections.presenter.js';
 import { levelGuides } from '../components/concepts.jsx';
 import { formatLevelWithClb } from '../presenters/levels.presenter.js';
-import { Box, ErrorMessage, ExerciseShell, Page, PageHeader, Text } from '../components/ui';
+import { Box as BoxJsx, ErrorMessage as ErrorMessageJsx, ExerciseShell as ExerciseShellJsx, Page as PageJsx, PageHeader as PageHeaderJsx, Text as TextJsx } from '../components/ui';
+
+// FRA-66 interim bridge: src/components/ui/ is still .jsx (typed by FRA-63),
+// and tsc infers required-any props from allowJs sources. Cast to untyped
+// components so JSX usage isn't checked against those inferred props.
+// Delete this block once FRA-63 ships real component prop types.
+const Box: React.ComponentType<any> = BoxJsx;
+const ErrorMessage: React.ComponentType<any> = ErrorMessageJsx;
+const ExerciseShell: React.ComponentType<any> = ExerciseShellJsx;
+const Page: React.ComponentType<any> = PageJsx;
+const PageHeader: React.ComponentType<any> = PageHeaderJsx;
+const Text: React.ComponentType<any> = TextJsx;
+
+// --- Local interfaces (FRA-66; for FRA-68: centralize into shared API types) ---
+
+/** One MCQ choice in the placement quiz. */
+interface PlacementChoice {
+  key: string;
+  text: string;
+}
+
+/** One static placement question; answer is the winning choice key. */
+interface PlacementQuestion {
+  prompt: string;
+  choices: PlacementChoice[];
+  answer: string;
+}
+
+/** CEFR code returned by levelForScore. */
+type PlacementLevel = 'A1' | 'A2' | 'B1' | 'B2';
+
+/** POST /api/me/placement response. */
+interface PlacementResponse {
+  placement_status?: string;
+}
+
+/** Result state once the quiz is submitted. */
+interface PlacementResult {
+  score: number;
+  level: PlacementLevel;
+  placementStatus?: string;
+}
+
+interface PlacementProps {
+  token?: string | null;
+  onPlaced?: () => void;
+}
 
 // Original 10-question placement quiz, A1 → B2 gradient. The resulting CEFR
 // level is submitted to POST /api/me/placement and becomes the learner's
 // current level for adaptive sessions.
-const QUESTIONS = [
+const QUESTIONS: PlacementQuestion[] = [
   { prompt: '___ livre est sur la table.', choices: [{ key: 'A', text: 'Le' }, { key: 'B', text: 'La' }, { key: 'C', text: 'Les' }, { key: 'D', text: 'Des' }], answer: 'A' },
   { prompt: '___ suis fatigué aujourd’hui.', choices: [{ key: 'A', text: 'Je' }, { key: 'B', text: 'Tu' }, { key: 'C', text: 'Il' }, { key: 'D', text: 'Nous' }], answer: 'A' },
   { prompt: 'Elle ___ à Paris.', choices: [{ key: 'A', text: 'habite' }, { key: 'B', text: 'habites' }, { key: 'C', text: 'habitent' }, { key: 'D', text: 'habiter' }], answer: 'A' },
@@ -23,23 +69,23 @@ const QUESTIONS = [
   { prompt: '___ d’efforts, il a réussi.', choices: [{ key: 'A', text: 'À force' }, { key: 'B', text: 'Par force' }, { key: 'C', text: 'Avec force' }, { key: 'D', text: 'En force' }], answer: 'A' },
 ];
 
-function levelForScore(score) {
+function levelForScore(score: number): PlacementLevel {
   if (score <= 3) return 'A1';
   if (score <= 5) return 'A2';
   if (score <= 7) return 'B1';
   return 'B2';
 }
 
-export function Placement({ token, onPlaced }) {
+export function Placement({ token, onPlaced }: PlacementProps) {
   const [index, setIndex] = React.useState(0);
-  const [answers, setAnswers] = React.useState([]);
-  const [options] = React.useState(() => QUESTIONS.map((q) => shuffle(q.choices)));
-  const [result, setResult] = React.useState(null);
+  const [answers, setAnswers] = React.useState<string[]>([]);
+  const [options] = React.useState<PlacementChoice[][]>(() => QUESTIONS.map((q) => shuffle(q.choices)));
+  const [result, setResult] = React.useState<PlacementResult | null>(null);
   const [error, setError] = React.useState('');
 
   const question = QUESTIONS[index];
 
-  async function choose(key) {
+  async function choose(key: string) {
     if (result) return;
     const next = [...answers, key];
     setAnswers(next);
@@ -50,7 +96,7 @@ export function Placement({ token, onPlaced }) {
     const score = QUESTIONS.filter((q, i) => next[i] === q.answer).length;
     const level = levelForScore(score);
     try {
-      const res = await apiPost('/api/me/placement', { level }, token);
+      const res = await apiPost('/api/me/placement', { level }, token) as PlacementResponse;
       setResult({ score, level, placementStatus: res.placement_status });
       onPlaced?.();
     } catch (e) {

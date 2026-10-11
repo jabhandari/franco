@@ -43,7 +43,7 @@ assert(formatLevelWithClb('Z9') === 'Z9', "formatLevelWithClb('Z9') falls back t
     /formatLevelWithClb\(section\)/.test(pastSrc) && /Canadian Language Benchmark/.test(pastSrc),
     'PastQuestions references the CLB mapping in section meta and lede'
   );
-  const placementSrc = readFileSync(new URL('../views/Placement.jsx', import.meta.url), 'utf8');
+  const placementSrc = readFileSync(new URL('../views/Placement.tsx', import.meta.url), 'utf8');
   assert(
     /formatLevelWithClb\(result\.level\)/.test(placementSrc),
     'Placement result shows the CEFR · CLB label'
