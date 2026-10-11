@@ -1391,11 +1391,38 @@ html:not([data-theme="light"]) .auth-page .auth-brand-subtitle { color:#888; }
 }
 
 /* FRA-47: Learn view — CEFR level-first navigation. */
+.learn-view .eyebrow {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.learn-view .page-title {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+.learn-view h2 {
+  font-size: 28px;
+  margin: 0 0 10px;
+}
+.learn-view .lede {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+/* Exercise cards in the Learn browsing context are previews, not the full
+   practice experience — keep them compact. */
+.learn-view .exercise-preview {
+  padding: 16px 18px;
+}
+.learn-view .exercise-preview h2 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
 .learn-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 14px;
-  margin: 18px 0 26px;
+  gap: 16px;
+  margin: 26px 0 34px;
 }
 
 /* Card (src/components/ui/Card.jsx): themed clickable/static card.
@@ -1482,8 +1509,8 @@ html:not([data-theme="light"]) .progress-ring .ring-track {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin: 6px 0 14px;
+  gap: 16px;
+  margin: 12px 0 20px;
 }
 
 .skill-tab-count {
@@ -1494,7 +1521,7 @@ html:not([data-theme="light"]) .progress-ring .ring-track {
 }
 
 .learn-back {
-  margin-bottom: 4px;
+  margin-bottom: 12px;
   text-align: left;
 }
 

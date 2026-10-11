@@ -171,6 +171,7 @@ export function Learn({ token, onQuiz }) {
 
   return (
     <Page>
+      <Box className="learn-view">
       <PageHeader
         eyebrow="Learn"
         title="Choose your level"
@@ -196,6 +197,7 @@ export function Learn({ token, onQuiz }) {
           onQuiz={onQuiz}
         />
       )}
+      </Box>
     </Page>
   );
 }
