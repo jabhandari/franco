@@ -9,7 +9,7 @@ export interface ApiResourceState<T> {
   error: string;
 }
 
-export function useApiResource<T = any>(path: string, token?: string | null): ApiResourceState<T> {
+export function useApiResource<T = unknown>(path: string, token?: string | null): ApiResourceState<T> {
   const [state, setState] = React.useState<ApiResourceState<T>>({ data: null, loading: true, error: '' });
 
   React.useEffect(() => {
