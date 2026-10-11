@@ -42,6 +42,11 @@ If nothing notable: write "No issues found."
 
 - Cite real file paths and line numbers from the diff. Never invent issues;
   if unsure, omit or say so briefly.
+- Only flag a file as added, deleted, or renamed when the diff itself shows
+  it — never infer file operations from the PR title or description.
+- Never claim a model name, API version, or endpoint is invalid, deprecated,
+  or non-existent. Your training data is outdated on model availability; if
+  unsure about a name, omit it.
 - Do NOT repeat findings already reported in the previous review excerpt
   included in the request (if any).
 - Ignore lockfiles and generated build output.
