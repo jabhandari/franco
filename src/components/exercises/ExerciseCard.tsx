@@ -6,9 +6,23 @@ import { PronunciationDrill } from './Listening';
 import { WritingPrompt, SpeakingPrompt } from './WritingSpeaking';
 import * as UIRaw from '../ui/index.js';
 
-// delete once FRA-63 lands: unconverted JS UI components don't resolve as
-// plain `any` for JSX props under allowJs, so alias them loose here.
-const { Box, ReportButton }: Record<string, React.ComponentType<any>> = UIRaw;
+interface BoxProps {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+interface ReportButtonProps {
+  itemId?: string | number | null;
+  token?: string | null;
+}
+
+// Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
+// .jsx, so its exports resolve as `any` under allowJs and precise prop types
+// are unknowable from this file. Justification for each `as` below: the
+// assertion restores a minimal typed surface — only the props this file
+// passes — until the library converts to TSX, when this block is removed.
+const Box = UIRaw.Box as React.ComponentType<BoxProps>;
+const ReportButton = UIRaw.ReportButton as React.ComponentType<ReportButtonProps>;
 import { sanitizeEntry } from '../../presenters/entry.presenter.js';
 
 // Minimal local content-item shapes (FRA-64). The canonical API types are
@@ -34,6 +48,11 @@ export function ExerciseCard({ entry, token, onResult }: ExerciseCardProps) {
   // object-shaped API values can never crash a renderer or print raw JSON.
   const raw: ExerciseItem = entry && typeof entry === 'object' ? entry : {};
   const rawType = raw.type;
+  // Justification for the `as`: sanitizeEntry is an untyped JS boundary
+  // (entry.presenter.js is still JS) returning a sanitized copy of the same
+  // object — the shape is unchanged, so the assertion restores the known
+  // ExerciseItem type. Proper typing is impossible until the presenter
+  // converts to TS.
   const item = sanitizeEntry({
     ...raw,
     expectedPoints: raw.expectedPoints ?? raw.expected_points,

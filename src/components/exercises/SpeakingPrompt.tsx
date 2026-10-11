@@ -4,15 +4,60 @@ import { getSpeakingLesson } from '../../../shared/speaking-lessons.js';
 import { speechFeedback } from '../../../shared/speech-feedback.js';
 import * as UIRaw from '../ui';
 
-// delete once FRA-63 lands: unconverted JS UI components don't resolve as
-// plain `any` for JSX props under allowJs, so alias them loose here.
-const {
-  AudioPlayer,
-  Box,
-  Button,
-  Feedback,
-  Text,
-}: Record<string, React.ComponentType<any>> = UIRaw;
+interface AudioPlayerProps {
+  src?: string;
+}
+
+// Box and Text are polymorphic (`as`) and take a wide mix of HTML/SVG/aria
+// props in this file; named props cover the common ones, the index signature
+// covers the rest (aria-*, viewBox, d, …).
+interface BoxProps {
+  as?: string;
+  className?: string;
+  type?: string;
+  role?: string;
+  href?: string;
+  target?: string;
+  rel?: string;
+  disabled?: boolean;
+  onClick?: () => void;
+  children?: React.ReactNode;
+  [key: string]: unknown;
+}
+
+interface ButtonProps {
+  variant?: string;
+  disabled?: boolean;
+  onClick?: () => void;
+  children?: React.ReactNode;
+}
+
+interface FeedbackProps {
+  tone?: 'correct' | 'incorrect' | 'info';
+  title?: string;
+  children?: React.ReactNode;
+}
+
+interface TextProps {
+  as?: string;
+  className?: string;
+  variant?: string;
+  role?: string;
+  children?: React.ReactNode;
+  [key: string]: unknown;
+}
+
+// Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
+// .jsx, so its exports resolve as `any` under allowJs and precise prop types
+// are unknowable from this file. Justification for each `as` below: the
+// assertion restores a typed surface — precise where the props are narrow,
+// `Record<string, unknown>`-shaped where they vary widely — until the library
+// converts to TSX, when this block is removed.
+const AudioPlayer = UIRaw.AudioPlayer as React.ComponentType<AudioPlayerProps>;
+const Box = UIRaw.Box as React.ComponentType<BoxProps>;
+const Button = UIRaw.Button as React.ComponentType<ButtonProps>;
+const Feedback = UIRaw.Feedback as React.ComponentType<FeedbackProps>;
+const Text = UIRaw.Text as React.ComponentType<TextProps>;
 
 // Minimal local content-item shapes (FRA-64). The canonical API types are
 // owned by FRA-61 — see "Notes for FRA-68" in the PR description.
@@ -41,6 +86,15 @@ export interface TranscriptionResult {
     user_requests_remaining_today?: number;
     user_audio_seconds_remaining_today?: number;
   } | null;
+  [key: string]: unknown;
+}
+
+// Shape saved by markComplete via reportAttempt: a completion marker plus
+// the optional transcription it was built from.
+export interface SavedAttemptResult {
+  completed?: boolean;
+  transcript?: string;
+  transcription_id?: string | number | null;
   [key: string]: unknown;
 }
 
@@ -81,7 +135,7 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
   const [mode, setMode] = React.useState<string>(lesson ? 'guided' : 'free');
   const [phraseIndex, setPhraseIndex] = React.useState<number>(0);
   const phrase = lesson?.phrases[phraseIndex];
-  const [result, setResult] = React.useState<unknown>(null);
+  const [result, setResult] = React.useState<SavedAttemptResult | null>(null);
   const [completionError, setCompletionError] = React.useState<string>('');
   const [recordingError, setRecordingError] = React.useState<string>('');
   const [phase, setPhase] = React.useState<RecorderPhase>('idle');

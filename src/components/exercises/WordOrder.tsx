@@ -11,18 +11,69 @@ import {
 } from '../../presenters/attempt.presenter.js';
 import * as UIRaw from '../ui';
 
-// delete once FRA-63 lands: unconverted JS UI components don't resolve as
-// plain `any` for JSX props under allowJs, so alias them loose here.
-const {
-  ExerciseShell,
-  ExerciseEyebrow,
-  Feedback,
-  ErrorMessage,
-  Button,
-  Text,
-  WordToken,
-  TokenTray,
-}: Record<string, React.ComponentType<any>> = UIRaw;
+interface ExerciseShellProps {
+  answered?: 'correct' | 'wrong' | null;
+  children?: React.ReactNode;
+}
+
+interface ExerciseEyebrowProps {
+  level?: string;
+  kind?: string;
+}
+
+interface FeedbackProps {
+  tone?: 'correct' | 'incorrect' | 'info';
+  title?: string;
+  reveal?: unknown;
+  revealLabel?: string;
+  onRetry?: () => void;
+  children?: React.ReactNode;
+}
+
+interface ErrorMessageProps {
+  message?: string;
+}
+
+interface ButtonProps {
+  variant?: string;
+  disabled?: boolean;
+  onClick?: () => void;
+  children?: React.ReactNode;
+}
+
+interface TextProps {
+  as?: string;
+  variant?: string;
+  children?: React.ReactNode;
+}
+
+interface WordTokenProps {
+  placed?: boolean;
+  disabled?: boolean;
+  onClick?: () => void;
+  children?: React.ReactNode;
+}
+
+interface TokenTrayProps {
+  variant?: string;
+  label?: string;
+  emptyHint?: string;
+  children?: React.ReactNode;
+}
+
+// Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
+// .jsx, so its exports resolve as `any` under allowJs and precise prop types
+// are unknowable from this file. Justification for each `as` below: the
+// assertion restores a minimal typed surface — only the props this file
+// passes — until the library converts to TSX, when this block is removed.
+const ExerciseShell = UIRaw.ExerciseShell as React.ComponentType<ExerciseShellProps>;
+const ExerciseEyebrow = UIRaw.ExerciseEyebrow as React.ComponentType<ExerciseEyebrowProps>;
+const Feedback = UIRaw.Feedback as React.ComponentType<FeedbackProps>;
+const ErrorMessage = UIRaw.ErrorMessage as React.ComponentType<ErrorMessageProps>;
+const Button = UIRaw.Button as React.ComponentType<ButtonProps>;
+const Text = UIRaw.Text as React.ComponentType<TextProps>;
+const WordToken = UIRaw.WordToken as React.ComponentType<WordTokenProps>;
+const TokenTray = UIRaw.TokenTray as React.ComponentType<TokenTrayProps>;
 
 // Minimal local content-item shapes (FRA-64). The canonical API types are
 // owned by FRA-61 — see "Notes for FRA-68" in the PR description.

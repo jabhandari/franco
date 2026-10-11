@@ -6,27 +6,92 @@ import { CEFR_LEVELS, formatLevelWithClb } from '../presenters/levels.presenter.
 import { describeWord } from '../presenters/words.presenter.js';
 import * as UIRaw from './ui';
 
-// delete once FRA-63 lands: unconverted JS UI components don't resolve as
-// plain `any` for JSX props under allowJs, so alias them loose here.
-const {
-  Badge,
-  Box,
-  EmptyState,
-  ErrorMessage,
-  Modal,
-  Panel,
-  Tabs,
-  Text,
-  TextInput,
-}: Record<string, React.ComponentType<any>> = UIRaw;
+interface BadgeProps {
+  variant?: string;
+  children?: React.ReactNode;
+}
+
+// Box is polymorphic (`as`) and takes aria/SVG props in this file; named
+// props cover the common ones, the index signature covers the rest
+// (aria-*, viewBox, preserveAspectRatio, d, href, …).
+interface BoxProps {
+  as?: string;
+  className?: string;
+  type?: string;
+  role?: string;
+  onClick?: (event: React.MouseEvent) => void;
+  children?: React.ReactNode;
+  [key: string]: unknown;
+}
+
+interface EmptyStateProps {
+  icon?: React.ComponentType<{ size?: number; 'aria-hidden'?: boolean | string }>;
+  title?: string;
+  text?: string;
+}
+
+interface ErrorMessageProps {
+  message?: string;
+}
+
+interface ModalProps {
+  closeLabel?: string;
+  onClose?: () => void;
+  children?: React.ReactNode;
+}
+
+interface PanelProps {
+  layout?: string;
+  children?: React.ReactNode;
+}
+
+interface TabsProps {
+  variant?: string;
+  options?: Array<{ id: string; label: string }>;
+  value?: string;
+  onChange?: (value: string) => void;
+}
+
+interface TextProps {
+  as?: string;
+  variant?: string;
+  size?: string;
+  className?: string;
+  children?: React.ReactNode;
+}
+
+interface TextInputProps {
+  autoFocus?: boolean;
+  type?: string;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
+  placeholder?: string;
+  [key: string]: unknown; // aria-label, …
+}
+
+// Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
+// .jsx, so its exports resolve as `any` under allowJs and precise prop types
+// are unknowable from this file. Justification for each `as` below: the
+// assertion restores a minimal typed surface — only the props this file
+// passes — until the library converts to TSX, when this block is removed.
+const Badge = UIRaw.Badge as React.ComponentType<BadgeProps>;
+const Box = UIRaw.Box as React.ComponentType<BoxProps>;
+const EmptyState = UIRaw.EmptyState as React.ComponentType<EmptyStateProps>;
+const ErrorMessage = UIRaw.ErrorMessage as React.ComponentType<ErrorMessageProps>;
+const Modal = UIRaw.Modal as React.ComponentType<ModalProps>;
+const Panel = UIRaw.Panel as React.ComponentType<PanelProps>;
+const Tabs = UIRaw.Tabs as React.ComponentType<TabsProps>;
+const Text = UIRaw.Text as React.ComponentType<TextProps>;
+const TextInput = UIRaw.TextInput as React.ComponentType<TextInputProps>;
 
 // Minimal local API shapes (FRA-64). The canonical API types are owned by
 // FRA-61 — see "Notes for FRA-68" in the PR description.
 export interface ConceptMetadata {
-  theory?: unknown[];
+  theory?: unknown[][];
   vocabulary?: unknown[];
-  examples?: unknown[];
-  sources?: unknown[];
+  examples?: unknown[][];
+  sources?: unknown[][];
   stub?: boolean;
   [key: string]: unknown;
 }
@@ -49,10 +114,10 @@ export interface ConceptNode {
   category: string;
   level: string;
   shortDescription: string;
-  theory: any[];
-  vocabulary: any[];
-  examples: any[];
-  sources: any[];
+  theory: unknown[][];
+  vocabulary: unknown[];
+  examples: unknown[][];
+  sources: unknown[][];
   stub: boolean;
 }
 
@@ -211,13 +276,16 @@ export function RoadmapConnectors({ section, edges }: { section: string; edges: 
 // reaches this listener at all.
 function useBackgroundClose(
   active: ConceptNode | null | undefined,
-  dialogRef: React.RefObject<any>,
+  dialogRef: React.RefObject<HTMLDivElement | null>,
   onSelectConcept: (id: string | null) => void,
 ) {
   React.useEffect(() => {
     if (!active) return undefined;
     function onDocumentClick(event: MouseEvent) {
-      if (dialogRef.current?.contains(event.target)) return;
+      // Narrow instead of asserting: only treat the click as outside when we
+      // have both the dialog node and a real DOM target to test against it.
+      const dialog = dialogRef.current;
+      if (dialog && event.target instanceof Node && dialog.contains(event.target)) return;
       onSelectConcept(null);
     }
     document.addEventListener('click', onDocumentClick);
@@ -236,7 +304,7 @@ interface ConceptMapProps {
 
 export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectConcept, onSelectSection }: ConceptMapProps) {
   const active = nodes.find((node) => node.id === activeConceptId);
-  const dialogRef = React.useRef<any>(null);
+  const dialogRef = React.useRef<HTMLDivElement>(null);
   useBackgroundClose(active, dialogRef, onSelectConcept);
   return (
     <Box as="section" className={`concept-map panel ${active ? 'has-modal' : ''}`}>
@@ -279,7 +347,7 @@ type RoadmapTableProps = Omit<ConceptMapProps, 'edges'>;
 
 export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId, onSelectConcept }: RoadmapTableProps) {
   const active = nodes.find((node) => node.id === activeConceptId);
-  const dialogRef = React.useRef<any>(null);
+  const dialogRef = React.useRef<HTMLDivElement>(null);
   useBackgroundClose(active, dialogRef, onSelectConcept);
   return (
     <Box as="section" className="roadmap-table-page">
