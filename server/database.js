@@ -67,15 +67,8 @@ export async function migrate() {
     CREATE INDEX IF NOT EXISTS speech_transcriptions_user_time_idx ON speech_transcriptions(user_id,created_at DESC);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_time_idx ON speech_transcriptions(created_at DESC);
   `);
-  // FRA-56: backfill first_name/last_name for rows created before the columns
-  // existed. First token -> first_name, remainder -> last_name; single-token
-  // legacy names (e.g. the old email-prefix default) become first_name only.
-  // Existing users are otherwise untouched.
-  const { splitLegacyName } = await import('./user-names.js');
-  for (const row of await query('SELECT id, name FROM users WHERE first_name IS NULL')) {
-    const [first, last] = splitLegacyName(row.name);
-    await query('UPDATE users SET first_name=?,last_name=? WHERE id=?', [first, last, row.id]);
-  }
+  // FRA-56: first_name/last_name columns added above. No backfill from the
+  // legacy `name` column — only 2 users exist and they will be reset.
   for (const [code, ordinal] of [['A1',1],['A2',2],['B1',3],['B2',4],['C1',5],['C2',6]]) await query('INSERT INTO cefr_levels(code,ordinal) VALUES(?,?) ON CONFLICT(code) DO NOTHING', [code, ordinal]);
   await query("INSERT INTO schema_migrations(version) VALUES('content-v1') ON CONFLICT(version) DO NOTHING");
   if (process.env.CONTENT_API_KEY) {
