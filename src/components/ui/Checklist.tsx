@@ -1,8 +1,20 @@
 import React from 'react';
 
+export interface ChecklistItem {
+  id: string;
+  title: React.ReactNode;
+  sub?: React.ReactNode;
+}
+
+export interface ChecklistProps {
+  items?: ChecklistItem[];
+  checked?: Record<string, boolean>;
+  onToggle: (id: string) => void;
+  key?: React.Key;
+}
+
 // Toggle checklist: ul.checklist of buttons with checkbox squares.
-// items: [{ id, title, sub? }]; checked: { [id]: boolean }.
-export function Checklist({ items = [], checked = {}, onToggle }) {
+export function Checklist({ items = [], checked = {}, onToggle }: ChecklistProps) {
   return (
     <ul className="checklist">
       {items.map((item) => {

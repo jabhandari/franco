@@ -1,7 +1,17 @@
 import React from 'react';
 
+export interface Step {
+  title?: string;
+  text?: React.ReactNode;
+}
+
+export interface StepsProps {
+  steps?: Step[];
+  key?: React.Key;
+}
+
 // Numbered step cards: div.steps-row > div.step-card × n.
-export function Steps({ steps = [] }) {
+export function Steps({ steps = [] }: StepsProps) {
   return (
     <div className="steps-row">
       {steps.map((step, index) => (

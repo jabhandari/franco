@@ -1,15 +1,30 @@
 import React from 'react';
-import { Button } from './Button.jsx';
-import { Textarea } from './Field.jsx';
+import { Button } from './Button';
+import { Textarea } from './Field';
+
+export interface ExerciseEyebrowProps {
+  level?: React.ReactNode;
+  kind?: React.ReactNode;
+  key?: React.Key;
+}
 
 // Kicker line for exercise cards: "A1 · dictation".
-export function ExerciseEyebrow({ level, kind }) {
+export function ExerciseEyebrow({ level, kind }: ExerciseEyebrowProps) {
   return <span>{[level, kind].filter(Boolean).join(' · ')}</span>;
+}
+
+export type AnsweredState = 'correct' | 'wrong';
+
+export interface ExerciseShellProps {
+  eyebrow?: React.ReactNode;
+  answered?: AnsweredState | null;
+  children?: React.ReactNode;
+  key?: React.Key;
 }
 
 // Standard exercise card wrapper: article.exercise-preview.mcq-card with
 // an optional answered-correct / answered-wrong state class.
-export function ExerciseShell({ eyebrow, answered = null, children }) {
+export function ExerciseShell({ eyebrow, answered = null, children }: ExerciseShellProps) {
   const stateClass =
     answered === 'correct' ? ' answered-correct' : answered === 'wrong' ? ' answered-wrong' : '';
   return (
@@ -20,9 +35,24 @@ export function ExerciseShell({ eyebrow, answered = null, children }) {
   );
 }
 
+export interface ExerciseOption {
+  key: string;
+  label: React.ReactNode;
+}
+
+export interface OptionListProps {
+  options?: ExerciseOption[];
+  selectedKey?: string;
+  answered?: boolean;
+  correct?: boolean;
+  disabled?: boolean;
+  onSelect: (key: string) => void;
+  key?: React.Key;
+}
+
 // Choice buttons: div.mcq-options. After answering, the selected option
 // gets .correct / .incorrect based on the `correct` result.
-export function OptionList({ options = [], selectedKey, answered = false, correct = false, disabled = false, onSelect }) {
+export function OptionList({ options = [], selectedKey, answered = false, correct = false, disabled = false, onSelect }: OptionListProps) {
   return (
     <div className="mcq-options">
       {options.map((option) => {
@@ -44,6 +74,21 @@ export function OptionList({ options = [], selectedKey, answered = false, correc
   );
 }
 
+export interface AnswerFormProps {
+  rows?: number;
+  value?: string;
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
+  placeholder?: string;
+  disabled?: boolean;
+  submitDisabled?: boolean;
+  hideSubmit?: boolean;
+  submitLabel?: string;
+  submittingLabel?: string;
+  submitting?: boolean;
+  onSubmit: () => void;
+  key?: React.Key;
+}
+
 // Free-text answer form: textarea + primary submit button.
 export function AnswerForm({
   rows = 3,
@@ -57,7 +102,7 @@ export function AnswerForm({
   submittingLabel,
   submitting = false,
   onSubmit,
-}) {
+}: AnswerFormProps) {
   return (
     <form
       onSubmit={(event) => {

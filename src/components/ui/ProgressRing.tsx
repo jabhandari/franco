@@ -1,9 +1,16 @@
 import React from 'react';
 
+export interface ProgressRingProps {
+  percent?: number;
+  size?: number;
+  label?: string;
+  key?: React.Key;
+}
+
 // FRA-47: SVG progress ring for the Learn level cards. Geometry is
 // data-driven and owned by this component — callers pass a percent (0-100),
 // never widths or dash arrays. The track/fill styling lives in styles.css.
-export function ProgressRing({ percent = 0, size = 76, label }) {
+export function ProgressRing({ percent = 0, size = 76, label }: ProgressRingProps) {
   const clamped = Math.max(0, Math.min(100, Math.round(percent)));
   const stroke = 8;
   const radius = (size - stroke) / 2;

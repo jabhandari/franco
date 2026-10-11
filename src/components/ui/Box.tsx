@@ -14,7 +14,37 @@ import React from 'react';
 //
 // gap scale (same tokens as Stack — do not invent a second scale):
 // xs=4, sm=8, md=16, lg=24, xl=32
-const GAP_SCALE = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };
+const GAP_SCALE: Record<string, number> = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };
+
+export type BoxGap = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
+
+export interface BoxProps {
+  as?: React.ElementType;
+  className?: string;
+  display?: React.CSSProperties['display'];
+  direction?: React.CSSProperties['flexDirection'];
+  gap?: BoxGap;
+  align?: React.CSSProperties['alignItems'];
+  justify?: React.CSSProperties['justifyContent'];
+  wrap?: boolean;
+  children?: React.ReactNode;
+  id?: string;
+  role?: string;
+  title?: string;
+  type?: string;
+  disabled?: boolean;
+  onClick?: React.MouseEventHandler;
+  onSubmit?: React.FormEventHandler;
+  href?: string;
+  target?: string;
+  rel?: string;
+  viewBox?: string;
+  preserveAspectRatio?: string;
+  d?: string;
+  key?: React.Key;
+  // Only aria-* attributes pass through from any extra props.
+  [ariaProp: `aria-${string}`]: unknown;
+}
 
 export function Box({
   as: Tag = 'div',
@@ -40,15 +70,15 @@ export function Box({
   preserveAspectRatio,
   d,
   ...rest
-}) {
+}: BoxProps) {
   // Explicit allowlist: only aria-* passes through from the rest props.
   // Anything else a caller sneaks in is dropped, never spread onto the DOM.
-  const ariaProps = {};
+  const ariaProps: Record<string, unknown> = {};
   for (const key of Object.keys(rest)) {
     if (key.startsWith('aria-')) ariaProps[key] = rest[key];
   }
 
-  let style;
+  let style: React.CSSProperties | undefined;
   if (display || direction || gap || align || justify || wrap) {
     style = {};
     const effectiveDisplay = display || (direction ? 'flex' : undefined);

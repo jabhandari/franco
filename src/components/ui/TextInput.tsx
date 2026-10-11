@@ -4,6 +4,23 @@ import React from 'react';
 // Field (label + icon), but a few places (auth screen, vocabulary search)
 // render the input directly — this is that bare input. className is allowed
 // so it can carry an existing styles.css hook like any other primitive.
+export interface TextInputProps {
+  type?: string;
+  name?: string;
+  value?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+  placeholder?: string;
+  autoComplete?: string;
+  autoFocus?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  className?: string;
+  key?: React.Key;
+  // Only aria-* attributes pass through from any extra props.
+  [ariaProp: `aria-${string}`]: unknown;
+}
+
 export function TextInput({
   type = 'text',
   name,
@@ -16,9 +33,9 @@ export function TextInput({
   required = false,
   className,
   ...rest
-}) {
+}: TextInputProps) {
   // Explicit allowlist: only aria-* passes through from the rest props.
-  const ariaProps = {};
+  const ariaProps: Record<string, unknown> = {};
   for (const key of Object.keys(rest)) {
     if (key.startsWith('aria-')) ariaProps[key] = rest[key];
   }

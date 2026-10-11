@@ -1,10 +1,10 @@
 import React from 'react';
 import { Check, Flame } from 'lucide-react';
-import { Box } from './Box.jsx';
-import { Panel, PanelHeader } from './Panel.jsx';
-import { RecordCount, StatGroup } from './Data.jsx';
-import { EmptyState } from './EmptyState.jsx';
-import { Text } from './Text.jsx';
+import { Box } from './Box';
+import { Panel, PanelHeader } from './Panel';
+import { RecordCount, StatGroup } from './Data';
+import { EmptyState } from './EmptyState';
+import { Text } from './Text';
 import { buildHeatmap, streakLabel, HEATMAP_DAY_LABELS } from '../../presenters/streak.presenter.js';
 
 // FRA-44 streak UI. All three placements read the GET /api/me/streak
@@ -14,15 +14,37 @@ import { buildHeatmap, streakLabel, HEATMAP_DAY_LABELS } from '../../presenters/
 const FLAME_COLOR = '#d94836';
 const FLAME_FILL = '#f4604e';
 
-function bestLabel(longestStreak) {
+// Minimal local view of the streak payload.
+// (Canonical streak types belong to the API-client ticket — FRA-61.)
+export interface StreakDay {
+  date: string;
+  attempts: number;
+}
+
+export interface StreakPayload {
+  currentStreak?: number | null;
+  longestStreak?: number | null;
+  studiedToday?: boolean;
+  activeDays?: number | null;
+  totalAttempts?: number | null;
+  today?: string;
+  days?: StreakDay[];
+}
+
+function bestLabel(longestStreak: number | null | undefined) {
   const best = Number(longestStreak) || 0;
   return `Best: ${best} day${best === 1 ? '' : 's'}`;
+}
+
+export interface StreakChipProps {
+  streak?: StreakPayload | null;
+  key?: React.Key;
 }
 
 // Compact flame chip for the sidebar, under the nav. In the collapsed
 // icon rail only the flame is visible (see .streak-chip in styles.css),
 // so the full label also goes on the title for hover discovery.
-export function StreakChip({ streak }) {
+export function StreakChip({ streak }: StreakChipProps) {
   if (!streak) return null;
   const current = Number(streak.currentStreak) || 0;
   const title = current > 0 ? `${streakLabel(current)} · ${bestLabel(streak.longestStreak)}` : 'No streak yet · Study today to start';
@@ -37,9 +59,14 @@ export function StreakChip({ streak }) {
   );
 }
 
+export interface StreakHeroProps {
+  streak?: StreakPayload | null;
+  key?: React.Key;
+}
+
 // Streak summary for the Home daily panel, above the session button.
 // Brand-new learners get the empty strip instead of a zero hero.
-export function StreakHero({ streak }) {
+export function StreakHero({ streak }: StreakHeroProps) {
   if (!streak) return null;
   const current = Number(streak.currentStreak) || 0;
   const best = Number(streak.longestStreak) || 0;
@@ -79,9 +106,15 @@ export function StreakHero({ streak }) {
   );
 }
 
+export interface StreakHeatmapProps {
+  days?: StreakDay[];
+  today?: string;
+  key?: React.Key;
+}
+
 // GitHub-style activity heatmap: week columns, Sunday..Saturday rows,
 // intensity buckets from the streak presenter.
-export function StreakHeatmap({ days, today }) {
+export function StreakHeatmap({ days, today }: StreakHeatmapProps) {
   const { columns, months } = buildHeatmap(days || [], today);
   const monthByColumn = new Map(months.map((month) => [month.column, month.label]));
   return (
@@ -121,9 +154,14 @@ export function StreakHeatmap({ days, today }) {
   );
 }
 
+export interface StreakPanelProps {
+  streak?: StreakPayload | null;
+  key?: React.Key;
+}
+
 // Full consistency panel for the Progress view: streak stats + heatmap,
 // or the empty state for learners with no activity yet.
-export function StreakPanel({ streak }) {
+export function StreakPanel({ streak }: StreakPanelProps) {
   if (!streak) return null;
   const hasActivity = (Number(streak.totalAttempts) || 0) > 0;
   return (

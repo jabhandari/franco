@@ -1,10 +1,10 @@
 import React from 'react';
 import { Flag } from 'lucide-react';
 import { apiPost } from '../../api/client.js';
-import { Button } from './Button.jsx';
-import { ErrorMessage } from './Feedback.jsx';
+import { Button } from './Button';
+import { ErrorMessage } from './Feedback';
 
-const REPORT_REASONS = [
+const REPORT_REASONS: Array<{ id: string; label: string }> = [
   { id: 'wrong_answer', label: 'Wrong answer' },
   { id: 'unclear_prompt', label: 'Unclear prompt' },
   { id: 'typo', label: 'Typo or language error' },
@@ -12,13 +12,21 @@ const REPORT_REASONS = [
   { id: 'other', label: 'Something else' },
 ];
 
+export type ReportState = 'idle' | 'sending' | 'done' | 'error';
+
+export interface ReportButtonProps {
+  itemId: string | number;
+  token?: string | null;
+  key?: React.Key;
+}
+
 // Learner QA: flagging a suspect item files a report; enough distinct reports
 // auto-demote the item back to pending_review for human re-review.
-export function ReportButton({ itemId, token }) {
+export function ReportButton({ itemId, token }: ReportButtonProps) {
   const [open, setOpen] = React.useState(false);
   const [reason, setReason] = React.useState('wrong_answer');
   const [note, setNote] = React.useState('');
-  const [state, setState] = React.useState('idle'); // idle | sending | done | error
+  const [state, setState] = React.useState<ReportState>('idle');
 
   async function submit() {
     setState('sending');
