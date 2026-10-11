@@ -50,11 +50,7 @@ const navItems = [
   { id: 'profile', label: 'Profile', icon: UserRound }
 ];
 
-<<<<<<< HEAD
-const viewPaths = { home: '/', learn: '/learn', placement: '/placement', session: '/session', content: '/content', past: '/past-questions', progress: '/progress', conversation: '/conversation', review: '/review' };
-=======
-const viewPaths = { home: '/', placement: '/placement', session: '/session', content: '/content', past: '/past-questions', progress: '/progress', conversation: '/conversation', review: '/review', profile: '/profile' };
->>>>>>> dd1c2b7 (FRA-56: collect first/last name at signup; editable profile)
+const viewPaths = { home: '/', learn: '/learn', placement: '/placement', session: '/session', content: '/content', past: '/past-questions', progress: '/progress', conversation: '/conversation', review: '/review', profile: '/profile' };
 function viewFromPath(pathname) {
   const entry = Object.entries(viewPaths).find(([, path]) => path === pathname || (path !== '/' && pathname.startsWith(`${path}/`)));
   return entry?.[0] || 'home';
