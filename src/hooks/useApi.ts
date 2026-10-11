@@ -2,8 +2,15 @@ import React from 'react';
 import { apiGet } from '../api/client.js';
 import { getErrorMessage } from '../presenters/format.presenter.js';
 
-export function useApiResource(path, token) {
-  const [state, setState] = React.useState({ data: null, loading: true, error: '' });
+/** Return shape of {@link useApiResource}. */
+export interface ApiResourceState<T> {
+  data: T | null;
+  loading: boolean;
+  error: string;
+}
+
+export function useApiResource<T = any>(path: string, token?: string | null): ApiResourceState<T> {
+  const [state, setState] = React.useState<ApiResourceState<T>>({ data: null, loading: true, error: '' });
 
   React.useEffect(() => {
     if (!token && path.startsWith('/api/me')) {
@@ -14,10 +21,10 @@ export function useApiResource(path, token) {
     setState({ data: null, loading: true, error: '' });
 
     apiGet(path, token)
-      .then((data) => {
+      .then((data: T) => {
         if (!cancelled) setState({ data, loading: false, error: '' });
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         if (!cancelled) setState({ data: null, loading: false, error: getErrorMessage(error) });
       });
 
