@@ -2,33 +2,18 @@ import React from 'react';
 import { Check, CheckCircle2, Flag, KeyRound, RefreshCw, Send, X } from 'lucide-react';
 import { apiGet, apiPost, formatEnum, getErrorMessage, normalizeChoices, safeText } from '../api/client.js';
 import {
-  Box as _Box,
-  Button as _Button,
-  EmptyState as _EmptyState,
-  ErrorMessage as _ErrorMessage,
-  Field as _Field,
-  Page as _Page,
-  PageHeader as _PageHeader,
-  Panel as _Panel,
-  Tabs as _Tabs,
-  Text as _Text,
-  TextInput as _TextInput,
+  Box,
+  Button,
+  EmptyState,
+  ErrorMessage,
+  Field,
+  Page,
+  PageHeader,
+  Panel,
+  Tabs,
+  Text,
+  TextInput,
 } from '../components/ui';
-
-// FRA-66 pattern: unconverted .jsx components don't resolve as `any` for JSX
-// props under allowJs — tsc over-infers required props from destructuring.
-// Alias to loose component types; delete once FRA-63 lands with real prop types.
-const Box = _Box as React.ComponentType<any>;
-const Button = _Button as React.ComponentType<any>;
-const EmptyState = _EmptyState as React.ComponentType<any>;
-const ErrorMessage = _ErrorMessage as React.ComponentType<any>;
-const Field = _Field as React.ComponentType<any>;
-const Page = _Page as React.ComponentType<any>;
-const PageHeader = _PageHeader as React.ComponentType<any>;
-const Panel = _Panel as React.ComponentType<any>;
-const Tabs = _Tabs as React.ComponentType<any>;
-const Text = _Text as React.ComponentType<any>;
-const TextInput = _TextInput as React.ComponentType<any>;
 
 // FRA-67: local interfaces for the review-queue payloads. Canonical ownership
 // of the content-item shape belongs to a later ticket (see "Notes for FRA-68").
@@ -259,7 +244,9 @@ export function ReviewQueue({ onKeyChange }: ReviewQueueProps) {
 function ReviewItem({ item, note, busy, error, onNote, onAct }: ReviewItemProps) {
   const choices = normalizeChoices(item.choices);
   const expected = safeText(item.expected);
-  const expectedPoints: unknown[] = Array.isArray(item.expected_points) ? item.expected_points : [];
+  const expectedPoints: string[] = Array.isArray(item.expected_points)
+    ? item.expected_points.filter((point): point is string => typeof point === 'string')
+    : [];
   const flagged = (item.report_count || 0) > 0;
   const isCorrectChoice = (choice: { key: string; text: string }) => {
     if (!expected) return false;

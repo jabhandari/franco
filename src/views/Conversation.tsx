@@ -3,29 +3,16 @@ import { Database, Timer } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { safeText } from '../presenters/format.presenter.js';
 import {
-  Checklist as _Checklist,
-  Chip as _Chip,
-  EmptyState as _EmptyState,
-  Page as _Page,
-  PageHeader as _PageHeader,
-  Panel as _Panel,
-  PanelHeader as _PanelHeader,
-  Steps as _Steps,
-  Text as _Text,
+  Checklist,
+  Chip,
+  EmptyState,
+  Page,
+  PageHeader,
+  Panel,
+  PanelHeader,
+  Steps,
+  Text,
 } from '../components/ui';
-
-// FRA-66 pattern: unconverted .jsx components don't resolve as `any` for JSX
-// props under allowJs — tsc over-infers required props from destructuring.
-// Alias to loose component types; delete once FRA-63 lands with real prop types.
-const Checklist = _Checklist as React.ComponentType<any>;
-const Chip = _Chip as React.ComponentType<any>;
-const EmptyState = _EmptyState as React.ComponentType<any>;
-const Page = _Page as React.ComponentType<any>;
-const PageHeader = _PageHeader as React.ComponentType<any>;
-const Panel = _Panel as React.ComponentType<any>;
-const PanelHeader = _PanelHeader as React.ComponentType<any>;
-const Steps = _Steps as React.ComponentType<any>;
-const Text = _Text as React.ComponentType<any>;
 
 // FRA-67: local interface for the /api/me/conversation-targets payload.
 interface ConversationTarget {

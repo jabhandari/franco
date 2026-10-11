@@ -5,39 +5,21 @@ import { normalizeChoices } from '../presenters/collections.presenter.js';
 import { capitalize, choiceLabel } from '../presenters/format.presenter.js';
 import { CEFR_LEVELS, formatLevelWithClb } from '../presenters/levels.presenter.js';
 import {
-  Box as _Box,
-  Button as _Button,
-  CollapsibleSection as _CollapsibleSection,
-  EmptyState as _EmptyState,
-  ExerciseShell as _ExerciseShell,
-  Feedback as _Feedback,
-  OptionList as _OptionList,
-  Page as _Page,
-  PageHeader as _PageHeader,
-  Panel as _Panel,
-  ReadingPassage as _ReadingPassage,
-  Tabs as _Tabs,
-  Text as _Text,
-  Toolbar as _Toolbar,
+  Box,
+  Button,
+  CollapsibleSection,
+  EmptyState,
+  ExerciseShell,
+  Feedback,
+  OptionList,
+  Page,
+  PageHeader,
+  Panel,
+  ReadingPassage,
+  Tabs,
+  Text,
+  Toolbar,
 } from '../components/ui';
-
-// FRA-66 pattern: unconverted .jsx components don't resolve as `any` for JSX
-// props under allowJs — tsc over-infers required props from destructuring.
-// Alias to loose component types; delete once FRA-63 lands with real prop types.
-const Box = _Box as React.ComponentType<any>;
-const Button = _Button as React.ComponentType<any>;
-const CollapsibleSection = _CollapsibleSection as React.ComponentType<any>;
-const EmptyState = _EmptyState as React.ComponentType<any>;
-const ExerciseShell = _ExerciseShell as React.ComponentType<any>;
-const Feedback = _Feedback as React.ComponentType<any>;
-const OptionList = _OptionList as React.ComponentType<any>;
-const Page = _Page as React.ComponentType<any>;
-const PageHeader = _PageHeader as React.ComponentType<any>;
-const Panel = _Panel as React.ComponentType<any>;
-const ReadingPassage = _ReadingPassage as React.ComponentType<any>;
-const Tabs = _Tabs as React.ComponentType<any>;
-const Text = _Text as React.ComponentType<any>;
-const Toolbar = _Toolbar as React.ComponentType<any>;
 
 // FRA-67: local interfaces for the /api/exam/questions payload. The exam
 // archive row shape stays owned by its ticket (see "Notes for FRA-68").
