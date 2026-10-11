@@ -28,13 +28,22 @@ async function parseApiResponse(response) {
   return payload;
 }
 
+// Build-time API base URL. Set VITE_API_URL in the host's env vars
+// (e.g. Cloudflare Pages) to point the frontend at the API origin.
+// Falls back to same-origin relative URLs, which is what local dev uses.
+const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+
+function apiUrl(path) {
+  return API_BASE ? `${API_BASE}${path}` : path;
+}
+
 // (moved to src/presenters/format.presenter.js — re-exported at the top of this file)
 
 export async function apiGet(path, token, options = {}) {
   const headers = {};
   if (token) headers.authorization = `Bearer ${token}`;
   if (options.apiKey) headers['x-api-key'] = options.apiKey;
-  const response = await fetch(path, { headers, cache: 'no-store' });
+  const response = await fetch(apiUrl(path), { headers, cache: 'no-store' });
   return parseApiResponse(response);
 }
 
@@ -42,7 +51,7 @@ export async function apiPost(path, body, token, options = {}) {
   const headers = { 'content-type': 'application/json' };
   if (token) headers.authorization = `Bearer ${token}`;
   if (options.apiKey) headers['x-api-key'] = options.apiKey;
-  const response = await fetch(path, {
+  const response = await fetch(apiUrl(path), {
     method: 'POST',
     headers,
     body: JSON.stringify(body),
@@ -64,7 +73,7 @@ export function getSpeechStatus(token) {
 
 export async function uploadSpeech(itemId, audio, token, practiceId = null) {
   const path = '/api/speech/transcribe?item_id=' + encodeURIComponent(itemId) + (practiceId ? '&practice=' + encodeURIComponent(practiceId) : '');
-  const response = await fetch(path, {
+  const response = await fetch(apiUrl(path), {
     method: 'POST',
     headers: { authorization: 'Bearer ' + token, 'content-type': audio.type },
     body: audio,
