@@ -11,46 +11,46 @@ import {
 } from '../../presenters/attempt.presenter.js';
 import * as UIRaw from '../ui';
 
-interface ExerciseShellProps {
+type ExerciseShellProps = {
   answered?: 'correct' | 'wrong' | null;
   children?: React.ReactNode;
-}
+};
 
-interface ExerciseEyebrowProps {
+type ExerciseEyebrowProps = {
   level?: string;
   kind?: string;
-}
+};
 
-interface ReadingPassageProps {
+type ReadingPassageProps = {
   text?: string;
-}
+};
 
-interface OptionListProps {
+type OptionListProps = {
   options?: Array<{ key: string; label: string }>;
   selectedKey?: string | null;
   answered?: boolean;
   correct?: boolean;
   disabled?: boolean;
   onSelect?: (key: string) => void;
-}
+};
 
-interface FeedbackProps {
+type FeedbackProps = {
   tone?: 'correct' | 'incorrect' | 'info';
   title?: string;
-  reveal?: unknown;
+  reveal?: React.ReactNode;
   revealLabel?: string;
   onRetry?: () => void;
   children?: React.ReactNode;
-}
+};
 
-interface ErrorMessageProps {
+type ErrorMessageProps = {
   message?: string;
-}
+};
 
-interface TextProps {
+type TextProps = {
   as?: string;
   children?: React.ReactNode;
-}
+};
 
 // Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
 // .jsx, so its exports resolve as `any` under allowJs and precise prop types
@@ -67,33 +67,38 @@ const Text = UIRaw.Text as React.ComponentType<TextProps>;
 
 // Minimal local content-item shapes (FRA-64). The canonical API types are
 // owned by FRA-61 — see "Notes for FRA-68" in the PR description.
-export interface MultipleChoiceOption {
+//
+// Choice shape after normalizeChoices() (src/presenters/collections.presenter.js):
+// every choice is { key, text } — safeText guarantees both are strings.
+export type MultipleChoiceOption = {
   key: string;
-  [key: string]: unknown;
-}
+  text: string;
+};
 
-export interface MultipleChoiceItem {
+export type MultipleChoiceItem = {
   level?: string;
   skill?: string;
   type?: string;
   prompt?: string;
   context?: string;
   choices?: MultipleChoiceOption[];
-  [key: string]: unknown;
-}
+};
 
-export interface AttemptResult {
+// Attempt rows returned by POST /api/me/attempts (server/index.js):
+// { attempt, correct, score, reveal, next_due_at }. For multiple-choice the
+// server sets reveal to the correct choice's text (see the FRA-7 comment in
+// the attempts route); error is set locally when reportAttempt throws.
+export type AttemptResult = {
   correct?: boolean;
-  reveal?: unknown;
+  reveal?: string | null;
   error?: string;
-  [key: string]: unknown;
-}
+};
 
-interface MultipleChoiceProps {
+type MultipleChoiceProps = {
   entry: MultipleChoiceItem;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
-}
+};
 
 export function MultipleChoice({ entry, token, onResult }: MultipleChoiceProps) {
   const [selected, setSelected] = React.useState<string | null>(null);

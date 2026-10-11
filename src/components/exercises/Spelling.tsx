@@ -10,17 +10,17 @@ import {
 } from '../../presenters/attempt.presenter.js';
 import * as UIRaw from '../ui';
 
-interface ExerciseShellProps {
+type ExerciseShellProps = {
   answered?: 'correct' | 'wrong' | null;
   children?: React.ReactNode;
-}
+};
 
-interface ExerciseEyebrowProps {
+type ExerciseEyebrowProps = {
   level?: string;
   kind?: string;
-}
+};
 
-interface AnswerFormProps {
+type AnswerFormProps = {
   rows?: number;
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -30,29 +30,29 @@ interface AnswerFormProps {
   hideSubmit?: boolean;
   submitLabel?: string;
   onSubmit?: (event?: React.SyntheticEvent) => void;
-}
+};
 
-interface FeedbackProps {
+type FeedbackProps = {
   tone?: 'correct' | 'incorrect' | 'info';
   title?: string;
-  reveal?: unknown;
+  reveal?: React.ReactNode;
   revealLabel?: string;
   onRetry?: () => void;
   children?: React.ReactNode;
-}
+};
 
-interface ErrorMessageProps {
+type ErrorMessageProps = {
   message?: string;
-}
+};
 
-interface AudioPlayerProps {
+type AudioPlayerProps = {
   src?: string;
-}
+};
 
-interface TextProps {
+type TextProps = {
   as?: string;
   children?: React.ReactNode;
-}
+};
 
 // Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
 // .jsx, so its exports resolve as `any` under allowJs and precise prop types
@@ -69,26 +69,28 @@ const Text = UIRaw.Text as React.ComponentType<TextProps>;
 
 // Minimal local content-item shapes (FRA-64). The canonical API types are
 // owned by FRA-61 — see "Notes for FRA-68" in the PR description.
-export interface SpellingItem {
+export type SpellingItem = {
   level?: string;
   type?: string;
   prompt?: string;
-  [key: string]: unknown;
-}
+};
 
-export interface AttemptResult {
+// Attempt rows returned by POST /api/me/attempts (server/index.js):
+// { attempt, correct, score, reveal, next_due_at }. For spelling the server
+// sets reveal to the expected answer; error is set locally when
+// reportAttempt throws.
+export type AttemptResult = {
   correct?: boolean;
-  reveal?: unknown;
+  reveal?: string | null;
   error?: string;
-  [key: string]: unknown;
-}
+};
 
-interface SpellingProps {
+type SpellingProps = {
   entry: SpellingItem;
   token?: string | null;
   audioUrl?: string;
   onResult?: (result: AttemptResult) => void;
-}
+};
 
 // Typed-answer renderer for spelling / cloze / free-text items, and dictation
 // when an audioUrl is provided.

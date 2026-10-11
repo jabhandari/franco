@@ -11,55 +11,55 @@ import {
 } from '../../presenters/attempt.presenter.js';
 import * as UIRaw from '../ui';
 
-interface ExerciseShellProps {
+type ExerciseShellProps = {
   answered?: 'correct' | 'wrong' | null;
   children?: React.ReactNode;
-}
+};
 
-interface ExerciseEyebrowProps {
+type ExerciseEyebrowProps = {
   level?: string;
   kind?: string;
-}
+};
 
-interface FeedbackProps {
+type FeedbackProps = {
   tone?: 'correct' | 'incorrect' | 'info';
   title?: string;
-  reveal?: unknown;
+  reveal?: React.ReactNode;
   revealLabel?: string;
   onRetry?: () => void;
   children?: React.ReactNode;
-}
+};
 
-interface ErrorMessageProps {
+type ErrorMessageProps = {
   message?: string;
-}
+};
 
-interface ButtonProps {
+type ButtonProps = {
   variant?: string;
   disabled?: boolean;
   onClick?: () => void;
   children?: React.ReactNode;
-}
+};
 
-interface TextProps {
+type TextProps = {
   as?: string;
   variant?: string;
   children?: React.ReactNode;
-}
+};
 
-interface WordTokenProps {
+type WordTokenProps = {
   placed?: boolean;
   disabled?: boolean;
   onClick?: () => void;
   children?: React.ReactNode;
-}
+};
 
-interface TokenTrayProps {
+type TokenTrayProps = {
   variant?: string;
   label?: string;
   emptyHint?: string;
   children?: React.ReactNode;
-}
+};
 
 // Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
 // .jsx, so its exports resolve as `any` under allowJs and precise prop types
@@ -77,25 +77,27 @@ const TokenTray = UIRaw.TokenTray as React.ComponentType<TokenTrayProps>;
 
 // Minimal local content-item shapes (FRA-64). The canonical API types are
 // owned by FRA-61 — see "Notes for FRA-68" in the PR description.
-export interface WordOrderItem {
+export type WordOrderItem = {
   level?: string;
   prompt?: string;
   tokens?: string[];
-  [key: string]: unknown;
-}
+};
 
-export interface AttemptResult {
+// Attempt rows returned by POST /api/me/attempts (server/index.js):
+// { attempt, correct, score, reveal, next_due_at }. For word_order the
+// server sets reveal to the tokens joined in the correct order; error is set
+// locally when reportAttempt throws.
+export type AttemptResult = {
   correct?: boolean;
-  reveal?: unknown;
+  reveal?: string | null;
   error?: string;
-  [key: string]: unknown;
-}
+};
 
-interface WordOrderProps {
+type WordOrderProps = {
   entry: WordOrderItem;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
-}
+};
 
 // Tap-to-order sentence builder for word_order items.
 export function WordOrder({ entry, token, onResult }: WordOrderProps) {

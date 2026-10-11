@@ -9,50 +9,50 @@ import {
 } from '../../presenters/attempt.presenter.js';
 import * as UIRaw from '../ui';
 
-interface BoxProps {
+type BoxProps = {
   className?: string;
   children?: React.ReactNode;
-}
+};
 
-interface ExerciseShellProps {
+type ExerciseShellProps = {
   answered?: 'correct' | 'wrong' | null;
   children?: React.ReactNode;
-}
+};
 
-interface ExerciseEyebrowProps {
+type ExerciseEyebrowProps = {
   level?: string;
   kind?: string;
-}
+};
 
-interface AudioPlayerProps {
+type AudioPlayerProps = {
   src?: string;
   transcript?: string;
   emptyText?: string;
-}
+};
 
-interface FeedbackProps {
+type FeedbackProps = {
   tone?: 'correct' | 'incorrect' | 'info';
   title?: string;
   onRetry?: () => void;
   children?: React.ReactNode;
-}
+};
 
-interface ErrorMessageProps {
+type ErrorMessageProps = {
   message?: string;
-}
+};
 
-interface ButtonProps {
+type ButtonProps = {
   variant?: string;
   onClick?: () => void;
   children?: React.ReactNode;
-}
+};
 
-interface TextProps {
+type TextProps = {
   as?: string;
   className?: string;
   variant?: string;
   children?: React.ReactNode;
-}
+};
 
 // Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
 // .jsx, so its exports resolve as `any` under allowJs and precise prop types
@@ -70,32 +70,39 @@ const Text = UIRaw.Text as React.ComponentType<TextProps>;
 
 // Minimal local content-item shapes (FRA-64). The canonical API types are
 // owned by FRA-61 — see "Notes for FRA-68" in the PR description.
-export interface MediaAsset {
-  kind?: string;
-  url?: string;
+//
+// Media asset shape per the content contract (schemas/content.v1.schema.json
+// $.defs media): kind + url are required; listening items use `transcript`
+// for the post-self-marking reveal text.
+export type MediaAsset = {
+  kind: 'audio' | 'image' | 'video' | 'document';
+  url: string;
+  duration_seconds?: number;
   transcript?: string;
-  [key: string]: unknown;
-}
+  checksum?: string;
+};
 
-export interface PronunciationDrillItem {
+export type PronunciationDrillItem = {
   level?: string;
   prompt?: string;
   expected?: string;
   media?: MediaAsset[];
-  [key: string]: unknown;
-}
+};
 
-export interface AttemptResult {
+// Attempt rows returned by POST /api/me/attempts (server/index.js):
+// { attempt, correct, score, reveal, next_due_at }. The drill reads
+// correct/error; error is set locally when reportAttempt throws.
+export type AttemptResult = {
   correct?: boolean;
+  reveal?: string | null;
   error?: string;
-  [key: string]: unknown;
-}
+};
 
-interface PronunciationDrillProps {
+type PronunciationDrillProps = {
   entry: PronunciationDrillItem;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
-}
+};
 
 // Pronunciation drill: listen, repeat aloud, then honestly self-mark.
 export function PronunciationDrill({ entry, token, onResult }: PronunciationDrillProps) {

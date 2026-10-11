@@ -6,69 +6,64 @@ import { CEFR_LEVELS, formatLevelWithClb } from '../presenters/levels.presenter.
 import { describeWord } from '../presenters/words.presenter.js';
 import * as UIRaw from './ui';
 
-interface BadgeProps {
+type BadgeProps = {
   variant?: string;
   children?: React.ReactNode;
-}
+};
 
-// Box is polymorphic (`as`) and takes aria/SVG props in this file; named
-// props cover the common ones, the index signature covers the rest
-// (aria-*, viewBox, preserveAspectRatio, d, href, …).
-interface BoxProps {
-  as?: string;
-  className?: string;
-  type?: string;
-  role?: string;
-  onClick?: (event: React.MouseEvent) => void;
-  children?: React.ReactNode;
-  [key: string]: unknown;
-}
+// Box is polymorphic (`as`) and takes a wide mix of HTML/SVG/aria props in
+// this file (aria-*, viewBox, preserveAspectRatio, d, href, …). The union
+// covers them without an escape-hatch index signature.
+type BoxProps = React.AllHTMLAttributes<HTMLElement> &
+  React.SVGAttributes<SVGSVGElement> & {
+    as?: string;
+  };
 
-interface EmptyStateProps {
+type EmptyStateProps = {
   icon?: React.ComponentType<{ size?: number; 'aria-hidden'?: boolean | string }>;
   title?: string;
   text?: string;
-}
+};
 
-interface ErrorMessageProps {
+type ErrorMessageProps = {
   message?: string;
-}
+};
 
-interface ModalProps {
+type ModalProps = {
   closeLabel?: string;
   onClose?: () => void;
   children?: React.ReactNode;
-}
+};
 
-interface PanelProps {
+type PanelProps = {
   layout?: string;
   children?: React.ReactNode;
-}
+};
 
-interface TabsProps {
+type TabsProps = {
   variant?: string;
   options?: Array<{ id: string; label: string }>;
   value?: string;
   onChange?: (value: string) => void;
-}
+};
 
-interface TextProps {
+type TextProps = {
   as?: string;
   variant?: string;
   size?: string;
   className?: string;
   children?: React.ReactNode;
-}
+};
 
-interface TextInputProps {
+type TextInputProps = {
   autoFocus?: boolean;
   type?: string;
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   placeholder?: string;
-  [key: string]: unknown; // aria-label, …
-}
+  'aria-label'?: string;
+};
 
 // Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
 // .jsx, so its exports resolve as `any` under allowJs and precise prop types
@@ -87,16 +82,21 @@ const TextInput = UIRaw.TextInput as React.ComponentType<TextInputProps>;
 
 // Minimal local API shapes (FRA-64). The canonical API types are owned by
 // FRA-61 — see "Notes for FRA-68" in the PR description.
-export interface ConceptMetadata {
-  theory?: unknown[][];
-  vocabulary?: unknown[];
-  examples?: unknown[][];
-  sources?: unknown[][];
+//
+// Concept metadata_json shape, per scripts/concept-data.mjs: theory blocks
+// are [tag, ...cells] string rows where tag is one of
+// 'idea' | 'rule' | 'tip' | 'example' | 'table'; examples are [french, english]
+// pairs; sources are [label, url] pairs.
+export type ConceptMetadata = {
+  theory?: string[][];
+  vocabulary?: string[];
+  examples?: string[][];
+  sources?: string[][];
   stub?: boolean;
-  [key: string]: unknown;
-}
+};
 
-export interface ApiConcept {
+// Row shape returned by GET /api/content/v1/concepts (server/index.js).
+export type ApiConcept = {
   slug?: string;
   title?: string;
   concept_type?: string;
@@ -105,36 +105,38 @@ export interface ApiConcept {
   metadata?: ConceptMetadata;
   prerequisites?: string[];
   list_order?: number | null;
-  [key: string]: unknown;
-}
+};
 
-export interface ConceptNode {
+// Row shape from the learning_topics table (supabase/schema.sql), returned by
+// GET /api/content/topics. `item` is a word or a JSON word record.
+export type VocabularyTopic = {
+  id: string;
+  title?: string;
+  category?: string;
+  item?: string;
+};
+
+type LevelGuideInfo = {
+  label: string;
+  goal: string;
+  focus: string;
+  read: string;
+};
+
+// Node shape the roadmap components render, adapted from ApiConcept by
+// toNode() below.
+export type ConceptNode = {
   id: string;
   title: string;
   category: string;
   level: string;
   shortDescription: string;
-  theory: unknown[][];
-  vocabulary: unknown[];
-  examples: unknown[][];
-  sources: unknown[][];
+  theory: string[][];
+  vocabulary: string[];
+  examples: string[][];
+  sources: string[][];
   stub: boolean;
-}
-
-export interface VocabularyTopic {
-  id: string | number;
-  title?: string;
-  category?: string;
-  item?: unknown;
-  [key: string]: unknown;
-}
-
-interface LevelGuideInfo {
-  label: string;
-  goal: string;
-  focus: string;
-  read: string;
-}
+};
 
 // Restored original roadmap display: the interactive concept tree with a
 // spine, SVG connectors, numbered nodes, and a click-to-open lesson modal.
@@ -293,14 +295,14 @@ function useBackgroundClose(
   }, [active, dialogRef, onSelectConcept]);
 }
 
-interface ConceptMapProps {
+type ConceptMapProps = {
   section: string;
   nodes: ConceptNode[];
   edges: [number, number][];
   activeConceptId: string | null;
   onSelectConcept: (id: string | null) => void;
   onSelectSection: (section: string) => void;
-}
+};
 
 export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectConcept, onSelectSection }: ConceptMapProps) {
   const active = nodes.find((node) => node.id === activeConceptId);

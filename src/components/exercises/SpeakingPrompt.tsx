@@ -4,54 +4,41 @@ import { getSpeakingLesson } from '../../../shared/speaking-lessons.js';
 import { speechFeedback } from '../../../shared/speech-feedback.js';
 import * as UIRaw from '../ui';
 
-interface AudioPlayerProps {
+type AudioPlayerProps = {
   src?: string;
-}
+};
 
 // Box and Text are polymorphic (`as`) and take a wide mix of HTML/SVG/aria
-// props in this file; named props cover the common ones, the index signature
-// covers the rest (aria-*, viewBox, d, …).
-interface BoxProps {
-  as?: string;
-  className?: string;
-  type?: string;
-  role?: string;
-  href?: string;
-  target?: string;
-  rel?: string;
-  disabled?: boolean;
-  onClick?: () => void;
-  children?: React.ReactNode;
-  [key: string]: unknown;
-}
+// props in this file (aria-*, viewBox, d, …). The union covers them without
+// an escape-hatch index signature.
+type BoxProps = React.AllHTMLAttributes<HTMLElement> &
+  React.SVGAttributes<SVGSVGElement> & {
+    as?: string;
+  };
 
-interface ButtonProps {
+type ButtonProps = {
   variant?: string;
   disabled?: boolean;
   onClick?: () => void;
   children?: React.ReactNode;
-}
+};
 
-interface FeedbackProps {
+type FeedbackProps = {
   tone?: 'correct' | 'incorrect' | 'info';
   title?: string;
   children?: React.ReactNode;
-}
+};
 
-interface TextProps {
-  as?: string;
-  className?: string;
-  variant?: string;
-  role?: string;
-  children?: React.ReactNode;
-  [key: string]: unknown;
-}
+type TextProps = React.AllHTMLAttributes<HTMLElement> &
+  React.SVGAttributes<SVGSVGElement> & {
+    as?: string;
+  };
 
 // Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
 // .jsx, so its exports resolve as `any` under allowJs and precise prop types
 // are unknowable from this file. Justification for each `as` below: the
 // assertion restores a typed surface — precise where the props are narrow,
-// `Record<string, unknown>`-shaped where they vary widely — until the library
+// HTML/SVG/aria attribute unions where they vary widely — until the library
 // converts to TSX, when this block is removed.
 const AudioPlayer = UIRaw.AudioPlayer as React.ComponentType<AudioPlayerProps>;
 const Box = UIRaw.Box as React.ComponentType<BoxProps>;
@@ -61,7 +48,11 @@ const Text = UIRaw.Text as React.ComponentType<TextProps>;
 
 // Minimal local content-item shapes (FRA-64). The canonical API types are
 // owned by FRA-61 — see "Notes for FRA-68" in the PR description.
-export interface SpeakingPromptItem {
+//
+// Entry shape after sanitizeEntry() (src/presenters/entry.presenter.js):
+// server snake_case fields normalized to camelCase where this component
+// reads them (expectedPoints/followUpQuestions).
+export type SpeakingPromptItem = {
   id?: string | number | null;
   external_id?: string | null;
   level?: string;
@@ -70,39 +61,73 @@ export interface SpeakingPromptItem {
   instructions?: string;
   expectedPoints?: string[];
   followUpQuestions?: string[];
-  [key: string]: unknown;
-}
+};
 
-export interface SpeechWordToken {
+// Word statuses produced by speechFeedback() (shared/speech-feedback.js):
+// 'matched' (green) | 'missed' (red, not heard) | 'extra' (amber).
+export type SpeechWordToken = {
   text: string;
-  status: string;
-}
+  status: 'matched' | 'missed' | 'extra';
+};
 
-export interface TranscriptionResult {
+// speechFeedback() returns { mode: 'transcript_only' } when there is no
+// model phrase, otherwise the word_diff token arrays.
+export type SpeechFeedback =
+  | { mode: 'transcript_only' }
+  | { mode: 'word_diff'; expected: SpeechWordToken[]; heard: SpeechWordToken[] };
+
+// Response shape of POST /api/speech/transcribe (server/speech.js).
+export type TranscriptionResult = {
   transcript?: string;
   transcription_id?: string | number | null;
-  feedback?: unknown;
+  feedback?: SpeechFeedback;
   quota?: {
     user_requests_remaining_today?: number;
     user_audio_seconds_remaining_today?: number;
+    resets_at?: string;
   } | null;
-  [key: string]: unknown;
-}
+};
 
 // Shape saved by markComplete via reportAttempt: a completion marker plus
-// the optional transcription it was built from.
-export interface SavedAttemptResult {
+// the optional transcription it was built from. This is the request payload;
+// the server's attempt response (stored in `result` below) has the
+// AttemptResult shape.
+export type SavedAttemptResult = {
   completed?: boolean;
   transcript?: string;
   transcription_id?: string | number | null;
-  [key: string]: unknown;
-}
+};
 
-interface SpeakingPromptProps {
+// Attempt rows returned by POST /api/me/attempts (server/index.js):
+// { attempt, correct, score, reveal, next_due_at }. This component only
+// uses the result as a completion marker, but the value flowing through
+// onResult is the server response — the same shape the other renderers use.
+export type AttemptResult = {
+  correct?: boolean;
+  reveal?: string | null;
+  error?: string;
+};
+
+type SpeakingPromptProps = {
   entry: SpeakingPromptItem;
   token?: string | null;
-  onResult?: (result: unknown) => void;
-}
+  onResult?: (result: AttemptResult) => void;
+};
+
+// Lesson shape from shared/speaking-lessons.js (getSpeakingLesson): six
+// authored models keyed by external_id, each with practice phrases.
+type SpeakingPhrase = {
+  id: string;
+  french: string;
+  english: string;
+  tip: string;
+};
+
+type SpeakingLesson = {
+  focus: string;
+  strategy: string;
+  phrases: SpeakingPhrase[];
+};
 
 type RecorderPhase = 'idle' | 'requesting' | 'recording' | 'ready' | 'uploading';
 
@@ -131,11 +156,11 @@ function WordTokens({ title, tokens }: { title: string; tokens: SpeechWordToken[
 }
 
 export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) {
-  const lesson = getSpeakingLesson(entry.external_id, entry.id);
+  const lesson: SpeakingLesson | null = getSpeakingLesson(entry.external_id, entry.id);
   const [mode, setMode] = React.useState<string>(lesson ? 'guided' : 'free');
   const [phraseIndex, setPhraseIndex] = React.useState<number>(0);
   const phrase = lesson?.phrases[phraseIndex];
-  const [result, setResult] = React.useState<SavedAttemptResult | null>(null);
+  const [result, setResult] = React.useState<AttemptResult | null>(null);
   const [completionError, setCompletionError] = React.useState<string>('');
   const [recordingError, setRecordingError] = React.useState<string>('');
   const [phase, setPhase] = React.useState<RecorderPhase>('idle');
@@ -285,7 +310,7 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
     if (result) return;
     setCompletionError('');
     try {
-      const response: Record<string, unknown> = { completed: true };
+      const response: SavedAttemptResult = { completed: true };
       if (transcription) {
         response.transcript = transcription.transcript;
         response.transcription_id = transcription.transcription_id;

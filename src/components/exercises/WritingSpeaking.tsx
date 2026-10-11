@@ -4,16 +4,16 @@ import { getErrorMessage, humanize } from '../../presenters/format.presenter.js'
 import { hasResult, elapsedMs } from '../../presenters/attempt.presenter.js';
 import * as UIRaw from '../ui';
 
-interface ExerciseShellProps {
+type ExerciseShellProps = {
   children?: React.ReactNode;
-}
+};
 
-interface ExerciseEyebrowProps {
+type ExerciseEyebrowProps = {
   level?: string;
   kind?: string;
-}
+};
 
-interface AnswerFormProps {
+type AnswerFormProps = {
   rows?: number;
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -23,28 +23,28 @@ interface AnswerFormProps {
   hideSubmit?: boolean;
   submitLabel?: string;
   onSubmit?: (event?: React.SyntheticEvent) => void;
-}
+};
 
-interface FeedbackProps {
+type FeedbackProps = {
   tone?: 'correct' | 'incorrect' | 'info';
   title?: string;
   children?: React.ReactNode;
-}
+};
 
-interface ErrorMessageProps {
+type ErrorMessageProps = {
   message?: string;
-}
+};
 
-interface RubricBoxProps {
+type RubricBoxProps = {
   title?: string;
   items?: React.ReactNode;
-}
+};
 
-interface TextProps {
+type TextProps = {
   as?: string;
   variant?: string;
   children?: React.ReactNode;
-}
+};
 
 // Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
 // .jsx, so its exports resolve as `any` under allowJs and precise prop types
@@ -61,25 +61,28 @@ const Text = UIRaw.Text as React.ComponentType<TextProps>;
 
 // Minimal local content-item shapes (FRA-64). The canonical API types are
 // owned by FRA-61 — see "Notes for FRA-68" in the PR description.
-export interface WritingPromptItem {
+//
+// Rubric is normalized by sanitizeEntry() (src/presenters/entry.presenter.js)
+// into a Record<string, string> via safeText.
+export type WritingPromptItem = {
   level?: string;
   title?: string;
   prompt?: string;
   instructions?: string;
   rubric?: Record<string, string>;
-  [key: string]: unknown;
-}
+};
 
-export interface AttemptResult {
+// Writing is graded against the rubric; the component only surfaces an
+// error when reportAttempt throws.
+export type AttemptResult = {
   error?: string;
-  [key: string]: unknown;
-}
+};
 
-interface WritingPromptProps {
+type WritingPromptProps = {
   entry: WritingPromptItem;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
-}
+};
 
 // Writing prompt: free-form text graded against the server-side rubric.
 export function WritingPrompt({ entry, token, onResult }: WritingPromptProps) {

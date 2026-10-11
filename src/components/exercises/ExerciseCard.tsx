@@ -4,17 +4,18 @@ import { WordOrder } from './WordOrder';
 import { Spelling } from './Spelling';
 import { PronunciationDrill } from './Listening';
 import { WritingPrompt, SpeakingPrompt } from './WritingSpeaking';
+import type { MediaAsset } from './Listening';
 import * as UIRaw from '../ui/index.js';
 
-interface BoxProps {
+type BoxProps = {
   className?: string;
   children?: React.ReactNode;
-}
+};
 
-interface ReportButtonProps {
+type ReportButtonProps = {
   itemId?: string | number | null;
   token?: string | null;
-}
+};
 
 // Interim ui/ bridge (deleted once FRA-63 lands): src/components/ui is still
 // .jsx, so its exports resolve as `any` under allowJs and precise prop types
@@ -27,19 +28,42 @@ import { sanitizeEntry } from '../../presenters/entry.presenter.js';
 
 // Minimal local content-item shapes (FRA-64). The canonical API types are
 // owned by FRA-61 — see "Notes for FRA-68" in the PR description.
-export interface ExerciseItem {
+//
+// Entry shape after sanitizeEntry() (src/presenters/entry.presenter.js):
+// server snake_case fields normalized to camelCase where the renderers need
+// them. MediaAsset is defined in ./Listening (FRA-68 moves it to
+// src/types.ts with the other shared content shapes).
+//
+// `level`/`prompt` are read by every renderer below, so they live here too:
+// the per-renderer item types share these props with ExerciseItem, which is
+// what makes the ExerciseCard -> renderer handoff typecheck.
+export type ExerciseItem = {
   id?: string | number | null;
   type?: string;
   item_kind?: string;
-  media?: { url?: string; [key: string]: unknown }[];
-  [key: string]: unknown;
-}
+  level?: string;
+  prompt?: string;
+  media?: MediaAsset[];
+  expectedPoints?: string[];
+  expected_points?: string[];
+  followUpQuestions?: string[];
+  follow_up_questions?: string[];
+};
 
-interface ExerciseCardProps {
+// Attempt rows returned by POST /api/me/attempts (server/index.js):
+// { attempt, correct, score, reveal, next_due_at }. Renderers only read
+// correct/reveal; error is set locally when reportAttempt throws.
+export type AttemptResult = {
+  correct?: boolean;
+  reveal?: string | null;
+  error?: string;
+};
+
+type ExerciseCardProps = {
   entry: ExerciseItem | null | undefined;
   token?: string | null;
-  onResult?: (result: unknown) => void;
-}
+  onResult?: (result: AttemptResult) => void;
+};
 
 // One renderer per item type. Every answered item reports an attempt with
 // response + duration to the server's adaptive engine.
