@@ -946,6 +946,13 @@ html[data-theme="light"] .free-text-input {
 html[data-theme="light"] .free-text-input::placeholder { color: #718096; }
 .audio-player { margin:8px 0; }
 .audio-player audio { width:100%; }
+/* FRA-55: external embed card. Placeholder state is the default; the iframe
+   only renders when embedding is expressly permitted. */
+.external-embed { display:flex; gap:14px; align-items:flex-start; padding:14px; border:1px solid #303030; border-radius:10px; background:rgba(255,255,255,.03); margin:8px 0; }
+.external-embed iframe { width:100%; min-height:320px; border:0; border-radius:8px; background:#000; }
+.external-embed-media { flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:56px; height:56px; border-radius:12px; background:rgba(255,255,255,.06); color:#9fb3c8; }
+.external-embed-body { flex:1 1 auto; display:grid; gap:6px; }
+.external-embed-link { display:inline-flex; align-items:center; gap:6px; font-weight:700; }
 .rubric-box { padding:12px 14px; border:1px solid #303030; border-radius:10px; background:rgba(255,255,255,.03); }
 .rubric-box ul { margin:8px 0 0; padding-left:18px; display:grid; gap:6px; font-size:13px; }
 .reveal-word { font-size:22px; font-weight:800; padding:10px 0; }

@@ -26,6 +26,7 @@ export { Banner } from './Banner.jsx';
 export { Toolbar } from './Toolbar.jsx';
 export { CollapsibleSection } from './CollapsibleSection.jsx';
 export { AudioPlayer } from './AudioPlayer.jsx';
+export { ExternalEmbed } from './ExternalEmbed.jsx';
 export { ReadingPassage } from './ReadingPassage.jsx';
 export { RubricBox } from './RubricBox.jsx';
 export { WordToken, TokenTray } from './Token.jsx';
