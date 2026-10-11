@@ -165,6 +165,7 @@ nav {
 .exercise-list {
   display: grid;
   gap: 16px;
+  margin-top: 20px;
 }
 
 .auth-card,

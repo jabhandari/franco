@@ -4,6 +4,7 @@ import { apiPost } from '../api/client.js';
 import { getErrorMessage } from '../presenters/format.presenter.js';
 import { shuffle } from '../presenters/collections.presenter.js';
 import { levelGuides } from '../components/concepts.jsx';
+import { formatLevelWithClb } from '../presenters/levels.presenter.js';
 import { Box, ErrorMessage, ExerciseShell, Page, PageHeader, Text } from '../components/ui';
 
 // Original 10-question placement quiz, A1 → B2 gradient. The resulting CEFR
@@ -63,12 +64,12 @@ export function Placement({ token, onPlaced }) {
       <Page>
         <PageHeader
           eyebrow="Placement complete"
-          title={<>Your level: {result.level}{guide ? ` · ${guide.label}` : ''}</>}
+          title={<>Your level: {formatLevelWithClb(result.level)}{guide ? ` · ${guide.label}` : ''}</>}
           lede={`You scored ${result.score} out of ${QUESTIONS.length}. Your sessions will now target ${result.level} content.`}
         />
         {guide && (
           <Box as="section" className="level-guide panel">
-            <Box><Text as="span" variant="eyebrow">{result.level} · {guide.label}</Text><Text as="h2">{guide.goal}</Text></Box>
+            <Box><Text as="span" variant="eyebrow">{formatLevelWithClb(result.level)} · {guide.label}</Text><Text as="h2">{guide.goal}</Text></Box>
             <Box className="guide-columns">
               <Box><Text as="strong">What to focus on</Text><Text>{guide.focus}</Text></Box>
               <Box><Text as="strong">Reading practice</Text><Text>{guide.read}</Text></Box>
