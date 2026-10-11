@@ -2,6 +2,9 @@
 // FRA-61 owns these: every view consumes the API through the helpers at the
 // bottom of this file. Other wave-2 tickets may define local copies of these
 // shapes — FRA-68 unifies them at closeout.
+// Shared domain shapes (UserPayload, ContentItemStatus) are imported from
+// '../types' and never redefined here — src/types.ts is read-only during
+// wave 2.
 // Pure presenters live in src/presenters/ (FRA-21); this module re-exports
 // them so every existing import from './api/client.js' keeps working.
 // New code should import from the presenter modules directly.
@@ -14,6 +17,7 @@ export { sanitizeEntry } from '../presenters/entry.presenter.js';
 // this import is the only intentional runtime change in this file.
 import { safeText } from '../presenters/format.presenter.js';
 import { browserTimeZone } from '../presenters/streak.presenter.js';
+import type { UserPayload, ContentItemStatus } from '../types';
 
 // ---------------------------------------------------------------------------
 // Shared plumbing
@@ -41,14 +45,6 @@ export interface HealthResponse {
 // Auth (/api/auth/*, /api/me)
 // ---------------------------------------------------------------------------
 
-export interface AuthUser {
-  id: string;
-  email: string;
-  name: string;
-  first_name: string | null;
-  last_name: string | null;
-}
-
 /** Learner profile row (learner_profiles). Columns beyond the core three are
  *  DB-owned; the index signature keeps SELECT * passthroughs honest. */
 export interface LearnerProfile {
@@ -75,7 +71,7 @@ export type AuthRequest = LoginRequest | SignupRequest;
 /** POST /api/auth/signup and POST /api/auth/login. */
 export interface AuthResponse {
   token: string;
-  user: AuthUser;
+  user: UserPayload;
   profile: null;
   progress: unknown[];
   mistakes: unknown[];
@@ -84,7 +80,7 @@ export interface AuthResponse {
 
 /** GET /api/me. */
 export interface MeResponse {
-  user: AuthUser;
+  user: UserPayload;
   profile: LearnerProfile | null;
   progress: unknown[];
   mistakes: unknown[];
@@ -98,7 +94,7 @@ export interface UpdateProfileRequest {
 
 /** POST /api/me/profile (FRA-56). */
 export interface UpdateProfileResponse {
-  user: AuthUser;
+  user: UserPayload;
 }
 
 export interface PlacementRequest {
@@ -240,8 +236,6 @@ export interface AttemptResult {
 // ---------------------------------------------------------------------------
 // Content v1 (scoped x-api-key) and review actions
 // ---------------------------------------------------------------------------
-
-export type ContentItemStatus = 'published' | 'pending_review' | 'approved' | 'rejected';
 
 export type ReviewAction = 'approve' | 'reject' | 'publish';
 
@@ -492,6 +486,41 @@ export interface Tv5ExercisesResponse {
 }
 
 // ---------------------------------------------------------------------------
+// ApiResponse union (for FRA-68)
+// ---------------------------------------------------------------------------
+
+/**
+ * Every endpoint success-response shape defined in this module, as one
+ * union. FRA-68 constrains `useApiResource<T extends ApiResponse>` with it.
+ * ContentSectionsResponse is intentionally excluded: it is typed `unknown`
+ * (deprecated legacy track) and would collapse the whole union to unknown.
+ */
+export type ApiResponse =
+  | HealthResponse
+  | AuthResponse
+  | MeResponse
+  | UpdateProfileResponse
+  | PlacementResponse
+  | StreakResponse
+  | SessionPlanResponse
+  | ProgressResponse
+  | ReviewDueResponse
+  | AttemptResult
+  | ContentItemsResponse
+  | ReviewActionResponse
+  | ReportContentResponse
+  | ContentItemCountsResponse
+  | BatchIngestResponse
+  | ContentConceptsResponse
+  | SpeechStatusResponse
+  | SpeechTranscribeResponse
+  | ConversationTargetsResponse
+  | ExamQuestionsResponse
+  | PastQuestionsResponse
+  | ContentTopicsResponse
+  | Tv5ExercisesResponse;
+
+// ---------------------------------------------------------------------------
 // Client helpers
 // ---------------------------------------------------------------------------
 
@@ -504,18 +533,36 @@ function fallbackForStatus(status: number): string {
   return 'Request failed. Please try again.';
 }
 
-async function parseApiResponse(response: Response): Promise<any> {
-  let payload: any = null;
+/** True for non-null objects: the only JSON shape we read error fields from. */
+function isJsonObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+/** Extract the server's error message from an unknown failure payload. */
+function errorMessageFrom(payload: unknown, status: number): string {
+  if (isJsonObject(payload)) {
+    const message = safeText(payload.error) || safeText(payload.message);
+    if (message) return message;
+  }
+  return fallbackForStatus(status);
+}
+
+async function parseApiResponse<T = unknown>(response: Response): Promise<T> {
+  let payload: unknown = null;
   try {
     payload = await response.json();
   } catch {
     throw new Error('The server sent an unreadable response. Please try again.');
   }
   if (!response.ok) {
-    const message = safeText(payload && payload.error) || safeText(payload && payload.message);
-    throw new Error(message || fallbackForStatus(response.status));
+    throw new Error(errorMessageFrom(payload, response.status));
   }
-  return payload;
+  // Justification: T is the caller-declared endpoint response shape (the
+  // apiGet/apiPost type argument, defaulting to unknown); the JSON body
+  // crosses the network boundary here as unknown and this is the single
+  // point where it is bound to T. The server contract (server/index.js) is
+  // the authority for the shape.
+  return payload as T;
 }
 
 // Build-time API base URL. Set VITE_API_URL in the host's env vars
@@ -529,7 +576,7 @@ function apiUrl(path: string): string {
 
 // (moved to src/presenters/format.presenter.js — re-exported at the top of this file)
 
-export async function apiGet<T = any>(path: string, token?: string | null, options: ApiRequestOptions = {}): Promise<T> {
+export async function apiGet<T = unknown>(path: string, token?: string | null, options: ApiRequestOptions = {}): Promise<T> {
   const headers: Record<string, string> = {};
   if (token) headers.authorization = `Bearer ${token}`;
   if (options.apiKey) headers['x-api-key'] = options.apiKey;
@@ -537,7 +584,7 @@ export async function apiGet<T = any>(path: string, token?: string | null, optio
   return parseApiResponse(response);
 }
 
-export async function apiPost<T = any>(path: string, body?: unknown, token?: string | null, options: ApiRequestOptions = {}): Promise<T> {
+export async function apiPost<T = unknown>(path: string, body?: unknown, token?: string | null, options: ApiRequestOptions = {}): Promise<T> {
   const headers: Record<string, string> = { 'content-type': 'application/json' };
   if (token) headers.authorization = `Bearer ${token}`;
   if (options.apiKey) headers['x-api-key'] = options.apiKey;
