@@ -137,9 +137,11 @@ function LevelDetail({ level, token, onBack, onQuiz }) {
         onChange={setSkill}
         ariaLabel={`Choose a ${level} skill`}
       />
+      <Box className="learn-skill-content">
       {SKILL_ITEM_TYPES[skill] && (
         <SkillItems level={level} skill={skill} token={token} />
       )}
+      </Box>
       {!countsLoading && total === 0 && (
         <Text variant="muted">No published activities at {level} yet — the counts above will fill in as content ships.</Text>
       )}

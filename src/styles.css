@@ -1418,6 +1418,10 @@ html:not([data-theme="light"]) .auth-page .auth-brand-subtitle { color:#888; }
   font-size: 20px;
   margin-bottom: 8px;
 }
+/* Space between skill tabs and the content below */
+.learn-skill-content {
+  margin-top: 24px;
+}
 .learn-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
