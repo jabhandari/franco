@@ -7,16 +7,64 @@ import { Box as BoxJsx, Button as ButtonJsx, EmptyState as EmptyStateJsx, Page a
 
 // FRA-66 interim bridge: these are still .jsx (ExerciseCard: FRA-65,
 // src/components/ui: FRA-63), and tsc infers required-any props from allowJs
-// sources. Cast to untyped components so JSX usage isn't checked against
-// those inferred props. Delete this block once the owning tickets land.
-const ExerciseCard: React.ComponentType<any> = ExerciseCardJsx;
-const Box: React.ComponentType<any> = BoxJsx;
-const Button: React.ComponentType<any> = ButtonJsx;
-const EmptyState: React.ComponentType<any> = EmptyStateJsx;
-const Page: React.ComponentType<any> = PageJsx;
-const PageHeader: React.ComponentType<any> = PageHeaderJsx;
-const Tabs: React.ComponentType<any> = TabsJsx;
-const Toolbar: React.ComponentType<any> = ToolbarJsx;
+// sources. Each import is pinned to the minimal prop subset this view
+// passes, so JSX is checked against real props instead of the inferred ones.
+// Justification: proper component typing is impossible until FRA-63/FRA-65
+// ship real prop types — delete this block then. Box's props vary too
+// widely for a minimal interface, so it bridges as
+// ComponentType<Record<string, unknown>>.
+interface ButtonProps {
+  variant?: string;
+  onClick?: () => void;
+  children?: React.ReactNode;
+}
+interface EmptyStateProps {
+  icon?: React.ElementType;
+  title?: string;
+  text?: string;
+}
+interface ExerciseCardProps {
+  entry: SessionQueueEntry;
+  token?: string | null;
+}
+interface PageProps {
+  children?: React.ReactNode;
+}
+interface PageHeaderProps {
+  eyebrow?: string;
+  title?: React.ReactNode;
+  lede?: string;
+}
+interface TabsOption {
+  id: string;
+  label: string;
+}
+interface TabsProps {
+  variant?: string;
+  compact?: boolean;
+  options?: TabsOption[];
+  value?: string;
+  onChange?: (value: string) => void;
+  ariaLabel?: string;
+}
+interface TextProps {
+  as?: string;
+  variant?: string;
+  size?: string;
+  children?: React.ReactNode;
+}
+interface ToolbarProps {
+  meta?: React.ReactNode;
+  actions?: React.ReactNode;
+}
+const ExerciseCard = ExerciseCardJsx as React.ComponentType<ExerciseCardProps>;
+const Box = BoxJsx as React.ComponentType<Record<string, unknown>>;
+const Button = ButtonJsx as React.ComponentType<ButtonProps>;
+const EmptyState = EmptyStateJsx as React.ComponentType<EmptyStateProps>;
+const Page = PageJsx as React.ComponentType<PageProps>;
+const PageHeader = PageHeaderJsx as React.ComponentType<PageHeaderProps>;
+const Tabs = TabsJsx as React.ComponentType<TabsProps>;
+const Toolbar = ToolbarJsx as React.ComponentType<ToolbarProps>;
 
 // --- Local interfaces (FRA-66; for FRA-68: centralize into shared API types) ---
 
@@ -49,7 +97,10 @@ export function Session({ token, initialLevel }: SessionProps) {
   const [selectedSection, setSelectedSection] = React.useState(initialLevel || 'A1');
   const [resetKey, setResetKey] = React.useState(0);
   const { data, loading, error } = useApiResource(`/api/me/session-plan?section=${selectedSection}`, token);
-  const plan = data as SessionPlanResponse | null;
+  // useApiResource is still untyped .js (typed by FRA-65); the locally
+  // declared SessionPlanResponse is assigned directly (no `as`) since the
+  // hook's data is untyped at the boundary.
+  const plan: SessionPlanResponse | null = data;
   const queue: SessionQueueEntry[] = plan?.queue || [];
 
   return (

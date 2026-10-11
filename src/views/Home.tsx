@@ -4,19 +4,70 @@ import { useApiResource } from '../hooks/useApi.js';
 import { Banner as BannerJsx, Box as BoxJsx, Button as ButtonJsx, EmptyState as EmptyStateJsx, Panel as PanelJsx, PanelHeader as PanelHeaderJsx, ProfileRows as ProfileRowsJsx, RecordCount as RecordCountJsx, StreakHero as StreakHeroJsx, Text as TextJsx } from '../components/ui';
 
 // FRA-66 interim bridge: src/components/ui/ is still .jsx (typed by FRA-63),
-// and tsc infers required-any props from allowJs sources. Cast to untyped
-// components so JSX usage isn't checked against those inferred props.
-// Delete this block once FRA-63 ships real component prop types.
-const Banner: React.ComponentType<any> = BannerJsx;
-const Box: React.ComponentType<any> = BoxJsx;
-const Button: React.ComponentType<any> = ButtonJsx;
-const EmptyState: React.ComponentType<any> = EmptyStateJsx;
-const Panel: React.ComponentType<any> = PanelJsx;
-const PanelHeader: React.ComponentType<any> = PanelHeaderJsx;
-const ProfileRows: React.ComponentType<any> = ProfileRowsJsx;
-const RecordCount: React.ComponentType<any> = RecordCountJsx;
-const StreakHero: React.ComponentType<any> = StreakHeroJsx;
-const Text: React.ComponentType<any> = TextJsx;
+// and tsc infers required-any props from allowJs sources. Each import is
+// pinned to the minimal prop subset this view passes, so JSX is checked
+// against real props instead of the inferred ones.
+// Justification: proper component typing is impossible until FRA-63 ships
+// real prop types for src/components/ui — delete this block then. Box's
+// props vary too widely for a minimal interface, so it bridges as
+// ComponentType<Record<string, unknown>>.
+interface BannerProps {
+  icon?: React.ElementType;
+  iconSize?: number;
+  title?: string;
+  text?: string;
+  actionLabel?: string;
+  onAction?: () => void;
+}
+interface ButtonProps {
+  variant?: string;
+  wide?: boolean;
+  onClick?: () => void;
+  icon?: React.ElementType;
+  iconSize?: number;
+  iconPosition?: string;
+  children?: React.ReactNode;
+}
+interface EmptyStateProps {
+  icon?: React.ElementType;
+  title?: string;
+  text?: string;
+}
+interface PanelProps {
+  compact?: boolean;
+  children?: React.ReactNode;
+}
+interface PanelHeaderProps {
+  eyebrow?: string;
+  title?: string;
+  aside?: React.ReactNode;
+}
+interface ProfileRowsProps {
+  profile?: LearnerProfile | null;
+}
+interface RecordCountProps {
+  count?: number;
+  label?: string;
+}
+interface StreakHeroProps {
+  streak?: StreakSummary | null;
+}
+interface TextProps {
+  as?: string;
+  variant?: string;
+  size?: string;
+  children?: React.ReactNode;
+}
+const Banner = BannerJsx as React.ComponentType<BannerProps>;
+const Box = BoxJsx as React.ComponentType<Record<string, unknown>>;
+const Button = ButtonJsx as React.ComponentType<ButtonProps>;
+const EmptyState = EmptyStateJsx as React.ComponentType<EmptyStateProps>;
+const Panel = PanelJsx as React.ComponentType<PanelProps>;
+const PanelHeader = PanelHeaderJsx as React.ComponentType<PanelHeaderProps>;
+const ProfileRows = ProfileRowsJsx as React.ComponentType<ProfileRowsProps>;
+const RecordCount = RecordCountJsx as React.ComponentType<RecordCountProps>;
+const StreakHero = StreakHeroJsx as React.ComponentType<StreakHeroProps>;
+const Text = TextJsx as React.ComponentType<TextProps>;
 
 // --- Local interfaces (FRA-66; for FRA-68: centralize into shared API types) ---
 
@@ -57,6 +108,9 @@ export function Home({ userData, streak, onStart, onPlacement }: HomeProps) {
   const progressCount = userData?.progress?.length || 0;
   const mistakeCount = userData?.mistakes?.length || 0;
   const { data: contentData } = useApiResource('/api/content/sections');
+  // Justification: useApiResource is still untyped .js (typed by FRA-65);
+  // the GET /api/content/sections shape can't be expressed at the boundary
+  // until then, so the locally declared ContentSectionsResponse is asserted.
   const sections: ContentSectionsResponse['sections'] =
     (contentData as ContentSectionsResponse | null)?.sections;
   const contentCount = sections?.reduce((sum, section) => sum + Number(section.example_count || 0), 0) || 0;

@@ -8,15 +8,40 @@ import { formatLevelWithClb } from '../presenters/levels.presenter.js';
 import { Box as BoxJsx, ErrorMessage as ErrorMessageJsx, ExerciseShell as ExerciseShellJsx, Page as PageJsx, PageHeader as PageHeaderJsx, Text as TextJsx } from '../components/ui';
 
 // FRA-66 interim bridge: src/components/ui/ is still .jsx (typed by FRA-63),
-// and tsc infers required-any props from allowJs sources. Cast to untyped
-// components so JSX usage isn't checked against those inferred props.
-// Delete this block once FRA-63 ships real component prop types.
-const Box: React.ComponentType<any> = BoxJsx;
-const ErrorMessage: React.ComponentType<any> = ErrorMessageJsx;
-const ExerciseShell: React.ComponentType<any> = ExerciseShellJsx;
-const Page: React.ComponentType<any> = PageJsx;
-const PageHeader: React.ComponentType<any> = PageHeaderJsx;
-const Text: React.ComponentType<any> = TextJsx;
+// and tsc infers required-any props from allowJs sources. Each import is
+// pinned to the minimal prop subset this view passes, so JSX is checked
+// against real props instead of the inferred ones.
+// Justification: proper component typing is impossible until FRA-63 ships
+// real prop types for src/components/ui — delete this block then. Box's
+// props vary too widely for a minimal interface, so it bridges as
+// ComponentType<Record<string, unknown>>.
+interface ErrorMessageProps {
+  message?: string;
+}
+interface ExerciseShellProps {
+  eyebrow?: string;
+  children?: React.ReactNode;
+}
+interface PageProps {
+  children?: React.ReactNode;
+}
+interface PageHeaderProps {
+  eyebrow?: string;
+  title?: React.ReactNode;
+  lede?: string;
+}
+interface TextProps {
+  as?: string;
+  variant?: string;
+  size?: string;
+  children?: React.ReactNode;
+}
+const Box = BoxJsx as React.ComponentType<Record<string, unknown>>;
+const ErrorMessage = ErrorMessageJsx as React.ComponentType<ErrorMessageProps>;
+const ExerciseShell = ExerciseShellJsx as React.ComponentType<ExerciseShellProps>;
+const Page = PageJsx as React.ComponentType<PageProps>;
+const PageHeader = PageHeaderJsx as React.ComponentType<PageHeaderProps>;
+const Text = TextJsx as React.ComponentType<TextProps>;
 
 // --- Local interfaces (FRA-66; for FRA-68: centralize into shared API types) ---
 
@@ -96,7 +121,7 @@ export function Placement({ token, onPlaced }: PlacementProps) {
     const score = QUESTIONS.filter((q, i) => next[i] === q.answer).length;
     const level = levelForScore(score);
     try {
-      const res = await apiPost('/api/me/placement', { level }, token) as PlacementResponse;
+      const res: PlacementResponse = await apiPost('/api/me/placement', { level }, token);
       setResult({ score, level, placementStatus: res.placement_status });
       onPlaced?.();
     } catch (e) {

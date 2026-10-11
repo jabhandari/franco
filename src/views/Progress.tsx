@@ -17,21 +17,71 @@ import {
 } from '../components/ui';
 
 // FRA-66 interim bridge: src/components/ui/ is still .jsx (typed by FRA-63),
-// and tsc infers required-any props from allowJs sources. Cast to untyped
-// components so JSX usage isn't checked against those inferred props.
-// Delete this block once FRA-63 ships real component prop types.
-const Box: React.ComponentType<any> = BoxJsx;
-const EmptyState: React.ComponentType<any> = EmptyStateJsx;
-const ErrorMessage: React.ComponentType<any> = ErrorMessageJsx;
-const Page: React.ComponentType<any> = PageJsx;
-const PageHeader: React.ComponentType<any> = PageHeaderJsx;
-const Panel: React.ComponentType<any> = PanelJsx;
-const PanelHeader: React.ComponentType<any> = PanelHeaderJsx;
-const ProgressBar: React.ComponentType<any> = ProgressBarJsx;
-const RecordCount: React.ComponentType<any> = RecordCountJsx;
-const StatGroup: React.ComponentType<any> = StatGroupJsx;
-const StreakPanel: React.ComponentType<any> = StreakPanelJsx;
-const Text: React.ComponentType<any> = TextJsx;
+// and tsc infers required-any props from allowJs sources. Each import is
+// pinned to the minimal prop subset this view passes, so JSX is checked
+// against real props instead of the inferred ones.
+// Justification: proper component typing is impossible until FRA-63 ships
+// real prop types for src/components/ui — delete this block then. Box's
+// props vary too widely for a minimal interface, so it bridges as
+// ComponentType<Record<string, unknown>>.
+interface EmptyStateProps {
+  icon?: React.ElementType;
+  title?: string;
+  text?: string;
+}
+interface ErrorMessageProps {
+  message?: string;
+}
+interface PageProps {
+  children?: React.ReactNode;
+}
+interface PageHeaderProps {
+  eyebrow?: string;
+  title?: string;
+  aside?: React.ReactNode;
+}
+interface PanelProps {
+  compact?: boolean;
+  children?: React.ReactNode;
+}
+interface PanelHeaderProps {
+  eyebrow?: string;
+  title?: string;
+  aside?: React.ReactNode;
+}
+interface ProgressBarProps {
+  label?: string;
+  percent?: number;
+  skeleton?: boolean;
+}
+interface RecordCountProps {
+  count?: number;
+  label?: string;
+}
+interface StatGroupProps {
+  children?: React.ReactNode;
+}
+interface StreakPanelProps {
+  streak?: StreakSummary | null;
+}
+interface TextProps {
+  as?: string;
+  variant?: string;
+  size?: string;
+  children?: React.ReactNode;
+}
+const Box = BoxJsx as React.ComponentType<Record<string, unknown>>;
+const EmptyState = EmptyStateJsx as React.ComponentType<EmptyStateProps>;
+const ErrorMessage = ErrorMessageJsx as React.ComponentType<ErrorMessageProps>;
+const Page = PageJsx as React.ComponentType<PageProps>;
+const PageHeader = PageHeaderJsx as React.ComponentType<PageHeaderProps>;
+const Panel = PanelJsx as React.ComponentType<PanelProps>;
+const PanelHeader = PanelHeaderJsx as React.ComponentType<PanelHeaderProps>;
+const ProgressBar = ProgressBarJsx as React.ComponentType<ProgressBarProps>;
+const RecordCount = RecordCountJsx as React.ComponentType<RecordCountProps>;
+const StatGroup = StatGroupJsx as React.ComponentType<StatGroupProps>;
+const StreakPanel = StreakPanelJsx as React.ComponentType<StreakPanelProps>;
+const Text = TextJsx as React.ComponentType<TextProps>;
 import { streakPath } from '../presenters/streak.presenter.js';
 
 // --- Local interfaces (FRA-66; for FRA-68: centralize into shared API types) ---
@@ -55,6 +105,11 @@ interface ReviewDueResponse {
   items?: unknown[];
 }
 
+/** Streak read model from GET /api/me/streak (consumed by StreakPanel). */
+interface StreakSummary {
+  [key: string]: unknown;
+}
+
 function MasteryBars({ rows }: { rows: ConceptMasteryRow[] }) {
   if (!rows.length) return <Text variant="muted">Answer exercises to start building concept mastery.</Text>;
   const sorted = [...rows].sort((a, b) => Number(b.mastery) - Number(a.mastery)).slice(0, 12);
@@ -76,11 +131,15 @@ export function Progress({ token }: ProgressProps) {
   const { data: reviewData } = useApiResource('/api/me/review-due', token);
   const { data: streakData } = useApiResource(streakPath(), token);
 
-  const progress = data as ProgressResponse | null;
+  // useApiResource is still untyped .js (typed by FRA-65); the locally
+  // declared response shapes are assigned directly (no `as`) since the
+  // hook's data is untyped at the boundary.
+  const progress: ProgressResponse | null = data;
   const concepts: ConceptMasteryRow[] = progress?.concepts || [];
   const attempts = progress?.attempts || [];
   const items = progress?.items || [];
-  const reviewsDue = (reviewData as ReviewDueResponse | null)?.items?.length ?? 0;
+  const reviewProgress: ReviewDueResponse | null = reviewData;
+  const reviewsDue = reviewProgress?.items?.length ?? 0;
 
   return (
     <Page>
