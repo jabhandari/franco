@@ -18,6 +18,10 @@ Give every franco PR the same review, in the same order, against the conventions
    - `className` only on the primitives that accept it (`Box`, `Text`, `TextInput`); semantic components keep their fixed classes.
    - No style props in any component's public API — layout via explicit props (`display`, `direction`, `gap`, `align`, `justify`, `wrap`) only.
    - Confirm `npm run lint:ui` passes — run it; don't eyeball this.
+- **TypeScript clean-code** (any change touching `.ts`/`.tsx`):
+   - Shared/domain types come from `src/types.ts` — flag any locally redefined shape that already lives there.
+   - No `as` assertions (blocker, unless explicitly justified with a comment at the usage site). No explicit `any` (blocker). No `unknown` used as a dodge — acceptable only where the value is genuinely unknowable at the boundary (e.g. caught errors) and narrowed immediately.
+   - Everything has a type: no implicit `any`, no untyped exports. Confirm `npm run typecheck` passes — run it; don't eyeball this.
 4. **FRA-16 library use.** New UI composes library components from `src/components/ui` (import from the index, not individual files). A new presentational pattern that appears twice belongs in the library, not copied into a second view.
 5. **Presenters.** Helper logic used more than once lives in `src/presenters/` as `<name>.presenter.js` with a colocated `<name>.presenter.test.js`. Single-use logic may stay in its component. Presenter tests must run as part of `npm test`.
 6. **Server / content API** (any change touching `server/` or `supabase/`):

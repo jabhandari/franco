@@ -140,6 +140,17 @@ Operating rules:
   `tsconfig.json` runs with `allowJs` until the closeout ticket flips
   `strict` on. `npm run typecheck` (`tsc --noEmit`) must pass — it is a CI
   gate, same as `lint:ui`.
+- **Types live in `src/types.ts`.** Shared/domain types go there — import
+  them, never redefine the same shape twice. Types used by only one module
+  live in that module. During parallel migration waves, treat `src/types.ts`
+  as read-only (define ticket-local types in your module and note them for
+  the closeout ticket to consolidate) — parallel branches editing one file
+  will conflict.
+- **No escape hatches.** No `as` assertions (ever, unless explicitly
+  justified with a comment at the usage site), no explicit `any`. Prefer
+  precise types over `unknown`; `unknown` is acceptable only where the value
+  is genuinely unknowable at the boundary (e.g. caught errors) and must be
+  narrowed immediately, never passed through. Everything has a type.
 
 ## Architecture
 

@@ -1,0 +1,77 @@
+// Shared TypeScript types for the franco SPA — the single home for
+// cross-cutting domain types. Import from here instead of redefining a
+// shape locally; a type used by only one module lives in that module.
+// Mirrors the server contract in `server/content-contract.js`
+// (CONTENT_TYPES, CEFR_LEVELS, EVALUATORS) — if the server changes those,
+// update here too.
+//
+// Clean-code rules (enforced in code review):
+// - No `as` assertions. Ever, unless explicitly justified with a comment
+//   at the usage site explaining why proper typing is impossible.
+// - No explicit `any`.
+// - Prefer precise types over `unknown`. `unknown` is acceptable only
+//   where the value is genuinely unknowable at the boundary (e.g. caught
+//   errors) and it must be narrowed immediately — never passed through.
+
+/** CEFR levels, ascending. Matches `CEFR_LEVELS` in server/content-contract.js. */
+export type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+
+/** Content item types. Matches `CONTENT_TYPES` in server/content-contract.js. */
+export type ContentItemType =
+  | 'multiple_choice'
+  | 'cloze'
+  | 'free_text'
+  | 'word_order'
+  | 'reading'
+  | 'listening'
+  | 'speaking'
+  | 'vocabulary';
+
+/** Grading modes. Matches `EVALUATORS` in server/content-contract.js. */
+export type EvaluationMode =
+  | 'exact'
+  | 'choice'
+  | 'normalized_text'
+  | 'token_order'
+  | 'rubric'
+  | 'external';
+
+/** Lifecycle status of a content item in the content bank. */
+export type ContentItemStatus = 'pending_review' | 'approved' | 'published' | 'rejected';
+
+/** Public user shape returned by signup/login, /api/me, and /api/me/profile. */
+export interface UserPayload {
+  id: string;
+  email: string;
+  name: string;
+  first_name: string | null;
+  last_name: string | null;
+}
+
+/** POST /api/auth/signup and /api/auth/login response. */
+export interface AuthResponse {
+  token: string;
+  user: UserPayload;
+}
+
+/** Shape of `{ error: string }` failure responses across the API. */
+export interface ApiError {
+  error: string;
+}
+
+/** CEFR metadata block on content items. */
+export interface CefrMeta {
+  level: CefrLevel;
+  method: 'source' | 'human_review' | 'heuristic' | 'model' | 'mixed';
+  confidence?: number | null;
+}
+
+/** Minimal content-item shape shared by the review queue and exercises. */
+export interface ContentItemSummary {
+  id: string;
+  external_id: string;
+  item_type: ContentItemType;
+  status: ContentItemStatus;
+  cefr_level: CefrLevel;
+  prompt: string;
+}
