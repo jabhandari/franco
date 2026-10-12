@@ -61,6 +61,7 @@ export type AttemptResult = {
 };
 
 type ExerciseCardProps = {
+  key?: React.Key;
   entry: ExerciseItem | null | undefined;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;

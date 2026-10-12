@@ -5,6 +5,7 @@ import { ExerciseCard } from '../components/exercises/ExerciseCard';
 import { ConceptRoadmap, LevelGuide, TopicTracks } from '../components/concepts';
 import { CEFR_LEVELS as SECTIONS } from '../presenters/levels.presenter.js';
 import { humanize } from '../presenters/format.presenter.js';
+import type { RawChoices } from '../presenters/collections.presenter.js';
 import {
   Box,
   EmptyState,
@@ -15,116 +16,23 @@ import {
   Text,
 } from '../components/ui';
 
-<<<<<<< HEAD
-// FRA-67: local interface. Canonical ownership of the content-item shape
-// belongs to a later ticket; kept minimal here (see "Notes for FRA-68").
-interface ContentItem {
-  id: string | number;
-  [key: string]: unknown;
-}
-=======
-// Interim bridge until FRA-63 converts the .jsx sources
-// (src/components/ui/, src/components/concepts.jsx,
-// src/components/exercises/ExerciseCard.jsx) to .tsx with real prop types.
-// Under allowJs those .jsx imports expose no usable prop types to tsc, so
-// each binding below pins the imported component to the minimal props this
-// view passes. This uses a plain typed assignment — no `as` assertion is
-// needed because the untyped .jsx exports assign cleanly to the declared
-// component type. Delete the whole block once FRA-63 lands.
-
-// Minimal props the views pass — kept local per the read-only window on
-// src/types.ts (see "Notes for FRA-68").
-type IconComponent = React.ComponentType<{ size?: number | string; className?: string }>;
-// Prop-value kinds the views pass to the polymorphic primitives (Box,
-// Text): strings, numbers, booleans, renderable children, and event
-// handlers.
-type LooseProps = Record<string, React.ReactNode | ((...args: never[]) => void)>;
-
-// Input contract of normalizeChoices() in
-// src/presenters/collections.presenter.js: a JSON string, an array of
-// choice objects, a key->text map, or null.
-type RawChoice = {
-  key?: string | number;
-  id?: string | number;
-  text?: string | number | null;
-};
-type ChoicesInput = string | RawChoice[] | Record<string, string | number | null> | null | undefined;
-
-type ExerciseCardProps = {
-  entry: ContentListItem;
-  token?: string | null;
-};
-
-type ConceptRoadmapProps = {
-  level: string;
-  token?: string | null;
-  onSelectSection: (section: string) => void;
-};
-
-type LevelGuideProps = {
-  section: string;
-};
-
-type TopicTracksProps = {
-  section: string;
-};
-
-type EmptyStateProps = {
-  icon?: IconComponent;
-  title: string;
-  text: string;
-};
-
-type ErrorMessageProps = {
-  message: string;
-};
-
-type PanelProps = {
-  children?: React.ReactNode;
-};
-
-type PanelHeaderProps = {
-  eyebrow: string;
-  title: string;
-  aside?: React.ReactNode;
-};
-
-type TabOption = {
-  id: string;
-  label: string;
-  icon?: IconComponent;
-};
-
-type TabsProps = {
-  variant?: 'library' | 'section' | 'roadmap';
-  options: TabOption[];
-  value: string;
-  onChange: (id: string) => void;
-};
-
-const ExerciseCard: React.ComponentType<ExerciseCardProps> = _ExerciseCard;
-const ConceptRoadmap: React.ComponentType<ConceptRoadmapProps> = _ConceptRoadmap;
-const LevelGuide: React.ComponentType<LevelGuideProps> = _LevelGuide;
-const TopicTracks: React.ComponentType<TopicTracksProps> = _TopicTracks;
-const Box: React.ComponentType<LooseProps> = _Box;
-const EmptyState: React.ComponentType<EmptyStateProps> = _EmptyState;
-const ErrorMessage: React.ComponentType<ErrorMessageProps> = _ErrorMessage;
-const Panel: React.ComponentType<PanelProps> = _Panel;
-const PanelHeader: React.ComponentType<PanelHeaderProps> = _PanelHeader;
-const Tabs: React.ComponentType<TabsProps> = _Tabs;
-const Text: React.ComponentType<LooseProps> = _Text;
-
 // FRA-67: local types for the GET /api/content/v1/items payload. Shaped by
 // shapeContentItem() in server/index.js plus the list extras (status,
 // external_id, source, batch_id, report_count). Canonical ownership of the
 // content-item shape belongs to a later ticket (see "Notes for FRA-68").
+// Media kind is narrowed to the renderer's union: the ingest schema
+// restricts authored media to these four kinds (see ContentMediaAsset in
+// src/api/client.ts); this is what ExerciseCard's ExerciseItem expects.
 type MediaAsset = {
-  kind: string;
+  kind: 'audio' | 'image' | 'video' | 'document';
   url: string;
   duration_seconds: number | null;
   transcript: string | null;
 };
->>>>>>> 5ad6af1 (FRA-67: convention retrofit — type over interface, no as/any/unknown, real payload types)
+
+// Input contract of normalizeChoices() — imported from the presenter
+// (canonical type).
+type ChoicesInput = RawChoices | null | undefined;
 
 type ContentListItem = {
   id: string;
@@ -168,7 +76,7 @@ const LIBRARY_TABS = [
 ];
 
 function CanonicalList({ type, section, token }: CanonicalListProps) {
-  const { data, loading, error } = useApiResource(
+  const { data, loading, error } = useApiResource<{ items: ContentListItem[] }>(
     `/api/content/v1/items?type=${type}&level=${section}&limit=20`,
     token
   );

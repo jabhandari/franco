@@ -25,6 +25,12 @@ type ConversationTarget = {
   text: string;
 };
 
+type ConversationApiResponse = {
+  scenario?: string;
+  message?: string;
+  targets?: ConversationTarget[];
+};
+
 type ConversationProps = {
   token?: string | null;
 };
@@ -40,7 +46,7 @@ const STEPS = [
 ];
 
 export function Conversation({ token }: ConversationProps) {
-  const { data, loading, error } = useApiResource('/api/me/conversation-targets', token);
+  const { data, loading, error } = useApiResource<ConversationApiResponse>('/api/me/conversation-targets', token);
   const [checked, setChecked] = React.useState<Record<string, boolean>>({});
   React.useEffect(() => setChecked({}), [data?.scenario]);
   const toggle = (id: string) => setChecked((prev) => ({ ...prev, [id]: !prev[id] }));

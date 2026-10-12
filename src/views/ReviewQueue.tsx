@@ -1,6 +1,7 @@
 import React from 'react';
 import { Check, CheckCircle2, Flag, KeyRound, RefreshCw, Send, X } from 'lucide-react';
 import { apiGet, apiPost, formatEnum, getErrorMessage, normalizeChoices, safeText } from '../api/client.js';
+import type { RawChoices } from '../presenters/collections.presenter.js';
 import {
   Box,
   Button,
@@ -15,15 +16,9 @@ import {
   TextInput,
 } from '../components/ui';
 
-// Input contract of normalizeChoices() in
-// src/presenters/collections.presenter.js: a JSON string, an array of
-// choice objects, a key->text map, or null.
-type RawChoice = {
-  key?: string | number;
-  id?: string | number;
-  text?: string | number | null;
-};
-type ChoicesInput = string | RawChoice[] | Record<string, string | number | null> | null | undefined;
+// Input contract of normalizeChoices() — imported from the presenter
+// (canonical type).
+type ChoicesInput = RawChoices | null | undefined;
 
 // Output contract of normalizeChoices(): filtered { key, text } pairs.
 type NormalizedChoice = { key: string; text: string };
@@ -121,7 +116,7 @@ export function ReviewQueue({ onKeyChange }: ReviewQueueProps) {
     setLoading(true);
     setError('');
     try {
-      const payload = await apiGet(queuePath(forStatus), null, { apiKey: key });
+      const payload = await apiGet<{ items: ReviewQueueItem[] }>(queuePath(forStatus), null, { apiKey: key });
       // Learner-flagged items first: they were already live and may be
       // actively wrong, so they outrank brand-new source items.
       const list: ReviewQueueItem[] = [...(payload.items || [])].sort((a, b) => (b.report_count || 0) - (a.report_count || 0));

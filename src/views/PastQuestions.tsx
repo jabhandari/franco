@@ -1,7 +1,7 @@
 import React from 'react';
 import { Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { normalizeChoices } from '../presenters/collections.presenter.js';
+import { normalizeChoices, type RawChoices } from '../presenters/collections.presenter.js';
 import { capitalize, choiceLabel } from '../presenters/format.presenter.js';
 import { CEFR_LEVELS, formatLevelWithClb } from '../presenters/levels.presenter.js';
 import {
@@ -21,15 +21,9 @@ import {
   Toolbar,
 } from '../components/ui';
 
-// Input contract of normalizeChoices() in
-// src/presenters/collections.presenter.js: a JSON string, an array of
-// choice objects, a key->text map, or null.
-type RawChoice = {
-  key?: string | number;
-  id?: string | number;
-  text?: string | number | null;
-};
-type ChoicesInput = string | RawChoice[] | Record<string, string | number | null> | null | undefined;
+// Input contract of normalizeChoices() — imported from the presenter
+// (canonical type). The ExamQuestion.choices field uses this type.
+type ChoicesInput = RawChoices | null | undefined;
 
 // Output contract of normalizeChoices(): filtered { key, text } pairs.
 type NormalizedChoice = { key: string; text: string };
@@ -148,7 +142,7 @@ export function PastQuestions({ token }: PastQuestionsProps) {
   const [section, setSection] = React.useState('A1');
   const [skill, setSkill] = React.useState('all');
 
-  const { data, loading, error } = useApiResource(`/api/exam/questions?section=${section}`, token);
+  const { data, loading, error } = useApiResource<{ questions: ExamQuestion[] }>(`/api/exam/questions?section=${section}`, token);
   const all: ExamQuestion[] = data?.questions || [];
   const filtered = skill === 'all' ? all : all.filter((q) => (q.skill || 'reading').toLowerCase() === skill);
   const skillLabel = skill === 'all' ? 'All skills' : capitalize(skill);
