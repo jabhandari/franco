@@ -6,7 +6,7 @@ import {
   streakLabel,
   buildHeatmap,
   HEATMAP_DAY_LABELS,
-} from './streak.presenter.js';
+} from './streak.presenter.ts';
 
 function assert(cond, message) {
   if (!cond) throw new Error(`FAIL: ${message}`);

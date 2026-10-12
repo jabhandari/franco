@@ -6,7 +6,7 @@ import {
   countsForSkill,
   levelMastery,
   MASTERED_THRESHOLD,
-} from './learn.presenter.js';
+} from './learn.presenter.ts';
 
 function assert(cond, message) {
   if (!cond) throw new Error(`FAIL: ${message}`);

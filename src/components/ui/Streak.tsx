@@ -115,7 +115,9 @@ export type StreakHeatmapProps = {
 // GitHub-style activity heatmap: week columns, Sunday..Saturday rows,
 // intensity buckets from the streak presenter.
 export function StreakHeatmap({ days, today }: StreakHeatmapProps) {
-  const { columns, months } = buildHeatmap(days || [], today);
+  // FRA-81: buildHeatmap requires a real YYYY-MM-DD string (an invalid date
+  // throws, same as before); the optional prop stays for API-shape honesty.
+  const { columns, months } = buildHeatmap(days || [], today ?? '');
   const monthByColumn = new Map(months.map((month) => [month.column, month.label]));
   return (
     <Box className="heat-wrap">

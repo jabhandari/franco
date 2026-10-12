@@ -1,19 +1,18 @@
 import React from 'react';
-import { BookOpen, ChevronLeft, GraduationCap, Play } from 'lucide-react';
+import { BookOpen, ChevronLeft, Play } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { CEFR_LEVELS } from '../presenters/levels.presenter.js';
-// FRA-50 adds the canonical CLB mapping to levels.presenter.js; the
-// namespace import keeps this view working standalone until it merges,
-// at which point cards pick up "B2 · CLB 7–8" style labels automatically.
-import * as levelsPresenter from '../presenters/levels.presenter.js';
-const CLB_BY_CEFR = levelsPresenter.CLB_BY_CEFR || {};
+import { CEFR_LEVELS, CLB_BY_CEFR } from '../presenters/levels.presenter.js';
 import {
   SKILL_TABS,
   SKILL_ITEM_TYPES,
   skillForItemType,
   countsForSkill,
   levelMastery,
+  type LearnConcept,
+  type LevelMasterySummary,
 } from '../presenters/learn.presenter.js';
+import type { CefrLevel } from '../types';
+import type { ProgressResponse } from '../api/client.js';
 import { ExerciseCard } from '../components/exercises/ExerciseCard';
 import {
   Box,
@@ -34,7 +33,43 @@ import {
 // each level view has the four skill tabs filtering content_items by
 // cefr_level + item type, with per-cell counts and honest empty states.
 
-function LevelCards({ levels, countsByLevel, mastery, onSelect }) {
+// Local types for the API payloads this view reads (server/index.js).
+// Canonical ownership of these shapes belongs to a later ticket.
+
+/** One row from GET /api/content/v1/items (the API shapes rows with `type`). */
+type LearnListItem = {
+  id: string;
+  type: string | null;
+  item_type: string | null;
+};
+
+type ContentItemsResponse = {
+  items: LearnListItem[];
+};
+
+type LevelCounts = {
+  total: number;
+  byType: Record<string, number>;
+};
+
+type ItemCountsResponse = LevelCounts;
+
+type AllItemCountsResponse = {
+  counts: Record<string, LevelCounts>;
+};
+
+type ConceptsResponse = {
+  concepts: LearnConcept[];
+};
+
+type LevelCardsProps = {
+  levels: CefrLevel[];
+  countsByLevel: Record<string, LevelCounts>;
+  mastery: Record<string, LevelMasterySummary> | null;
+  onSelect: (level: CefrLevel) => void;
+};
+
+function LevelCards({ levels, countsByLevel, mastery, onSelect }: LevelCardsProps) {
   return (
     <Box className="learn-grid">
       {levels.map((level) => {
@@ -62,8 +97,14 @@ function LevelCards({ levels, countsByLevel, mastery, onSelect }) {
   );
 }
 
-function SkillItems({ level, skill, token }) {
-  const { data, loading, error } = useApiResource(`/api/content/v1/items?level=${level}&limit=100`, token);
+type SkillItemsProps = {
+  level: CefrLevel;
+  skill: string;
+  token: string | null;
+};
+
+function SkillItems({ level, skill, token }: SkillItemsProps) {
+  const { data, loading, error } = useApiResource<ContentItemsResponse>(`/api/content/v1/items?level=${level}&limit=100`, token);
   // The items API shapes rows with `type` (not `item_type`); fall back to
   // `item_type` for forward-compatibility.
   const items = (data?.items || []).filter(
@@ -95,9 +136,16 @@ function SkillItems({ level, skill, token }) {
   );
 }
 
-function LevelDetail({ level, token, onBack, onQuiz }) {
+type LevelDetailProps = {
+  level: CefrLevel;
+  token: string | null;
+  onBack: () => void;
+  onQuiz: (level: CefrLevel) => void;
+};
+
+function LevelDetail({ level, token, onBack, onQuiz }: LevelDetailProps) {
   const [skill, setSkill] = React.useState('ecouter');
-  const { data: countsData, loading: countsLoading, error: countsError } = useApiResource(
+  const { data: countsData, loading: countsLoading, error: countsError } = useApiResource<ItemCountsResponse>(
     `/api/content/v1/item-counts?level=${level}`,
     token
   );
@@ -139,7 +187,7 @@ function LevelDetail({ level, token, onBack, onQuiz }) {
         ariaLabel={`Choose a ${level} skill`}
       />
       <Box className="learn-skill-content">
-      {SKILL_ITEM_TYPES[skill] && (
+      {skill in SKILL_ITEM_TYPES && (
         <SkillItems level={level} skill={skill} token={token} />
       )}
       </Box>
@@ -150,21 +198,27 @@ function LevelDetail({ level, token, onBack, onQuiz }) {
   );
 }
 
-export function Learn({ token, onQuiz }) {
-  const [selectedLevel, setSelectedLevel] = React.useState(null);
-  const { data: countsData } = useApiResource('/api/content/v1/item-counts', token);
-  const { data: conceptsData, loading: conceptsLoading, error: conceptsError } = useApiResource(
+export type LearnProps = {
+  token: string | null;
+  onQuiz: (level: CefrLevel) => void;
+  key?: React.Key;
+};
+
+export function Learn({ token, onQuiz }: LearnProps) {
+  const [selectedLevel, setSelectedLevel] = React.useState<CefrLevel | null>(null);
+  const { data: countsData } = useApiResource<AllItemCountsResponse>('/api/content/v1/item-counts', token);
+  const { data: conceptsData, loading: conceptsLoading, error: conceptsError } = useApiResource<ConceptsResponse>(
     '/api/content/v1/concepts',
     token
   );
-  const { data: progressData, loading: progressLoading } = useApiResource('/api/me/progress', token);
+  const { data: progressData, loading: progressLoading } = useApiResource<ProgressResponse>('/api/me/progress', token);
 
   const mastery = React.useMemo(
     () => levelMastery(conceptsData?.concepts, progressData?.concepts, CEFR_LEVELS),
     [conceptsData, progressData]
   );
-  const countsByLevel = React.useMemo(() => {
-    const byLevel = {};
+  const countsByLevel = React.useMemo<Record<string, LevelCounts>>(() => {
+    const byLevel: Record<string, LevelCounts> = {};
     for (const level of CEFR_LEVELS) byLevel[level] = { total: 0, byType: {} };
     for (const [level, entry] of Object.entries(countsData?.counts || {})) {
       byLevel[level] = { total: Number(entry.total) || 0, byType: entry.byType || {} };

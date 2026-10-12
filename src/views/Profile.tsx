@@ -1,6 +1,7 @@
 import React from 'react';
 import { UserRound, Save } from 'lucide-react';
-import { apiPost } from '../api/client.js';
+import { apiPost, type UpdateProfileResponse } from '../api/client.js';
+import type { UserPayload } from '../types';
 import { getErrorMessage } from '../presenters/format.presenter.js';
 import {
   Banner,
@@ -15,16 +16,23 @@ import {
   TextInput,
 } from '../components/ui';
 
+export type ProfileProps = {
+  token: string | null;
+  user: UserPayload | null;
+  onSaved?: (user: UserPayload) => void;
+  key?: React.Key;
+};
+
 // FRA-56: profile page — shows the signed-in user's email (read-only) and
 // lets them edit the first/last name collected at signup.
-export function Profile({ token, user, onSaved }) {
+export function Profile({ token, user, onSaved }: ProfileProps) {
   const [firstName, setFirstName] = React.useState(user?.first_name || '');
   const [lastName, setLastName] = React.useState(user?.last_name || '');
   const [saving, setSaving] = React.useState(false);
   const [error, setError] = React.useState('');
   const [saved, setSaved] = React.useState(false);
 
-  async function save(event) {
+  async function save(event: React.FormEvent): Promise<void> {
     event.preventDefault();
     const first = firstName.trim();
     const last = lastName.trim();
@@ -36,7 +44,11 @@ export function Profile({ token, user, onSaved }) {
     setError('');
     setSaved(false);
     try {
-      const payload = await apiPost('/api/me/profile', { first_name: first, last_name: last }, token);
+      const payload = await apiPost<UpdateProfileResponse>(
+        '/api/me/profile',
+        { first_name: first, last_name: last },
+        token,
+      );
       setFirstName(payload.user.first_name || '');
       setLastName(payload.user.last_name || '');
       setSaved(true);
