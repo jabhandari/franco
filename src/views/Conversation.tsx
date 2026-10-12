@@ -15,6 +15,27 @@ import {
   Text,
 } from '../components/ui';
 
+// FRA-67: local type for the GET /api/me/conversation-targets payload.
+// Targets are built from concept rows as { id, section, title, text } in
+// server/index.js; canonical ownership belongs to a later ticket (see
+// "Notes for FRA-68").
+type ConversationTarget = {
+  id: string;
+  section: string;
+  title: string;
+  text: string;
+};
+
+type ConversationApiResponse = {
+  scenario?: string;
+  message?: string;
+  targets?: ConversationTarget[];
+};
+
+type ConversationProps = {
+  token?: string | null;
+};
+
 // Guided speaking practice. There is no scripted chatbot here: the server
 // picks a roleplay scenario from your weakest concepts (or starter concepts
 // for your level), and you practice it out loud, with a partner, or into a
@@ -25,13 +46,13 @@ const STEPS = [
   { title: 'Enregistrez-vous', text: 'Réécoutez-vous et notez vos hésitations : c’est votre prochaine révision. Listen back — your hesitations are your next review.' },
 ];
 
-export function Conversation({ token }) {
-  const { data, loading, error } = useApiResource('/api/me/conversation-targets', token);
-  const [checked, setChecked] = React.useState({});
+export function Conversation({ token }: ConversationProps) {
+  const { data, loading, error } = useApiResource<ConversationApiResponse>('/api/me/conversation-targets', token);
+  const [checked, setChecked] = React.useState<Record<string, boolean>>({});
   React.useEffect(() => setChecked({}), [data?.scenario]);
-  const toggle = (id) => setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
-  const targets = (data?.targets || []).filter(
-    (target) => target && (safeText(target.title) || safeText(target.section)),
+  const toggle = (id: string) => setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
+  const targets: ConversationTarget[] = (data?.targets || []).filter(
+    (target: ConversationTarget) => target && (safeText(target.title) || safeText(target.section)),
   );
   const done = targets.filter((target) => checked[target.id]).length;
 

@@ -38,7 +38,7 @@ assert(formatLevelWithClb('Z9') === 'Z9', "formatLevelWithClb('Z9') falls back t
     /formatLevelWithClb\(section\)/.test(conceptsSrc),
     'LevelGuide eyebrow renders the CEFR · CLB label'
   );
-  const pastSrc = readFileSync(new URL('../views/PastQuestions.jsx', import.meta.url), 'utf8');
+  const pastSrc = readFileSync(new URL('../views/PastQuestions.tsx', import.meta.url), 'utf8');
   assert(
     /formatLevelWithClb\(section\)/.test(pastSrc) && /Canadian Language Benchmark/.test(pastSrc),
     'PastQuestions references the CLB mapping in section meta and lede'

@@ -177,6 +177,8 @@ type SessionProps = {
   token?: string | null;
   /** Level preselected by the Learn view's quiz entry point (FRA-47). */
   initialLevel?: string | null;
+  /** Remount key: the shell re-keys the session when the Learn quiz picks a level. */
+  key?: React.Key;
 };
 
 // Restored original session display: the full question list under the level

@@ -1,7 +1,67 @@
 import React from 'react';
 import { Check, CheckCircle2, Flag, KeyRound, RefreshCw, Send, X } from 'lucide-react';
 import { apiGet, apiPost, formatEnum, getErrorMessage, normalizeChoices, safeText } from '../api/client.js';
-import { Box, Button, EmptyState, ErrorMessage, Field, Page, PageHeader, Panel, Tabs, Text, TextInput } from '../components/ui';
+import type { ContentItemChoice } from '../api/client.js';
+import {
+  Box,
+  Button,
+  EmptyState,
+  ErrorMessage,
+  Field,
+  Page,
+  PageHeader,
+  Panel,
+  Tabs,
+  Text,
+  TextInput,
+} from '../components/ui';
+
+// Choices as shaped by shapeContentItem() (server/index.js): verbatim
+// response_json.choices — id-bearing {id,text} pairs for published items.
+// Canonical type imported from the API client (never redefined).
+type ChoicesInput = ContentItemChoice[] | null | undefined;
+
+// Output contract of normalizeChoices(): filtered { key, text } pairs.
+type NormalizedChoice = { key: string; text: string };
+
+// FRA-67: local types for the review-queue payloads. ReviewQueueItem models
+// GET /api/content/v1/items?status=… — the same shaped item as Content.tsx's
+// list (shapeContentItem() in server/index.js); only the fields this view
+// reads are included. Canonical ownership of the content-item shape belongs
+// to a later ticket (see "Notes for FRA-68").
+type ReviewStatus = 'pending_review' | 'approved' | 'published';
+type ReviewAction = 'approve' | 'publish' | 'reject';
+
+type ReviewQueueItem = {
+  id: string;
+  status: string;
+  type: string | null;
+  level: string | null;
+  source: string | null;
+  external_id: string | null;
+  report_count: number;
+  title: string | null;
+  prompt: string | null;
+  context: string | null;
+  instructions: string | null;
+  choices: ChoicesInput;
+  expected: string | null;
+  expected_points: string[] | null;
+};
+
+type ReviewQueueProps = {
+  onKeyChange?: (hasKey: boolean) => void;
+};
+
+type ReviewItemProps = {
+  key?: React.Key;
+  item: ReviewQueueItem;
+  note: string;
+  busy: boolean;
+  error: string;
+  onNote: (value: string) => void;
+  onAct: (action: ReviewAction) => void;
+};
 
 // FRA-2: review queue UI for the content bank. The review endpoints
 // authenticate with a content:review API key (x-api-key), not the learner
@@ -14,12 +74,12 @@ const MAX_NOTE_LENGTH = 500;
 // Status tabs: the queue proper (pending), items vetted and ready to go
 // live (approved), and the live content bank (published) — rejecting a
 // published item takes it offline.
-const STATUS_TABS = [
+const STATUS_TABS: { id: ReviewStatus; label: string }[] = [
   { id: 'pending_review', label: 'Pending' },
   { id: 'approved', label: 'Approved' },
   { id: 'published', label: 'Published' },
 ];
-const STATUS_COPY = {
+const STATUS_COPY: Record<ReviewStatus, { count: (n: number) => string; emptyTitle: string; emptyText: string }> = {
   pending_review: {
     count: (n) => `${n} item${n === 1 ? '' : 's'} waiting for review`,
     emptyTitle: 'Queue clear',
@@ -37,30 +97,30 @@ const STATUS_COPY = {
   },
 };
 
-function queuePath(status) {
+function queuePath(status: ReviewStatus) {
   return `/api/content/v1/items?status=${status}&limit=50`;
 }
 
-export function ReviewQueue({ onKeyChange }) {
+export function ReviewQueue({ onKeyChange }: ReviewQueueProps) {
   const [apiKey, setApiKey] = React.useState(() => localStorage.getItem(REVIEW_KEY_STORAGE) || '');
   const [keyDraft, setKeyDraft] = React.useState('');
-  const [status, setStatus] = React.useState('pending_review');
-  const [items, setItems] = React.useState(null);
+  const [status, setStatus] = React.useState<ReviewStatus>('pending_review');
+  const [items, setItems] = React.useState<ReviewQueueItem[] | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
-  const [notes, setNotes] = React.useState({});
-  const [busyId, setBusyId] = React.useState(null);
-  const [rowErrors, setRowErrors] = React.useState({});
+  const [notes, setNotes] = React.useState<Record<string, string>>({});
+  const [busyId, setBusyId] = React.useState<string | null>(null);
+  const [rowErrors, setRowErrors] = React.useState<Record<string, string>>({});
 
-  const load = React.useCallback(async (key, forStatus) => {
+  const load = React.useCallback(async (key: string, forStatus: ReviewStatus) => {
     if (!key) return;
     setLoading(true);
     setError('');
     try {
-      const payload = await apiGet(queuePath(forStatus), null, { apiKey: key });
+      const payload = await apiGet<{ items: ReviewQueueItem[] }>(queuePath(forStatus), null, { apiKey: key });
       // Learner-flagged items first: they were already live and may be
       // actively wrong, so they outrank brand-new source items.
-      const list = [...(payload.items || [])].sort((a, b) => (b.report_count || 0) - (a.report_count || 0));
+      const list: ReviewQueueItem[] = [...(payload.items || [])].sort((a, b) => (b.report_count || 0) - (a.report_count || 0));
       setItems(list);
     } catch (loadError) {
       setError(getErrorMessage(loadError));
@@ -74,7 +134,7 @@ export function ReviewQueue({ onKeyChange }) {
     if (apiKey) load(apiKey, status);
   }, [apiKey, status, load]);
 
-  function saveKey(event) {
+  function saveKey(event: React.FormEvent) {
     event.preventDefault();
     const key = keyDraft.trim();
     if (!key) return;
@@ -92,7 +152,7 @@ export function ReviewQueue({ onKeyChange }) {
     onKeyChange?.(false);
   }
 
-  async function act(item, action) {
+  async function act(item: ReviewQueueItem, action: ReviewAction) {
     setBusyId(item.id);
     setRowErrors((prev) => ({ ...prev, [item.id]: '' }));
     try {
@@ -151,7 +211,7 @@ export function ReviewQueue({ onKeyChange }) {
         ariaLabel="Content status"
         options={STATUS_TABS}
         value={status}
-        onChange={(next) => { setStatus(next); setItems(null); }}
+        onChange={(next: ReviewStatus) => { setStatus(next); setItems(null); }}
       />
 
       <Box className="review-toolbar">
@@ -193,12 +253,14 @@ export function ReviewQueue({ onKeyChange }) {
   );
 }
 
-function ReviewItem({ item, note, busy, error, onNote, onAct }) {
+function ReviewItem({ item, note, busy, error, onNote, onAct }: ReviewItemProps) {
   const choices = normalizeChoices(item.choices);
   const expected = safeText(item.expected);
-  const expectedPoints = Array.isArray(item.expected_points) ? item.expected_points : [];
+  const expectedPoints: string[] = Array.isArray(item.expected_points)
+    ? item.expected_points.filter((point): point is string => typeof point === 'string')
+    : [];
   const flagged = (item.report_count || 0) > 0;
-  const isCorrectChoice = (choice) => {
+  const isCorrectChoice = (choice: NormalizedChoice) => {
     if (!expected) return false;
     const target = expected.trim().toLowerCase();
     return choice.key.trim().toLowerCase() === target || choice.text.trim().toLowerCase() === target;
@@ -232,7 +294,7 @@ function ReviewItem({ item, note, busy, error, onNote, onAct }) {
             <Text as="strong">Answer / expected</Text>
             {choices.length > 0 && (
               <Box as="ul" className="review-choices">
-                {choices.map((choice) => (
+                {choices.map((choice: NormalizedChoice) => (
                   <Box as="li" key={choice.key} className={isCorrectChoice(choice) ? 'correct' : undefined}>
                     {choice.key}. {choice.text}
                     {isCorrectChoice(choice) ? ' ✓' : ''}
