@@ -68,8 +68,14 @@ const Toolbar: React.ComponentType<ToolbarProps> = ToolbarJsx;
 
 // --- Local types (FRA-66; for FRA-68: centralize into shared API types) ---
 
-/** Recursive JSON value for jsonb-backed content fields (response/evaluation payloads). */
-type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+/** Grading rubric from evaluation_json: criterion name → description (WritingPrompt renders each entry). */
+type EvaluationRubric = Record<string, string>;
+
+/** Expected key points from evaluation_json (SpeakingPrompt "Ideas to include" list). */
+type ExpectedPoints = string[];
+
+/** Follow-up questions from evaluation_json (SpeakingPrompt "Try a follow-up" list). */
+type FollowUpQuestions = string[];
 
 /** One media attachment on a queue entry (media_assets). */
 type SessionQueueMedia = {
@@ -104,10 +110,10 @@ type SessionContentEntry = {
   evaluation_mode?: string | null;
   choices?: SessionChoice[];
   tokens?: string[];
-  rubric?: JsonValue;
-  expected_points?: JsonValue;
-  follow_up_questions?: JsonValue;
-  expected?: JsonValue;
+  rubric?: EvaluationRubric;
+  expected_points?: ExpectedPoints;
+  follow_up_questions?: FollowUpQuestions;
+  expected?: string;
 };
 
 /** Exam-practice entry (legacy exam_questions track). */

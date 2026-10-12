@@ -91,8 +91,48 @@ const Text: React.ComponentType<TextProps> = TextJsx;
 
 // --- Local types (FRA-66; for FRA-68: centralize into shared API types) ---
 
-/** Recursive JSON value for jsonb-backed learner rows (attempt payloads). */
-type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+/**
+ * Learner's submitted response on a learning_attempts row. Most renderers
+ * submit the answer string; speaking_prompt submits a completion object.
+ */
+type AttemptResponse = string | {
+  completed: boolean;
+  transcript?: string;
+  transcription_id?: string;
+};
+
+/** Grading outcome stored on a learning_attempts row (server POST /api/me/attempts). */
+type AttemptEvaluation = {
+  correct: boolean;
+  evaluator: string;
+};
+
+/**
+ * Correct-response payload on a content_revisions row. Shape varies by
+ * item_type (see server/content-contract.js): MCQ carries choices+answer,
+ * word_order carries tokens.
+ */
+type RevisionResponse = {
+  choices?: { id: string; text: string }[];
+  answer?: string;
+  accepted_answers?: string[];
+  tokens?: string[];
+  expected?: string;
+};
+
+/** Evaluation config on a content_revisions row. */
+type RevisionEvaluation = {
+  mode?: string;
+  rubric?: Record<string, string>;
+  expected_points?: string[];
+  follow_up_questions?: string[];
+  expected?: string;
+  answer?: string;
+  case_sensitive?: boolean;
+};
+
+/** Free-form metadata on a content_revisions row (flat scalar map). */
+type RevisionMetadata = Record<string, string | number | boolean | null>;
 
 /** One learner_concept_mastery row from GET /api/me/progress. */
 type ConceptMasteryRow = {
@@ -131,8 +171,8 @@ type LearningAttemptRow = {
   user_id?: string;
   item_id?: string;
   revision?: number;
-  response_json?: JsonValue;
-  evaluation_json?: JsonValue;
+  response_json?: AttemptResponse;
+  evaluation_json?: AttemptEvaluation;
   score?: number | null;
   duration_ms?: number | null;
   created_at?: string;
@@ -160,9 +200,9 @@ type ReviewDueRow = {
   created_at?: string;
   title?: string | null;
   prompt?: string | null;
-  response_json?: JsonValue;
-  evaluation_json?: JsonValue;
-  metadata_json?: JsonValue;
+  response_json?: RevisionResponse;
+  evaluation_json?: RevisionEvaluation;
+  metadata_json?: RevisionMetadata;
   due_at?: string;
 };
 
