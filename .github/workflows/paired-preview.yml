@@ -7,6 +7,11 @@
 #     branch with VITE_API_URL pointed at it, and deploys it via Wrangler.
 #   - One PR comment carries both links and is updated in place on re-runs.
 #
+# Render only creates service previews for PRs opened against its linked
+# branch (main). A stacked PR (base != main) gets no backend preview at all,
+# so the workflow fails fast with an explanatory error instead of polling a
+# URL that will never exist.
+#
 # Removing the label or closing the PR tears the frontend preview down.
 # Render deprovisions its own preview automatically.
 #
@@ -45,6 +50,22 @@ jobs:
     env:
       PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.pr_number || github.event.pull_request.number }}
     steps:
+      # Fail fast for stacked PRs: Render only creates service previews for
+      # PRs against the linked branch (main), so a PR targeting any other
+      # base gets no backend preview and the wait step below would poll a
+      # dead URL for 10 minutes. Checked via the API so it also works for
+      # workflow_dispatch runs.
+      - name: Verify PR targets the linked branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          base=$(gh pr view "$PR_NUMBER" --json baseRefName --jq .baseRefName)
+          if [ "$base" != "main" ]; then
+            echo "::error::PR #$PR_NUMBER targets '$base', not 'main'. Render only creates service previews for PRs opened against the linked branch (main), so https://franco-pr-$PR_NUMBER.onrender.com will never exist. Retarget this PR to main (or land the stack below it), then remove and re-add the render-preview label to rebuild."
+            exit 1
+          fi
+          echo "PR #$PR_NUMBER targets main — Render preview expected."
+
       - name: Check out PR head
         uses: actions/checkout@v4
         with:
