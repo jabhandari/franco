@@ -39,3 +39,21 @@ is intentional here: no direct Data API clients are supported. The audit
 after applying both migrations reports no security errors or warnings,
 only these default-deny informational notices. Public published-content
 reads remain available through the Node API.
+
+## Reading position (FRA-91)
+
+`GET/POST /api/me/lesson-position` stores the active concept and last visible
+section (`overview`, `theory`, `vocabulary`, `examples`) in the private
+`learner_lesson_positions` table. The modal debounces section changes and
+flushes the last change when closed; writes are serialized. Home's Continue
+action passes the saved level, slug and section to the roadmap, opens that
+lesson, and scrolls to its saved section. No browser-only bookmark is used.
+
+```mermaid
+flowchart LR
+  Modal[Lesson reading section] -->|Bearer session| Save[POST /api/me/lesson-position]
+  Save --> Position[(Supabase: learner_lesson_positions)]
+  Position --> Load[GET /api/me/lesson-position]
+  Load --> Home[Continue row]
+  Home -->|level + slug + section| Modal
+```

@@ -17,6 +17,7 @@ export { sanitizeEntry } from '../presenters/entry.presenter.js';
 // this import is the only intentional runtime change in this file.
 import { safeText } from '../presenters/format.presenter.js';
 import { browserTimeZone } from '../presenters/streak.presenter.js';
+import type { LessonPosition } from '../types';
 import type { UserPayload, ContentItemStatus, EvaluationMode, ContentItemType, CefrMeta, ConceptProgress, SkillProgress } from '../types';
 
 // ---------------------------------------------------------------------------
@@ -118,6 +119,7 @@ export type MeResponse = {
 };
 
 export type RecentMistake = LearningAttempt & { prompt: string | null; level: string | null };
+export type LessonPositionResponse = { lesson: LessonPosition | null };
 
 export type UpdateProfileRequest = {
   first_name: string;

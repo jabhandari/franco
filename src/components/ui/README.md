@@ -79,6 +79,9 @@ Reusable helper logic lives in `src/presenters/` as pure functions (no JSX):
 | `Modal` | `onClose`, `closeLabel`, `children`, + `ref` (forwardRef to the dialog node, for ref-based outside-click checks) | `div.concept-modal` dialog; Escape closes while open |
 | `NavButton` | `icon`, `active`, `onClick` | Sidebar nav button |
 | `Brand` | `large`, `onClick`, `label` | `fr` brand mark |
+| `UserMenu` | `name`, `level`, `onClick` | Accessible sidebar/phone profile control |
+| `StreakCard` | `streak` | Real current/best streak and zero state on Home |
+| `SkillCard` | `title`, `gloss`, `description`, `done`, `total`, `percent`, `loading`, `onStart` | Shared skill box with donut; optional Start disabled for empty inventory |
 | `RecordCount` | `count`, `label` | Big-number stat |
 | `StreakChip` | `streak` | Sidebar flame chip (FRA-44) |
 | `StreakHero` | `streak` | Home daily-panel streak summary / empty strip (FRA-44) |

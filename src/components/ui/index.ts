@@ -39,6 +39,9 @@ export type { ModalProps } from './Modal';
 export { LoadingScreen, LoadingSpinner } from './Loading';
 export type { LoadingSpinnerSize } from './Loading';
 export { NavButton, Brand, UserMenu } from './Nav';
+export { SkillCard } from './SkillCard';
+export type { SkillCardProps } from './SkillCard';
+export { StreakCard } from './StreakCard';
 export type { NavButtonProps, BrandProps, UserMenuProps } from './Nav';
 export { RecordCount, StatGroup, ProfileRows, DataContract, ProgressRecords } from './Data';
 export type {
