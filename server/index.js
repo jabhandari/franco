@@ -10,6 +10,7 @@ import { getSpeakingLesson } from '../shared/speaking-lessons.js';
 import { getPort, getHost, corsOrigin } from './config.js';
 import { displayName, isNonEmptyName } from './user-names.js';
 import { getLearnerProgress } from './learner-progress.js';
+import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
 
 const PORT = getPort(); const HOST = getHost(); const hashToken = (v) => createHash('sha256').update(v).digest('hex');
 const json = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-headers': 'content-type, authorization', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-expose-headers': 'retry-after', ...headers }); res.end(JSON.stringify(body)); };
@@ -202,7 +203,7 @@ async function buildSessionPlan(userId, level) {
 
   return {
     section: level,
-    reviewsDue: reviewRows.length,
+    reviewsDue: Number((await query(`SELECT COUNT(*)::int AS count FROM learner_item_state s JOIN content_items i ON i.id=s.item_id WHERE s.user_id=? AND s.due_at<=NOW() AND i.status='published'`,[userId]))[0].count),
     queue,
     estimatedMinutes: Math.max(2, Math.round(queue.length * 1.2)),
     message: 'Adaptive queue: due reviews, then new items at your level, then weak concepts, exam practice, and drills.',
@@ -350,10 +351,18 @@ async function main() {
                 return json(res, 200, { counts });
             }
             if (req.method === 'GET' && u.pathname === '/api/content/v1/concepts') {
-                const concepts = await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status,metadata_json FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST, list_order NULLS LAST, title");
+                const concepts = await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status,metadata_json,list_order FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST, list_order NULLS LAST, title");
                 const prereqs = await query('SELECT concept_id,prerequisite_concept_id FROM concept_prerequisites');
                 const slugById = new Map(concepts.map((c) => [c.id, c.slug]));
-                return json(res, 200, { concepts: concepts.map((c) => ({ id: c.id, slug: c.slug, title: c.title, description: c.description, concept_type: c.concept_type, level_code: c.level_code, parent_id: c.parent_id, status: c.status, metadata: c.metadata_json || {}, prerequisites: prereqs.filter((p) => p.concept_id === c.id).map((p) => slugById.get(p.prerequisite_concept_id)).filter(Boolean) })) });
+                return json(res, 200, { concepts: concepts.map((c) => ({ id: c.id, slug: c.slug, title: c.title, description: c.description, concept_type: c.concept_type, level_code: c.level_code, parent_id: c.parent_id, status: c.status, list_order:c.list_order, metadata: c.metadata_json || {}, prerequisites: prereqs.filter((p) => p.concept_id === c.id).map((p) => slugById.get(p.prerequisite_concept_id)).filter(Boolean) })) });
+            }
+            if (u.pathname === '/api/me/lesson-position' && ['GET','POST'].includes(req.method)) {
+              const x=await user(req);
+              if (!x) return json(res,401,{error:'Authentication required.'});
+              if (req.method==='GET') return json(res,200,await getLessonPosition(query,x.id));
+              const b=await body(req);
+              const result=await saveLessonPosition(query,x.id,b?.concept_slug,b?.section);
+              return json(res,result.status,result.error ? {error:result.error} : {saved:true});
             }
             if (req.method === 'GET' && u.pathname === '/api/me/progress') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { items: await query('SELECT * FROM learner_item_state WHERE user_id=? ORDER BY due_at', [x.id]), concepts: await query('SELECT * FROM learner_concept_mastery WHERE user_id=? ORDER BY mastery', [x.id]), attempts: await query('SELECT * FROM learning_attempts WHERE user_id=? ORDER BY created_at DESC LIMIT 100', [x.id]) }); }
             if (req.method === 'GET' && u.pathname === '/api/me/streak') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const timeZone = normalizeTimeZone(u.searchParams.get('tz')); const today = localDateString(new Date(), timeZone); const rows = await query('SELECT activity_date, attempts_count FROM learner_activity_days WHERE user_id=? ORDER BY activity_date', [x.id]); const summary = summarizeActivity(rows, today); const windowStart = shiftDate(today, -370); return json(res, 200, { currentStreak: summary.currentStreak, longestStreak: summary.longestStreak, studiedToday: summary.studiedToday, activeDays: summary.activeDays, totalAttempts: summary.totalAttempts, today, days: summary.days.filter((day) => day.date >= windowStart) }); }
