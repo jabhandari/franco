@@ -38,8 +38,8 @@ export { Modal } from './Modal';
 export type { ModalProps } from './Modal';
 export { LoadingScreen, LoadingSpinner } from './Loading';
 export type { LoadingSpinnerSize } from './Loading';
-export { NavButton, Brand } from './Nav';
-export type { NavButtonProps, BrandProps } from './Nav';
+export { NavButton, Brand, UserMenu } from './Nav';
+export type { NavButtonProps, BrandProps, UserMenuProps } from './Nav';
 export { RecordCount, StatGroup, ProfileRows, DataContract, ProgressRecords } from './Data';
 export type {
   RecordCountProps, StatGroupProps, ProfileRowsProps, LearnerProfile,
