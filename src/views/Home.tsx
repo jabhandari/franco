@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, BookOpen, Mic, RotateCcw, Sparkles } from 'lucide-react';
+import { ArrowRight, BookOpen, ClipboardCheck, Mic, RotateCcw, Sparkles } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import type { AuthResponse, MeResponse, StreakResponse, SessionPlanResponse, LessonPositionResponse } from '../api/client.js';
 import type { LessonPosition, ConceptProgress, SkillId } from '../types';
@@ -11,6 +11,7 @@ type HomeProps = {
   userData?: MeResponse | AuthResponse | null;
   streak?: StreakResponse | null;
   onStart: () => void;
+  onPlacement: () => void;
   onContinue: (lesson: LessonPosition) => void;
   onLesson: (lesson: ConceptProgress) => void;
   onExplore: () => void;
@@ -24,7 +25,7 @@ const SKILLS: {id:SkillId;title:string;gloss:string;description:string}[] = [
   {id:'parler',title:'Parler',gloss:'Speaking',description:'Phrases said out loud, with pronunciation checked.'},
 ];
 
-export function Home({token,userData,streak,onStart,onContinue,onLesson,onExplore,onConversation}:HomeProps) {
+export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLesson,onExplore,onConversation}:HomeProps) {
   const {data:plan,error:planError}=useApiResource<SessionPlanResponse>('/api/me/session-plan',token);
   const {data:resume,error:resumeError}=useApiResource<LessonPositionResponse>('/api/me/lesson-position',token);
   const snapshot=userData && 'skill_progress' in userData ? userData : null;
@@ -49,6 +50,13 @@ export function Home({token,userData,streak,onStart,onContinue,onLesson,onExplor
 
       <Box className="home-plan">
         <Box className="home-section-heading"><Text as="h2">Today's plan</Text><Text as="span">About 10 minutes, all in</Text></Box>
+        {userData?.profile?.placement_status === 'not_started' && (
+          <Box as="button" type="button" className="home-plan-row" onClick={onPlacement}>
+            <ClipboardCheck size={18} aria-hidden="true" />
+            <Box as="span"><Text as="strong">Take your placement quiz</Text><Text as="small">Start with a level matched to your French.</Text></Box>
+            <Text as="small" className="home-time">~2 min</Text>
+          </Box>
+        )}
         {planError && <ErrorMessage message="Couldn't load your session plan. You can still explore your lessons." />}
         <Box as="button" type="button" className="home-plan-row" onClick={onStart}>
           <RotateCcw size={18} aria-hidden="true" />

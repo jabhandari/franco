@@ -52,7 +52,7 @@ paths:
         exam_question and exercise use legacy_ref. Both correct and incorrect
         answers are stored; the response supplies correct, reveal and attempt.
       responses:
-        '200': { description: Stored attempt and authoritative evaluation }
+        '201': { description: Stored attempt and authoritative evaluation }
         '400': { description: Missing response or invalid item reference }
         '401': { description: Missing or expired learner session }
         '404': { description: Item not found }
