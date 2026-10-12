@@ -286,6 +286,7 @@ function App(): React.JSX.Element {
       <Box as="main" className={`main-content ${view === 'content' ? 'wide-content' : ''}`}>
         {view === 'home' && <Home token={authToken} userData={userData} streak={streak}
           onStart={() => { setSessionLevel(userData?.profile?.current_level || 'A1'); navigate('session'); }}
+          onPlacement={() => navigate('placement')}
           onContinue={(lesson) => navigate('content', false, new URLSearchParams({ level:lesson.level_code,concept:lesson.slug,section:lesson.section }))}
           onLesson={(lesson) => navigate('content', false, new URLSearchParams({ level:lesson.level_code || 'A1',concept:lesson.slug }))}
           onExplore={() => navigate('content', false, new URLSearchParams({ level:userData?.profile?.current_level || 'A1' }))}
