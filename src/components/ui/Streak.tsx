@@ -11,8 +11,8 @@ import { buildHeatmap, streakLabel, HEATMAP_DAY_LABELS } from '../../presenters/
 // payload ({ currentStreak, longestStreak, studiedToday, activeDays,
 // totalAttempts, today, days }) and render nothing until it arrives.
 
-const FLAME_COLOR = '#d94836';
-const FLAME_FILL = '#f4604e';
+const FLAME_COLOR = 'var(--color-flame)';
+const FLAME_FILL = 'var(--color-flame-fill)';
 
 // Minimal local view of the streak payload.
 // (Canonical streak types belong to the API-client ticket — FRA-61.)

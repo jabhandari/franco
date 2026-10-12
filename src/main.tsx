@@ -3,18 +3,14 @@ import { createRoot } from 'react-dom/client';
 import {
   BookOpen,
   ChevronRight,
-  CirclePlay,
-  ClipboardCheck,
   GraduationCap,
   Home as HomeIcon,
   Lock,
   LogOut,
   Mail,
   Mic,
-  ShieldCheck,
   Sun,
   Moon,
-  TrendingUp,
   UserRound,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -23,7 +19,7 @@ import { apiGet, apiPost, getErrorMessage } from './api/client.js';
 import type { AuthResponse, MeResponse, StreakResponse } from './api/client.js';
 import type { UserPayload } from './types';
 import { ThemeProvider, useTheme } from 'next-themes';
-import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput, StreakChip } from './components/ui';
+import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput, UserMenu } from './components/ui';
 import { streakPath } from './presenters/streak.presenter.js';
 import { Home } from './views/Home.js';
 import { Learn } from './views/Learn.js';
@@ -33,7 +29,7 @@ import { PastQuestions } from './views/PastQuestions.js';
 import { Progress } from './views/Progress.js';
 import { Conversation } from './views/Conversation.js';
 import { Placement } from './views/Placement.js';
-import { ReviewQueue, REVIEW_KEY_STORAGE } from './views/ReviewQueue.js';
+import { ReviewQueue } from './views/ReviewQueue.js';
 import { Profile } from './views/Profile.js';
 
 // next-themes ships its own types, but this repo has no @types/react, so
@@ -53,7 +49,7 @@ declare module 'next-themes' {
 // FRA-67: app-shell types. ViewId is the sidebar's view vocabulary — the
 // auth gate, router, and nav all speak it, so a bad view id is a type
 // error, not a silent blank page.
-type ViewId = 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile';
+type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile';
 type AuthView = 'login' | 'signup';
 
 type NavItem = {
@@ -67,17 +63,13 @@ const TOKEN_KEY = 'franco_auth_token';
 const navItems: NavItem[] = [
   { id: 'home', label: 'Home', icon: HomeIcon },
   { id: 'learn', label: 'Learn', icon: GraduationCap },
-  { id: 'placement', label: 'Placement', icon: ClipboardCheck },
-  { id: 'session', label: 'Session', icon: CirclePlay },
-  { id: 'content', label: 'Content', icon: BookOpen },
-  { id: 'past', label: 'Past questions', icon: BookOpen },
-  { id: 'progress', label: 'Progress', icon: TrendingUp },
+  { id: 'practice', label: 'Practice', icon: BookOpen },
   { id: 'conversation', label: 'Conversation', icon: Mic },
-  { id: 'profile', label: 'Profile', icon: UserRound },
 ];
 
 const viewPaths: Record<ViewId, string> = {
   home: '/',
+  practice: '/practice',
   learn: '/learn',
   placement: '/placement',
   session: '/session',
@@ -89,7 +81,7 @@ const viewPaths: Record<ViewId, string> = {
   profile: '/profile',
 };
 
-const VIEW_IDS: ViewId[] = ['home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile'];
+const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile'];
 
 function viewFromPath(pathname: string): ViewId {
   for (const id of VIEW_IDS) {
@@ -110,13 +102,6 @@ function App(): React.JSX.Element {
   const [loading, setLoading] = React.useState<boolean>(Boolean(authToken));
   const [error, setError] = React.useState<string>('');
   const { resolvedTheme: theme, setTheme } = useTheme();
-  // FRA-2: the Review queue nav link only appears once a review API key
-  // has been stored in this browser (the view itself manages the key).
-  const [hasReviewKey, setHasReviewKey] = React.useState<boolean>(() => Boolean(localStorage.getItem(REVIEW_KEY_STORAGE)));
-  const visibleNavItems: NavItem[] = hasReviewKey
-    ? [...navItems, { id: 'review', label: 'Review queue', icon: ShieldCheck }]
-    : navItems;
-
   function navigate(nextView: ViewId, replace = false): void {
     setView(nextView);
     window.history[replace ? 'replaceState' : 'pushState']({}, '', viewPaths[nextView] || '/');
@@ -256,11 +241,11 @@ function App(): React.JSX.Element {
         <Brand onClick={() => navigate('home')} />
 
         <Box as="nav" aria-label="Main navigation">
-          {visibleNavItems.map((item) => (
+          {navItems.map((item) => (
             <NavButton
               key={item.id}
               icon={item.icon}
-              active={view === item.id}
+              active={view === item.id || (item.id === 'practice' && view === 'past') || (item.id === 'learn' && view === 'content')}
               onClick={() => navigate(item.id)}
             >
               {item.label}
@@ -268,23 +253,20 @@ function App(): React.JSX.Element {
           ))}
         </Box>
 
-        <StreakChip streak={streak} />
-
-        <Box className="sidebar-panel">
-          <Text>Signed in as</Text>
-          <Text as="strong">{session.name}</Text>
-          <Text as="span">Your learning space</Text>
-        </Box>
-
         <Box className="sidebar-actions">
-          <Box as="button" className="theme-toggle" onClick={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}>
+          <Box as="button" type="button" aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'} className="theme-toggle" onClick={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}>
             {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
             <Text as="span">{theme === 'dark' ? 'Light mode' : 'Dark mode'}</Text>
           </Box>
-          <Button variant="nav" onClick={logout} icon={LogOut} iconSize={18}>
+          <Button variant="nav" aria-label="Log out" onClick={logout} icon={LogOut} iconSize={18}>
             <Text as="span">Log out</Text>
           </Button>
         </Box>
+        <UserMenu name={session.name} level={userData?.profile?.current_level} onClick={() => navigate('profile')} />
+      </Box>
+
+      <Box as="nav" className="phone-tabs" aria-label="Phone navigation">
+        {navItems.map((item) => <NavButton key={item.id} icon={item.icon} active={view === item.id || (item.id === 'practice' && view === 'past') || (item.id === 'learn' && view === 'content')} onClick={() => navigate(item.id)}>{item.label}</NavButton>)}
       </Box>
 
       <Box as="main" className={`main-content ${view === 'content' ? 'wide-content' : ''}`}>
@@ -293,10 +275,10 @@ function App(): React.JSX.Element {
         {view === 'placement' && <Placement token={authToken} onPlaced={() => refreshUserData()} />}
         {view === 'session' && <Session key={sessionLevel || 'default'} token={authToken} initialLevel={sessionLevel} />}
         {view === 'content' && <Content token={authToken} />}
-        {view === 'past' && <PastQuestions token={authToken} />}
+        {(view === 'past' || view === 'practice') && <PastQuestions token={authToken} />}
         {view === 'progress' && <Progress token={authToken} />}
         {view === 'conversation' && <Conversation token={authToken} />}
-        {view === 'review' && <ReviewQueue onKeyChange={setHasReviewKey} />}
+        {view === 'review' && <ReviewQueue />}
         {view === 'profile' && <Profile token={authToken} user={session} onSaved={handleProfileSaved} />}
       </Box>
     </Box>
