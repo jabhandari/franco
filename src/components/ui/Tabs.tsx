@@ -34,10 +34,14 @@ export function Tabs({
   ariaLabel,
 }: TabsProps) {
   if (variant === 'learnSkill') {
+    // Group-of-buttons semantics (not the ARIA tab pattern): the options below
+    // filter the skill list and there is no associated tabpanel, so declaring
+    // tablist/tab roles would promise keyboard and panel behavior this control
+    // does not implement. aria-pressed carries the selected state instead.
     return (
-      <div className="learn-skill-tabs" role="tablist" aria-label={ariaLabel}>
+      <div className="learn-skill-tabs" role="group" aria-label={ariaLabel}>
         {options.map(({ id, label, icon: Icon }) => (
-          <button key={id} type="button" role="tab" aria-selected={value === id} className={value === id ? 'selected' : ''} onClick={() => onChange(id)}>
+          <button key={id} type="button" aria-pressed={value === id} className={value === id ? 'selected' : ''} onClick={() => onChange(id)}>
             {Icon ? <Icon size={22} strokeWidth={1.8} aria-hidden="true" /> : null}
             <span>{label}</span>
           </button>

@@ -51,7 +51,11 @@ export function PronunciationDrill({ entry, token, onResult, compact = false, se
     setSubmitting(true);
     setError('');
     try {
-      const response = await reportAttempt(entry, saidItRight ? entry.expected ?? '' : '', token, {
+      // Submit the same word the learner judged themselves against: entry.expected
+      // when present, otherwise the audio transcript revealed by "Show word".
+      // Submitting entry.expected alone would send '' on transcript-only drills,
+      // which the attempts endpoint grades as an incorrect attempt.
+      const response = await reportAttempt(entry, saidItRight ? word : '', token, {
         durationMs: elapsedMs(startRef.current),
       });
       setResult(response);

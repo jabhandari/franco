@@ -380,6 +380,14 @@ async function main() {
               let correct; let score;
               if (target) {
                 correct = target.item_type === 'speaking_prompt' ? true : evaluate(target, b.response);
+                if (!correct && target.item_type === 'pronunciation_drill') {
+                  // Transcript-backed drills carry no expected/answer reference, so
+                  // evaluate() rejects every response. Grade against the audio
+                  // transcript instead — the same source the client reveals as the
+                  // word and submits on a "Got it" self-mark.
+                  const audioRow = (await query('SELECT transcript FROM media_assets WHERE item_id=? AND kind=? AND transcript IS NOT NULL LIMIT 1', [target.id, 'audio']))[0];
+                  if (audioRow) correct = normalizeText(b.response) === normalizeText(audioRow.transcript);
+                }
                 const selfAssessed = !target.evaluation_json?.mode && (target.evaluation_json?.rubric || target.evaluation_json?.expected_points);
                 score = (target.item_type === 'speaking_prompt' || target.evaluation_json?.mode === 'rubric' || selfAssessed) ? null : (correct ? 1 : 0);
               } else if (itemKind === 'exam_question') { correct = gradeExamQuestion(legacyRow, b.response); score = correct ? 1 : 0; }
