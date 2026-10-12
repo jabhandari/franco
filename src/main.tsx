@@ -26,7 +26,7 @@ import { ThemeProvider, useTheme } from 'next-themes';
 import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput, StreakChip } from './components/ui';
 import { streakPath } from './presenters/streak.presenter.js';
 import { Home } from './views/Home.js';
-import { Learn } from './views/Learn.jsx';
+import { Learn } from './views/Learn.js';
 import { Session } from './views/Session.js';
 import { Content } from './views/Content.js';
 import { PastQuestions } from './views/PastQuestions.js';
@@ -34,7 +34,7 @@ import { Progress } from './views/Progress.js';
 import { Conversation } from './views/Conversation.js';
 import { Placement } from './views/Placement.js';
 import { ReviewQueue, REVIEW_KEY_STORAGE } from './views/ReviewQueue.js';
-import { Profile } from './views/Profile.jsx';
+import { Profile } from './views/Profile.js';
 
 // next-themes ships its own types, but this repo has no @types/react, so
 // `React.PropsWithChildren` in its ThemeProviderProps resolves to nothing
