@@ -26,14 +26,14 @@ import { apiGet, apiPost } from './api/client.js';
 import { ThemeProvider, useTheme } from 'next-themes';
 import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput, StreakChip } from './components/ui';
 import { streakPath } from './presenters/streak.presenter.js';
-import { Home } from './views/Home.jsx';
+import { Home } from './views/Home.js';
 import { Learn } from './views/Learn.jsx';
-import { Session } from './views/Session.jsx';
+import { Session } from './views/Session.js';
 import { Content } from './views/Content.jsx';
 import { PastQuestions } from './views/PastQuestions.jsx';
-import { Progress } from './views/Progress.jsx';
+import { Progress } from './views/Progress.js';
 import { Conversation } from './views/Conversation.jsx';
-import { Placement } from './views/Placement.jsx';
+import { Placement } from './views/Placement.js';
 import { ReviewQueue, REVIEW_KEY_STORAGE } from './views/ReviewQueue.jsx';
 import { Profile } from './views/Profile.jsx';
 
