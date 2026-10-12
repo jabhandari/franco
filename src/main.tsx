@@ -40,10 +40,13 @@ import { Profile } from './views/Profile.jsx';
 // `React.PropsWithChildren` in its ThemeProviderProps resolves to nothing
 // and the `children` prop is missing from the declared props. Re-declare it
 // via module augmentation (not an assertion) so the <ThemeProvider> wrapper
-// below typechecks. Remove when @types/react lands (migration closeout).
+// below typechecks, using the same `React.ReactNode` children type as the
+// component library (the repo's no-`unknown` rule forbids an escape hatch
+// here). Remove when @types/react lands (migration closeout) —
+// PropsWithChildren will supply children then, making this redundant.
 declare module 'next-themes' {
   interface ThemeProviderProps {
-    children?: unknown;
+    children?: React.ReactNode;
   }
 }
 
