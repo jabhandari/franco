@@ -8,11 +8,18 @@ import {
   skillForItemType,
   countsForSkill,
   levelMastery,
-  type LearnConcept,
   type LevelMasterySummary,
 } from '../presenters/learn.presenter.js';
 import type { CefrLevel } from '../types';
-import type { ProgressResponse } from '../api/client.js';
+import type {
+  ContentItemsResponse,
+  ContentMediaAsset,
+  ContentItemCountsForLevel,
+  ContentItemCountsAll,
+  ContentConceptsResponse,
+  ProgressResponse,
+} from '../api/client.js';
+import type { MediaAsset } from '../components/exercises/Listening';
 import { ExerciseCard } from '../components/exercises/ExerciseCard';
 import {
   Box,
@@ -33,38 +40,34 @@ import {
 // each level view has the four skill tabs filtering content_items by
 // cefr_level + item type, with per-cell counts and honest empty states.
 
-// Local types for the API payloads this view reads (server/index.js).
-// Canonical ownership of these shapes belongs to a later ticket.
+// Media kinds the ingest schema allows. The API honestly types
+// ContentMediaAsset.kind as string (stored rows are not re-validated —
+// see src/api/client.ts), while ExerciseCard's renderers consume the
+// narrow union, so narrow at runtime instead of asserting. Unknown kinds
+// are dropped; renderers ignore them anyway (.find(m => m.kind === ...)).
+const RENDERABLE_MEDIA_KINDS: ReadonlySet<string> = new Set(['audio', 'image', 'video', 'document']);
 
-/** One row from GET /api/content/v1/items (the API shapes rows with `type`). */
-type LearnListItem = {
-  id: string;
-  type: string | null;
-  item_type: string | null;
-};
+function isRenderableMediaKind(kind: string): kind is MediaAsset['kind'] {
+  return RENDERABLE_MEDIA_KINDS.has(kind);
+}
 
-type ContentItemsResponse = {
-  items: LearnListItem[];
-};
-
-type LevelCounts = {
-  total: number;
-  byType: Record<string, number>;
-};
-
-type ItemCountsResponse = LevelCounts;
-
-type AllItemCountsResponse = {
-  counts: Record<string, LevelCounts>;
-};
-
-type ConceptsResponse = {
-  concepts: LearnConcept[];
-};
+function toRendererMedia(media: ContentMediaAsset[]): MediaAsset[] {
+  const out: MediaAsset[] = [];
+  for (const m of media) {
+    if (!isRenderableMediaKind(m.kind)) continue;
+    out.push({
+      kind: m.kind,
+      url: m.url,
+      duration_seconds: m.duration_seconds ?? undefined,
+      transcript: m.transcript ?? undefined,
+    });
+  }
+  return out;
+}
 
 type LevelCardsProps = {
   levels: CefrLevel[];
-  countsByLevel: Record<string, LevelCounts>;
+  countsByLevel: ContentItemCountsAll['counts'];
   mastery: Record<string, LevelMasterySummary> | null;
   onSelect: (level: CefrLevel) => void;
 };
@@ -105,11 +108,7 @@ type SkillItemsProps = {
 
 function SkillItems({ level, skill, token }: SkillItemsProps) {
   const { data, loading, error } = useApiResource<ContentItemsResponse>(`/api/content/v1/items?level=${level}&limit=100`, token);
-  // The items API shapes rows with `type` (not `item_type`); fall back to
-  // `item_type` for forward-compatibility.
-  const items = (data?.items || []).filter(
-    (item) => skillForItemType(item.type ?? item.item_type) === skill
-  );
+  const items = (data?.items || []).filter((item) => skillForItemType(item.type) === skill);
   const tab = SKILL_TABS.find((t) => t.id === skill);
 
   if (loading) return <LoadingSpinner label={`Loading ${tab?.label} activities…`} />;
@@ -127,7 +126,7 @@ function SkillItems({ level, skill, token }: SkillItemsProps) {
   return (
     <Box className="stack">
       {items.map((item) => (
-        <ExerciseCard key={item.id} entry={{ ...item, item_kind: 'content_item' }} token={token} />
+        <ExerciseCard key={item.id} entry={{ ...item, item_kind: 'content_item', media: toRendererMedia(item.media) }} token={token} />
       ))}
       {(data?.items?.length ?? 0) >= 100 && (
         <Text variant="muted">Showing the first 100 {level} activities.</Text>
@@ -145,7 +144,7 @@ type LevelDetailProps = {
 
 function LevelDetail({ level, token, onBack, onQuiz }: LevelDetailProps) {
   const [skill, setSkill] = React.useState('ecouter');
-  const { data: countsData, loading: countsLoading, error: countsError } = useApiResource<ItemCountsResponse>(
+  const { data: countsData, loading: countsLoading, error: countsError } = useApiResource<ContentItemCountsForLevel>(
     `/api/content/v1/item-counts?level=${level}`,
     token
   );
@@ -206,8 +205,8 @@ export type LearnProps = {
 
 export function Learn({ token, onQuiz }: LearnProps) {
   const [selectedLevel, setSelectedLevel] = React.useState<CefrLevel | null>(null);
-  const { data: countsData } = useApiResource<AllItemCountsResponse>('/api/content/v1/item-counts', token);
-  const { data: conceptsData, loading: conceptsLoading, error: conceptsError } = useApiResource<ConceptsResponse>(
+  const { data: countsData } = useApiResource<ContentItemCountsAll>('/api/content/v1/item-counts', token);
+  const { data: conceptsData, loading: conceptsLoading, error: conceptsError } = useApiResource<ContentConceptsResponse>(
     '/api/content/v1/concepts',
     token
   );
@@ -217,8 +216,8 @@ export function Learn({ token, onQuiz }: LearnProps) {
     () => levelMastery(conceptsData?.concepts, progressData?.concepts, CEFR_LEVELS),
     [conceptsData, progressData]
   );
-  const countsByLevel = React.useMemo<Record<string, LevelCounts>>(() => {
-    const byLevel: Record<string, LevelCounts> = {};
+  const countsByLevel = React.useMemo<ContentItemCountsAll['counts']>(() => {
+    const byLevel: ContentItemCountsAll['counts'] = {};
     for (const level of CEFR_LEVELS) byLevel[level] = { total: 0, byType: {} };
     for (const [level, entry] of Object.entries(countsData?.counts || {})) {
       byLevel[level] = { total: Number(entry.total) || 0, byType: entry.byType || {} };
