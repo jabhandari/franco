@@ -59,7 +59,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          base=$(gh pr view "$PR_NUMBER" --json baseRefName --jq .baseRefName)
+          base=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json baseRefName --jq .baseRefName)
           if [ "$base" != "main" ]; then
             echo "::error::PR #$PR_NUMBER targets '$base', not 'main'. Render only creates service previews for PRs opened against the linked branch (main), so https://franco-pr-$PR_NUMBER.onrender.com will never exist. Retarget this PR to main (or land the stack below it), then remove and re-add the render-preview label to rebuild."
             exit 1
