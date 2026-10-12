@@ -892,11 +892,21 @@ function apiUrl(path: string): string {
 // close/scroll flush, preventing Home from showing the previous section.
 let bookmarkWrites: Promise<void> = Promise.resolve();
 
-export async function saveLessonBookmark(slug: string, section: LessonSection, token: string): Promise<{saved:boolean}> {
-  await bookmarkWrites;
-  const request = apiPost<{saved:boolean}>('/api/me/lesson-position',{concept_slug:slug,section},token);
+async function runBookmarkWrite(
+  previous: Promise<void>,
+  write: () => Promise<{saved:boolean}>,
+): Promise<{saved:boolean}> {
+  await previous;
+  return await write();
+}
+
+export function saveLessonBookmark(slug: string, section: LessonSection, token: string): Promise<{saved:boolean}> {
+  const request = runBookmarkWrite(
+    bookmarkWrites,
+    () => apiPost<{saved:boolean}>('/api/me/lesson-position',{concept_slug:slug,section},token),
+  );
   bookmarkWrites = request.then(() => {},() => {});
-  return await request;
+  return request;
 }
 
 export async function apiGet<T = ApiResponse>(path: string, token?: string | null, options: ApiRequestOptions = {}): Promise<T> {
