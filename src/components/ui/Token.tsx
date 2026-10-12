@@ -1,7 +1,15 @@
 import React from 'react';
 
+export type WordTokenProps = {
+  placed?: boolean;
+  disabled?: boolean;
+  onClick?: () => void;
+  children?: React.ReactNode;
+  key?: React.Key;
+};
+
 // Tappable word token: button.word-token (+ .placed when in the answer tray).
-export function WordToken({ placed = false, disabled = false, onClick, children }) {
+export function WordToken({ placed = false, disabled = false, onClick, children }: WordTokenProps) {
   return (
     <button
       type="button"
@@ -14,10 +22,20 @@ export function WordToken({ placed = false, disabled = false, onClick, children 
   );
 }
 
+export type TokenTrayVariant = 'answer' | 'bank';
+
+export type TokenTrayProps = {
+  variant?: TokenTrayVariant;
+  label?: string;
+  emptyHint?: React.ReactNode;
+  children?: React.ReactNode;
+  key?: React.Key;
+};
+
 // Token drop zone. variant picks the tray class:
 //   answer -> .word-order-answer (shows emptyHint when no children)
 //   bank   -> .word-order-bank
-export function TokenTray({ variant = 'bank', label, emptyHint, children }) {
+export function TokenTray({ variant = 'bank', label, emptyHint, children }: TokenTrayProps) {
   const hasChildren = React.Children.count(children) > 0;
   if (variant === 'answer') {
     return (

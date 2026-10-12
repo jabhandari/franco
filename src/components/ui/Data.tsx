@@ -1,10 +1,24 @@
 import React from 'react';
 import { safeText, formatEnum } from '../../presenters/format.presenter.js';
-import { Panel } from './Panel.jsx';
-import { ProgressBar } from './ProgressBar.jsx';
+import { Panel } from './Panel';
+import { ProgressBar } from './ProgressBar';
+
+// Minimal local view of the learner profile row these rows render.
+// (Full learner/profile types belong to the API-client ticket — FRA-61.)
+export type LearnerProfile = {
+  placement_status?: string | null;
+  current_level?: string | null;
+  learning_goal?: string | null;
+};
+
+export type RecordCountProps = {
+  count?: React.ReactNode;
+  label?: React.ReactNode;
+  key?: React.Key;
+};
 
 // Big-number stat tile.
-export function RecordCount({ count, label }) {
+export function RecordCount({ count, label }: RecordCountProps) {
   return (
     <div className="record-count">
       <strong>{safeText(count, '–')}</strong>
@@ -13,14 +27,24 @@ export function RecordCount({ count, label }) {
   );
 }
 
+export type StatGroupProps = {
+  children?: React.ReactNode;
+  key?: React.Key;
+};
+
 // Grid wrapper for RecordCount tiles.
-export function StatGroup({ children }) {
+export function StatGroup({ children }: StatGroupProps) {
   return <div className="session-stats">{children}</div>;
 }
 
+export type ProfileRowsProps = {
+  profile?: LearnerProfile | null;
+  key?: React.Key;
+};
+
 // Label/value rows for a learner profile.
-export function ProfileRows({ profile }) {
-  const rows = [
+export function ProfileRows({ profile }: ProfileRowsProps) {
+  const rows: Array<[string, string]> = [
     ['Placement', formatEnum(profile?.placement_status) || 'Not started'],
     ['Current level', formatEnum(profile?.current_level) || 'Not set'],
     ['Learning goal', formatEnum(profile?.learning_goal) || 'Not set'],
@@ -38,8 +62,14 @@ export function ProfileRows({ profile }) {
   );
 }
 
+export type DataContractProps = {
+  title?: React.ReactNode;
+  items: React.ReactNode[];
+  key?: React.Key;
+};
+
 // Titled panel with a plain bullet list.
-export function DataContract({ title, items }) {
+export function DataContract({ title, items }: DataContractProps) {
   return (
     <Panel>
       <h2>{title}</h2>
@@ -52,8 +82,20 @@ export function DataContract({ title, items }) {
   );
 }
 
+// Minimal local view of one CEFR x skill progress row.
+// (Canonical content-progress types belong to the API-client ticket — FRA-61.)
+export type ProgressRow = {
+  cefr_level?: string | null;
+  skill?: string | null;
+};
+
+export type ProgressRecordsProps = {
+  progress: ProgressRow[];
+  key?: React.Key;
+};
+
 // CEFR x skill progress grid of compact panels.
-export function ProgressRecords({ progress }) {
+export function ProgressRecords({ progress }: ProgressRecordsProps) {
   return (
     <div className="progress-grid">
       {progress.map((row) => (
