@@ -2012,7 +2012,9 @@ html[data-theme="light"] .loading-spinner__label { color: var(--palette-slate); 
 /* FRA-88 foundation. Both themes share geometry; only tokens change paint.
    Legacy page selectors above remain until their own redesign tickets land. */
 html[data-theme] body { background: var(--color-background); color: var(--color-text); }
-html[data-theme] .brand { color: var(--color-sidebar-text); }
+html[data-theme] .brand { color: var(--color-text); }
+.brand span:last-child { opacity: 1; pointer-events: auto; }
+html[data-theme] .sidebar .brand { color: var(--color-sidebar-text); }
 html[data-theme] .brand-mark {
   width: 32px; height: 32px; border-radius: var(--radius-control);
   background: var(--color-accent); color: var(--palette-white); box-shadow: none;

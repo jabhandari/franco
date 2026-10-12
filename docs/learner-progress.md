@@ -21,7 +21,7 @@ Empty inventories return zero counts and zero percent for all 24 skill/level
 combinations; they never show fictional progress.
 
 Concept state is `completed` at mastery >= 0.8, `in_progress` when there is
-evidence of practice, and `not_started` otherwise. Recent mistakes are the
+evidence of practice or a saved reading position, and `not_started` otherwise. Recent mistakes are the
 last 50 incorrect attempts, newest first. Attempt history is limited to 100;
 completion aggregates query the full history, so old completions persist.
 
@@ -45,8 +45,8 @@ reads remain available through the Node API.
 `GET/POST /api/me/lesson-position` stores the active concept and last visible
 section (`overview`, `theory`, `vocabulary`, `examples`) in the private
 `learner_lesson_positions` table. The modal debounces section changes and
-flushes the last change when closed; writes are serialized. Home's Continue
-action passes the saved level, slug and section to the roadmap, opens that
+flushes the last change when closed; writes are serialized. Home waits for those writes, including a save flushed during navigation.
+Its Continue action passes the saved level, slug and section to the roadmap, opens that
 lesson, and scrolls to its saved section. No browser-only bookmark is used.
 
 ```mermaid
