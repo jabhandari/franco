@@ -8,7 +8,7 @@ import {
   capitalize,
   padNumber,
   choiceLabel,
-} from './format.presenter.js';
+} from './format.presenter.ts';
 
 function assert(cond, message) {
   if (!cond) throw new Error(`FAIL: ${message}`);

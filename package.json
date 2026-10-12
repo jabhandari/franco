@@ -10,7 +10,7 @@
     "build": "vite build",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node scripts/test-content-contract.mjs && node scripts/test-learning-engine.mjs && node src/presenters/attempt.presenter.test.js && node src/presenters/levels.presenter.test.js && node src/presenters/learn.presenter.test.js && node src/presenters/format.presenter.test.js && node src/presenters/collections.presenter.test.js && node src/presenters/entry.presenter.test.js && node src/presenters/words.presenter.test.js && node src/presenters/streak.presenter.test.js && node scripts/test-streak.mjs && node scripts/test-speech.mjs && node scripts/test-user-names.mjs && node scripts/test-server-config.mjs",
+    "test": "node scripts/test-content-contract.mjs && node scripts/test-learning-engine.mjs && tsx src/presenters/attempt.presenter.test.js && tsx src/presenters/levels.presenter.test.js && tsx src/presenters/learn.presenter.test.js && tsx src/presenters/format.presenter.test.js && tsx src/presenters/collections.presenter.test.js && tsx src/presenters/entry.presenter.test.js && tsx src/presenters/words.presenter.test.js && tsx src/presenters/streak.presenter.test.js && node scripts/test-streak.mjs && node scripts/test-speech.mjs && node scripts/test-user-names.mjs && node scripts/test-server-config.mjs",
     "lint:ui": "node scripts/lint-ui-boundary.mjs",
     "import:tv5": "node scripts/import-tv5-exercises.mjs",
     "import:all": "npm run import:ud-gsd && npm run import:tv5",
@@ -18,7 +18,7 @@
     "import:ud-gsd": "node scripts/import-ud-gsd.mjs",
     "test:content-contract": "node scripts/test-content-contract.mjs",
     "test:learning-engine": "node scripts/test-learning-engine.mjs",
-    "test:streak": "node scripts/test-streak.mjs && node src/presenters/streak.presenter.test.js",
+    "test:streak": "node scripts/test-streak.mjs && tsx src/presenters/streak.presenter.test.js",
     "seed:concepts": "node --env-file=.env scripts/seed-concepts.mjs",
     "import:normalized": "node --env-file=.env scripts/import-normalized-content.mjs",
     "publish:founding": "node --env-file=.env scripts/publish-founding-content.mjs",
@@ -37,6 +37,7 @@
     "vite": "^7.1.0"
   },
   "devDependencies": {
+    "tsx": "^4.23.15",
     "typescript": "7.0.2"
   }
 }

@@ -6,7 +6,7 @@ import {
   feedbackTone,
   feedbackTitle,
   elapsedMs,
-} from './attempt.presenter.js';
+} from './attempt.presenter.ts';
 
 function assert(cond, message) {
   if (!cond) throw new Error(`FAIL: ${message}`);

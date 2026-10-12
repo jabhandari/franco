@@ -1,6 +1,6 @@
 // Unit checks for the collections presenter: shuffle and choice
 // normalization, moved verbatim from the exercise components.
-import { shuffle, normalizeChoices } from './collections.presenter.js';
+import { shuffle, normalizeChoices } from './collections.presenter.ts';
 
 function assert(cond, message) {
   if (!cond) throw new Error(`FAIL: ${message}`);
