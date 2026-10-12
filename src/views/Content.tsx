@@ -10,10 +10,10 @@ import {
   Box,
   EmptyState,
   ErrorMessage,
+  LoadingSpinner,
   Panel,
   PanelHeader,
   Tabs,
-  Text,
 } from '../components/ui';
 
 // FRA-67: local types for the GET /api/content/v1/items payload. Shaped by
