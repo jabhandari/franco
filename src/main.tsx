@@ -102,9 +102,9 @@ function App(): React.JSX.Element {
   const [loading, setLoading] = React.useState<boolean>(Boolean(authToken));
   const [error, setError] = React.useState<string>('');
   const { resolvedTheme: theme, setTheme } = useTheme();
-  function navigate(nextView: ViewId, replace = false): void {
+  function navigate(nextView: ViewId, replace = false, params?: URLSearchParams): void {
     setView(nextView);
-    window.history[replace ? 'replaceState' : 'pushState']({}, '', viewPaths[nextView] || '/');
+    window.history[replace ? 'replaceState' : 'pushState']({}, '', `${viewPaths[nextView] || '/'}${params ? `?${params}` : ''}`);
   }
 
   React.useEffect(() => {
@@ -268,7 +268,7 @@ function App(): React.JSX.Element {
         </Box>
 
         <Box className="sidebar-actions">
-          <Box as="button" type="button" aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'} className="theme-toggle" onClick={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}>
+          <Box as="button" type="button" aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'} className="theme-toggle" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
             {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
             <Text as="span">{theme === 'dark' ? 'Light mode' : 'Dark mode'}</Text>
           </Box>
@@ -284,7 +284,13 @@ function App(): React.JSX.Element {
       </Box>
 
       <Box as="main" className={`main-content ${view === 'content' ? 'wide-content' : ''}`}>
-        {view === 'home' && <Home userData={userData} streak={streak} onStart={() => navigate('session')} onPlacement={() => navigate('placement')} />}
+        {view === 'home' && <Home token={authToken} userData={userData} streak={streak}
+          onStart={() => { setSessionLevel(userData?.profile?.current_level || 'A1'); navigate('session'); }}
+          onContinue={(lesson) => navigate('content', false, new URLSearchParams({ level:lesson.level_code,concept:lesson.slug,section:lesson.section }))}
+          onLesson={(lesson) => navigate('content', false, new URLSearchParams({ level:lesson.level_code || 'A1',concept:lesson.slug }))}
+          onExplore={() => navigate('content', false, new URLSearchParams({ level:userData?.profile?.current_level || 'A1' }))}
+          onConversation={() => navigate('conversation')}
+        />}
         {view === 'learn' && <Learn token={authToken} onQuiz={(level) => { setSessionLevel(level); navigate('session'); }} />}
         {view === 'placement' && <Placement token={authToken} onPlaced={() => refreshUserData()} />}
         {view === 'session' && <Session key={sessionLevel || 'default'} token={authToken} initialLevel={sessionLevel} />}

@@ -21,7 +21,7 @@ Empty inventories return zero counts and zero percent for all 24 skill/level
 combinations; they never show fictional progress.
 
 Concept state is `completed` at mastery >= 0.8, `in_progress` when there is
-evidence of practice, and `not_started` otherwise. Recent mistakes are the
+evidence of practice or a saved reading position, and `not_started` otherwise. Recent mistakes are the
 last 50 incorrect attempts, newest first. Attempt history is limited to 100;
 completion aggregates query the full history, so old completions persist.
 
@@ -39,3 +39,21 @@ is intentional here: no direct Data API clients are supported. The audit
 after applying both migrations reports no security errors or warnings,
 only these default-deny informational notices. Public published-content
 reads remain available through the Node API.
+
+## Reading position (FRA-91)
+
+`GET/POST /api/me/lesson-position` stores the active concept and last visible
+section (`overview`, `theory`, `vocabulary`, `examples`) in the private
+`learner_lesson_positions` table. The modal debounces section changes and
+flushes the last change when closed; writes are serialized. Home waits for those writes, including a save flushed during navigation.
+Its Continue action passes the saved level, slug and section to the roadmap, opens that
+lesson, and scrolls to its saved section. No browser-only bookmark is used.
+
+```mermaid
+flowchart LR
+  Modal[Lesson reading section] -->|Bearer session| Save[POST /api/me/lesson-position]
+  Save --> Position[(Supabase: learner_lesson_positions)]
+  Position --> Load[GET /api/me/lesson-position]
+  Load --> Home[Continue row]
+  Home -->|level + slug + section| Modal
+```
