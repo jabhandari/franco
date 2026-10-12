@@ -77,6 +77,26 @@ export async function migrate() {
     SELECT user_id, (created_at AT TIME ZONE 'UTC')::date, COUNT(*)::int, MIN(created_at), MAX(created_at)
     FROM learning_attempts GROUP BY user_id, (created_at AT TIME ZONE 'UTC')::date
     ON CONFLICT(user_id, activity_date) DO NOTHING;
+-- Resume the actual last-read lesson section across browsers/devices.
+CREATE TABLE IF NOT EXISTS public.learner_lesson_positions (
+  user_id TEXT NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  concept_id TEXT NOT NULL REFERENCES public.concepts(id) ON DELETE CASCADE,
+  section TEXT NOT NULL CHECK (section IN ('overview','theory','vocabulary','examples')),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  PRIMARY KEY(user_id,concept_id)
+);
+CREATE INDEX IF NOT EXISTS learner_lesson_positions_recent_idx
+  ON public.learner_lesson_positions(user_id,updated_at DESC);
+ALTER TABLE public.learner_lesson_positions ENABLE ROW LEVEL SECURITY;
+
+    -- Match the private-data migrations on fresh or existing databases.
+    DO $$ DECLARE table_name TEXT; BEGIN
+      FOREACH table_name IN ARRAY ARRAY['users','sessions','learner_profiles','user_skill_estimates','attempts','mistakes','learning_attempts','learner_item_state','learner_concept_mastery','learner_activity_days','speech_transcriptions','content_api_keys','content_reports','content_sources','example_sentences','exercise_items','exam_questions','learning_topics','tv5_exercises','concepts','schema_migrations','cefr_levels','content_batches','content_items','content_concepts','content_revisions','content_tags','tags','media_assets','content_duplicates','content_reviews','concept_prerequisites'] LOOP
+        IF to_regclass(format('public.%I',table_name)) IS NOT NULL THEN
+          EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY',table_name);
+        END IF;
+      END LOOP;
+    END $$;
   `);
   // FRA-56: backfill first_name/last_name for rows created before the columns
   // existed. First token -> first_name, remainder -> last_name; single-token

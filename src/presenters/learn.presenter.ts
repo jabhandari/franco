@@ -1,10 +1,11 @@
 // FRA-47 presenter: Learn view helpers (CEFR level-first navigation).
 // Pure functions only — no JSX, no hooks, no side effects.
-import type { CefrLevel } from '../types';
+import type { CefrLevel, SkillId } from '../types';
 import type { LearnerConceptMastery } from '../api/client.js';
+import { LEARNING_SKILL_ITEM_TYPES } from '../../shared/learning-skills.js';
 
 /** Skill tab ids on the Learn level views. */
-export type SkillId = 'ecouter' | 'lire' | 'ecrire' | 'parler';
+export type { SkillId } from '../types';
 
 /** One skill tab: French-first label, English gloss for screen-reader/aria use. */
 export type SkillTab = {
@@ -25,10 +26,7 @@ export const SKILL_TABS: SkillTab[] = [
 // content_items.item_type -> skill tab. Types not listed here (e.g. future
 // types) don't map to a tab and are excluded from skill-filtered lists.
 export const SKILL_ITEM_TYPES: Record<SkillId, string[]> = {
-  ecouter: ['listening', 'dictation', 'pronunciation_drill'],
-  lire: ['reading', 'multiple_choice', 'grammar_focus'],
-  ecrire: ['writing_prompt', 'spelling', 'cloze', 'free_text', 'word_order'],
-  parler: ['speaking_prompt'],
+  ...LEARNING_SKILL_ITEM_TYPES,
 };
 
 // Reverse lookup: item type -> skill id, or null when the type has no tab.

@@ -6,6 +6,7 @@ import { ConceptRoadmap, LevelGuide, TopicTracks } from '../components/concepts'
 import { CEFR_LEVELS as SECTIONS } from '../presenters/levels.presenter.js';
 import { humanize } from '../presenters/format.presenter.js';
 import type { ContentItemChoice } from '../api/client.js';
+import type { LessonSection } from '../types';
 import {
   Box,
   EmptyState,
@@ -110,12 +111,18 @@ function CanonicalList({ type, section, token }: CanonicalListProps) {
 }
 
 export function Content({ token }: ContentProps) {
-  const [selectedSection, setSelectedSection] = React.useState('A1');
+  const params=new URLSearchParams(window.location.search);
+  const requestedLevel=params.get('level');
+  const [selectedSection, setSelectedSection] = React.useState(() => SECTIONS.find(level => level===requestedLevel) || 'A1');
+  const initialConcept=params.get('concept');
+  const requestedSection=params.get('section');
+  const lessonSections: LessonSection[]=['overview','theory','vocabulary','examples'];
+  const initialReadingSection=lessonSections.find(section => section===requestedSection) || 'overview';
   const [libraryTab, setLibraryTab] = React.useState('vocabulary');
 
   return (
     <Box as="section" className="map-only-page">
-      <ConceptRoadmap level={selectedSection} token={token} onSelectSection={setSelectedSection} />
+      <ConceptRoadmap level={selectedSection} token={token} onSelectSection={setSelectedSection} initialConcept={initialConcept} initialReadingSection={initialReadingSection} />
       <LevelGuide section={selectedSection} />
       <Panel>
         <PanelHeader eyebrow="Study library" title={`More ${selectedSection} content`} />

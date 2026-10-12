@@ -6,6 +6,56 @@ info:
 servers:
   - url: https://franco.example.com
 paths:
+  /api/me/lesson-position:
+    get:
+      security: [{ LearnerSession: [] }]
+      description: Latest active lesson, saved section, real roadmap position/count, and saved timestamp for the signed-in learner. Returns lesson null before any lesson is read.
+      responses:
+        '200': { description: Saved reading position }
+        '401': { description: Missing or expired learner session }
+    post:
+      security: [{ LearnerSession: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [concept_slug, section]
+              properties:
+                concept_slug: { type: string }
+                section: { type: string, enum: [overview, theory, vocabulary, examples] }
+      responses:
+        '200': { description: Reading position saved for the session learner }
+        '400': { description: Invalid section or slug }
+        '401': { description: Missing or expired learner session }
+        '404': { description: Active lesson not found }
+  /api/me:
+    get:
+      security: [{ LearnerSession: [] }]
+      description: >-
+        The signed-in learner's user/profile, active concept progress states,
+        50 most recent incorrect attempts (newest first), 100 recent attempts,
+        and all 24 skill/CEFR aggregates. exercises_done counts distinct
+        answered items, including incorrect answers; exercises_correct counts
+        distinct items with at least one correct attempt. Retries cannot
+        inflate completion. Inventory includes published current-revision
+        content and the exam archive; pending/rejected content is excluded.
+      responses:
+        '200': { description: Learner snapshot; empty inventories have zero counts and percent }
+        '401': { description: Missing or expired learner session }
+  /api/me/attempts:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: >-
+        Records and grades a learner answer. content_item uses item_id;
+        exam_question and exercise use legacy_ref. Both correct and incorrect
+        answers are stored; the response supplies correct, reveal and attempt.
+      responses:
+        '200': { description: Stored attempt and authoritative evaluation }
+        '400': { description: Missing response or invalid item reference }
+        '401': { description: Missing or expired learner session }
+        '404': { description: Item not found }
   /api/content/v1/schema:
     get:
       security: []
@@ -46,6 +96,10 @@ paths:
       responses: { '200': { description: Updated content status } }
 components:
   securitySchemes:
+    LearnerSession:
+      type: http
+      scheme: bearer
+      description: Opaque Franco session token (custom auth, not a Supabase JWT).
     ContentApiKey:
       type: apiKey
       in: header

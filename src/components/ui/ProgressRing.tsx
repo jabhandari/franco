@@ -30,6 +30,7 @@ export function ProgressRing({ percent = 0, size = 76, label }: ProgressRingProp
         />
         <circle
           className="ring-fill"
+          opacity={clamped === 0 ? 0 : 1}
           cx={center}
           cy={center}
           r={radius}

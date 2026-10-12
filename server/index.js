@@ -9,6 +9,8 @@ import { SpeechError, speechConfig, audioMime, readAudio, audioDuration, transcr
 import { getSpeakingLesson } from '../shared/speaking-lessons.js';
 import { getPort, getHost, corsOrigin } from './config.js';
 import { displayName, isNonEmptyName } from './user-names.js';
+import { getLearnerProgress } from './learner-progress.js';
+import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
 
 const PORT = getPort(); const HOST = getHost(); const hashToken = (v) => createHash('sha256').update(v).digest('hex');
 const json = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-headers': 'content-type, authorization', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-expose-headers': 'retry-after', ...headers }); res.end(JSON.stringify(body)); };
@@ -50,7 +52,7 @@ function normalizeChoices(raw) {
 // ---- Adaptive session plan ------------------------------------------------
 // Queue order: due SM-2 reviews -> new items at the learner's level ->
 // weak-concept items -> exam practice -> extra legacy drills.
-const USABLE_STATUSES = `('published','approved','pending_review')`;
+const USABLE_STATUSES = `('published')`;
 // Learner reports needed from distinct users before an item is auto-demoted
 // back to pending_review for human re-review.
 const REPORT_THRESHOLD = 3;
@@ -201,7 +203,7 @@ async function buildSessionPlan(userId, level) {
 
   return {
     section: level,
-    reviewsDue: reviewRows.length,
+    reviewsDue: Number((await query(`SELECT COUNT(*)::int AS count FROM learner_item_state s JOIN content_items i ON i.id=s.item_id WHERE s.user_id=? AND s.due_at<=NOW() AND i.status='published'`,[userId]))[0].count),
     queue,
     estimatedMinutes: Math.max(2, Math.round(queue.length * 1.2)),
     message: 'Adaptive queue: due reviews, then new items at your level, then weak concepts, exam practice, and drills.',
@@ -349,10 +351,18 @@ async function main() {
                 return json(res, 200, { counts });
             }
             if (req.method === 'GET' && u.pathname === '/api/content/v1/concepts') {
-                const concepts = await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status,metadata_json FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST, list_order NULLS LAST, title");
+                const concepts = await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status,metadata_json,list_order FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST, list_order NULLS LAST, title");
                 const prereqs = await query('SELECT concept_id,prerequisite_concept_id FROM concept_prerequisites');
                 const slugById = new Map(concepts.map((c) => [c.id, c.slug]));
-                return json(res, 200, { concepts: concepts.map((c) => ({ id: c.id, slug: c.slug, title: c.title, description: c.description, concept_type: c.concept_type, level_code: c.level_code, parent_id: c.parent_id, status: c.status, metadata: c.metadata_json || {}, prerequisites: prereqs.filter((p) => p.concept_id === c.id).map((p) => slugById.get(p.prerequisite_concept_id)).filter(Boolean) })) });
+                return json(res, 200, { concepts: concepts.map((c) => ({ id: c.id, slug: c.slug, title: c.title, description: c.description, concept_type: c.concept_type, level_code: c.level_code, parent_id: c.parent_id, status: c.status, list_order:c.list_order, metadata: c.metadata_json || {}, prerequisites: prereqs.filter((p) => p.concept_id === c.id).map((p) => slugById.get(p.prerequisite_concept_id)).filter(Boolean) })) });
+            }
+            if (u.pathname === '/api/me/lesson-position' && ['GET','POST'].includes(req.method)) {
+              const x=await user(req);
+              if (!x) return json(res,401,{error:'Authentication required.'});
+              if (req.method==='GET') return json(res,200,await getLessonPosition(query,x.id));
+              const b=await body(req);
+              const result=await saveLessonPosition(query,x.id,b?.concept_slug,b?.section);
+              return json(res,result.status,result.error ? {error:result.error} : {saved:true});
             }
             if (req.method === 'GET' && u.pathname === '/api/me/progress') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { items: await query('SELECT * FROM learner_item_state WHERE user_id=? ORDER BY due_at', [x.id]), concepts: await query('SELECT * FROM learner_concept_mastery WHERE user_id=? ORDER BY mastery', [x.id]), attempts: await query('SELECT * FROM learning_attempts WHERE user_id=? ORDER BY created_at DESC LIMIT 100', [x.id]) }); }
             if (req.method === 'GET' && u.pathname === '/api/me/streak') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const timeZone = normalizeTimeZone(u.searchParams.get('tz')); const today = localDateString(new Date(), timeZone); const rows = await query('SELECT activity_date, attempts_count FROM learner_activity_days WHERE user_id=? ORDER BY activity_date', [x.id]); const summary = summarizeActivity(rows, today); const windowStart = shiftDate(today, -370); return json(res, 200, { currentStreak: summary.currentStreak, longestStreak: summary.longestStreak, studiedToday: summary.studiedToday, activeDays: summary.activeDays, totalAttempts: summary.totalAttempts, today, days: summary.days.filter((day) => day.date >= windowStart) }); }
@@ -363,7 +373,7 @@ async function main() {
               let target = null; let legacyRow = null;
               if (itemKind === 'content_item') {
                 if (!b.item_id) return json(res, 400, { error: 'item_id is required for content items.' });
-                target = (await query("SELECT i.*,r.revision,r.response_json,r.evaluation_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE i.id=? AND i.status<>'rejected'", [b.item_id]))[0];
+                target = (await query("SELECT i.*,r.revision,r.response_json,r.evaluation_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE i.id=? AND i.status='published'", [b.item_id]))[0];
                 if (!target) return json(res, 404, { error: 'Content item not found.' });
               } else if (itemKind === 'exam_question' || itemKind === 'exercise') {
                 if (!b.legacy_ref) return json(res, 400, { error: 'legacy_ref is required for legacy items.' });
@@ -445,7 +455,15 @@ async function main() {
             if (req.method === 'GET' && u.pathname === '/api/content/tv5-exercises') return json(res, 200, { section: u.searchParams.get('section') || 'all', exercises: await query('SELECT * FROM tv5_exercises WHERE ($1 IS NULL OR cefr_section=$1) ORDER BY cefr_section,title', [u.searchParams.get('section')?.toUpperCase() || null]) });
             if (req.method === 'GET' && u.pathname === '/api/exam/questions') return json(res, 200, { section: u.searchParams.get('section') || 'A1', questions: await query('SELECT *,choices_json AS choices FROM exam_questions WHERE cefr_section=? ORDER BY external_id', [u.searchParams.get('section')?.toUpperCase() || 'A1']), sources: [] });
             if (req.method === 'GET' && u.pathname === '/api/exam/past-questions') return json(res, 200, { questions: await query('SELECT *,choices_json AS choices FROM exam_questions ORDER BY cefr_section,external_id'), sources: [] });
-            if (req.method === 'GET' && u.pathname === '/api/me') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { user: userPayload(x), profile: (await query('SELECT * FROM learner_profiles WHERE user_id=?', [x.id]))[0] || null, progress: [], mistakes: [], attempts: [] }); }
+            if (req.method === 'GET' && u.pathname === '/api/me') {
+              const x = await user(req);
+              if (!x) return json(res, 401, { error: 'Authentication required.' });
+              const [profiles,progress] = await Promise.all([
+                query('SELECT * FROM learner_profiles WHERE user_id=?',[x.id]),
+                getLearnerProgress(query,x.id),
+              ]);
+              return json(res, 200, { user:userPayload(x),profile:profiles[0] || null,...progress });
+            }
             if (req.method === 'GET' && u.pathname === '/api/me/conversation-targets') {
               const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' });
               const profile = (await query('SELECT current_level FROM learner_profiles WHERE user_id=?', [x.id]))[0];

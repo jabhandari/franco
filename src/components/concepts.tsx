@@ -1,6 +1,9 @@
 import React from 'react';
 import { Database, Search, X } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
+import { saveLessonBookmark } from '../api/client.js';
+import type { LessonSection } from '../types';
+import { Modal } from './ui';
 import { safeText, padNumber } from '../presenters/format.presenter.js';
 import { CEFR_LEVELS, formatLevelWithClb } from '../presenters/levels.presenter.js';
 import { describeWord } from '../presenters/words.presenter.js';
@@ -33,12 +36,6 @@ type LoadingSpinnerProps = {
   size?: UIRaw.LoadingSpinnerSize;
   label?: string;
   centered?: boolean;
-};
-
-type ModalProps = {
-  closeLabel?: string;
-  onClose?: () => void;
-  children?: React.ReactNode;
 };
 
 type PanelProps = {
@@ -81,7 +78,6 @@ const Box = UIRaw.Box as React.ComponentType<BoxProps>;
 const EmptyState = UIRaw.EmptyState as React.ComponentType<EmptyStateProps>;
 const ErrorMessage = UIRaw.ErrorMessage as React.ComponentType<ErrorMessageProps>;
 const LoadingSpinner = UIRaw.LoadingSpinner as React.ComponentType<LoadingSpinnerProps>;
-const Modal = UIRaw.Modal as React.ComponentType<ModalProps>;
 const Panel = UIRaw.Panel as React.ComponentType<PanelProps>;
 const Tabs = UIRaw.Tabs as React.ComponentType<TabsProps>;
 const Text = UIRaw.Text as React.ComponentType<TextProps>;
@@ -309,9 +305,11 @@ type ConceptMapProps = {
   activeConceptId: string | null;
   onSelectConcept: (id: string | null) => void;
   onSelectSection: (section: string) => void;
+  resumeSection?: LessonSection;
+  onReadingSectionChange?: (section: LessonSection) => void;
 };
 
-export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectConcept, onSelectSection }: ConceptMapProps) {
+export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectConcept, onSelectSection, resumeSection, onReadingSectionChange }: ConceptMapProps) {
   const active = nodes.find((node) => node.id === activeConceptId);
   const dialogRef = React.useRef<HTMLDivElement>(null);
   useBackgroundClose(active, dialogRef, onSelectConcept);
@@ -344,7 +342,7 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
         ))}
       </Box>
       {active && (
-        <Modal ref={dialogRef} closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
+        <Modal key={active.id} ref={dialogRef} resumeSection={resumeSection} onReadingSectionChange={onReadingSectionChange} closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
           <ConceptDetail concept={active} />
         </Modal>
       )}
@@ -354,7 +352,7 @@ export function ConceptMap({ section, nodes, edges, activeConceptId, onSelectCon
 
 type RoadmapTableProps = Omit<ConceptMapProps, 'edges'>;
 
-export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId, onSelectConcept }: RoadmapTableProps) {
+export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId, onSelectConcept, resumeSection, onReadingSectionChange }: RoadmapTableProps) {
   const active = nodes.find((node) => node.id === activeConceptId);
   const dialogRef = React.useRef<HTMLDivElement>(null);
   useBackgroundClose(active, dialogRef, onSelectConcept);
@@ -384,7 +382,7 @@ export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId,
         ))}
       </Box>
       {active && (
-        <Modal ref={dialogRef} closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
+        <Modal key={active.id} ref={dialogRef} resumeSection={resumeSection} onReadingSectionChange={onReadingSectionChange} closeLabel="Close lesson" onClose={() => onSelectConcept(null)}>
           <ConceptDetail concept={active} />
         </Modal>
       )}
@@ -396,13 +394,13 @@ export function ConceptDetail({ concept }: { concept: ConceptNode | null | undef
   if (!concept) return null;
   return (
     <Box as="article" className="concept-detail">
-      <Box>
+      <Box id="lesson-overview">
         <Text as="span" variant="eyebrow">{concept.category} · {concept.level}</Text>
         <Text as="h2">{safeText(concept.title)}</Text>
         <Text className="concept-subtitle">{concept.shortDescription}</Text>
         {concept.stub && <Text variant="muted" size="sm">Full lesson content for this concept is still being authored.</Text>}
       </Box>
-      <Box className="theory-blocks">
+      <Box id="lesson-theory" className="theory-blocks">
         {concept.theory.map((block, index) => block[0] === 'table' ? (
           <Box className="theory-table" key={index}>
             {block.slice(1).map((cell, cellIndex) => <Text as="span" key={cellIndex}>{safeText(cell)}</Text>)}
@@ -415,13 +413,13 @@ export function ConceptDetail({ concept }: { concept: ConceptNode | null | undef
         ))}
       </Box>
       {concept.vocabulary.length > 0 && (
-        <Box className="related-vocab">
+        <Box id="lesson-vocabulary" className="related-vocab">
           <Text as="strong">Vocabulary</Text>
           <Box>{concept.vocabulary.map((word, index) => <Text as="span" key={index}>{safeText(word)}</Text>)}</Box>
         </Box>
       )}
       {concept.examples.length > 0 && (
-        <Box className="related-examples">
+        <Box id="lesson-examples" className="related-examples">
           <Text as="strong">Examples</Text>
           {concept.examples.map(([french, english], index) => (
             <Text key={index}><Text as="strong">{safeText(french)}</Text>{safeText(english) ? <Text as="span"> — {safeText(english)}</Text> : null}</Text>
@@ -439,12 +437,30 @@ export function ConceptDetail({ concept }: { concept: ConceptNode | null | undef
 
 // Fetches canonical concepts once and renders the roadmap for a level,
 // with the original roadmap/table view toggle.
-export function ConceptRoadmap({ level, token, onSelectSection }: { level: string; token?: string | null; onSelectSection: (section: string) => void }) {
+export function ConceptRoadmap({ level, token, onSelectSection, initialConcept, initialReadingSection='overview' }: { level: string; token?: string | null; onSelectSection: (section: string) => void; initialConcept?: string | null; initialReadingSection?: LessonSection }) {
   const { data, loading, error } = useApiResource<{ concepts: ApiConcept[] }>('/api/content/v1/concepts', token);
   const [activeConceptId, setActiveConceptId] = React.useState<string | null>(null);
   const [layoutMode, setLayoutMode] = React.useState<string>('roadmap');
-  React.useEffect(() => setActiveConceptId(null), [level]);
+  const [resumeError,setResumeError]=React.useState('');
+  const lastSaved=React.useRef('');
+  const readingSections=React.useRef<Record<string,LessonSection>>({});
+  const previousLevel=React.useRef(level);
+  React.useEffect(() => setActiveConceptId(initialConcept || null), [initialConcept]);
+  React.useEffect(() => {
+    if (previousLevel.current!==level) { previousLevel.current=level; setActiveConceptId(null); }
+  }, [level]);
+  function recordSection(section: LessonSection) {
+    if (!token || !activeConceptId) return;
+    const key=`${activeConceptId}:${section}`;
+    readingSections.current[activeConceptId]=section;
+    if (lastSaved.current===key) return;
+    lastSaved.current=key;
+    saveLessonBookmark(activeConceptId,section,token)
+      .then(() => setResumeError(''))
+      .catch(() => { lastSaved.current=''; setResumeError('Your reading position could not be saved.'); });
+  }
   const concepts: ApiConcept[] = data?.concepts || [];
+  const resumeSection=activeConceptId ? readingSections.current[activeConceptId] || (activeConceptId===initialConcept ? initialReadingSection : 'overview') : 'overview';
   const { nodes, edges } = React.useMemo(() => levelNodes(concepts, level), [concepts, level]);
 
   if (loading) return <LoadingSpinner label="Loading curriculum — pulling up the lesson roadmap." />;
@@ -458,6 +474,7 @@ export function ConceptRoadmap({ level, token, onSelectSection }: { level: strin
           {layoutMode === 'roadmap' ? 'Show table' : 'Show roadmap'}
         </Box>
       </Box>
+      {resumeError && <ErrorMessage message={resumeError} />}
       {layoutMode === 'roadmap' ? (
         <ConceptMap
           section={level}
@@ -466,12 +483,16 @@ export function ConceptRoadmap({ level, token, onSelectSection }: { level: strin
           activeConceptId={activeConceptId}
           onSelectConcept={setActiveConceptId}
           onSelectSection={onSelectSection}
+          resumeSection={resumeSection}
+          onReadingSectionChange={recordSection}
         />
       ) : (
         <RoadmapTable
           section={level}
           nodes={nodes}
           onSelectSection={onSelectSection}
+          resumeSection={resumeSection}
+          onReadingSectionChange={recordSection}
           activeConceptId={activeConceptId}
           onSelectConcept={setActiveConceptId}
         />
