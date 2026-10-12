@@ -23,12 +23,18 @@ import type { UserPayload, ContentItemStatus, EvaluationMode, ContentItemType, C
 // JSON wire types
 // ---------------------------------------------------------------------------
 
-/** Any JSON-serializable value: the wire type for request bodies and
- *  free-form metadata blobs. Recursive, never unknown. */
+/** Any JSON-serializable value: the wire type for the generic apiPost request
+ *  body. Recursive, never unknown. Endpoint-specific request shapes (e.g.
+ *  AttemptRequest) are defined per API below — this is only the transport. */
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
 
-/** A JSON object (as opposed to any JSON value). */
+/** A JSON object (as opposed to any JSON value). Used only for the generic
+ *  transport (apiPost body) and error-payload narrowing — never for domain
+ *  fields, which define their own specific types. */
 export type JsonObject = { [key: string]: JsonValue };
+
+/** Free-form metadata blob on content items/revisions (flat scalar map). */
+export type ContentMetadata = Record<string, string | number | boolean | null>;
 
 /** One validation failure from validateBatch() (server/content-contract.js):
  *  `issue(path, message)` returns exactly `{ path, message }`. */
@@ -405,7 +411,7 @@ export type ContentItemDetail = ContentItemRow & {
   context: string | null;
   response_json: ContentResponseJson;
   evaluation_json: ContentEvaluationJson;
-  metadata_json: JsonObject;
+  metadata_json: ContentMetadata;
 };
 
 export type ReviewActionRequest = {
@@ -482,7 +488,7 @@ export type BatchIngestItem = {
   concepts?: string[];
   tags?: string[];
   media?: BatchIngestMedia[];
-  metadata?: JsonObject;
+  metadata?: ContentMetadata;
 };
 
 /** POST /api/content/v1/batches request body (validated against
