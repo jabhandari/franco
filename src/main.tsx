@@ -268,7 +268,7 @@ function App(): React.JSX.Element {
         </Box>
 
         <Box className="sidebar-actions">
-          <Box as="button" type="button" aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'} className="theme-toggle" onClick={() => setTheme((value) => value === 'dark' ? 'light' : 'dark')}>
+          <Box as="button" type="button" aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'} className="theme-toggle" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
             {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
             <Text as="span">{theme === 'dark' ? 'Light mode' : 'Dark mode'}</Text>
           </Box>

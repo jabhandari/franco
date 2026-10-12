@@ -17,7 +17,7 @@ export { sanitizeEntry } from '../presenters/entry.presenter.js';
 // this import is the only intentional runtime change in this file.
 import { safeText } from '../presenters/format.presenter.js';
 import { browserTimeZone } from '../presenters/streak.presenter.js';
-import type { LessonPosition } from '../types';
+import type { LessonPosition, LessonSection } from '../types';
 import type { UserPayload, ContentItemStatus, EvaluationMode, ContentItemType, CefrMeta, ConceptProgress, SkillProgress } from '../types';
 
 // ---------------------------------------------------------------------------
@@ -807,6 +807,7 @@ export type ApiResponse =
   | HealthResponse
   | AuthResponse
   | MeResponse
+  | LessonPositionResponse
   | UpdateProfileResponse
   | PlacementResponse
   | StreakResponse
@@ -887,7 +888,18 @@ function apiUrl(path: string): string {
 
 // (moved to src/presenters/format.presenter.js — re-exported at the top of this file)
 
+// Bookmarks share a write queue across roadmap mounts. Reads wait for the
+// close/scroll flush, preventing Home from showing the previous section.
+let bookmarkWrites: Promise<void> = Promise.resolve();
+
+export function saveLessonBookmark(slug: string, section: LessonSection, token: string): Promise<{saved:boolean}> {
+  const request = bookmarkWrites.then(() => apiPost<{saved:boolean}>('/api/me/lesson-position',{concept_slug:slug,section},token));
+  bookmarkWrites = request.then(() => {},() => {});
+  return request;
+}
+
 export async function apiGet<T = ApiResponse>(path: string, token?: string | null, options: ApiRequestOptions = {}): Promise<T> {
+  if (path === '/api/me/lesson-position') await bookmarkWrites;
   const headers: Record<string, string> = {};
   if (token) headers.authorization = `Bearer ${token}`;
   if (options.apiKey) headers['x-api-key'] = options.apiKey;

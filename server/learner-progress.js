@@ -40,10 +40,11 @@ export const CONCEPT_PROGRESS_SQL = `
          COALESCE(m.mastery,0) AS mastery,COALESCE(m.total_attempts,0) AS total_attempts,
          m.last_practiced_at,
          CASE WHEN m.mastery>=0.8 THEN 'completed'
-              WHEN COALESCE(m.total_attempts,0)>0 OR COALESCE(m.evidence_count,0)>0 THEN 'in_progress'
+              WHEN COALESCE(m.total_attempts,0)>0 OR COALESCE(m.evidence_count,0)>0 OR p.concept_id IS NOT NULL THEN 'in_progress'
               ELSE 'not_started' END AS state
   FROM concepts c
   LEFT JOIN learner_concept_mastery m ON m.concept_id=c.id AND m.user_id=$1
+  LEFT JOIN learner_lesson_positions p ON p.concept_id=c.id AND p.user_id=$1
   WHERE c.status='active'
   ORDER BY c.level_code NULLS LAST,c.list_order NULLS LAST,c.title,c.id`;
 

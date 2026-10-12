@@ -1,7 +1,7 @@
 import React from 'react';
 import { Database, Search, X } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import { apiPost } from '../api/client.js';
+import { saveLessonBookmark } from '../api/client.js';
 import type { LessonSection } from '../types';
 import { Modal } from './ui';
 import { safeText, padNumber } from '../presenters/format.presenter.js';
@@ -443,7 +443,6 @@ export function ConceptRoadmap({ level, token, onSelectSection, initialConcept, 
   const [layoutMode, setLayoutMode] = React.useState<string>('roadmap');
   const [resumeError,setResumeError]=React.useState('');
   const lastSaved=React.useRef('');
-  const saveQueue=React.useRef<Promise<void>>(Promise.resolve());
   const readingSections=React.useRef<Record<string,LessonSection>>({});
   const previousLevel=React.useRef(level);
   React.useEffect(() => setActiveConceptId(initialConcept || null), [initialConcept]);
@@ -456,7 +455,7 @@ export function ConceptRoadmap({ level, token, onSelectSection, initialConcept, 
     readingSections.current[activeConceptId]=section;
     if (lastSaved.current===key) return;
     lastSaved.current=key;
-    saveQueue.current=saveQueue.current.then(() => apiPost<{saved:boolean}>('/api/me/lesson-position',{concept_slug:activeConceptId,section},token))
+    saveLessonBookmark(activeConceptId,section,token)
       .then(() => setResumeError(''))
       .catch(() => { lastSaved.current=''; setResumeError('Your reading position could not be saved.'); });
   }

@@ -45,10 +45,11 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(function Modal
     const scroll=scrollRef.current;
     if (!scroll || !callback.current) return;
     const sections: LessonSection[]=['overview','theory','vocabulary','examples'];
+    const atBottom=scroll.scrollHeight>scroll.clientHeight && scroll.scrollTop+scroll.clientHeight>=scroll.scrollHeight-8;
     let selected: LessonSection='overview';
     for (const section of sections) {
       const target=scroll.querySelector<HTMLElement>(`#lesson-${section}`);
-      if (target && target.getBoundingClientRect().top<=scroll.getBoundingClientRect().top+100) selected=section;
+      if (target && (atBottom || target.getBoundingClientRect().top<=scroll.getBoundingClientRect().top+100)) selected=section;
     }
     if (selected===lastSection.current) return;
     lastSection.current=selected;
