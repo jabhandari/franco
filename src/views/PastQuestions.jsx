@@ -11,6 +11,7 @@ import {
   EmptyState,
   ExerciseShell,
   Feedback,
+  LoadingSpinner,
   OptionList,
   Page,
   PageHeader,
@@ -131,7 +132,7 @@ export function PastQuestions({ token }) {
         strongLabels={false}
         ariaLabel="Choose a skill"
       />
-      {loading && <EmptyState icon={Database} title="Loading past questions" text="Fetching the exam archive." />}
+      {loading && <LoadingSpinner label="Loading past questions — fetching the exam archive." />}
       {error && <EmptyState icon={Database} title="Couldn't load past questions" text={error} />}
       {!loading && !error && (
         <ExamQuestionList data={{ questions: filtered, section: `${formatLevelWithClb(section)} · ${skillLabel}` }} />

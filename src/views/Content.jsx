@@ -5,7 +5,7 @@ import { ExerciseCard } from '../components/exercises/ExerciseCard';
 import { ConceptRoadmap, LevelGuide, TopicTracks } from '../components/concepts';
 import { CEFR_LEVELS as SECTIONS } from '../presenters/levels.presenter.js';
 import { humanize } from '../presenters/format.presenter.js';
-import { Box, EmptyState, ErrorMessage, Panel, PanelHeader, Tabs, Text } from '../components/ui';
+import { Box, EmptyState, ErrorMessage, LoadingSpinner, Panel, PanelHeader, Tabs } from '../components/ui';
 
 const LIBRARY_TABS = [
   { id: 'writing', label: 'Writing', icon: PenLine },
@@ -20,7 +20,7 @@ function CanonicalList({ type, section, token }) {
   );
   const items = data?.items || [];
 
-  if (loading) return <Text variant="muted">Loading {humanize(type)}…</Text>;
+  if (loading) return <LoadingSpinner label={`Loading ${humanize(type)}…`} />;
   if (error) return <ErrorMessage message={error} />;
   if (!items.length) {
     return (

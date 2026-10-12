@@ -6,6 +6,7 @@ import {
   Checklist,
   Chip,
   EmptyState,
+  LoadingSpinner,
   Page,
   PageHeader,
   Panel,
@@ -46,7 +47,7 @@ export function Conversation({ token }) {
           </>
         }
       />
-      {loading && <EmptyState icon={Database} title="Préparation de votre scénario…" text="Loading your speaking scenario…" />}
+      {loading && <LoadingSpinner label="Préparation de votre scénario — loading your speaking scenario…" />}
       {error && <EmptyState icon={Database} title="Pratique indisponible" text={error} />}
       {data && (
         <>

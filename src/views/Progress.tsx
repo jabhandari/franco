@@ -15,7 +15,9 @@ import {
   StatGroup as StatGroupJsx,
   StreakPanel as StreakPanelJsx,
   Text as TextJsx,
+  LoadingSpinner as LoadingSpinnerJsx,
 } from '../components/ui';
+import type { LoadingSpinnerSize } from '../components/ui';
 
 // FRA-66 interim bridge: src/components/ui/ is still .jsx (typed by FRA-63),
 // so these imports carry no prop types. Each is pinned to the minimal prop
@@ -37,6 +39,11 @@ type EmptyStateProps = {
 };
 type ErrorMessageProps = {
   message?: string;
+};
+type LoadingSpinnerProps = {
+  size?: LoadingSpinnerSize;
+  label?: string;
+  centered?: boolean;
 };
 type PageProps = {
   children?: React.ReactNode;
@@ -79,6 +86,7 @@ type TextProps = {
 const Box: React.ComponentType<BoxProps> = BoxJsx;
 const EmptyState: React.ComponentType<EmptyStateProps> = EmptyStateJsx;
 const ErrorMessage: React.ComponentType<ErrorMessageProps> = ErrorMessageJsx;
+const LoadingSpinner: React.ComponentType<LoadingSpinnerProps> = LoadingSpinnerJsx;
 const Page: React.ComponentType<PageProps> = PageJsx;
 const PageHeader: React.ComponentType<PageHeaderProps> = PageHeaderJsx;
 const Panel: React.ComponentType<PanelProps> = PanelJsx;
@@ -267,7 +275,7 @@ export function Progress({ token }: ProgressProps) {
         lede="Your review queue and concept mastery update every time you answer an exercise."
       />
 
-      {loading && <ProgressBar label="Loading progress" skeleton />}
+      {loading && <LoadingSpinner label="Loading progress" />}
       {error && <ErrorMessage message={error} />}
 
       {!loading && !error && (

@@ -1828,3 +1828,35 @@ html:not([data-theme="light"]) .heat-cell.today {
 html:not([data-theme="light"]) .heat-cell.future {
   background: transparent;
 }
+
+/* ---- Loading spinner (FRA-59) ---- */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1rem;
+  color: #5eead4;
+}
+.loading-spinner--centered {
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  min-height: 172px;
+}
+.loading-spinner__icon {
+  animation: franco-spin 1s linear infinite;
+  flex: none;
+}
+.loading-spinner__label {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #91a3bb;
+}
+@keyframes franco-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner__icon { animation: none; }
+}
+html[data-theme="light"] .loading-spinner { color: #0f766e; }
+html[data-theme="light"] .loading-spinner__label { color: #566069; }
