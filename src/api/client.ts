@@ -17,7 +17,7 @@ export { sanitizeEntry } from '../presenters/entry.presenter.js';
 // this import is the only intentional runtime change in this file.
 import { safeText } from '../presenters/format.presenter.js';
 import { browserTimeZone } from '../presenters/streak.presenter.js';
-import type { UserPayload, ContentItemStatus, EvaluationMode, ContentItemType, CefrMeta } from '../types';
+import type { UserPayload, ContentItemStatus, EvaluationMode, ContentItemType, CefrMeta, ConceptProgress, SkillProgress } from '../types';
 
 // ---------------------------------------------------------------------------
 // JSON wire types
@@ -111,10 +111,13 @@ export type AuthResponse = {
 export type MeResponse = {
   user: UserPayload;
   profile: LearnerProfile | null;
-  progress: never[];
-  mistakes: never[];
-  attempts: never[];
+  progress: ConceptProgress[];
+  mistakes: RecentMistake[];
+  attempts: LearningAttempt[];
+  skill_progress: SkillProgress[];
 };
+
+export type RecentMistake = LearningAttempt & { prompt: string | null; level: string | null };
 
 export type UpdateProfileRequest = {
   first_name: string;

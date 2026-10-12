@@ -9,6 +9,7 @@
 - Keep API response shapes separate from this file: API fields can be computed or renamed and do not necessarily match stored columns.
 - `server/database.js` connects the API to Supabase PostgreSQL. Its `migrate()` function currently creates only a subset of these tables; the live Supabase schema represented here is broader.
 - `scripts/migrate-sqlite-to-supabase.mjs` is a legacy data-transfer utility, not the authoritative model or schema migration mechanism.
+- The `private_learner_data` and `private_content_data` migrations enable default-deny RLS on the API-owned tables. Franco uses custom sessions and scoped content keys through the Node API; no direct Supabase Data API policies are intended. The API/import database role must own the tables or bypass RLS (`postgres` is the configured role).
 
 ## Relationship overview
 

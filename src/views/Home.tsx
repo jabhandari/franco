@@ -1,7 +1,8 @@
 import React from 'react';
 import { ChevronRight, Plus, TrendingUp, ClipboardCheck, Database } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
-import type { UserPayload } from '../types.js';
+import type { UserPayload, ConceptProgress } from '../types.js';
+import type { RecentMistake } from '../api/client.js';
 import { Banner as BannerJsx, Box as BoxJsx, Button as ButtonJsx, EmptyState as EmptyStateJsx, Panel as PanelJsx, PanelHeader as PanelHeaderJsx, ProfileRows as ProfileRowsJsx, RecordCount as RecordCountJsx, StreakHero as StreakHeroJsx, Text as TextJsx } from '../components/ui';
 
 // FRA-66 interim bridge: src/components/ui/ is still .jsx (typed by FRA-63),
@@ -89,14 +90,13 @@ type LearnerProfile = {
 };
 
 /**
- * GET /api/me (and auth) aggregate. progress/mistakes are always empty
- * arrays in the server response today — `never[]` says exactly that.
+ * GET /api/me learner aggregate; auth responses carry empty initial arrays.
  */
 type HomeUserData = {
   user?: UserPayload | null;
   profile?: LearnerProfile | null;
-  progress?: never[];
-  mistakes?: never[];
+  progress?: ConceptProgress[];
+  mistakes?: RecentMistake[];
 };
 
 /** One day in the streak activity window (server/streak.js summarizeActivity). */
@@ -149,7 +149,7 @@ type HomeProps = {
 
 export function Home({ userData, streak, onStart, onPlacement }: HomeProps) {
   const profile = userData?.profile;
-  const progressCount = userData?.progress?.length || 0;
+  const progressCount = userData?.progress?.filter(concept => concept.state !== 'not_started').length || 0;
   const mistakeCount = userData?.mistakes?.length || 0;
   const { data: contentData } = useApiResource('/api/content/sections');
   // useApiResource is still untyped .js (typed by FRA-65); the response
@@ -191,7 +191,7 @@ export function Home({ userData, streak, onStart, onPlacement }: HomeProps) {
         <Panel compact>
           <PanelHeader eyebrow="Your learning" title="Level strength" aside={<Database size={20} aria-hidden="true" />} />
           {progressCount ? (
-            <RecordCount count={progressCount} label="progress rows loaded" />
+            <RecordCount count={progressCount} label="concepts practiced" />
           ) : (
             <EmptyState
               icon={TrendingUp}

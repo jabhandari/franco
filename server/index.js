@@ -9,6 +9,7 @@ import { SpeechError, speechConfig, audioMime, readAudio, audioDuration, transcr
 import { getSpeakingLesson } from '../shared/speaking-lessons.js';
 import { getPort, getHost, corsOrigin } from './config.js';
 import { displayName, isNonEmptyName } from './user-names.js';
+import { getLearnerProgress } from './learner-progress.js';
 
 const PORT = getPort(); const HOST = getHost(); const hashToken = (v) => createHash('sha256').update(v).digest('hex');
 const json = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-headers': 'content-type, authorization', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-expose-headers': 'retry-after', ...headers }); res.end(JSON.stringify(body)); };
@@ -50,7 +51,7 @@ function normalizeChoices(raw) {
 // ---- Adaptive session plan ------------------------------------------------
 // Queue order: due SM-2 reviews -> new items at the learner's level ->
 // weak-concept items -> exam practice -> extra legacy drills.
-const USABLE_STATUSES = `('published','approved','pending_review')`;
+const USABLE_STATUSES = `('published')`;
 // Learner reports needed from distinct users before an item is auto-demoted
 // back to pending_review for human re-review.
 const REPORT_THRESHOLD = 3;
@@ -363,7 +364,7 @@ async function main() {
               let target = null; let legacyRow = null;
               if (itemKind === 'content_item') {
                 if (!b.item_id) return json(res, 400, { error: 'item_id is required for content items.' });
-                target = (await query("SELECT i.*,r.revision,r.response_json,r.evaluation_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE i.id=? AND i.status<>'rejected'", [b.item_id]))[0];
+                target = (await query("SELECT i.*,r.revision,r.response_json,r.evaluation_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE i.id=? AND i.status='published'", [b.item_id]))[0];
                 if (!target) return json(res, 404, { error: 'Content item not found.' });
               } else if (itemKind === 'exam_question' || itemKind === 'exercise') {
                 if (!b.legacy_ref) return json(res, 400, { error: 'legacy_ref is required for legacy items.' });
@@ -445,7 +446,15 @@ async function main() {
             if (req.method === 'GET' && u.pathname === '/api/content/tv5-exercises') return json(res, 200, { section: u.searchParams.get('section') || 'all', exercises: await query('SELECT * FROM tv5_exercises WHERE ($1 IS NULL OR cefr_section=$1) ORDER BY cefr_section,title', [u.searchParams.get('section')?.toUpperCase() || null]) });
             if (req.method === 'GET' && u.pathname === '/api/exam/questions') return json(res, 200, { section: u.searchParams.get('section') || 'A1', questions: await query('SELECT *,choices_json AS choices FROM exam_questions WHERE cefr_section=? ORDER BY external_id', [u.searchParams.get('section')?.toUpperCase() || 'A1']), sources: [] });
             if (req.method === 'GET' && u.pathname === '/api/exam/past-questions') return json(res, 200, { questions: await query('SELECT *,choices_json AS choices FROM exam_questions ORDER BY cefr_section,external_id'), sources: [] });
-            if (req.method === 'GET' && u.pathname === '/api/me') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { user: userPayload(x), profile: (await query('SELECT * FROM learner_profiles WHERE user_id=?', [x.id]))[0] || null, progress: [], mistakes: [], attempts: [] }); }
+            if (req.method === 'GET' && u.pathname === '/api/me') {
+              const x = await user(req);
+              if (!x) return json(res, 401, { error: 'Authentication required.' });
+              const [profiles,progress] = await Promise.all([
+                query('SELECT * FROM learner_profiles WHERE user_id=?',[x.id]),
+                getLearnerProgress(query,x.id),
+              ]);
+              return json(res, 200, { user:userPayload(x),profile:profiles[0] || null,...progress });
+            }
             if (req.method === 'GET' && u.pathname === '/api/me/conversation-targets') {
               const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' });
               const profile = (await query('SELECT current_level FROM learner_profiles WHERE user_id=?', [x.id]))[0];

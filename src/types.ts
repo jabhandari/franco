@@ -15,6 +15,27 @@
 
 /** CEFR levels, ascending. Matches `CEFR_LEVELS` in server/content-contract.js. */
 export type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+export type SkillId = 'ecouter' | 'lire' | 'ecrire' | 'parler';
+
+export type ConceptProgress = {
+  concept_id: string;
+  slug: string;
+  title: string;
+  level_code: CefrLevel | null;
+  mastery: number;
+  total_attempts: number;
+  last_practiced_at: string | null;
+  state: 'not_started' | 'in_progress' | 'completed';
+};
+
+export type SkillProgress = {
+  skill: SkillId;
+  level: CefrLevel;
+  exercises_total: number;
+  exercises_done: number;
+  exercises_correct: number;
+  percent: number;
+};
 
 /** Content item types. Matches `CONTENT_TYPES` in server/content-contract.js. */
 export type ContentItemType =
