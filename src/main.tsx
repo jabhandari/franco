@@ -2,11 +2,9 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   BookOpen,
-  BarChart3,
   ChevronRight,
   CirclePlay,
   ClipboardCheck,
-  Database,
   GraduationCap,
   Home as HomeIcon,
   Lock,
@@ -14,15 +12,16 @@ import {
   Mail,
   Mic,
   ShieldCheck,
-  Target,
-  TrendingUp,
-  UserRound,
   Sun,
   Moon,
-  Zap
+  TrendingUp,
+  UserRound,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import './styles.css';
-import { apiGet, apiPost } from './api/client.js';
+import { apiGet, apiPost, getErrorMessage } from './api/client.js';
+import type { AuthResponse, MeResponse, StreakResponse } from './api/client.js';
+import type { UserPayload } from './types';
 import { ThemeProvider, useTheme } from 'next-themes';
 import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput, StreakChip } from './components/ui';
 import { streakPath } from './presenters/streak.presenter.js';
@@ -37,9 +36,32 @@ import { Placement } from './views/Placement.js';
 import { ReviewQueue, REVIEW_KEY_STORAGE } from './views/ReviewQueue.js';
 import { Profile } from './views/Profile.jsx';
 
+// next-themes ships its own types, but this repo has no @types/react, so
+// `React.PropsWithChildren` in its ThemeProviderProps resolves to nothing
+// and the `children` prop is missing from the declared props. Re-declare it
+// via module augmentation (not an assertion) so the <ThemeProvider> wrapper
+// below typechecks. Remove when @types/react lands (migration closeout).
+declare module 'next-themes' {
+  interface ThemeProviderProps {
+    children?: unknown;
+  }
+}
+
+// FRA-67: app-shell types. ViewId is the sidebar's view vocabulary — the
+// auth gate, router, and nav all speak it, so a bad view id is a type
+// error, not a silent blank page.
+type ViewId = 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile';
+type AuthView = 'login' | 'signup';
+
+type NavItem = {
+  id: ViewId;
+  label: string;
+  icon: LucideIcon;
+};
+
 const TOKEN_KEY = 'franco_auth_token';
 
-const navItems = [
+const navItems: NavItem[] = [
   { id: 'home', label: 'Home', icon: HomeIcon },
   { id: 'learn', label: 'Learn', icon: GraduationCap },
   { id: 'placement', label: 'Placement', icon: ClipboardCheck },
@@ -48,34 +70,51 @@ const navItems = [
   { id: 'past', label: 'Past questions', icon: BookOpen },
   { id: 'progress', label: 'Progress', icon: TrendingUp },
   { id: 'conversation', label: 'Conversation', icon: Mic },
-  { id: 'profile', label: 'Profile', icon: UserRound }
+  { id: 'profile', label: 'Profile', icon: UserRound },
 ];
 
-const viewPaths = { home: '/', learn: '/learn', placement: '/placement', session: '/session', content: '/content', past: '/past-questions', progress: '/progress', conversation: '/conversation', review: '/review', profile: '/profile' };
-function viewFromPath(pathname) {
-  const entry = Object.entries(viewPaths).find(([, path]) => path === pathname || (path !== '/' && pathname.startsWith(`${path}/`)));
-  return entry?.[0] || 'home';
+const viewPaths: Record<ViewId, string> = {
+  home: '/',
+  learn: '/learn',
+  placement: '/placement',
+  session: '/session',
+  content: '/content',
+  past: '/past-questions',
+  progress: '/progress',
+  conversation: '/conversation',
+  review: '/review',
+  profile: '/profile',
+};
+
+const VIEW_IDS: ViewId[] = ['home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile'];
+
+function viewFromPath(pathname: string): ViewId {
+  for (const id of VIEW_IDS) {
+    const path = viewPaths[id];
+    if (path === pathname || (path !== '/' && pathname.startsWith(`${path}/`))) return id;
+  }
+  return 'home';
 }
 
-function App() {
-  const [authView, setAuthView] = React.useState('login');
-  const [session, setSession] = React.useState(null);
-  const [authToken, setAuthToken] = React.useState(() => sessionStorage.getItem(TOKEN_KEY));
-  const [userData, setUserData] = React.useState(null);
-  const [streak, setStreak] = React.useState(null);
-  const [view, setView] = React.useState(() => viewFromPath(window.location.pathname));
-  const [sessionLevel, setSessionLevel] = React.useState(null);
-  const [loading, setLoading] = React.useState(Boolean(authToken));
-  const [error, setError] = React.useState('');
+function App(): React.JSX.Element {
+  const [authView, setAuthView] = React.useState<AuthView>('login');
+  const [session, setSession] = React.useState<UserPayload | null>(null);
+  const [authToken, setAuthToken] = React.useState<string | null>(() => sessionStorage.getItem(TOKEN_KEY));
+  const [userData, setUserData] = React.useState<MeResponse | null>(null);
+  const [streak, setStreak] = React.useState<StreakResponse | null>(null);
+  const [view, setView] = React.useState<ViewId>(() => viewFromPath(window.location.pathname));
+  const [sessionLevel, setSessionLevel] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(Boolean(authToken));
+  const [error, setError] = React.useState<string>('');
   const { resolvedTheme: theme, setTheme } = useTheme();
   // FRA-2: the Review queue nav link only appears once a review API key
   // has been stored in this browser (the view itself manages the key).
-  const [hasReviewKey, setHasReviewKey] = React.useState(() => Boolean(localStorage.getItem(REVIEW_KEY_STORAGE)));
-  const visibleNavItems = hasReviewKey
+  const [hasReviewKey, setHasReviewKey] = React.useState<boolean>(() => Boolean(localStorage.getItem(REVIEW_KEY_STORAGE)));
+  const visibleNavItems: NavItem[] = hasReviewKey
     ? [...navItems, { id: 'review', label: 'Review queue', icon: ShieldCheck }]
     : navItems;
 
-  function navigate(nextView, replace = false) {
+  function navigate(nextView: ViewId, replace = false): void {
     setView(nextView);
     window.history[replace ? 'replaceState' : 'pushState']({}, '', viewPaths[nextView] || '/');
   }
@@ -86,9 +125,9 @@ function App() {
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
-  function refreshUserData() {
+  function refreshUserData(): void {
     if (!authToken) return;
-    apiGet('/api/me', authToken)
+    apiGet<MeResponse>('/api/me', authToken)
       .then((payload) => {
         setSession(payload.user);
         setUserData(payload);
@@ -100,14 +139,14 @@ function App() {
         setSession(null);
         setUserData(null);
       });
-    apiGet(streakPath(), authToken).then(setStreak).catch(() => {});
+    apiGet<StreakResponse>(streakPath(), authToken).then(setStreak).catch(() => {});
   }
 
   React.useEffect(() => {
     if (!authToken) return;
     let cancelled = false;
     setLoading(true);
-    apiGet('/api/me', authToken)
+    apiGet<MeResponse>('/api/me', authToken)
       .then((payload) => {
         if (cancelled) return;
         setSession(payload.user);
@@ -137,7 +176,7 @@ function App() {
       return;
     }
     let cancelled = false;
-    apiGet(streakPath(), authToken)
+    apiGet<StreakResponse>(streakPath(), authToken)
       .then((payload) => {
         if (!cancelled) setStreak(payload);
       })
@@ -149,12 +188,12 @@ function App() {
     };
   }, [authToken]);
 
-  async function handleAuthSubmit(event) {
+  async function handleAuthSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const email = formData.get('email')?.toString().trim();
-    const firstName = formData.get('first_name')?.toString().trim();
-    const lastName = formData.get('last_name')?.toString().trim();
+    const email = formData.get('email')?.toString().trim() ?? '';
+    const firstName = formData.get('first_name')?.toString().trim() ?? '';
+    const lastName = formData.get('last_name')?.toString().trim() ?? '';
     const password = formData.get('password')?.toString() || '';
     const endpoint = authView === 'signup' ? '/api/auth/signup' : '/api/auth/login';
 
@@ -167,7 +206,7 @@ function App() {
     setLoading(true);
 
     try {
-      const payload = await apiPost(
+      const payload = await apiPost<AuthResponse>(
         endpoint,
         authView === 'signup'
           ? { email, first_name: firstName, last_name: lastName, password }
@@ -179,13 +218,14 @@ function App() {
       setUserData(payload);
       navigate('home', true);
     } catch (requestError) {
-      setError(requestError.message);
+      // Type boundary: narrow the unknown catch value before reading it.
+      setError(requestError instanceof Error ? getErrorMessage(requestError) : 'Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
   }
 
-  function logout() {
+  function logout(): void {
     setSession(null);
     setAuthToken(null);
     setUserData(null);
@@ -194,7 +234,7 @@ function App() {
     navigate('home', true);
   }
 
-  function handleProfileSaved(user) {
+  function handleProfileSaved(user: UserPayload): void {
     setSession(user);
     setUserData((prev) => (prev ? { ...prev, user } : prev));
   }
@@ -260,7 +300,15 @@ function App() {
   );
 }
 
-function AuthScreen({ mode, onModeChange, onSubmit, loading, error }) {
+type AuthScreenProps = {
+  mode: AuthView;
+  onModeChange: (mode: AuthView) => void;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  loading: boolean;
+  error: string;
+};
+
+function AuthScreen({ mode, onModeChange, onSubmit, loading, error }: AuthScreenProps): React.JSX.Element {
   const isSignup = mode === 'signup';
 
   return (

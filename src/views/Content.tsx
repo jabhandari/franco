@@ -5,7 +5,7 @@ import { ExerciseCard } from '../components/exercises/ExerciseCard';
 import { ConceptRoadmap, LevelGuide, TopicTracks } from '../components/concepts';
 import { CEFR_LEVELS as SECTIONS } from '../presenters/levels.presenter.js';
 import { humanize } from '../presenters/format.presenter.js';
-import type { RawChoices } from '../presenters/collections.presenter.js';
+import type { ContentItemChoice } from '../api/client.js';
 import {
   Box,
   EmptyState,
@@ -30,9 +30,11 @@ type MediaAsset = {
   transcript: string | null;
 };
 
-// Input contract of normalizeChoices() — imported from the presenter
-// (canonical type).
-type ChoicesInput = RawChoices | null | undefined;
+// Choices as forwarded verbatim by shapeContentItem() (server/index.js):
+// the stored response_json.choices — id-bearing {id,text} pairs for
+// published multiple-choice items. Canonical type imported from the API
+// client (never redefined).
+type ChoicesInput = ContentItemChoice[] | null | undefined;
 
 type ContentListItem = {
   id: string;

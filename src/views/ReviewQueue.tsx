@@ -1,7 +1,7 @@
 import React from 'react';
 import { Check, CheckCircle2, Flag, KeyRound, RefreshCw, Send, X } from 'lucide-react';
 import { apiGet, apiPost, formatEnum, getErrorMessage, normalizeChoices, safeText } from '../api/client.js';
-import type { RawChoices } from '../presenters/collections.presenter.js';
+import type { ContentItemChoice } from '../api/client.js';
 import {
   Box,
   Button,
@@ -16,9 +16,10 @@ import {
   TextInput,
 } from '../components/ui';
 
-// Input contract of normalizeChoices() — imported from the presenter
-// (canonical type).
-type ChoicesInput = RawChoices | null | undefined;
+// Choices as shaped by shapeContentItem() (server/index.js): verbatim
+// response_json.choices — id-bearing {id,text} pairs for published items.
+// Canonical type imported from the API client (never redefined).
+type ChoicesInput = ContentItemChoice[] | null | undefined;
 
 // Output contract of normalizeChoices(): filtered { key, text } pairs.
 type NormalizedChoice = { key: string; text: string };
