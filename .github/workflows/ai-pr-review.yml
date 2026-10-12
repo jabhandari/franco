@@ -87,7 +87,7 @@ jobs:
           BASE_SHA="${{ steps.refs.outputs.base_sha }}"
           HEAD_SHA="${{ steps.refs.outputs.head_sha }}"
           git diff "$BASE_SHA" "$HEAD_SHA" -- . ':(exclude)package-lock.json' ':(exclude)dist' \
-            | python3 -c 'import sys; sys.stdout.write(sys.stdin.read(60000))' > /tmp/pr.diff
+            | python3 -c 'import sys; data = sys.stdin.read(); sys.stdout.write(data[:60000])' > /tmp/pr.diff
           {
             echo "PR title: $(gh pr view "${{ steps.refs.outputs.pr_number }}" --json title --jq .title)"
             echo ""
