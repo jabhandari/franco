@@ -397,6 +397,7 @@ export type ContentReviewQueueItem = ContentItemEntry & {
 
 /** GET /api/content/v1/items. */
 export type ContentItemsResponse = {
+  total: number;
   items: ContentReviewQueueItem[];
 };
 

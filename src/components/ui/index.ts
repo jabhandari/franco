@@ -62,7 +62,7 @@ export { Toolbar } from './Toolbar';
 export type { ToolbarProps } from './Toolbar';
 export { CollapsibleSection } from './CollapsibleSection';
 export type { CollapsibleSectionProps } from './CollapsibleSection';
-export { AudioPlayer } from './AudioPlayer';
+export { AudioPlayer, ClipPlayer } from './AudioPlayer';
 export type { AudioPlayerProps } from './AudioPlayer';
 export { ReadingPassage } from './ReadingPassage';
 export type { ReadingPassageProps } from './ReadingPassage';
