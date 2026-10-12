@@ -284,7 +284,9 @@ CREATE TABLE public.content_api_keys (
 CREATE TABLE public.learning_attempts (
   id text NOT NULL,
   user_id text NOT NULL,
-  item_id text NOT NULL,
+  item_id text,
+  item_kind text NOT NULL DEFAULT 'content_item'::text,
+  legacy_ref text,
   revision integer NOT NULL,
   response_json jsonb NOT NULL,
   evaluation_json jsonb NOT NULL,
@@ -366,3 +368,37 @@ CREATE TABLE public.concept_prerequisites (
   CONSTRAINT learner_activity_days_pkey PRIMARY KEY (user_id, activity_date),
   CONSTRAINT learner_activity_days_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
 );
+
+-- API-owned data is private; custom session/scoped-key checks live in Node.
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.learner_profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_skill_estimates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.attempts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.mistakes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.learning_attempts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.learner_item_state ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.learner_concept_mastery ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.learner_activity_days ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.speech_transcriptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_api_keys ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_reports ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_sources ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.example_sentences ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.exercise_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.exam_questions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.learning_topics ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.tv5_exercises ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.concepts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.schema_migrations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.cefr_levels ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_batches ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_concepts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_revisions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_tags ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.tags ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.media_assets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_duplicates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.content_reviews ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.concept_prerequisites ENABLE ROW LEVEL SECURITY;

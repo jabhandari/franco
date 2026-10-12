@@ -113,6 +113,20 @@ function App(): React.JSX.Element {
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
+  // Page navigation refreshes the shared learner snapshot after any exercise
+  // surface records attempts, so Home/Profile never retain pre-practice data.
+  React.useEffect(() => {
+    if (!authToken || !session) return;
+    let cancelled = false;
+    apiGet<MeResponse>('/api/me', authToken).then(payload => {
+      if (!cancelled) { setSession(payload.user); setUserData(payload); }
+    }).catch(() => {});
+    apiGet<StreakResponse>(streakPath(), authToken).then(payload => {
+      if (!cancelled) setStreak(payload);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [view, authToken]);
+
   function refreshUserData(): void {
     if (!authToken) return;
     apiGet<MeResponse>('/api/me', authToken)
