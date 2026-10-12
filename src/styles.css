@@ -2084,6 +2084,7 @@ html[data-theme] .sidebar .nav-button:is(:hover, .active), html[data-theme] .sid
 .sidebar-actions .nav-button span, .user-details, .user-chevron {
   opacity: 0; pointer-events: none; white-space: nowrap; transition: opacity .12s ease;
 }
+.sidebar .brand span:last-child, .sidebar .nav-label, .sidebar .theme-toggle span { display: inline; }
 .sidebar:is(:hover, :focus-within) .brand span:last-child,
 .sidebar:is(:hover, :focus-within) .nav-label,
 .sidebar:is(:hover, :focus-within) .theme-toggle span,
