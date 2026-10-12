@@ -14,7 +14,7 @@ import {
   countsForSkill,
   levelMastery,
 } from '../presenters/learn.presenter.js';
-import { ExerciseCard } from '../components/exercises/ExerciseCard.jsx';
+import { ExerciseCard } from '../components/exercises/ExerciseCard';
 import {
   Box,
   Button,
