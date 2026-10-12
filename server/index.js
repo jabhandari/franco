@@ -313,11 +313,18 @@ async function main() {
                 params.push(status); where.push(`i.status=$${params.length}`);
                 if (u.searchParams.get('level')) { params.push(u.searchParams.get('level').toUpperCase()); where.push(`i.cefr_level=$${params.length}`); }
                 if (u.searchParams.get('type')) { params.push(u.searchParams.get('type')); where.push(`i.item_type=$${params.length}`); }
-                const limit = Math.min(100, Math.max(1, Number(u.searchParams.get('limit') || 25)));
-                const rows = await query(`SELECT i.id,i.external_id,i.item_type,i.cefr_level,i.difficulty_score,i.status,i.created_at,i.source_id,s.name AS source_name,r.batch_id,r.title,r.prompt,r.instructions,r.context,r.response_json,r.evaluation_json,r.metadata_json,(SELECT COUNT(*)::int FROM content_reports cr WHERE cr.item_id=i.id) AS report_count FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision LEFT JOIN content_sources s ON s.id=i.source_id WHERE ${where.join(' AND ')} ORDER BY i.updated_at DESC LIMIT ${limit}`, params);
+                if (u.searchParams.get('types')) { params.push(u.searchParams.get('types').split(',').filter(Boolean)); where.push(`i.item_type=ANY($${params.length})`); }
+                const limitText = u.searchParams.get('limit') || '25';
+                const offsetText = u.searchParams.get('offset') || '0';
+                if (!/^[1-9]\d*$/.test(limitText) || !Number.isSafeInteger(Number(limitText)) || !/^\d+$/.test(offsetText) || !Number.isSafeInteger(Number(offsetText))) return json(res, 400, { error: 'Limit must be positive and offset must be non-negative integers.' });
+                const limit = Math.min(100, Number(limitText));
+                const offset = Number(offsetText);
+                const [{ total }] = await query(`SELECT COUNT(*)::int AS total FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE ${where.join(' AND ')}`, params);
+                params.push(limit, offset);
+                const rows = await query(`SELECT i.id,i.external_id,i.item_type,i.cefr_level,i.difficulty_score,i.status,i.created_at,i.source_id,s.name AS source_name,r.batch_id,r.title,r.prompt,r.instructions,r.context,r.response_json,r.evaluation_json,r.metadata_json,(SELECT COUNT(*)::int FROM content_reports cr WHERE cr.item_id=i.id) AS report_count FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision LEFT JOIN content_sources s ON s.id=i.source_id WHERE ${where.join(' AND ')} ORDER BY i.updated_at DESC,i.id DESC LIMIT $${params.length - 1} OFFSET $${params.length}`, params);
                 const mediaByItem = {};
                 if (rows.length) { const media = await query('SELECT item_id,kind,url,duration_seconds,transcript FROM media_assets WHERE item_id=ANY(?)', [rows.map((r) => r.id)]); for (const m of media) { (mediaByItem[m.item_id] = mediaByItem[m.item_id] || []).push({ kind: m.kind, url: m.url, duration_seconds: m.duration_seconds, transcript: m.transcript }); } }
-                return json(res, 200, { items: rows.map((r) => ({ ...shapeContentItem(r, null, mediaByItem), status: r.status, external_id: r.external_id, source: r.source_name || null, batch_id: r.batch_id || null, report_count: r.report_count || 0 })) });
+                return json(res, 200, { total, items: rows.map((r) => ({ ...shapeContentItem(r, null, mediaByItem), status: r.status, external_id: r.external_id, source: r.source_name || null, batch_id: r.batch_id || null, report_count: r.report_count || 0 })) });
             }
             if (req.method === 'GET' && u.pathname === '/api/content/v1/item-counts') {
                 // FRA-47: real published-content counts per level and item type,

@@ -967,9 +967,6 @@ html[data-theme="light"] .free-text-input::placeholder { color: #718096; }
 .audio-player audio { width:100%; }
 .rubric-box { padding:12px 14px; border:1px solid #303030; border-radius:10px; background:rgba(255,255,255,.03); }
 .rubric-box ul { margin:8px 0 0; padding-left:18px; display:grid; gap:6px; font-size:13px; }
-.reveal-word { font-size:22px; font-weight:800; padding:10px 0; }
-.self-mark-row { display:flex; gap:10px; flex-wrap:wrap; }
-.self-mark-row > button { flex:1 1 160px; min-height:46px; margin-top:0; padding:12px 16px; font-size:inherit; }
 .stub-badge { display:inline-block; font-size:10px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:3px 8px; border-radius:999px; background:rgba(251,191,36,.15); color:#fbbf24; border:1px solid rgba(251,191,36,.4); margin-top:6px; }
 .concept-map-scroll { overflow-x:auto; }
 .roadmap-edge { fill:none; stroke:#94a3b8; stroke-width:2; opacity:.7; }
@@ -1439,28 +1436,26 @@ html:not([data-theme="light"]) .auth-page .auth-brand-subtitle { color:#888; }
   font-size: 20px;
   margin-bottom: 8px;
 }
-/* Pronunciation drill: compact layout for single-word drills */
-.exercise-preview .pronunciation-drill h2 {
-  font-size: 18px;
-  margin-bottom: 6px;
+/* Learn uses one visible hierarchy on both its overview and level pages. */
+.learn-view { max-width:1160px; margin:0 auto; }
+.learn-overview-intro { max-width:720px; padding:10px 0 2px; }
+.learn-overview-intro > span, .learn-section-intro > span, .learn-list-heading span {
+  display:block; color:#156064; font-size:11px; font-weight:800; letter-spacing:.13em;
 }
-.exercise-preview .pronunciation-drill .audio-player {
-  margin: 8px 0;
-}
-.exercise-preview .pronunciation-drill .reveal-word {
-  font-size: 20px;
-  padding: 6px 0;
-}
-/* Space between skill tabs and the content below */
-.learn-skill-content {
-  margin-top: 24px;
-}
+.learn-overview-intro h1 { margin:10px 0 12px; max-width:680px; font-size:clamp(32px,4vw,48px); line-height:1.08; letter-spacing:-.045em; }
+.learn-overview-intro > p { margin:0; max-width:610px; color:#52646a; font-size:16px; line-height:1.55; }
+.learn-skill-content { margin-top:26px; }
 .learn-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
-  margin: 26px 0 34px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 28px 0 34px;
 }
+.learn-grid .card { display:flex; flex-direction:row; align-items:center; justify-content:space-between; padding:22px; text-align:left; min-height:142px; }
+.learn-card-copy { display:grid; gap:5px; }
+.learn-grid .learn-card-level { margin:0; font-size:32px; line-height:1; letter-spacing:-.04em; color:#1c3135; }
+.learn-grid .learn-card-subtitle { margin:0; font-size:12px; color:#607177; }
+.learn-grid .learn-card-count { margin:10px 0 0; font-size:13px; font-weight:700; color:#156064; }
 
 /* Card (src/components/ui/Card.jsx): themed clickable/static card.
    Light and dark variants; mobile stacks via the grid above. */
@@ -1541,31 +1536,120 @@ html:not([data-theme="light"]) .progress-ring .ring-track {
   color: #156064;
 }
 
-.learn-detail-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin: 12px 0 20px;
-}
+.learn-back { margin-bottom:18px; }
+.learn-back .text-button { width:auto; min-height:36px; margin:0; padding:6px 4px; border:0; background:transparent; box-shadow:none; color:#156064; }
+.learn-level-hero { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:36px; align-items:center; overflow:hidden; position:relative; padding:30px 34px; border:1px solid #cfe4dc; border-radius:20px; background:linear-gradient(125deg,#edf8f4,#f8fbf8 70%); }
+.learn-level-hero::after { content:""; position:absolute; width:300px; height:300px; right:11%; top:-190px; border:1px solid rgba(21,96,100,.13); border-radius:50%; pointer-events:none; }
+.learn-level-kicker { display:inline-block; padding:6px 10px; border-radius:999px; background:rgba(21,96,100,.1); color:#156064; font-size:11px; font-weight:800; letter-spacing:.12em; }
+.learn-level-copy h1 { margin:14px 0 9px; font-size:clamp(30px,3.5vw,44px); line-height:1.08; letter-spacing:-.045em; color:#172b2e; }
+.learn-level-copy > p { max-width:560px; margin:0; color:#4f6367; font-size:15px; line-height:1.5; }
+.learn-hero-action { display:grid; justify-items:start; min-width:178px; position:relative; z-index:1; }
+.learn-hero-action > strong { color:#156064; font-size:35px; line-height:1; letter-spacing:-.04em; }
+.learn-hero-action > p { margin:3px 0 14px; color:#586c70; font-size:12px; }
+.learn-hero-action .primary-button { min-height:42px; padding:9px 14px; margin:0; font-size:13px; }
+.learn-section-intro { margin:28px 0 14px; }
+.learn-section-intro h2 { margin:7px 0 0; font-size:20px; letter-spacing:-.025em; }
+.learn-skill-tabs { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+.learn-skill-tabs button { min-width:0; display:flex; align-items:center; gap:12px; padding:17px 18px; border:1px solid #d8e5df; border-radius:14px; background:#fff; color:#38535a; text-align:left; cursor:pointer; transition:background .16s,border-color .16s,transform .16s; }
+.learn-skill-tabs button:hover { border-color:#7fb7ab; transform:translateY(-2px); }
+.learn-skill-tabs button:focus-visible, .clip-play-button:focus-visible { outline:2px solid #37b9a5; outline-offset:3px; }
+.learn-skill-tabs button.selected { border-color:#248978; background:#e8f7f1; color:#156064; box-shadow:0 0 0 1px rgba(36,137,120,.16) inset; }
+.learn-skill-tabs button > svg { flex:none; }
+.learn-skill-tabs button > span { display:grid; gap:3px; min-width:0; }
+.learn-skill-tabs strong { font-size:15px; line-height:1.1; }
+.learn-skill-tabs small { font-size:11px; color:#697b80; }
+.learn-skill-tabs button.selected small { color:#397568; }
+.learn-list-heading { display:flex; align-items:end; justify-content:space-between; gap:12px; margin-bottom:15px; }
+.learn-list-heading h2 { margin:6px 0 0; font-size:21px; letter-spacing:-.025em; }
+.learn-list-heading .learn-list-instruction { margin:5px 0 0; color:#52676b; font-size:13px; }
+.learn-list-heading > p { margin:0 0 2px; color:#64777a; font-size:12px; }
+.learn-activity-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.learn-activity-list { display:grid; gap:16px; }
+.learn-activity-grid .exercise-card-wrap, .learn-activity-list .exercise-card-wrap { min-width:0; }
+.learn-page-controls { display:flex; justify-content:center; align-items:center; gap:14px; flex-wrap:wrap; margin:24px 0; }
+.learn-page-controls > p { margin:0; font-size:12px; color:#64777a; }
+.learn-page-controls .text-button { width:auto; min-height:38px; margin:0; padding:7px 14px; }
+.learn-view .report-button { min-height:32px; margin-top:5px; padding:5px 8px; border-color:transparent; background:transparent; color:#156064; font-size:11px; }
+html[data-theme="light"] .learn-view .report-button { border-color:transparent; background:transparent; color:#156064; }
 
-.skill-tab-count {
-  font-size: 12px;
-  font-weight: 600;
-  opacity: 0.75;
-  margin-left: 4px;
-}
+/* A short clip gets a replay button, not a recording-length timeline. */
+.exercise-preview.pronunciation-card { padding:18px; gap:0; }
+.pronunciation-drill { display:grid; gap:14px; }
+.pronunciation-copy { display:grid; gap:3px; }
+.pronunciation-copy > span { color:#156064; font-size:10px; letter-spacing:.12em; }
+.pronunciation-title { margin:3px 0 0; font-size:19px; letter-spacing:-.025em; line-height:1.2; color:#1c3135; }
+.pronunciation-hint { margin:0; color:#53676b; font-size:13px; line-height:1.4; }
+.pronunciation-controls { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.pronunciation-controls .text-button { width:auto; min-height:42px; margin:0; padding:8px 14px; border-color:#cbded7; background:transparent; color:#156064; font-size:13px; }
+.clip-player { display:grid; gap:6px; }
+.clip-play-button { display:inline-flex; align-items:center; gap:10px; min-height:42px; padding:4px 12px 4px 5px; border:1px solid #156064; border-radius:999px; background:#156064; color:#fff; font:inherit; font-size:13px; font-weight:800; cursor:pointer; }
+.clip-play-button:hover { background:#0e4a4d; }
+.pronunciation-card .clip-play-button span { color:inherit; font-size:13px; text-transform:none; }
+.clip-play-icon { width:32px; height:32px; display:grid; place-items:center; border-radius:50%; background:rgba(255,255,255,.18); color:#fff; }
+.clip-wave { display:flex; align-items:center; gap:2px; margin-left:5px; height:18px; }
+.clip-wave i { display:block; width:2px; height:6px; border-radius:2px; background:currentColor; opacity:.65; }
+.clip-wave i:nth-child(2), .clip-wave i:nth-child(4) { height:13px; }
+.clip-wave i:nth-child(3) { height:18px; }
+.clip-play-button.is-playing .clip-wave i { animation:clip-pulse .5s ease-in-out infinite alternate; }
+.clip-play-button.is-playing .clip-wave i:nth-child(even) { animation-delay:.18s; }
+@keyframes clip-pulse { to { transform:scaleY(.4); } }
+.clip-error { margin:0; color:#ae482d; font-size:12px; }
+.pronunciation-reveal { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding-top:12px; border-top:1px solid #e0e9e4; }
+.pronunciation-card .pronunciation-answer-label { color:#69817c; font-size:10px; letter-spacing:.1em; }
+.pronunciation-word { color:#172d31; font-size:22px; letter-spacing:-.03em; }
+.pronunciation-mark-row { display:flex; flex-wrap:wrap; gap:7px; margin-left:auto; }
+.pronunciation-mark-row > button { flex:none; width:auto; min-height:36px; margin:0; padding:7px 12px; font-size:12px; }
+.pronunciation-mark-row > .retry-button { border-color:#bbd3ca; }
+.pronunciation-card .mcq-feedback { margin-top:0; }
 
-.learn-back {
-  margin-bottom: 12px;
-  text-align: left;
-}
+html:not([data-theme="light"]) .learn-overview-intro > p, html:not([data-theme="light"]) .learn-level-copy > p { color:#b4c4c2; }
+html:not([data-theme="light"]) .learn-grid .learn-card-level { color:#f4f8f6; }
+html:not([data-theme="light"]) .learn-grid .learn-card-subtitle, html:not([data-theme="light"]) .learn-list-heading > p { color:#9baead; }
+html:not([data-theme="light"]) .learn-list-heading .learn-list-instruction { color:#aec3bc; }
+html:not([data-theme="light"]) .learn-page-controls > p { color:#a9bcb7; }
+html:not([data-theme="light"]) .learn-grid .learn-card-count { color:#79e1cf; }
+html:not([data-theme="light"]) .learn-back .text-button { color:#7fe3d3; }
+html:not([data-theme="light"]) .learn-level-hero { border-color:#285b52; background:linear-gradient(125deg,#18332e,#182120 72%); }
+html:not([data-theme="light"]) .learn-level-kicker { background:rgba(111,224,201,.13); color:#8bead8; }
+html:not([data-theme="light"]) .learn-level-copy h1 { color:#f4fbf8; }
+html:not([data-theme="light"]) .learn-hero-action > strong { color:#8bead8; }
+html:not([data-theme="light"]) .learn-hero-action > p { color:#a9c3bd; }
+html:not([data-theme="light"]) .learn-section-intro > span, html:not([data-theme="light"]) .learn-list-heading span, html:not([data-theme="light"]) .learn-overview-intro > span { color:#70ddca; }
+html:not([data-theme="light"]) .learn-skill-tabs button { border-color:#363d3c; background:#1a1d1c; color:#f0f6f3; }
+html:not([data-theme="light"]) .learn-skill-tabs button:hover { border-color:#65bbaa; }
+html:not([data-theme="light"]) .learn-skill-tabs button.selected { border-color:#65c9b5; background:#203b35; color:#9af0db; box-shadow:0 0 0 1px rgba(101,201,181,.16) inset; }
+html:not([data-theme="light"]) .learn-skill-tabs small { color:#a4b8b2; }
+html:not([data-theme="light"]) .learn-skill-tabs button.selected small { color:#b5e8dd; }
+html:not([data-theme="light"]) .learn-view .report-button { color:#a1e9db; background:transparent; border-color:transparent; }
+html:not([data-theme="light"]) .pronunciation-copy > span { color:#76dac9; }
+html:not([data-theme="light"]) .pronunciation-title, html:not([data-theme="light"]) .pronunciation-word { color:#f6faf8; }
+html:not([data-theme="light"]) .pronunciation-hint { color:#bbc9c5; }
+html:not([data-theme="light"]) .pronunciation-controls .text-button { border-color:#43645b; background:#1d2925; color:#b1ebde; }
+html:not([data-theme="light"]) .clip-play-button { border-color:#8ee9d4; background:#91e5d1; color:#10342d; }
+html:not([data-theme="light"]) .clip-play-button:hover { background:#b0f3e3; }
+html:not([data-theme="light"]) .clip-play-icon { background:rgba(16,52,45,.13); color:#10342d; }
+html:not([data-theme="light"]) .clip-error { color:#ffab91; }
+html:not([data-theme="light"]) .pronunciation-reveal { border-color:#34423d; }
+html:not([data-theme="light"]) .pronunciation-card .pronunciation-answer-label { color:#a3b8ae; }
+html:not([data-theme="light"]) .pronunciation-mark-row > .retry-button { border-color:#819990; }
 
-.learn-back .text-button {
-  width: auto;
-  margin-top: 0;
-  padding-left: 0;
+@media (max-width:850px) {
+  .learn-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .learn-skill-tabs { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:680px) {
+  .learn-level-hero { grid-template-columns:1fr; gap:18px; padding:24px; }
+  .learn-hero-action { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+  .learn-hero-action > p { margin:0 auto 0 0; }
+  .learn-grid, .learn-activity-grid { grid-template-columns:1fr; }
+  .learn-skill-tabs button { padding:13px; }
+  .learn-list-heading { align-items:start; }
+  .learn-list-heading > p { display:none; }
+  .pronunciation-mark-row { width:100%; margin-left:0; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .clip-play-button.is-playing .clip-wave i { animation:none; }
+  .learn-skill-tabs button, .card-clickable { transition:none; }
 }
 
 /* FRA-44: daily streak — sidebar chip, Home hero, Progress heatmap.

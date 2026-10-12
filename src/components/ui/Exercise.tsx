@@ -18,17 +18,19 @@ export type AnsweredState = 'correct' | 'wrong';
 export type ExerciseShellProps = {
   eyebrow?: React.ReactNode;
   answered?: AnsweredState | null;
+  variant?: 'default' | 'pronunciation';
   children?: React.ReactNode;
   key?: React.Key;
 };
 
 // Standard exercise card wrapper: article.exercise-preview.mcq-card with
 // an optional answered-correct / answered-wrong state class.
-export function ExerciseShell({ eyebrow, answered = null, children }: ExerciseShellProps) {
+export function ExerciseShell({ eyebrow, answered = null, variant = 'default', children }: ExerciseShellProps) {
   const stateClass =
     answered === 'correct' ? ' answered-correct' : answered === 'wrong' ? ' answered-wrong' : '';
+  const variantClass = variant === 'pronunciation' ? ' pronunciation-card' : '';
   return (
-    <article className={`exercise-preview mcq-card${stateClass}`}>
+    <article className={`exercise-preview mcq-card${variantClass}${stateClass}`}>
       {eyebrow ? <span>{eyebrow}</span> : null}
       {children}
     </article>

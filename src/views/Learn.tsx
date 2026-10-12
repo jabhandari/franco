@@ -1,5 +1,6 @@
 import React from 'react';
-import { BookOpen, ChevronLeft, Play } from 'lucide-react';
+import { BookOpen, ChevronLeft, Headphones, Mic2, PenLine, Play, BookText } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import { CEFR_LEVELS, CLB_BY_CEFR } from '../presenters/levels.presenter.js';
 import {
@@ -9,6 +10,7 @@ import {
   countsForSkill,
   levelMastery,
   type LevelMasterySummary,
+  type SkillId,
 } from '../presenters/learn.presenter.js';
 import type { CefrLevel } from '../types';
 import type {
@@ -29,7 +31,6 @@ import {
   ErrorMessage,
   LoadingSpinner,
   Page,
-  PageHeader,
   ProgressRing,
   Text,
   Tabs,
@@ -46,6 +47,14 @@ import {
 // narrow union, so narrow at runtime instead of asserting. Unknown kinds
 // are dropped; renderers ignore them anyway (.find(m => m.kind === ...)).
 const RENDERABLE_MEDIA_KINDS: ReadonlySet<string> = new Set(['audio', 'image', 'video', 'document']);
+const SKILL_PAGE_SIZE = 8;
+const ITEM_TYPES_BY_SKILL: Record<string, string[]> = SKILL_ITEM_TYPES;
+const SKILL_ICONS: Record<SkillId, LucideIcon> = {
+  ecouter: Headphones,
+  lire: BookText,
+  ecrire: PenLine,
+  parler: Mic2,
+};
 
 function isRenderableMediaKind(kind: string): kind is MediaAsset['kind'] {
   return RENDERABLE_MEDIA_KINDS.has(kind);
@@ -84,15 +93,16 @@ function LevelCards({ levels, countsByLevel, mastery, onSelect }: LevelCardsProp
             onClick={() => onSelect(level)}
             ariaLabel={`${level}, ${CLB_BY_CEFR[level] ?? ''}, ${total} activities`}
           >
-            <Text className="card-title">{level}</Text>
-            {CLB_BY_CEFR[level] && <Text className="card-subtitle">{CLB_BY_CEFR[level]}</Text>}
+            <Box className="learn-card-copy">
+              <Text as="strong" className="learn-card-level">{level}</Text>
+              <Text className="learn-card-subtitle">{CLB_BY_CEFR[level] || 'CEFR level'}</Text>
+              <Text className="learn-card-count">{total} {total === 1 ? 'activity' : 'activities'}</Text>
+            </Box>
             <ProgressRing
+              size={64}
               percent={Math.round(levelMasterySummary.avgMastery * 100)}
               label={`${level} mastery: ${levelMasterySummary.mastered} of ${levelMasterySummary.total} concepts mastered`}
             />
-            <Text className="card-meta">
-              {total} {total === 1 ? 'activity' : 'activities'} · {levelMasterySummary.mastered}/{levelMasterySummary.total} concepts
-            </Text>
           </Card>
         );
       })}
@@ -101,15 +111,25 @@ function LevelCards({ levels, countsByLevel, mastery, onSelect }: LevelCardsProp
 }
 
 type SkillItemsProps = {
+  key?: React.Key;
   level: CefrLevel;
   skill: string;
   token: string | null;
 };
 
 function SkillItems({ level, skill, token }: SkillItemsProps) {
-  const { data, loading, error } = useApiResource<ContentItemsResponse>(`/api/content/v1/items?level=${level}&limit=100`, token);
+  const [page, setPage] = React.useState(0);
+  const types = ITEM_TYPES_BY_SKILL[skill] || [];
+  const path = `/api/content/v1/items?level=${level}&types=${types.join(',')}&limit=${SKILL_PAGE_SIZE}&offset=${page * SKILL_PAGE_SIZE}`;
+  const { data, loading, error } = useApiResource<ContentItemsResponse>(path, token);
   const items = (data?.items || []).filter((item) => skillForItemType(item.type) === skill);
+  const total = data?.total ?? 0;
+  const pageCount = Math.max(1, Math.ceil(total / SKILL_PAGE_SIZE));
   const tab = SKILL_TABS.find((t) => t.id === skill);
+
+  React.useEffect(() => {
+    if (!loading && data && page > 0 && items.length === 0 && total > 0) setPage(pageCount - 1);
+  }, [data, items.length, loading, page, pageCount, total]);
 
   if (loading) return <LoadingSpinner label={`Loading ${tab?.label} activities…`} />;
   if (error) return <ErrorMessage message={error} />;
@@ -124,12 +144,18 @@ function SkillItems({ level, skill, token }: SkillItemsProps) {
   }
 
   return (
-    <Box className="stack">
-      {items.map((item) => (
-        <ExerciseCard key={item.id} entry={{ ...item, item_kind: 'content_item', media: toRendererMedia(item.media) }} token={token} />
-      ))}
-      {(data?.items?.length ?? 0) >= 100 && (
-        <Text variant="muted">Showing the first 100 {level} activities.</Text>
+    <Box>
+      <Box className={skill === 'ecouter' ? 'learn-activity-grid' : 'learn-activity-list'}>
+        {items.map((item, index) => (
+          <ExerciseCard key={item.id} entry={{ ...item, item_kind: 'content_item', media: toRendererMedia(item.media) }} token={token} compactListening sequence={page * SKILL_PAGE_SIZE + index + 1} />
+        ))}
+      </Box>
+      {pageCount > 1 && (
+        <Box className="learn-page-controls">
+          <Button variant="text" disabled={page === 0} onClick={() => setPage((current) => current - 1)}>Previous</Button>
+          <Text>Page {page + 1} of {pageCount} · {total} activities</Text>
+          <Button variant="text" disabled={page + 1 >= pageCount} onClick={() => setPage((current) => current + 1)}>Next</Button>
+        </Box>
       )}
     </Box>
   );
@@ -150,34 +176,42 @@ function LevelDetail({ level, token, onBack, onQuiz }: LevelDetailProps) {
   );
   const byType = countsData?.byType || {};
   const total = countsData?.total ?? 0;
+  const selectedTab = SKILL_TABS.find((tab) => tab.id === skill);
+  const selectedCount = countsForSkill(byType, skill);
 
   return (
-    <Box>
+    <Box className="learn-level-detail">
       <Box className="learn-back">
         <Button variant="text" onClick={onBack} icon={ChevronLeft} iconSize={16}>
-          All levels
+          Back to levels
         </Button>
       </Box>
-      <Box className="learn-detail-head">
-        <Box>
-          <Text variant="eyebrow">{level}{CLB_BY_CEFR[level] ? ` · ${CLB_BY_CEFR[level]}` : ''}</Text>
-          <Text as="h2">Learn {level}</Text>
+      <Box className="learn-level-hero">
+        <Box className="learn-level-copy">
+          <Text as="span" className="learn-level-kicker">LEVEL {level}{CLB_BY_CEFR[level] ? `  ·  ${CLB_BY_CEFR[level]}` : ''}</Text>
+          <Text as="h1">Your {level} practice space.</Text>
+          <Text>Pick a skill, try a short activity, and build momentum one step at a time.</Text>
         </Box>
-        <Button variant="primary" onClick={() => onQuiz(level)} icon={Play} iconSize={16}>
-          Start {level} quiz
-        </Button>
+        <Box className="learn-hero-action">
+          <Text as="strong">{countsLoading ? '…' : total}</Text>
+          <Text>{total === 1 ? 'activity' : 'activities'} to explore</Text>
+          <Button variant="primary" onClick={() => onQuiz(level)} icon={Play} iconSize={16}>Start {level} quiz</Button>
+        </Box>
       </Box>
       {countsError && <ErrorMessage message={countsError} />}
+      <Box className="learn-section-intro">
+        <Text as="span">01 / CHOOSE YOUR SKILL</Text>
+        <Text as="h2">What would you like to work on?</Text>
+      </Box>
       <Tabs
-        variant="section"
+        variant="learnSkill"
         options={SKILL_TABS.map((tab) => ({
           id: tab.id,
+          icon: SKILL_ICONS[tab.id],
           label: (
             <>
-              {tab.label}
-              <Text className="skill-tab-count">
-                {countsLoading ? '…' : countsForSkill(byType, tab.id)}
-              </Text>
+              <Text as="strong">{tab.label}</Text>
+              <Text as="small">{countsLoading ? '…' : countsForSkill(byType, tab.id)} activities</Text>
             </>
           ),
         }))}
@@ -186,9 +220,17 @@ function LevelDetail({ level, token, onBack, onQuiz }: LevelDetailProps) {
         ariaLabel={`Choose a ${level} skill`}
       />
       <Box className="learn-skill-content">
-      {skill in SKILL_ITEM_TYPES && (
-        <SkillItems level={level} skill={skill} token={token} />
-      )}
+        <Box className="learn-list-heading">
+          <Box>
+            <Text as="span">02 / PRACTISE</Text>
+            <Text as="h2">{selectedTab?.gloss} activities</Text>
+            {skill === 'ecouter' && <Text className="learn-list-instruction">Play a sound, say what you hear, then reveal the word.</Text>}
+          </Box>
+          <Text>{countsLoading ? 'Loading count…' : `${selectedCount} available`}</Text>
+        </Box>
+        {skill in SKILL_ITEM_TYPES && (
+          <SkillItems key={`${level}-${skill}`} level={level} skill={skill} token={token} />
+        )}
       </Box>
       {!countsLoading && total === 0 && (
         <Text variant="muted">No published activities at {level} yet — the counts above will fill in as content ships.</Text>
@@ -228,31 +270,33 @@ export function Learn({ token, onQuiz }: LearnProps) {
   return (
     <Page>
       <Box className="learn-view">
-      <PageHeader
-        eyebrow="Learn"
-        title="Choose your level"
-        lede="Levels first, skills second. Pick a CEFR level to see listening, reading, writing, and speaking activities — with real counts, so empty shelves say so."
-      />
-      {conceptsError && <ErrorMessage message={conceptsError} />}
-      {(conceptsLoading || progressLoading) && (
-        <LoadingSpinner label="Loading levels — pulling your progress and the content counts." />
-      )}
-      {!conceptsLoading && !progressLoading && !selectedLevel && (
-        <LevelCards
-          levels={CEFR_LEVELS}
-          countsByLevel={countsByLevel}
-          mastery={mastery}
-          onSelect={setSelectedLevel}
-        />
-      )}
-      {selectedLevel && (
-        <LevelDetail
-          level={selectedLevel}
-          token={token}
-          onBack={() => setSelectedLevel(null)}
-          onQuiz={onQuiz}
-        />
-      )}
+        {!selectedLevel && (
+          <Box className="learn-overview-intro">
+            <Text as="span">YOUR LEARNING PATH</Text>
+            <Text as="h1">Find your next step in French.</Text>
+            <Text>Choose a level, then follow your curiosity through listening, reading, writing, and speaking.</Text>
+          </Box>
+        )}
+        {conceptsError && <ErrorMessage message={conceptsError} />}
+        {(conceptsLoading || progressLoading) && (
+          <LoadingSpinner label="Loading levels — pulling your progress and the content counts." />
+        )}
+        {!conceptsLoading && !progressLoading && !selectedLevel && (
+          <LevelCards
+            levels={CEFR_LEVELS}
+            countsByLevel={countsByLevel}
+            mastery={mastery}
+            onSelect={setSelectedLevel}
+          />
+        )}
+        {selectedLevel && (
+          <LevelDetail
+            level={selectedLevel}
+            token={token}
+            onBack={() => setSelectedLevel(null)}
+            onQuiz={onQuiz}
+          />
+        )}
       </Box>
     </Page>
   );

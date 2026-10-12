@@ -65,11 +65,13 @@ type ExerciseCardProps = {
   entry: ExerciseItem | null | undefined;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
+  compactListening?: boolean;
+  sequence?: number;
 };
 
 // One renderer per item type. Every answered item reports an attempt with
 // response + duration to the server's adaptive engine.
-export function ExerciseCard({ entry, token, onResult }: ExerciseCardProps) {
+export function ExerciseCard({ entry, token, onResult, compactListening = false, sequence }: ExerciseCardProps) {
   // Normalize server snake_case fields for the renderers, then sanitize so
   // object-shaped API values can never crash a renderer or print raw JSON.
   const raw: Partial<ExerciseItem> = entry && typeof entry === 'object' ? entry : {};
@@ -98,7 +100,7 @@ export function ExerciseCard({ entry, token, onResult }: ExerciseCardProps) {
       rendered = <Spelling entry={item} token={token} onResult={onResult} audioUrl={(item.media || [])[0]?.url} />;
       break;
     case 'pronunciation_drill':
-      rendered = <PronunciationDrill entry={item} token={token} onResult={onResult} />;
+      rendered = <PronunciationDrill entry={item} token={token} onResult={onResult} compact={compactListening} sequence={sequence} />;
       break;
     case 'writing_prompt':
       rendered = <WritingPrompt entry={item} token={token} onResult={onResult} />;

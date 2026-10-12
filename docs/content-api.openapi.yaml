@@ -33,7 +33,10 @@ paths:
       parameters:
         - { name: level, in: query, schema: { type: string, enum: [A1, A2, B1, B2, C1, C2] } }
         - { name: type, in: query, schema: { type: string } }
-      responses: { '200': { description: Published content items } }
+        - { name: types, in: query, schema: { type: string }, description: Comma-separated item types }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 25 } }
+        - { name: offset, in: query, schema: { type: integer, minimum: 0, default: 0 } }
+      responses: { '200': { description: Matching items and the total across all pages } }
   /api/content/v1/items/{id}/{action}:
     post:
       security: [{ ContentApiKey: [] }]
