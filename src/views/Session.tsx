@@ -85,9 +85,19 @@ type SessionQueueMedia = {
   transcript?: string | null;
 };
 
-/** One normalized MCQ choice (server normalizeChoices). */
+/** One normalized MCQ choice (server normalizeChoices) — exam and drill entries only. */
 type SessionChoice = {
   key: string;
+  text: string;
+};
+
+/**
+ * One MCQ choice on a content-track entry: shapeContentItem passes
+ * resp.choices through raw, and the content contract stores choices as
+ * {id, text} (schemas/content.v1.schema.json; content-contract.js).
+ */
+type SessionContentChoice = {
+  id: string;
   text: string;
 };
 
@@ -108,7 +118,7 @@ type SessionContentEntry = {
   context?: string | null;
   media: SessionQueueMedia[];
   evaluation_mode?: string | null;
-  choices?: SessionChoice[];
+  choices?: SessionContentChoice[];
   tokens?: string[];
   rubric?: EvaluationRubric;
   expected_points?: ExpectedPoints;
