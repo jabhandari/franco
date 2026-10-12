@@ -1,4 +1,5 @@
 import React from 'react';
+import type { AttemptItemKind, AttemptResult } from '../../api/client';
 import { reportAttempt } from '../../api/client.js';
 import { getErrorMessage, humanize } from '../../presenters/format.presenter.js';
 import { hasResult, elapsedMs } from '../../presenters/attempt.presenter.js';
@@ -65,6 +66,8 @@ const Text = UIRaw.Text as React.ComponentType<TextProps>;
 // Rubric is normalized by sanitizeEntry() (src/presenters/entry.presenter.js)
 // into a Record<string, string> via safeText.
 export type WritingPromptItem = {
+  id: string;
+  item_kind: AttemptItemKind;
   level?: string;
   title?: string;
   prompt?: string;
@@ -73,10 +76,8 @@ export type WritingPromptItem = {
 };
 
 // Writing is graded against the rubric; the component only surfaces an
-// error when reportAttempt throws.
-export type AttemptResult = {
-  error?: string;
-};
+// error when reportAttempt throws. AttemptResult is imported from the API
+// client (the canonical type for POST /api/me/attempts responses).
 
 type WritingPromptProps = {
   entry: WritingPromptItem;

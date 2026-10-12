@@ -1,4 +1,5 @@
 import React from 'react';
+import type { AttemptItemKind } from '../../api/client';
 import { reportAttempt } from '../../api/client.js';
 import { getErrorMessage } from '../../presenters/format.presenter.js';
 import { shuffle } from '../../presenters/collections.presenter.js';
@@ -78,6 +79,8 @@ const TokenTray = UIRaw.TokenTray as React.ComponentType<TokenTrayProps>;
 // Minimal local content-item shapes (FRA-64). The canonical API types are
 // owned by FRA-61 — see "Notes for FRA-68" in the PR description.
 export type WordOrderItem = {
+  id: string;
+  item_kind: AttemptItemKind;
   level?: string;
   prompt?: string;
   tokens?: string[];

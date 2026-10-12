@@ -1,4 +1,5 @@
 import React from 'react';
+import type { AttemptItemKind } from '../../api/client';
 import { MultipleChoice } from './MultipleChoice';
 import { WordOrder } from './WordOrder';
 import { Spelling } from './Spelling';
@@ -38,9 +39,9 @@ import { sanitizeEntry } from '../../presenters/entry.presenter.js';
 // the per-renderer item types share these props with ExerciseItem, which is
 // what makes the ExerciseCard -> renderer handoff typecheck.
 export type ExerciseItem = {
-  id?: string | number | null;
+  id: string;
+  item_kind: AttemptItemKind;
   type?: string;
-  item_kind?: string;
   level?: string;
   prompt?: string;
   media?: MediaAsset[];
@@ -70,7 +71,7 @@ type ExerciseCardProps = {
 export function ExerciseCard({ entry, token, onResult }: ExerciseCardProps) {
   // Normalize server snake_case fields for the renderers, then sanitize so
   // object-shaped API values can never crash a renderer or print raw JSON.
-  const raw: ExerciseItem = entry && typeof entry === 'object' ? entry : {};
+  const raw: Partial<ExerciseItem> = entry && typeof entry === 'object' ? entry : {};
   const rawType = raw.type;
   // Justification for the `as`: sanitizeEntry is an untyped JS boundary
   // (entry.presenter.js is still JS) returning a sanitized copy of the same

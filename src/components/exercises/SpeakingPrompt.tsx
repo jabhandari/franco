@@ -1,4 +1,5 @@
 import React from 'react';
+import type { AttemptItemKind } from '../../api/client';
 import { getErrorMessage, getSpeechStatus, reportAttempt, uploadSpeech } from '../../api/client.js';
 import { getSpeakingLesson } from '../../../shared/speaking-lessons.js';
 import { speechFeedback } from '../../../shared/speech-feedback.js';
@@ -53,7 +54,8 @@ const Text = UIRaw.Text as React.ComponentType<TextProps>;
 // server snake_case fields normalized to camelCase where this component
 // reads them (expectedPoints/followUpQuestions).
 export type SpeakingPromptItem = {
-  id?: string | number | null;
+  id: string;
+  item_kind: AttemptItemKind;
   external_id?: string | null;
   level?: string;
   title?: string;
@@ -93,9 +95,9 @@ export type TranscriptionResult = {
 // the server's attempt response (stored in `result` below) has the
 // AttemptResult shape.
 export type SavedAttemptResult = {
-  completed?: boolean;
+  completed: boolean;
   transcript?: string;
-  transcription_id?: string | number | null;
+  transcription_id?: string;
 };
 
 // Attempt rows returned by POST /api/me/attempts (server/index.js):
@@ -313,7 +315,9 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
       const response: SavedAttemptResult = { completed: true };
       if (transcription) {
         response.transcript = transcription.transcript;
-        response.transcription_id = transcription.transcription_id;
+        if (transcription.transcription_id != null) {
+          response.transcription_id = String(transcription.transcription_id);
+        }
       }
       const saved = await reportAttempt(entry, response, token, { durationMs: Date.now() - startedAt.current });
       completed.current = true;

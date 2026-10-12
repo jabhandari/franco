@@ -1,4 +1,5 @@
 import React from 'react';
+import type { AttemptItemKind } from '../../api/client';
 import { reportAttempt } from '../../api/client.js';
 import { getErrorMessage } from '../../presenters/format.presenter.js';
 import {
@@ -83,6 +84,8 @@ export type MediaAsset = {
 };
 
 export type PronunciationDrillItem = {
+  id: string;
+  item_kind: AttemptItemKind;
   level?: string;
   prompt?: string;
   expected?: string;

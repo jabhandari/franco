@@ -1,4 +1,5 @@
 import React from 'react';
+import type { AttemptItemKind } from '../../api/client';
 import { reportAttempt } from '../../api/client.js';
 import { getErrorMessage, humanize, choiceLabel } from '../../presenters/format.presenter.js';
 import { shuffle } from '../../presenters/collections.presenter.js';
@@ -76,6 +77,8 @@ export type MultipleChoiceOption = {
 };
 
 export type MultipleChoiceItem = {
+  id: string;
+  item_kind: AttemptItemKind;
   level?: string;
   skill?: string;
   type?: string;

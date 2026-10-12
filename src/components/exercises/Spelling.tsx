@@ -1,4 +1,5 @@
 import React from 'react';
+import type { AttemptItemKind } from '../../api/client';
 import { reportAttempt } from '../../api/client.js';
 import { getErrorMessage, humanize } from '../../presenters/format.presenter.js';
 import {
@@ -70,6 +71,8 @@ const Text = UIRaw.Text as React.ComponentType<TextProps>;
 // Minimal local content-item shapes (FRA-64). The canonical API types are
 // owned by FRA-61 — see "Notes for FRA-68" in the PR description.
 export type SpellingItem = {
+  id: string;
+  item_kind: AttemptItemKind;
   level?: string;
   type?: string;
   prompt?: string;

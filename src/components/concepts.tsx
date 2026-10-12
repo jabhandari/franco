@@ -433,7 +433,7 @@ export function ConceptDetail({ concept }: { concept: ConceptNode | null | undef
 // Fetches canonical concepts once and renders the roadmap for a level,
 // with the original roadmap/table view toggle.
 export function ConceptRoadmap({ level, token, onSelectSection }: { level: string; token?: string | null; onSelectSection: (section: string) => void }) {
-  const { data, loading, error } = useApiResource('/api/content/v1/concepts', token);
+  const { data, loading, error } = useApiResource<{ concepts: ApiConcept[] }>('/api/content/v1/concepts', token);
   const [activeConceptId, setActiveConceptId] = React.useState<string | null>(null);
   const [layoutMode, setLayoutMode] = React.useState<string>('roadmap');
   React.useEffect(() => setActiveConceptId(null), [level]);
@@ -545,7 +545,7 @@ function TopicGroup({ category, topics }: { category: string; topics: Vocabulary
 
 // Vocabulary topics for a CEFR section, backed by the server.
 export function TopicTracks({ section }: { section: string }) {
-  const { data, loading, error } = useApiResource(`/api/content/topics?section=${section}`);
+  const { data, loading, error } = useApiResource<{ topics: VocabularyTopic[] }>(`/api/content/topics?section=${section}`);
   const topics: VocabularyTopic[] = data?.topics || [];
   const categories = [...new Set(topics.map((topic) => topic.category))];
 
