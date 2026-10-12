@@ -276,7 +276,7 @@ function App(): React.JSX.Element {
             <Text as="span">Log out</Text>
           </Button>
         </Box>
-        <UserMenu name={session.name} level={userData?.profile?.current_level} onClick={() => navigate('profile')} />
+        <UserMenu active={view === 'profile'} name={session.name} level={userData?.profile?.current_level} onClick={() => navigate('profile')} />
       </Box>
 
       <Box as="nav" className="phone-tabs" aria-label="Phone navigation">
@@ -300,7 +300,7 @@ function App(): React.JSX.Element {
         {view === 'progress' && <Progress token={authToken} />}
         {view === 'conversation' && <Conversation token={authToken} />}
         {view === 'review' && <ReviewQueue />}
-        {view === 'profile' && <Profile token={authToken} user={session} onSaved={handleProfileSaved} />}
+        {view === 'profile' && <Profile token={authToken} user={session} userData={userData} streak={streak} onSaved={handleProfileSaved} onLogout={logout} onRoadmap={() => navigate('content')} />}
       </Box>
     </Box>
   );
