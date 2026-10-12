@@ -23,10 +23,17 @@ export function shuffle<T>(items: readonly T[]): T[] {
 }
 
 /**
+ * Raw choices as they arrive from the API: normalized [{key,text}], a JSON
+ * string, or an {A: "..."} map (legacy shapes).
+ */
+export type RawChoices = Choice[] | string | Record<string, string>;
+
+/**
  * Choices may arrive as [{key,text}], a JSON string, or an {A: "..."} map.
  * Object-shaped values collapse to '' rather than "[object Object]".
  */
-export function normalizeChoices(raw: JsonValue): Choice[] {
+export function normalizeChoices(raw: RawChoices | null | undefined): Choice[] {
+  if (raw == null) return [];
   let choices: JsonValue = raw;
   if (typeof choices === 'string') {
     try { choices = JSON.parse(choices); } catch { return []; }

@@ -3,9 +3,10 @@
 // from src/api/client.js (re-exported there for compatibility).
 
 /**
- * Any JSON-decodable value crossing the API/render boundary — the real type
- * behind the old `unknown` annotations. Presenters accept this and narrow it
- * with isRecord/safeText instead of asserting.
+ * Untrusted JSON-ish value at the render boundary. Used ONLY by the
+ * defensive safeText/isRecord utilities below — never as a domain type.
+ * Domain types (AttemptResult, ExerciseEntry, API response shapes) define
+ * their own specific fields instead of reaching for this.
  */
 export type JsonValue =
   | string
