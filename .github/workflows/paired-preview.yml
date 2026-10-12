@@ -12,6 +12,12 @@
 # so the workflow fails fast with an explanatory error instead of polling a
 # URL that will never exist.
 #
+# NOTE for future edits: steps that run before `actions/checkout` execute
+# with no local git repo, and `gh` does NOT fall back to GITHUB_REPOSITORY
+# for repo resolution — any `gh` invocation there must pass
+# --repo "${{ github.repository }}" explicitly, or it fails with
+# "failed to run git: fatal: not a git repository".
+#
 # Removing the label or closing the PR tears the frontend preview down.
 # Render deprovisions its own preview automatically.
 #
