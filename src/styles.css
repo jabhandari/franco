@@ -2183,10 +2183,9 @@ html[data-theme] .skill-card .ring-label { color: var(--color-text); font-size: 
   .skill-card-heading { flex-wrap: wrap; }
 }
 
-/* FRA-90: separate account-value and auth cards, with shared theme geometry. */
+/* FRA-90 Direction B: a single 40/60 card, with paint-only theme tokens. */
 .auth-direction-b { min-height:100dvh; display:grid; place-items:center; padding:40px 24px; background:var(--color-background); }
-.auth-b-card { display:grid; grid-template-columns:minmax(0,2fr) minmax(0,3fr); gap:24px; width:min(100%,1040px); }
-.auth-b-rail, .auth-b-form { min-width:0; border-radius:22px; box-shadow:0 12px 28px color-mix(in srgb,var(--color-text) 5%,transparent); }
+.auth-b-card { display:grid; grid-template-columns:2fr 3fr; width:min(100%,1000px); border-radius:22px; overflow:hidden; background:var(--color-surface); box-shadow:0 12px 28px color-mix(in srgb,var(--color-text) 5%,transparent); }
 .auth-b-rail { display:flex; flex-direction:column; padding:38px 32px; background:var(--color-sidebar); color:var(--color-sidebar-text); }
 .auth-b-brand { display:flex; align-items:center; gap:12px; }
 .auth-b-brand > span { display:grid; place-items:center; width:34px; height:34px; background:var(--color-accent); border-radius:8px; font-family:var(--font-heading); color:var(--palette-white); }
@@ -2201,7 +2200,7 @@ html[data-theme] .auth-b-rail h1 { color:var(--color-sidebar-text); font-size:28
 .auth-b-saved small { color:var(--color-sidebar-muted); font-size:14px; }
 .auth-b-saved strong { display:block; margin-top:8px; font-size:16px; }
 .auth-b-saved p { margin:8px 0 0; font-size:14px; color:var(--color-sidebar-muted); }
-.auth-b-form { padding:36px 40px; background:var(--color-surface); border:1px solid var(--color-border); }
+.auth-b-form { padding:36px 40px; }
 .auth-b-segments { display:grid; grid-template-columns:1fr 1fr; gap:4px; padding:4px; border-radius:var(--radius-control); background:var(--color-background); }
 .auth-b-segments button { border:0; padding:10px; font-size:13px; background:transparent; color:var(--color-muted); border-radius:6px; }
 .auth-b-segments button[aria-pressed="true"] { color:var(--color-text); background:var(--color-surface); box-shadow:0 1px 5px color-mix(in srgb,var(--color-text) 12%,transparent); }
@@ -2224,5 +2223,5 @@ html[data-theme] .auth-b-rail h1 { color:var(--color-sidebar-text); font-size:28
 .auth-b-checklist li.met { color:var(--color-accent); }
 .auth-b-confirm { font-size:13px; margin:-6px 0 0; color:var(--color-muted); }
 .auth-b-confirm.matched { color:var(--color-accent); }
-@media(max-width:650px) { .auth-direction-b { padding:20px 16px; align-items:start; } .auth-b-card { grid-template-columns:minmax(0,1fr); gap:16px; } .auth-b-rail { padding:20px 24px; } .auth-b-rail h1, .auth-b-values, .auth-b-saved { display:none; } .auth-b-form { padding:24px; } }
+@media(max-width:650px) { .auth-direction-b { padding:20px 16px; align-items:start; } .auth-b-card { grid-template-columns:minmax(0,1fr); } .auth-b-rail { padding:20px 24px; } .auth-b-rail h1, .auth-b-values, .auth-b-saved { display:none; } .auth-b-form { padding:24px; } }
 @media(max-width:380px) { .auth-b-name-row { grid-template-columns:minmax(0,1fr); } }
