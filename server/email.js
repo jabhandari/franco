@@ -14,7 +14,9 @@ export async function sendMail({ to, subject, html, text }) {
     baseUrl: process.env.RESEND_BASE_URL || undefined,
   });
   const { error } = await resend.emails.send({
-    from: process.env.EMAIL_FROM || 'onboarding@resend.dev', to, subject, html, text,
+    // A bare address with no display name reads as spam. Operators can still
+    // override the whole value (including the name) via EMAIL_FROM.
+    from: process.env.EMAIL_FROM || 'Franco <onboarding@resend.dev>', to, subject, html, text,
   });
   if (error) throw new Error(`Resend delivery failed: ${error.message}`);
 }
