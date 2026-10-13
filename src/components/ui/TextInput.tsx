@@ -17,6 +17,7 @@ export type TextInputProps = {
   autoComplete?: string;
   autoFocus?: boolean;
   required?: boolean;
+  minLength?: number;
   disabled?: boolean;
   className?: string;
   key?: React.Key;
@@ -34,6 +35,7 @@ export function TextInput({
   autoComplete,
   autoFocus,
   required = false,
+  minLength,
   className,
   ...rest
 }: TextInputProps) {
@@ -54,6 +56,7 @@ export function TextInput({
       autoComplete={autoComplete}
       autoFocus={autoFocus}
       required={required}
+      minLength={minLength}
       className={className}
       {...ariaProps}
     />

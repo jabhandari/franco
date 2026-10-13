@@ -1,3 +1,6 @@
+/** Public auth screen modes shared by routing and the auth view. */
+export type AuthMode = 'login' | 'signup' | 'forgot' | 'reset' | 'verify' | 'check-email' | 'unverified';
+
 // Shared TypeScript types for the franco SPA — the single home for
 // cross-cutting domain types. Import from here instead of redefining a
 // shape locally; a type used by only one module lives in that module.
@@ -106,3 +109,6 @@ export type ContentItemSummary = {
   cefr_level: CefrLevel;
   prompt: string;
 };
+
+export type TranslationResult = { text:string;translation:string;source:'fr'|'en';target:'fr'|'en' };
+export type DiaryEntry = TranslationResult & { id:string;saved_at:string };

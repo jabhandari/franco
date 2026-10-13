@@ -95,7 +95,7 @@ export type SignupRequest = {
 
 export type AuthRequest = LoginRequest | SignupRequest;
 
-/** POST /api/auth/signup and POST /api/auth/login. The progress/mistakes/
+/** POST /api/auth/login. The progress/mistakes/
  *  attempts arrays are always empty — the server hardcodes `[]` on these
  *  routes (legacy compatibility fields); real learner data comes from
  *  /api/me/progress. */
@@ -626,6 +626,7 @@ export type SpeechTranscribeResponse = {
 
 /** The speaking-completion token reportAttempt sends back for speaking items. */
 export type SpeakingCompletion = {
+  typed_text?: string;
   completed: boolean;
   transcript?: string;
   transcription_id?: string;
@@ -636,6 +637,7 @@ export type SpeakingCompletion = {
 // ---------------------------------------------------------------------------
 
 export type ConversationTarget = {
+  hint?: {sentence:string|null;pointer:string};
   id: string;
   section: string;
   title: string;
@@ -859,6 +861,10 @@ function errorMessageFrom(payload: unknown, status: number): string {
   return fallbackForStatus(status);
 }
 
+export class ApiError extends Error {
+  constructor(message: string, public status: number, public code: string | null) { super(message); }
+}
+
 async function parseApiResponse<T = ApiResponse>(response: Response): Promise<T> {
   let payload: unknown = null;
   try {
@@ -867,7 +873,7 @@ async function parseApiResponse<T = ApiResponse>(response: Response): Promise<T>
     throw new Error('The server sent an unreadable response. Please try again.');
   }
   if (!response.ok) {
-    throw new Error(errorMessageFrom(payload, response.status));
+    throw new ApiError(errorMessageFrom(payload, response.status), response.status, isJsonObject(payload) ? safeText(payload.code) || null : null);
   }
   // Justification: T is the caller-declared endpoint response shape (the
   // apiGet/apiPost type argument, defaulting to ApiResponse); the JSON body
@@ -881,6 +887,12 @@ async function parseApiResponse<T = ApiResponse>(response: Response): Promise<T>
 // (e.g. Cloudflare Pages) to point the frontend at the API origin.
 // Falls back to same-origin relative URLs, which is what local dev uses.
 const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+
+export function startGoogleSignIn(): void {
+  const state=Array.from(crypto.getRandomValues(new Uint8Array(32)),value=>value.toString(16).padStart(2,'0')).join('');
+  sessionStorage.setItem('franco_oauth_return_state',state);
+  window.location.assign(`${apiUrl('/api/auth/google')}?return_state=${state}`);
+}
 
 function apiUrl(path: string): string {
   return API_BASE ? `${API_BASE}${path}` : path;

@@ -1,9 +1,11 @@
 import React from 'react';
+import { useAudioRecorder } from '../../hooks/useAudioRecorder';
 import type { AttemptItemKind } from '../../api/client';
 import { getErrorMessage, getSpeechStatus, reportAttempt, uploadSpeech } from '../../api/client.js';
 import { getSpeakingLesson } from '../../../shared/speaking-lessons.js';
 import { speechFeedback } from '../../../shared/speech-feedback.js';
 import * as UIRaw from '../ui';
+import { Textarea } from '../ui';
 
 type AudioPlayerProps = {
   src?: string;
@@ -95,6 +97,7 @@ export type TranscriptionResult = {
 // the server's attempt response (stored in `result` below) has the
 // AttemptResult shape.
 export type SavedAttemptResult = {
+  typed_text?: string;
   completed: boolean;
   transcript?: string;
   transcription_id?: string;
@@ -131,17 +134,6 @@ type SpeakingLesson = {
   phrases: SpeakingPhrase[];
 };
 
-type RecorderPhase = 'idle' | 'requesting' | 'recording' | 'ready' | 'uploading';
-
-const MAX_BYTES = 8388608;
-const FORMATS = [
-  'audio/webm;codecs=opus',
-  'audio/webm',
-  'audio/mp4',
-  'audio/ogg;codecs=opus',
-  'audio/ogg',
-];
-
 function WordTokens({ title, tokens }: { title: string; tokens: SpeechWordToken[] }) {
   return (
     <Box className="speech-token-row">
@@ -162,13 +154,10 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
   const [mode, setMode] = React.useState<string>(lesson ? 'guided' : 'free');
   const [phraseIndex, setPhraseIndex] = React.useState<number>(0);
   const phrase = lesson?.phrases[phraseIndex];
+  const [typing,setTyping]=React.useState(false);
+  const [typedText,setTypedText]=React.useState('');
   const [result, setResult] = React.useState<AttemptResult | null>(null);
   const [completionError, setCompletionError] = React.useState<string>('');
-  const [recordingError, setRecordingError] = React.useState<string>('');
-  const [phase, setPhase] = React.useState<RecorderPhase>('idle');
-  const [elapsed, setElapsed] = React.useState<number>(0);
-  const [blob, setBlob] = React.useState<Blob | null>(null);
-  const [previewUrl, setPreviewUrl] = React.useState<string>('');
   const [transcription, setTranscription] = React.useState<TranscriptionResult | null>(null);
   const shownFeedback = mode === 'guided' && phrase && transcription
     ? speechFeedback(phrase.french, transcription.transcript) : transcription?.feedback;
@@ -176,19 +165,11 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
   const [serverAvailable, setServerAvailable] = React.useState<boolean | null>(null);
   const [maxSeconds, setMaxSeconds] = React.useState<number>(60);
   const startedAt = React.useRef<number>(Date.now());
-  const mounted = React.useRef<boolean>(true);
   const completed = React.useRef<boolean>(false);
-  const stream = React.useRef<MediaStream | null>(null);
-  const recorder = React.useRef<MediaRecorder | null>(null);
-  const chunks = React.useRef<Blob[]>([]);
-  const interval = React.useRef<number | null>(null);
-  const cutoff = React.useRef<number | null>(null);
-  const preview = React.useRef<string | null>(null);
+  const audio = useAudioRecorder(maxSeconds);
+  const {phase,setPhase,recordingError,setRecordingError,elapsed,blob,previewUrl,browserSupported,mounted,releasePreview,cancelRecording,stopRecording} = audio;
   const points: string[] = entry.expectedPoints || [];
   const followUps: string[] = entry.followUpQuestions || [];
-  const browserSupported = typeof window !== 'undefined' && window.isSecureContext &&
-    Boolean(navigator.mediaDevices?.getUserMedia) && typeof MediaRecorder !== 'undefined';
-
   const recordingSupported = browserSupported && serverAvailable === true;
 
   React.useEffect(() => {
@@ -197,97 +178,10 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
     return () => { cancelled = true; };
   }, [token]);
 
-  const releasePreview = React.useCallback(() => {
-    if (preview.current) URL.revokeObjectURL(preview.current);
-    preview.current = null;
-    if (mounted.current) {
-      setPreviewUrl('');
-      setBlob(null);
-    }
-  }, []);
-
-  const stopTracks = React.useCallback(() => {
-    if (interval.current) clearInterval(interval.current);
-    if (cutoff.current) clearTimeout(cutoff.current);
-    interval.current = null;
-    cutoff.current = null;
-    stream.current?.getTracks().forEach((track) => track.stop());
-    stream.current = null;
-  }, []);
-
-  React.useEffect(() => {
-    mounted.current = true;
-    return () => {
-      mounted.current = false;
-      recorder.current && (recorder.current.onstop = null);
-      if (recorder.current?.state === 'recording') recorder.current.stop();
-      stopTracks();
-      if (preview.current) URL.revokeObjectURL(preview.current);
-    };
-  }, [stopTracks]);
-
   async function startRecording() {
-    if (!recordingSupported || completed.current || phase === 'recording' || phase === 'uploading') return;
-    setRecordingError('');
+    if(!recordingSupported || completed.current) return;
     setTranscription(null);
-    releasePreview();
-    setPhase('requesting');
-    try {
-      const microphone = await navigator.mediaDevices.getUserMedia({ audio: true });
-      if (!mounted.current || completed.current) {
-        microphone.getTracks().forEach((track) => track.stop());
-        return;
-      }
-      stream.current = microphone;
-      const mimeType = FORMATS.find((value) => MediaRecorder.isTypeSupported?.(value));
-      const current = mimeType ? new MediaRecorder(microphone, { mimeType }) : new MediaRecorder(microphone);
-      recorder.current = current;
-      chunks.current = [];
-      current.ondataavailable = (event) => {
-        if (event.data?.size) chunks.current.push(event.data);
-      };
-      current.onstop = () => {
-        stopTracks();
-        if (!mounted.current) return;
-        const recorded = new Blob(chunks.current, { type: current.mimeType || mimeType || '' });
-        chunks.current = [];
-        if (!recorded.size || recorded.size > MAX_BYTES) {
-          setRecordingError(recorded.size ? 'This recording is too large. Try a shorter sample.' : 'No audio was recorded. Please try again.');
-          setPhase('idle');
-          return;
-        }
-        preview.current = URL.createObjectURL(recorded);
-        setPreviewUrl(preview.current);
-        setBlob(recorded);
-        setPhase('ready');
-      };
-      current.onerror = () => {
-        current.onstop = null;
-        stopTracks();
-        if (mounted.current) {
-          setRecordingError('The recording failed. Please try again.');
-          setPhase('idle');
-        }
-      };
-      current.start();
-      const start = Date.now();
-      setElapsed(0);
-      setPhase('recording');
-      interval.current = setInterval(() => setElapsed(Math.min(maxSeconds, Math.floor((Date.now() - start) / 1000))), 250);
-      cutoff.current = setTimeout(() => {
-        if (current.state === 'recording') current.stop();
-      }, Math.max(100, maxSeconds * 1000 - 500));
-    } catch {
-      stopTracks();
-      if (mounted.current) {
-        setRecordingError('Microphone access was denied or unavailable. You can still mark this exercise complete.');
-        setPhase('idle');
-      }
-    }
-  }
-
-  function stopRecording() {
-    if (recorder.current?.state === 'recording') recorder.current.stop();
+    await audio.startRecording();
   }
 
   async function transcribe() {
@@ -308,12 +202,13 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
     }
   }
 
-  async function markComplete() {
+  async function markComplete(typedAnswer = '') {
     if (result) return;
     setCompletionError('');
     try {
       const response: SavedAttemptResult = { completed: true };
-      if (transcription) {
+      if(typeof typedAnswer==='string' && typedAnswer.trim()) {response.typed_text=typedAnswer.trim();}
+      else if (transcription) {
         response.transcript = transcription.transcript;
         if (transcription.transcription_id != null) {
           response.transcription_id = String(transcription.transcription_id);
@@ -323,12 +218,7 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
       completed.current = true;
       setResult(saved);
       onResult?.(saved);
-      if (recorder.current) {
-        recorder.current.onstop = null;
-        if (recorder.current.state === 'recording') recorder.current.stop();
-      }
-      stopTracks();
-      releasePreview();
+      cancelRecording();
     } catch (error) {
       setCompletionError(getErrorMessage(error));
     }
@@ -406,6 +296,8 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
             </Box>
           )}
           {!recordingSupported && <Box className="speaking-button-row">{mode === 'guided' && lesson ? <Button variant="text" onClick={() => choosePractice('free')}>Continue to full prompt →</Button> : <Button variant="text" onClick={markComplete}>Finish practice</Button>}</Box>}
+          <Button variant="text" disabled={choosingDisabled} onClick={()=>setTyping(value=>!value)}>{typing ? 'Hide typing' : 'Type instead'}</Button>
+          {typing && <Box className="speaking-type-fallback"><Textarea rows={4} value={typedText} onChange={event=>setTypedText(event.target.value)} aria-label="Typed speaking answer" placeholder="Write the phrase you would say in French…"/><Button variant="primary" disabled={!typedText.trim()} onClick={()=>markComplete(typedText)}>Submit typed answer</Button></Box>}
           {recordingError && <Text className="error-message" role="alert">{recordingError}</Text>}
           {transcription && <Box className="speech-feedback" aria-live="polite">
             <Text as="strong">{mode === 'guided' ? 'Transcript comparison' : 'Your transcript'}</Text>

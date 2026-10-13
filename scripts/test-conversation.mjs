@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import { conversationScenario } from '../server/conversation.js';
+const concepts=Array.from({length:6},(_,index)=>({id:String(index),title:`Concept ${index}`,level_code:'A1',description:'Try a simple phrase.',metadata_json:{examples:[['Je parle français.','I speak French.']],theory:[['tip','Keep it simple.']]}}));
+const first=conversationScenario(concepts,0,true),next=conversationScenario(concepts,1,true);
+assert.notEqual(first.scenario,next.scenario);
+assert.notDeepEqual(first.targets,next.targets);
+assert.equal(first.targets.length,4);
+assert.equal(first.targets[0].hint.sentence,'Je parle français.');
+assert.equal(first.targets[0].hint.pointer,'Keep it simple.');
+assert.equal(conversationScenario([],3).targets.length,0);
+assert.equal(conversationScenario([{id:'empty',title:'Stub'}]).targets[0].hint.sentence,null);
+assert.equal(conversationScenario(concepts,6).targets[0].id,'0');
+console.log('conversation scenario tests passed');

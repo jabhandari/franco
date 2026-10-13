@@ -26,7 +26,23 @@ npm install
 npm run dev
 ```
 
-The API requires `DATABASE_URL` (your Supabase PostgreSQL connection string) in `.env`. To load the founding content dataset, run:
+The API requires `DATABASE_URL` (your Supabase PostgreSQL connection string) in `.env`. Email signup verification and password reset require `RESEND_API_KEY` on the **Render API service**. The PR Render preview is a separate service and also needs the key. When the key is absent, signup and email-request endpoints return `503 email_unavailable` rather than implying a message was sent. `EMAIL_FROM` defaults to `onboarding@resend.dev`, which can only send to the Resend account owner; use a verified-domain sender for other recipients. `FRONTEND_URL` defaults to `https://franco-dsh.pages.dev` and should be `http://localhost:5173` locally. Email requests made from Franco's own Pages preview link back to that preview. Keep `RESEND_API_KEY` server-side; the web app only receives email links. Existing users are backfilled as verified when the database migration runs; new email/password signups must verify before login. Google sign-in uses Google's verified email claim.
+
+```mermaid
+flowchart LR
+  Browser[Franco web app] -->|signup / resend / forgot| API[Render API]
+  API -->|hash and store one-use token| DB[(Supabase PostgreSQL)]
+  API -->|RESEND_API_KEY: send link| Resend[Resend]
+  Resend -->|verification or reset email| Inbox[User inbox]
+  Inbox -->|open link| Browser
+  Browser -->|redeem token| API
+  API -->|mark used / verify email or reset password and revoke sessions| DB
+```
+
+
+To run the email flow integration test against a **local** PostgreSQL database, set `TEST_DATABASE_URL` to its connection string and run `node scripts/test-auth-email.mjs`. The test uses a local fake Resend endpoint and never sends mail externally.
+
+To load the founding content dataset, run:
 
 ```bash
 npm run import:normalized

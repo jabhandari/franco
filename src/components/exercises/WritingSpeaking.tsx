@@ -131,6 +131,7 @@ export function WritingPrompt({ entry, token, onResult }: WritingPromptProps) {
         submitLabel="Submit writing"
         onSubmit={submit}
       />
+      <Text variant="muted">{value.trim() ? value.trim().split(/\s+/).length : 0} words</Text>
       {hasResult(result) && (
         <Feedback tone="correct" title="Submitted.">
           <Text as="span">Compare your text against the rubric above — completion has been logged.</Text>

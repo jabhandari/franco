@@ -38,6 +38,7 @@ type OptionListProps = {
 type FeedbackProps = {
   tone?: 'correct' | 'incorrect' | 'info';
   title?: string;
+  message?: string;
   reveal?: React.ReactNode;
   revealLabel?: string;
   onRetry?: () => void;
@@ -83,6 +84,7 @@ export type MultipleChoiceItem = {
   skill?: string;
   type?: string;
   prompt?: string;
+  explanation?: string;
   context?: string;
   choices?: MultipleChoiceOption[];
 };
@@ -144,6 +146,7 @@ export function MultipleChoice({ entry, token, onResult }: MultipleChoiceProps) 
         <Feedback
           tone={feedbackTone(result)}
           title={feedbackTitle(result)}
+          message={result.correct ? entry.explanation : undefined}
           reveal={result.correct ? undefined : result.reveal}
           revealLabel="Correct answer:"
           onRetry={result.correct ? undefined : retry}
