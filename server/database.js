@@ -12,6 +12,13 @@ export async function migrate() {
     -- name stays the derived display name ("First Last").
     ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name TEXT;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name TEXT;
+    -- Backfill existing users as verified before changing the default for new users.
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS email_verified BOOLEAN NOT NULL DEFAULT TRUE;
+    ALTER TABLE users ALTER COLUMN email_verified SET DEFAULT FALSE;
+    CREATE TABLE IF NOT EXISTS email_tokens (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,token_hash TEXT NOT NULL UNIQUE,type TEXT NOT NULL CHECK(type IN ('verify','reset')),expires_at TIMESTAMPTZ NOT NULL,used_at TIMESTAMPTZ,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
+    CREATE INDEX IF NOT EXISTS email_tokens_user_type_idx ON email_tokens(user_id,type,created_at DESC);
+    CREATE TABLE IF NOT EXISTS auth_email_requests (id TEXT PRIMARY KEY,scope_hash TEXT NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
+    CREATE INDEX IF NOT EXISTS auth_email_requests_scope_time_idx ON auth_email_requests(scope_hash,created_at DESC);
     CREATE TABLE IF NOT EXISTS sessions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,token_hash TEXT NOT NULL UNIQUE,expires_at TIMESTAMPTZ NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE TABLE IF NOT EXISTS learner_profiles (user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,current_level TEXT,learning_goal TEXT,placement_status TEXT NOT NULL DEFAULT 'not_started',created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE TABLE IF NOT EXISTS user_skill_estimates (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,cefr_level TEXT NOT NULL,skill TEXT NOT NULL,strength REAL,updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),UNIQUE(user_id,cefr_level,skill));
@@ -91,7 +98,7 @@ ALTER TABLE public.learner_lesson_positions ENABLE ROW LEVEL SECURITY;
 
     -- Match the private-data migrations on fresh or existing databases.
     DO $$ DECLARE table_name TEXT; BEGIN
-      FOREACH table_name IN ARRAY ARRAY['users','sessions','learner_profiles','user_skill_estimates','attempts','mistakes','learning_attempts','learner_item_state','learner_concept_mastery','learner_activity_days','speech_transcriptions','content_api_keys','content_reports','content_sources','example_sentences','exercise_items','exam_questions','learning_topics','tv5_exercises','concepts','schema_migrations','cefr_levels','content_batches','content_items','content_concepts','content_revisions','content_tags','tags','media_assets','content_duplicates','content_reviews','concept_prerequisites'] LOOP
+      FOREACH table_name IN ARRAY ARRAY['email_tokens','auth_email_requests','users','sessions','learner_profiles','user_skill_estimates','attempts','mistakes','learning_attempts','learner_item_state','learner_concept_mastery','learner_activity_days','speech_transcriptions','content_api_keys','content_reports','content_sources','example_sentences','exercise_items','exam_questions','learning_topics','tv5_exercises','concepts','schema_migrations','cefr_levels','content_batches','content_items','content_concepts','content_revisions','content_tags','tags','media_assets','content_duplicates','content_reviews','concept_prerequisites'] LOOP
         IF to_regclass(format('public.%I',table_name)) IS NOT NULL THEN
           EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY',table_name);
         END IF;

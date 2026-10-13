@@ -95,7 +95,7 @@ export type SignupRequest = {
 
 export type AuthRequest = LoginRequest | SignupRequest;
 
-/** POST /api/auth/signup and POST /api/auth/login. The progress/mistakes/
+/** POST /api/auth/login. The progress/mistakes/
  *  attempts arrays are always empty — the server hardcodes `[]` on these
  *  routes (legacy compatibility fields); real learner data comes from
  *  /api/me/progress. */
@@ -861,6 +861,10 @@ function errorMessageFrom(payload: unknown, status: number): string {
   return fallbackForStatus(status);
 }
 
+export class ApiError extends Error {
+  constructor(message: string, public status: number, public code: string | null) { super(message); }
+}
+
 async function parseApiResponse<T = ApiResponse>(response: Response): Promise<T> {
   let payload: unknown = null;
   try {
@@ -869,7 +873,7 @@ async function parseApiResponse<T = ApiResponse>(response: Response): Promise<T>
     throw new Error('The server sent an unreadable response. Please try again.');
   }
   if (!response.ok) {
-    throw new Error(errorMessageFrom(payload, response.status));
+    throw new ApiError(errorMessageFrom(payload, response.status), response.status, isJsonObject(payload) ? safeText(payload.code) || null : null);
   }
   // Justification: T is the caller-declared endpoint response shape (the
   // apiGet/apiPost type argument, defaulting to ApiResponse); the JSON body

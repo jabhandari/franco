@@ -55,11 +55,12 @@ export async function googleAccount(identity,{query,createProfileForUser,passwor
     // An inaccessible random password preserves the existing users contract;
     // password login cannot be guessed for a Google-created account.
     const id=randomBytes(16).toString('hex'),p=password(randomBytes(32).toString('hex'));
-    await query('INSERT INTO users(id,email,name,first_name,last_name,password_hash,password_salt) VALUES(?,?,?,?,?,?,?) ON CONFLICT(email) DO NOTHING',
+    await query('INSERT INTO users(id,email,name,first_name,last_name,password_hash,password_salt,email_verified) VALUES(?,?,?,?,?,?,?,TRUE) ON CONFLICT(email) DO NOTHING',
       [id,identity.email,[identity.firstName,identity.lastName].filter(Boolean).join(' '),identity.firstName,identity.lastName,p.hash,p.salt]);
     row=(await query('SELECT * FROM users WHERE email=?',[identity.email]))[0];
   }
   if(!row) throw new Error('Google account could not be created.');
+  await query('UPDATE users SET email_verified=TRUE WHERE id=?',[row.id]);
   await createProfileForUser(row.id);
   return row;
 }
