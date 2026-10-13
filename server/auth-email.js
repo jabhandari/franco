@@ -2,7 +2,7 @@ import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { isIP } from 'node:net';
 import { query, pool } from './database.js';
 import { sendMail } from './email.js';
-import { buildResetEmail, buildVerifyEmail, buildGoogleResetEmail } from './auth-email-templates.js';
+import { buildResetEmail, buildVerifyEmail, buildGoogleSignInEmail } from './auth-email-templates.js';
 
 export const hashEmailToken = value => createHash('sha256').update(value).digest('hex');
 export const validEmailToken = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
@@ -32,16 +32,20 @@ function frontendLoginUrl(origin) {
   return frontendOrigin(origin) || process.env.FRONTEND_URL || 'https://franco-dsh.pages.dev';
 }
 export async function sendAuthEmail(userId, email, type, origin, opts = {}) {
+  if (type === 'reset' && opts.googleLinked) {
+    // Separate silos (FRA-57): Google identities are Google-only. No reset
+    // token is minted for them — the email just points at Google sign-in.
+    // (Uniform 200 response + always sending keeps this oracle-free.)
+    const { subject, text, html } = buildGoogleSignInEmail(frontendLoginUrl(origin), email);
+    await sendMail({ to: email, subject, text, html });
+    return;
+  }
   const token = randomBytes(32).toString('hex');
   const minutes = type === 'verify' ? 24 * 60 : 60;
   await query("INSERT INTO email_tokens(id,user_id,token_hash,type,expires_at) VALUES(?,?,?,?,NOW()+(? * INTERVAL '1 minute'))",
     [randomUUID(), userId, hashEmailToken(token), type, minutes]);
   const link = frontendLink(type === 'verify' ? '/verify-email' : '/reset-password', token, origin);
-  // Google-linked accounts get tailored reset copy: the link still works
-  // (inbox ownership is the same trust level), but the email leads with
-  // "Continue with Google" so it never reads as a password you forgot.
-  const { subject, text, html } = type === 'verify' ? buildVerifyEmail(link, email)
-    : opts.googleLinked ? buildGoogleResetEmail(link, email, frontendLoginUrl(origin)) : buildResetEmail(link, email);
+  const { subject, text, html } = type === 'verify' ? buildVerifyEmail(link, email) : buildResetEmail(link, email);
   try {
     await sendMail({ to: email, subject, text, html });
   } catch (error) {

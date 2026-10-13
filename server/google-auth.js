@@ -69,9 +69,10 @@ export async function consumeAuthCode(query,code) {
 
 export async function googleAccount(identity,{query,createProfileForUser,password}) {
   if(!identity.sub) throw new Error('Google identity could not be verified.');
-  // Identity first: Google's sub is the stable account key. Email is a
-  // mutable attribute — a user who changes their Google account email keeps
-  // the same sub, so sub-first lookup never strands their data.
+  // Separate silos (FRA-57): a Google identity resolves by sub only. It is
+  // never merged into a password account by email match — Google users are
+  // Google users, password users are password users. One account per email
+  // across both methods; collisions point at the existing method.
   let row=(await query('SELECT * FROM users WHERE google_sub=?',[identity.sub]))[0];
   if(row) {
     if(row.email!==identity.email) {
@@ -86,47 +87,38 @@ export async function googleAccount(identity,{query,createProfileForUser,passwor
     await createProfileForUser(row.id);
     return row;
   }
-  row=(await query('SELECT * FROM users WHERE email=?',[identity.email]))[0];
-  if(!row) {
-    // An inaccessible random password preserves the existing users contract;
-    // password login cannot be guessed for a Google-created account.
-    const id=randomBytes(16).toString('hex'),p=password(randomBytes(32).toString('hex'));
-    try {
-      await query('INSERT INTO users(id,email,name,first_name,last_name,password_hash,password_salt,email_verified,google_sub) VALUES(?,?,?,?,?,?,?,TRUE,?) ON CONFLICT(email) DO NOTHING',
-        [id,identity.email,[identity.firstName,identity.lastName].filter(Boolean).join(' '),identity.firstName,identity.lastName,p.hash,p.salt,identity.sub]);
-    } catch(insertError) {
-      // Concurrent first-login race on google_sub (23505): the winner's row
-      // is re-read below; the loser adopts it instead of 500ing.
-      if(!insertError || insertError.code!=='23505') throw insertError;
-    }
-    row=(await query('SELECT * FROM users WHERE google_sub=?',[identity.sub]))[0]
-      || (await query('SELECT * FROM users WHERE email=?',[identity.email]))[0];
-    if(!row) throw new Error('Google account could not be created.');
+  // New Google identity: the email must be free. Never claim or merge into
+  // an existing row — not even an unverified one (that was the pre-hijacking
+  // primitive: anyone can type an address into a signup form).
+  const existing=(await query('SELECT id FROM users WHERE email=?',[identity.email]))[0];
+  if(existing) throw emailTakenError();
+  // An inaccessible random password preserves the existing users contract;
+  // password login cannot be guessed for a Google-created account.
+  const id=randomBytes(16).toString('hex'),p=password(randomBytes(32).toString('hex'));
+  try {
+    await query('INSERT INTO users(id,email,name,first_name,last_name,password_hash,password_salt,email_verified,google_sub) VALUES(?,?,?,?,?,?,?,TRUE,?) ON CONFLICT(email) DO NOTHING',
+      [id,identity.email,[identity.firstName,identity.lastName].filter(Boolean).join(' '),identity.firstName,identity.lastName,p.hash,p.salt,identity.sub]);
+  } catch(insertError) {
+    // Concurrent first-login race on google_sub (23505): the winner's row
+    // is re-read below; the loser adopts it instead of 500ing.
+    if(!insertError || insertError.code!=='23505') throw insertError;
   }
-  if(row.google_sub!==identity.sub) {
-    if(row.google_sub) {
-      // A *different* Google identity already owns this account — e.g. a
-      // Workspace admin reassigned this email address to a new hire. Never
-      // silently re-link one human's account to another: fail closed. The
-      // owner can still sign in with their original method.
-      throw new Error('This account is already linked to a different Google account. Sign in with your original method or contact support.');
-    }
-    if(!row.email_verified) {
-      // Pre-hijacking defense (FRA-57): this row was created by a password
-      // signup that was never verified, so literally anyone could have typed
-      // this address. The Google identity is the stronger proof of ownership,
-      // so it claims the row — and the password is rotated to a fresh random
-      // value, revoking whatever the unverified creator set. They never held
-      // a session: password login requires email_verified.
-      const p=password(randomBytes(32).toString('hex'));
-      await query('UPDATE users SET password_hash=?, password_salt=?, email_verified=TRUE, google_sub=? WHERE id=?',[p.hash,p.salt,identity.sub,row.id]);
-    } else {
-      // Verified password account: the same human proved ownership twice
-      // (inbox via verification link, Google via ID token). Link the sub.
-      await query('UPDATE users SET google_sub=? WHERE id=?',[identity.sub,row.id]);
-    }
-    row=(await query('SELECT * FROM users WHERE id=?',[row.id]))[0];
+  row=(await query('SELECT * FROM users WHERE google_sub=?',[identity.sub]))[0];
+  if(!row) {
+    // Lost a race against a password signup for the same email: the friendly
+    // "already exists" error, not a 500.
+    if((await query('SELECT id FROM users WHERE email=?',[identity.email]))[0]) throw emailTakenError();
+    throw new Error('Google account could not be created.');
   }
   await createProfileForUser(row.id);
   return row;
+}
+
+// Coded so the OAuth callback can surface a specific, safe message. Not an
+// enumeration oracle: the email in a Google ID token is the attacker's own,
+// so this only ever fires for the caller's own address.
+function emailTakenError() {
+  const error=new Error('An account with this email already exists. Please log in with your password instead.');
+  error.code='EMAIL_TAKEN';
+  return error;
 }

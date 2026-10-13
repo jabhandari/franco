@@ -288,8 +288,9 @@ async function main() {
                 // bearer tokens never travel in URLs (history, logs).
                 const authCode=await issueAuthCode(query,row.id);
                 res.writeHead(302,{...headers,location:googleReturn(config,authCode,false,record.returnState)});return res.end();
-              } catch {
-                res.writeHead(302,{...headers,location:googleReturn(config,'google_failed',true,record.returnState)});return res.end();
+              } catch(callbackError) {
+                const code=callbackError && callbackError.code==='EMAIL_TAKEN' ? 'email_taken' : 'google_failed';
+                res.writeHead(302,{...headers,location:googleReturn(config,code,true,record.returnState)});return res.end();
               }
             }
             if (req.method === 'POST' && u.pathname === '/api/auth/google/exchange') {
