@@ -8,6 +8,7 @@ const databaseUrl = process.env.TEST_DATABASE_URL;
 if (!databaseUrl || !['localhost','127.0.0.1'].includes(new URL(databaseUrl).hostname)) {
   throw new Error('TEST_DATABASE_URL must point to local PostgreSQL.');
 }
+const db=new Pool({connectionString:databaseUrl});
 const mail = [];
 const mailServer = createServer((req,res) => {
   let data=''; req.on('data',chunk=>data+=chunk); req.on('end',()=>{
@@ -37,12 +38,18 @@ try {
   assert.equal(r.status,201,JSON.stringify(r));assert.equal(mail.length,1);
   r=await post('/api/auth/login',{email,password});assert.equal(r.status,403);assert.equal(r.data.code,'email_not_verified');
   const verifyToken=tokenFromLastMail();
+  const verifyRows=await db.query("SELECT token_hash,expires_at FROM email_tokens WHERE type='verify' AND user_id=(SELECT id FROM users WHERE email=$1)",[email]);
+  assert.equal(verifyRows.rows.length,1);assert.notEqual(verifyRows.rows[0].token_hash,verifyToken);
+  assert(Math.abs(new Date(verifyRows.rows[0].expires_at).getTime()-Date.now()-86400000)<60000);
   r=await post('/api/auth/verify-email',{token:verifyToken});assert.equal(r.status,200);
   r=await post('/api/auth/verify-email',{token:verifyToken});assert.equal(r.status,400);
   r=await post('/api/auth/login',{email,password});assert.equal(r.status,200);
   const oldSession=r.data.token;
   r=await post('/api/auth/forgot-password',{email});assert.equal(r.status,200);assert.equal(mail.length,2);
   const resetToken=tokenFromLastMail();
+  const resetRows=await db.query("SELECT token_hash,expires_at FROM email_tokens WHERE type='reset' AND user_id=(SELECT id FROM users WHERE email=$1)",[email]);
+  assert.equal(resetRows.rows.length,1);assert.notEqual(resetRows.rows[0].token_hash,resetToken);
+  assert(Math.abs(new Date(resetRows.rows[0].expires_at).getTime()-Date.now()-3600000)<60000);
   r=await post('/api/auth/reset-password',{token:resetToken,password:'ReplacementPass2'});assert.equal(r.status,200);
   r=await post('/api/auth/reset-password',{token:resetToken,password:'ReplacementPass3'});assert.equal(r.status,400);
   const oldMe=await fetch(root+'/api/me',{headers:{authorization:`Bearer ${oldSession}`}});assert.equal(oldMe.status,401);
@@ -55,7 +62,9 @@ try {
   assert.equal(mail.length,before+4); // first request above consumed one of five hourly slots.
   console.log('Auth email integration OK: verify, replay, login gate, reset, session revocation, generic responses, rate limit.');
 } finally {
-  if(createdEmail) { const db=new Pool({connectionString:databaseUrl}); try {await db.query('DELETE FROM users WHERE email=$1',[createdEmail]);} finally {await db.end();} }
-  api.kill(); await new Promise(resolve=>api.once('exit',resolve));
-  await new Promise(resolve=>mailServer.close(resolve));
+  try { if(createdEmail) await db.query('DELETE FROM users WHERE email=$1',[createdEmail]); } finally {
+    await db.end();
+    if(api.exitCode===null) {api.kill(); await new Promise(resolve=>api.once('exit',resolve));}
+    await new Promise(resolve=>mailServer.close(resolve));
+  }
 }
