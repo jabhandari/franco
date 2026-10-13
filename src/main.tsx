@@ -22,7 +22,6 @@ import { ThemeProvider, useTheme } from 'next-themes';
 import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput, UserMenu } from './components/ui';
 import { streakPath } from './presenters/streak.presenter.js';
 import { Home } from './views/Home.js';
-import { Learn } from './views/Learn.js';
 import { Session } from './views/Session.js';
 import { Content } from './views/Content.js';
 import { PastQuestions } from './views/PastQuestions.js';
@@ -309,7 +308,7 @@ function App(): React.JSX.Element {
             <Text as="span">Log out</Text>
           </Button>
         </Box>
-        <UserMenu name={session.name} level={userData?.profile?.current_level} onClick={() => navigate('profile')} />
+        <UserMenu active={view === 'profile'} name={session.name} level={userData?.profile?.current_level} onClick={() => navigate('profile')} />
       </Box>
 
       <Box as="nav" className="phone-tabs" aria-label="Phone navigation">
@@ -325,15 +324,15 @@ function App(): React.JSX.Element {
           onExplore={() => navigate('content', false, new URLSearchParams({ level:userData?.profile?.current_level || 'A1' }))}
           onConversation={() => navigate('conversation')}
         />}
-        {view === 'learn' && <Learn token={authToken} onQuiz={(level) => { setSessionLevel(level); navigate('session'); }} />}
+        {view === 'learn' && <Content token={authToken} onPractice={(level) => { setSessionLevel(level); navigate('session'); }} />}
         {view === 'placement' && <Placement token={authToken} onPlaced={() => refreshUserData()} />}
         {view === 'session' && <Session key={sessionLevel || 'default'} token={authToken} initialLevel={sessionLevel} />}
-        {view === 'content' && <Content token={authToken} />}
+        {view === 'content' && <Content token={authToken} onPractice={(level) => { setSessionLevel(level); navigate('session'); }} />}
         {(view === 'past' || view === 'practice') && <PastQuestions token={authToken} />}
         {view === 'progress' && <Progress token={authToken} />}
         {view === 'conversation' && <Conversation token={authToken} />}
         {view === 'review' && <ReviewQueue />}
-        {view === 'profile' && <Profile token={authToken} user={session} onSaved={handleProfileSaved} />}
+        {view === 'profile' && <Profile token={authToken} user={session} userData={userData} streak={streak} onSaved={handleProfileSaved} onLogout={logout} onRoadmap={() => navigate('content')} />}
       </Box>
     </Box>
   );

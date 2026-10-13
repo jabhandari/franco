@@ -80,3 +80,5 @@ export type {
 } from './Exercise';
 export { ReportButton } from './Report';
 export type { ReportButtonProps, ReportState } from './Report';
+export { Roadmap } from './Roadmap';
+export { CheckRow } from './CheckRow';
