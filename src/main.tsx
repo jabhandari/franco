@@ -34,6 +34,7 @@ import { AuthScreen } from './views/Auth';
 
 import { LanguageTools } from './components/LanguageTools';
 import { Profile } from './views/Profile.js';
+import { QuestionTypes } from './views/QuestionTypes.js';
 
 // next-themes ships its own types, but this repo has no @types/react, so
 // `React.PropsWithChildren` in its ThemeProviderProps resolves to nothing
@@ -52,7 +53,7 @@ declare module 'next-themes' {
 // FRA-67: app-shell types. ViewId is the sidebar's view vocabulary — the
 // auth gate, router, and nav all speak it, so a bad view id is a type
 // error, not a silent blank page.
-type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile';
+type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types';
 const authViewFromPath = (): AuthMode => window.location.pathname === '/reset-password' ? 'reset' : window.location.pathname === '/verify-email' ? 'verify' : window.location.pathname === '/forgot-password' ? 'forgot' : 'login';
 
 type NavItem = {
@@ -93,9 +94,10 @@ const viewPaths: Record<ViewId, string> = {
   conversation: '/conversation',
   review: '/review',
   profile: '/profile',
+  'question-types': '/question-types',
 };
 
-const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile'];
+const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types'];
 
 function viewFromPath(pathname: string): ViewId {
   for (const id of VIEW_IDS) {
@@ -346,6 +348,7 @@ function App(): React.JSX.Element {
         {view === 'conversation' && <Conversation token={authToken} />}
         {view === 'review' && <ReviewQueue />}
         {view === 'profile' && <Profile token={authToken} user={session} userData={userData} streak={streak} onSaved={handleProfileSaved} onLogout={logout} onRoadmap={() => navigate('content')} />}
+        {view === 'question-types' && <QuestionTypes token={authToken} />}
       </Box>
     </Box>
   );
