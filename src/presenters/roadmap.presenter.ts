@@ -1,16 +1,13 @@
 import type { ContentConcept } from '../api/client';
 import type { ConceptProgress } from '../types';
 
-export type RoadmapState = 'completed' | 'in_progress' | 'up_next' | 'locked';
+export type RoadmapState = 'completed' | 'in_progress' | 'not_started' | 'unavailable';
 
-// A learner's existing work wins over prerequisite locks. Unknown progress
-// stays unavailable instead of treating a failed request as a fresh learner.
+// Progress describes prior work; prerequisites organize the path, never gate access.
 export function lessonState(concept: ContentConcept, progress: ConceptProgress[] | null): RoadmapState {
-  if (!progress) return 'locked';
+  if (!progress) return 'unavailable';
   const own = progress.find(row => row.slug === concept.slug);
-  if (own?.state === 'completed' || own?.state === 'in_progress') return own.state;
-  const ready = concept.prerequisites.every(slug => progress.some(row => row.slug === slug && row.state === 'completed'));
-  return ready ? 'up_next' : 'locked';
+  return own?.state === 'completed' || own?.state === 'in_progress' ? own.state : 'not_started';
 }
 
 // Topological depth preserves the prerequisite branches at every level.

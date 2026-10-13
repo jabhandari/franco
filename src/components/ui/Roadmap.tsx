@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, Lock, Circle } from 'lucide-react';
+import { Check, Circle } from 'lucide-react';
 import type { RoadmapState } from '../../presenters/roadmap.presenter';
 
 type RoadmapLesson = { slug: string; title: string; kind: string; stub: boolean; state: RoadmapState; percent: number; row: number; column: number };
@@ -37,7 +37,7 @@ export function Roadmap({ lessons, edges, selected, onSelect }: RoadmapProps) {
       aria-haspopup="dialog" aria-expanded={selected===lesson.slug} onClick={()=>onSelect(lesson.slug)}>
       <span className="learn-node-number">{String(index+1).padStart(2,'0')}</span>
       <strong>{lesson.title}</strong><small>{lesson.kind}</small>
-      <span className="learn-node-state">{lesson.state==='completed' ? <><Check size={14} aria-hidden="true"/> Completed</> : lesson.state==='in_progress' ? <><Circle size={12} aria-hidden="true"/> {lesson.percent}% · In progress</> : lesson.state==='up_next' ? 'Start →' : <><Lock size={12} aria-hidden="true"/> Locked</>}</span>
+      <span className="learn-node-state">{lesson.state==='completed' ? <><Check size={14} aria-hidden="true"/> Completed</> : lesson.state==='in_progress' ? <><Circle size={12} aria-hidden="true"/> {lesson.percent}% · In progress</> : lesson.state==='not_started' ? 'Start →' : 'Progress unavailable'}</span>
       {lesson.stub && <span className="learn-node-preparation">In preparation</span>}
       <span className="learn-node-track" aria-hidden="true"><span style={{width:`${lesson.state==='completed' ? 100 : lesson.percent}%`}}/></span>
     </button>)}
