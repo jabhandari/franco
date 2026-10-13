@@ -81,3 +81,6 @@ export type {
 export { ReportButton } from './Report';
 export type { ReportButtonProps, ReportState } from './Report';
 export { TimerRing } from './TimerRing';
+
+export { Roadmap } from './Roadmap';
+export { CheckRow } from './CheckRow';
