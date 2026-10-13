@@ -6,6 +6,27 @@ info:
 servers:
   - url: https://franco.example.com
 paths:
+  /api/me/translate:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Translates a short phrase through the server-side Groq provider. No learner progress, review queue, or scheduling writes. Diary saves are scoped per account in browser storage.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text: { type: string, minLength: 1, maxLength: 240 }
+                source: { type: string, enum: [auto, fr, en], default: auto }
+      responses:
+        '200': { description: text, translation, source and target (fr/en) }
+        '400': { description: Invalid phrase or direction }
+        '401': { description: Missing or expired session }
+        '429': { description: Translation capacity reached; retry later }
+        '502': { description: Provider failed or returned invalid output }
+        '503': { description: Provider not configured }
   /api/me/lesson-position:
     get:
       security: [{ LearnerSession: [] }]

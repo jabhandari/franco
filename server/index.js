@@ -6,6 +6,7 @@ import { sm2Update, masteryDelta } from './sm2.js';
 import { localDateString, normalizeTimeZone, shiftDate, summarizeActivity } from './streak.js';
 import { evaluate, gradeExamQuestion, gradeExerciseItem, normalizeText } from './evaluate.js';
 import { SpeechError, speechConfig, audioMime, readAudio, audioDuration, transcribeSpeech, validateSpeakingCompletion } from './speech.js';
+import { translateText, TranslationError } from './translation.js';
 import { getSpeakingLesson } from '../shared/speaking-lessons.js';
 import { getPort, getHost, corsOrigin } from './config.js';
 import { displayName, isNonEmptyName } from './user-names.js';
@@ -251,6 +252,13 @@ async function main() {
         try {
             res.setHeader('access-control-allow-origin', corsOrigin(req.headers.origin));
             if (req.method === 'OPTIONS') return json(res, 204, {}); const u = new URL(req.url, `http://${req.headers.host}`);
+            if (req.method === 'POST' && u.pathname === '/api/me/translate') {
+              const viewer = await user(req);
+              if (!viewer) return json(res,401,{error:'Authentication required.'});
+              const input = await body(req);
+              try {return json(res,200,await translateText({...input,userId:viewer.id}));}
+              catch(error) {if(error instanceof TranslationError) return json(res,error.status,{error:error.message});throw error;}
+            }
             if (req.method === 'GET' && u.pathname === '/api/health') return json(res, 200, { ok: true, database: 'supabase-postgres' });
             if (req.method === 'GET' && u.pathname === '/api/speech/status') { const viewer = await user(req); if (!viewer) return json(res, 401, { error: 'Authentication required.' }); const config = speechConfig(); return json(res, 200, { available: config.enabled, max_seconds: config.maxSeconds }); }
             if (req.method === 'POST' && u.pathname === '/api/speech/transcribe') {
