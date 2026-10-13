@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, RotateCcw, Flame, Check, Circle } from 'lucide-react';
+import { BookOpen, RotateCcw, Flame, Check, CheckCircle2, Circle } from 'lucide-react';
 import { apiGet, apiPost, getErrorMessage, startGoogleSignIn } from '../api/client';
 import { Box, Text, Field, TextInput, Button, ErrorMessage } from '../components/ui';
 import type { AuthMode } from '../types';
@@ -31,7 +31,7 @@ export function AuthScreen({mode,onModeChange,onSubmit,loading,error,onPasswordR
     return ()=>{active=false;};
   },[mode]);
   function submit(event:React.FormEvent<HTMLFormElement>) {
-    setLocalError('');
+    setLocalError('');setNotice('');
     if(signup && (!rules.every(rule=>rule.met) || password!==confirm)) {
       event.preventDefault();setLocalError(password!==confirm ? 'Your passwords do not match.' : 'Choose a password that meets all three rules.');return;
     }
@@ -46,7 +46,8 @@ export function AuthScreen({mode,onModeChange,onSubmit,loading,error,onPasswordR
         const path=mode==='forgot'?'/api/auth/forgot-password':'/api/auth/resend-verification';
         const result=await apiPost<{message:string}>(path,{email});setNotice(result.message);
       } else if(mode==='reset') {
-        const result=await apiPost<{message:string}>('/api/auth/reset-password',{token:linkToken,password});onPasswordReset();setNotice(result.message);
+        const result=await apiPost<{message:string}>('/api/auth/reset-password',{token:linkToken,password});
+        setPassword('');setConfirm('');setNotice(result.message);onPasswordReset();
       }
     } catch(failure) {setLocalError(getErrorMessage(failure));}
     finally {setWorking(false);}
@@ -71,8 +72,9 @@ export function AuthScreen({mode,onModeChange,onSubmit,loading,error,onPasswordR
       </Box>
       <Box as="section" className="auth-b-form">
         {(mode==='login'||signup) && <Box className="auth-b-segments" role="group" aria-label="Account mode"><Box as="button" type="button" disabled={loading} aria-pressed={!signup} onClick={()=>switchMode('login')}>Log in</Box><Box as="button" type="button" disabled={loading} aria-pressed={signup} onClick={()=>switchMode('signup')}>Create account</Box></Box>}
-        <Text as="h2">{title[mode]}</Text>
-        <Text className="auth-b-subtitle">{signup?'Save your level, your lessons and your progress.':mode==='login'?'Pick up where you left off.':mode==='verify'?'Confirming your email address.':mode==='reset'?'Enter a new password for your account.':'We will email you a secure link if the address is eligible.'}</Text>
+        <Text as="h2">{mode==='verify' && notice ? 'Email verified' : title[mode]}</Text>
+        <Text className="auth-b-subtitle">{signup?'Save your level, your lessons and your progress.':mode==='login'?'Pick up where you left off.':mode==='verify' ? notice ? 'Your address is confirmed. You can now log in.' : working ? 'Confirming your email address.' : localError ? 'We could not confirm your email address.' : 'Confirming your email address.':mode==='reset'?'Enter a new password for your account.':'We will email you a secure link if the address is eligible.'}</Text>
+        {mode==='login' && notice && <Box role="status" className="auth-b-success"><CheckCircle2 size={20} aria-hidden="true"/><Text>{notice}</Text></Box>}
         {(mode==='login'||signup) && <><Box as="button" type="button" className="auth-b-google" disabled={loading || googleLoading} onClick={google}><Text as="span" aria-hidden="true">G</Text>{googleLoading ? 'Connecting…' : 'Continue with Google'}</Box><Box className="auth-b-divider">or continue with email</Box></>}
         {(mode==='login'||signup) && <Box as="form" onSubmit={submit}>
           {signup && <Box className="auth-b-name-row"><Field label="First name" name="first_name" autoComplete="given-name" required/><Field label="Last name" name="last_name" autoComplete="family-name" required/></Box>}
@@ -87,9 +89,12 @@ export function AuthScreen({mode,onModeChange,onSubmit,loading,error,onPasswordR
           {mode==='reset' && <><Field label="New password"><TextInput type="password" value={password} onChange={event=>setPassword(event.target.value)} autoComplete="new-password" minLength={8} required/></Field><Field label="Confirm new password"><TextInput type="password" value={confirm} onChange={event=>setConfirm(event.target.value)} autoComplete="new-password" minLength={8} required/></Field></>}
           {notice && <Box role="status" className="auth-b-help">{notice}</Box>}
           {(localError || (!notice && error)) && <ErrorMessage message={localError || error}/>}
+          {mode==='reset' && localError.includes('invalid or expired') && <Box as="button" type="button" className="auth-b-back" onClick={()=>switchMode('forgot')}>Request a new reset link</Box>}
           <Button variant="primary" wide type="submit" disabled={working || (mode==='reset' && !linkToken)}>{working?'Please wait…':mode==='reset'?'Reset password':mode==='forgot'?'Send reset link':'Resend verification email'}</Button>
         </Box>}
-        {mode==='verify' && <Box role="status" className="auth-b-help">{working?'Verifying…':notice || localError}</Box>}
+        {mode==='verify' && notice && <Box role="status" className="auth-b-success"><CheckCircle2 size={20} aria-hidden="true"/><Text>{notice}</Text></Box>}
+        {mode==='verify' && working && <Box role="status" className="auth-b-help">Verifying…</Box>}
+        {mode==='verify' && localError && <ErrorMessage message={localError}/>}
         {mode!=='login' && <Box as="button" type="button" className="auth-b-back" onClick={()=>switchMode('login')}>Back to login</Box>}
       </Box>
     </Box>
