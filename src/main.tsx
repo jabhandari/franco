@@ -25,6 +25,7 @@ import { Home } from './views/Home.js';
 import { Session } from './views/Session.js';
 import { Content } from './views/Content.js';
 import { PastQuestions } from './views/PastQuestions.js';
+import { Practice } from './views/Practice';
 import { Progress } from './views/Progress.js';
 import { Conversation } from './views/Conversation.js';
 import { Placement } from './views/Placement.js';
@@ -331,7 +332,8 @@ function App(): React.JSX.Element {
         {view === 'placement' && <Placement token={authToken} onPlaced={() => refreshUserData()} />}
         {view === 'session' && <Session key={sessionLevel || 'default'} token={authToken} initialLevel={sessionLevel} />}
         {view === 'content' && <Content token={authToken} onPractice={(level) => { setSessionLevel(level); navigate('session'); }} />}
-        {(view === 'past' || view === 'practice') && <PastQuestions token={authToken} />}
+        {view === 'past' && <PastQuestions token={authToken} />}
+        {view === 'practice' && <Practice token={authToken} />}
         {view === 'progress' && <Progress token={authToken} />}
         {view === 'conversation' && <Conversation token={authToken} />}
         {view === 'review' && <ReviewQueue />}

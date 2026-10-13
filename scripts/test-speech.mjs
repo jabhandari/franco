@@ -120,3 +120,6 @@ await rejectsCode(validateSpeakingCompletion({ completed: true, transcript: 'bon
 await rejectsCode(validateSpeakingCompletion({ completed: true, transcript: 'edited', transcription_id: 'record-1' }, 'me', 'item', owned), 'speech_transcript_mismatch');
 
 console.log('speech checks passed');
+
+assert.deepEqual(await validateSpeakingCompletion({completed:true,typed_text:' Bonjour. '},'me','item'),{completed:true,typed_text:'Bonjour.'});
+await rejectsCode(validateSpeakingCompletion({completed:true,typed_text:''},'me','item'),'speech_invalid_typed_answer');

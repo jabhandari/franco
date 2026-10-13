@@ -61,6 +61,7 @@ type ExamQuestionCardProps = {
 };
 
 type ExamQuestionListProps = {
+  onAttempt?: () => void;
   data: { questions: ExamQuestion[]; section: string };
   token?: string | null;
 };
@@ -117,7 +118,7 @@ function ExamQuestionCard({ question, selected, onSelect, onRetry, result, pendi
   );
 }
 
-function ExamQuestionList({ data, token }: ExamQuestionListProps) {
+export function ExamQuestionList({ data, token, onAttempt }: ExamQuestionListProps) {
   const [showAll, setShowAll] = React.useState(false);
   const [answers, setAnswers] = React.useState<Record<string, AnswerState>>({});
   const generation = React.useRef(0);
@@ -134,6 +135,7 @@ function ExamQuestionList({ data, token }: ExamQuestionListProps) {
     setAnswers(current => ({ ...current, [question.id]: { selected,result:null,pending:true,error:'' } }));
     try {
       const result = await reportAttempt({ id:question.id,item_kind:'exam_question' },selected,token);
+      onAttempt?.();
       if (generation.current === currentGeneration) setAnswers(current => ({ ...current, [question.id]: { selected,result,pending:false,error:'' } }));
     } catch (error) {
       if (generation.current === currentGeneration) setAnswers(current => ({ ...current, [question.id]: { selected,result:null,pending:false,error:getErrorMessage(error) } }));
