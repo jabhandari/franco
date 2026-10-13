@@ -32,6 +32,13 @@ export function LanguageTools(props:LanguageToolsProps) {
     if(props.panel) panel.current?.querySelector<HTMLElement>('button,input')?.focus();
     else if(props.menu) root.current?.querySelector<HTMLElement>('.language-menu button')?.focus();
   },[props.panel,props.menu]);
+  React.useEffect(()=>{
+    if(!props.panel) return;
+    const background:HTMLElement[]=Array.from(document.querySelectorAll<HTMLElement>('.app-shell > aside,.app-shell > main,.phone-tabs'));
+    const previous=background.map(element=>element.inert);
+    background.forEach(element=>{element.inert=true;});
+    return()=>{background.forEach((element,index)=>{element.inert=previous[index];});if(opener.current?.isConnected) opener.current.focus();};
+  },[props.panel]);
   const selection=props.selection;
   const check=(on:boolean)=>on ? <span className="language-check"><Check size={13} aria-hidden="true"/></span> : <Circle size={19} aria-hidden="true"/>;
   function resultBlock(result:TranslationResult) {
@@ -44,7 +51,7 @@ export function LanguageTools(props:LanguageToolsProps) {
       <button type="button" role="checkbox" aria-checked={props.mode==='diary'} className={props.mode==='diary' ? 'checked' : ''} onClick={()=>props.onMode('diary')}>Add to diary {check(props.mode==='diary')}</button>
       <button type="button" onClick={()=>props.onPanel('translator')}>Translator <span aria-hidden="true">›</span></button><button type="button" onClick={()=>props.onPanel('diary')}>My diary <small>{props.diary.length} entries</small></button>
     </div>}
-    {selection && <div className="language-bubble" role="status" style={{left:Math.max(12,Math.min(selection.x,window.innerWidth-302)),top:Math.max(12,Math.min(selection.y,window.innerHeight-220))}}>
+    {selection && <div className="language-bubble" role="status" style={{left:Math.max(12,Math.min(selection.x,window.innerWidth-302)),top:Math.max(12,Math.min(selection.y,window.innerHeight-340))}}>
       <button type="button" className="language-close" aria-label="Close translation" onClick={props.onClose}><X size={16}/></button>
       {selection.loading ? <p>Translating…</p> : selection.error ? <p>{selection.error}</p> : selection.result && <><small>{selection.result.source.toUpperCase()} → {selection.result.target.toUpperCase()}</small><strong>{selection.result.text}</strong>{resultBlock(selection.result)}{selection.saved && <small>Saved to diary</small>}{props.status && props.status !== 'Saved to diary' && <small>{props.status}</small>}</>}
     </div>}

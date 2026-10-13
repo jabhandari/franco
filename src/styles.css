@@ -2225,3 +2225,4 @@ html[data-theme] .language-tools-enabled .main-content { padding-top:80px; }
 .language-bubble .language-result p { font-size:16px; }
 @media(max-width:680px) { .language-tools-button { top:76px; right:16px; } .language-menu { top:126px; right:16px; } .language-panel { top:var(--phone-header-height); bottom:var(--phone-tabs-height); padding-top:38px; } }
 .language-tools { position:fixed; z-index:70; width:0; height:0; }
+.language-bubble { max-height:min(320px,calc(100dvh - 24px)); max-width:calc(100vw - 24px); overflow-y:auto; }

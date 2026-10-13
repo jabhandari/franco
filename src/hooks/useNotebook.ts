@@ -16,7 +16,8 @@ export function useNotebook(userId:string) {
     catch {setError('Your diary could not be saved on this browser. Check that storage is available.');return false;}
   }
   function save(result:TranslationResult) {
-    if(current.current.some(row=>row.text.toLocaleLowerCase()===result.text.toLocaleLowerCase() && row.source===result.source)) return true;
+    const existing=current.current.find(row=>row.text.toLocaleLowerCase()===result.text.toLocaleLowerCase() && row.source===result.source);
+    if(existing) return persist(current.current.map(row=>row.id===existing.id ? {...row,...result,saved_at:new Date().toISOString()} : row));
     return persist([{...result,id:crypto.randomUUID(),saved_at:new Date().toISOString()},...current.current]);
   }
   function remove(id:string) {persist(current.current.filter(row=>row.id!==id));}
