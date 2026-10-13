@@ -1,6 +1,7 @@
 import React from 'react';
 import type { AttemptItemKind } from '../../api/client';
 import { reportAttempt } from '../../api/client.js';
+import type { SimulateSubmit } from './ExerciseCard';
 import { getErrorMessage } from '../../presenters/format.presenter.js';
 import { answeredState, hasResult, feedbackTone, elapsedMs } from '../../presenters/attempt.presenter.js';
 import { Box, Button, ClipPlayer, ErrorMessage, ExerciseEyebrow, ExerciseShell, Feedback, Text } from '../ui';
@@ -34,11 +35,11 @@ type PronunciationDrillProps = {
   onResult?: (result: AttemptResult) => void;
   compact?: boolean;
   sequence?: number;
-  preview?: boolean;
+  simulateSubmit?: SimulateSubmit;
 };
 
 // The answer stays hidden until the learner has listened and tried saying it.
-export function PronunciationDrill({ entry, token, onResult, compact = false, sequence, preview = false }: PronunciationDrillProps) {
+export function PronunciationDrill({ entry, token, onResult, compact = false, sequence, simulateSubmit }: PronunciationDrillProps) {
   const [revealed, setRevealed] = React.useState(false);
   const [result, setResult] = React.useState<AttemptResult | null>(null);
   const [submitting, setSubmitting] = React.useState(false);
@@ -56,9 +57,12 @@ export function PronunciationDrill({ entry, token, onResult, compact = false, se
       // when present, otherwise the audio transcript revealed by "Show word".
       // Submitting entry.expected alone would send '' on transcript-only drills,
       // which the attempts endpoint grades as an incorrect attempt.
-      const response = await reportAttempt(entry, saidItRight ? word : '', token, {
-        durationMs: elapsedMs(startRef.current),
-      });
+      const attemptResponse = saidItRight ? word : '';
+      const response: AttemptResult = simulateSubmit
+        ? await simulateSubmit(entry, attemptResponse)
+        : await reportAttempt(entry, attemptResponse, token, {
+            durationMs: elapsedMs(startRef.current),
+          });
       setResult(response);
       onResult?.(response);
     } catch (attemptError) {
@@ -97,8 +101,8 @@ export function PronunciationDrill({ entry, token, onResult, compact = false, se
             <Text as="strong" className="pronunciation-word">{word || 'No transcript available'}</Text>
             {!result && (
               <Box className="pronunciation-mark-row">
-                <Button variant="primary" disabled={submitting || preview} onClick={() => selfMark(true)}>Got it</Button>
-                <Button variant="retry" disabled={submitting || preview} onClick={() => selfMark(false)}>Not yet</Button>
+                <Button variant="primary" disabled={submitting} onClick={() => selfMark(true)}>Got it</Button>
+                <Button variant="retry" disabled={submitting} onClick={() => selfMark(false)}>Not yet</Button>
               </Box>
             )}
           </Box>

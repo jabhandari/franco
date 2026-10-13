@@ -1,6 +1,7 @@
 import React from 'react';
 import type { AttemptItemKind } from '../../api/client';
 import { reportAttempt } from '../../api/client.js';
+import type { SimulateSubmit } from './ExerciseCard';
 import { getErrorMessage } from '../../presenters/format.presenter.js';
 import { shuffle } from '../../presenters/collections.presenter.js';
 import {
@@ -100,11 +101,11 @@ type WordOrderProps = {
   entry: WordOrderItem;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
-  preview?: boolean;
+  simulateSubmit?: SimulateSubmit;
 };
 
 // Tap-to-order sentence builder for word_order items.
-export function WordOrder({ entry, token, onResult, preview = false }: WordOrderProps) {
+export function WordOrder({ entry, token, onResult, simulateSubmit }: WordOrderProps) {
   const [bank, setBank] = React.useState<string[]>(() => shuffle(entry.tokens || []));
   const [answer, setAnswer] = React.useState<string[]>([]);
   const [result, setResult] = React.useState<AttemptResult | null>(null);
@@ -133,7 +134,9 @@ export function WordOrder({ entry, token, onResult, preview = false }: WordOrder
   async function submit() {
     if (result || !answer.length) return;
     try {
-      const res: AttemptResult = await reportAttempt(entry, answer, token, { durationMs: elapsedMs(startRef.current) });
+      const res: AttemptResult = simulateSubmit
+        ? await simulateSubmit(entry, answer)
+        : await reportAttempt(entry, answer, token, { durationMs: elapsedMs(startRef.current) });
       setResult(res);
       onResult?.(res);
     } catch (error) {
@@ -168,7 +171,7 @@ export function WordOrder({ entry, token, onResult, preview = false }: WordOrder
         ))}
       </TokenTray>
       {!result && (
-        <Button variant="primary" onClick={submit} disabled={!answer.length || preview}>
+        <Button variant="primary" onClick={submit} disabled={!answer.length}>
           Check answer
         </Button>
       )}

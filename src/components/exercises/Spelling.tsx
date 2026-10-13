@@ -1,6 +1,7 @@
 import React from 'react';
 import type { AttemptItemKind } from '../../api/client';
 import { reportAttempt } from '../../api/client.js';
+import type { SimulateSubmit } from './ExerciseCard';
 import { getErrorMessage, humanize } from '../../presenters/format.presenter.js';
 import {
   answeredState,
@@ -93,12 +94,12 @@ type SpellingProps = {
   token?: string | null;
   audioUrl?: string;
   onResult?: (result: AttemptResult) => void;
-  preview?: boolean;
+  simulateSubmit?: SimulateSubmit;
 };
 
 // Typed-answer renderer for spelling / cloze / free-text items, and dictation
 // when an audioUrl is provided.
-export function Spelling({ entry, token, audioUrl, onResult, preview = false }: SpellingProps) {
+export function Spelling({ entry, token, audioUrl, onResult, simulateSubmit }: SpellingProps) {
   const [value, setValue] = React.useState<string>('');
   const [result, setResult] = React.useState<AttemptResult | null>(null);
   const startRef = React.useRef<number>(Date.now());
@@ -108,7 +109,9 @@ export function Spelling({ entry, token, audioUrl, onResult, preview = false }: 
     event?.preventDefault();
     if (result || !value.trim()) return;
     try {
-      const res: AttemptResult = await reportAttempt(entry, value, token, { durationMs: elapsedMs(startRef.current) });
+      const res: AttemptResult = simulateSubmit
+        ? await simulateSubmit(entry, value)
+        : await reportAttempt(entry, value, token, { durationMs: elapsedMs(startRef.current) });
       setResult(res);
       onResult?.(res);
     } catch (error) {
@@ -136,9 +139,9 @@ export function Spelling({ entry, token, audioUrl, onResult, preview = false }: 
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => setValue(event.target.value)}
         placeholder={isDictation ? 'Type exactly what you hear…' : 'Type your answer…'}
         disabled={Boolean(result)}
-        submitDisabled={!value.trim() || preview}
+        submitDisabled={!value.trim()}
         hideSubmit={Boolean(result)}
-        submitLabel={preview ? "Preview mode" : "Check answer"}
+        submitLabel="Check answer"
         onSubmit={submit}
       />
       {hasResult(result) && (

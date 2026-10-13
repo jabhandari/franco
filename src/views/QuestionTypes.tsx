@@ -1,5 +1,10 @@
 import React from 'react';
-import { ExerciseCard, type ExerciseItem } from '../components/exercises/ExerciseCard';
+import {
+  ExerciseCard,
+  type AttemptResult,
+  type ExerciseItem,
+  type SimulateSubmit,
+} from '../components/exercises/ExerciseCard';
 import type { Choice } from '../presenters/collections.presenter.js';
 import {
   Box,
@@ -20,6 +25,7 @@ type ShowcaseEntry = ExerciseItem & {
   choices?: Choice[];
   tokens?: string[];
   expected?: string;
+  correctKey?: string;
   context?: string;
   skill?: string;
   instructions?: string;
@@ -51,6 +57,7 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
         { key: 'C', text: 'Thank you' },
         { key: 'D', text: 'Please' },
       ],
+      correctKey: 'A',
     },
   },
   {
@@ -70,6 +77,7 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
         { key: 'C', text: 'Je suis aller au marché.' },
         { key: 'D', text: 'Nous avons vu un film.' },
       ],
+      correctKey: 'C',
     },
   },
   {
@@ -90,6 +98,7 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
         { key: 'C', text: 'By bus' },
         { key: 'D', text: 'She walks' },
       ],
+      correctKey: 'B',
     },
   },
   {
@@ -109,6 +118,7 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
         { key: 'C', text: 'aller' },
         { key: 'D', text: 'va' },
       ],
+      correctKey: 'B',
     },
   },
   {
@@ -128,6 +138,7 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
         { key: 'C', text: 'It is snowing' },
         { key: 'D', text: 'It is cloudy' },
       ],
+      correctKey: 'B',
     },
   },
   {
@@ -276,6 +287,78 @@ type QuestionTypesProps = {
   token?: string | null;
 };
 
+/**
+ * Mirrors server/evaluate.js normalizeText so simulated grading matches real
+ * attempt grading: accent/case/whitespace tolerant, trailing sentence
+ * punctuation never decides a comparison.
+ */
+export function normalizeAnswer(value: string): string {
+  return value
+    .normalize('NFKC')
+    .replace(/[‘’‛ʼ]/g, "'")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .replace(/[.!?…]+$/, '')
+    .trim();
+}
+
+/** The correct choice's text for an MCQ sample (the server reveals text, never just the key — FRA-7). */
+function correctChoiceText(sample: ShowcaseEntry): string | null {
+  const choice = (sample.choices ?? []).find((c) => c.key === sample.correctKey);
+  return choice ? choice.text : null;
+}
+
+/**
+ * Simulates POST /api/me/attempts for the showcase samples: grades the
+ * response locally against the sample answers and returns the same
+ * { correct, reveal } shape the server returns, so every renderer shows its
+ * real post-submit states. Nothing is sent anywhere; no attempt is recorded.
+ */
+export const simulateSubmit: SimulateSubmit = (entry, response): AttemptResult => {
+  const sample = SAMPLE_ENTRIES.find((def) => def.entry.id === entry.id)?.entry;
+  if (!sample) return { correct: false, reveal: null };
+  switch (sample.type) {
+    case 'multiple_choice':
+    case 'reading':
+    case 'grammar_focus':
+    case 'listening': {
+      // Server 'choice' evaluator: case-insensitive, whitespace-tolerant key match.
+      if (typeof response !== 'string' || !sample.correctKey) return { correct: false, reveal: null };
+      if (normalizeAnswer(response) === normalizeAnswer(sample.correctKey)) return { correct: true, reveal: null };
+      return { correct: false, reveal: correctChoiceText(sample) };
+    }
+    case 'word_order': {
+      // Server 'token_order' evaluator: token-by-token comparison.
+      const given = typeof response === 'string' ? response.split(/\s+/) : Array.isArray(response) ? response : [];
+      const expected = (sample.expected ?? '').split(/\s+/).map(normalizeAnswer).filter(Boolean);
+      const correct = given.length > 0 && given.length === expected.length &&
+        given.every((token, index) => normalizeAnswer(token) === expected[index]);
+      return { correct, reveal: correct ? null : sample.expected ?? null };
+    }
+    case 'spelling':
+    case 'cloze':
+    case 'free_text':
+    case 'dictation': {
+      // Server 'normalized_text' evaluator.
+      if (typeof response !== 'string') return { correct: false, reveal: sample.expected ?? null };
+      if (normalizeAnswer(response) === normalizeAnswer(sample.expected ?? '')) return { correct: true, reveal: null };
+      return { correct: false, reveal: sample.expected ?? null };
+    }
+    case 'pronunciation_drill':
+      // Self-marked: "Got it" submits the word (correct), "Not yet" submits '' (incorrect).
+      if (typeof response !== 'string') return { correct: false, reveal: null };
+      return { correct: normalizeAnswer(response) === normalizeAnswer(sample.expected ?? ''), reveal: null };
+    case 'writing_prompt':
+      // Server 'rubric' evaluator: any non-empty response counts as completed.
+      return { correct: true, reveal: null };
+    case 'speaking_prompt':
+      return { correct: true, reveal: null };
+    default:
+      return { correct: false, reveal: null };
+  }
+};
+
 export function QuestionTypes({ token }: QuestionTypesProps): React.JSX.Element {
   const [activeId, setActiveId] = React.useState<string>(SAMPLE_ENTRIES[0].id);
 
@@ -305,12 +388,12 @@ export function QuestionTypes({ token }: QuestionTypesProps): React.JSX.Element 
       </Box>
       <Box className="question-types-body">
         <Text as="p" variant="lede">{active.description}</Text>
-        <Text as="p" variant="note">Preview mode — submissions are disabled. This page shows the question UI only.</Text>
+        <Text as="p" variant="note">Simulated submissions — answers are graded locally, nothing is saved.</Text>
         <ExerciseCard
           key={active.id}
           entry={active.entry}
           token={token}
-          preview
+          simulateSubmit={simulateSubmit}
         />
       </Box>
     </Page>

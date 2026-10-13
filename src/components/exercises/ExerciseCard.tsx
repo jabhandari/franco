@@ -1,5 +1,5 @@
 import React from 'react';
-import type { AttemptItemKind } from '../../api/client';
+import type { AttemptItemKind, AttemptResponse } from '../../api/client';
 import { MultipleChoice } from './MultipleChoice';
 import { WordOrder } from './WordOrder';
 import { Spelling } from './Spelling';
@@ -60,6 +60,15 @@ export type AttemptResult = {
   error?: string;
 };
 
+// Drop-in stand-in for reportAttempt, used by the internal /question-types
+// showcase: grades the response locally and returns the same AttemptResult
+// shape the server would, so renderers show their real post-submit states
+// without any network traffic and without recording an attempt.
+export type SimulateSubmit = (
+  entry: { id: string; type?: string },
+  response: AttemptResponse,
+) => AttemptResult | Promise<AttemptResult>;
+
 type ExerciseCardProps = {
   key?: React.Key;
   entry: ExerciseItem | null | undefined;
@@ -67,12 +76,14 @@ type ExerciseCardProps = {
   onResult?: (result: AttemptResult) => void;
   compactListening?: boolean;
   sequence?: number;
-  preview?: boolean;
+  simulateSubmit?: SimulateSubmit;
 };
 
 // One renderer per item type. Every answered item reports an attempt with
-// response + duration to the server's adaptive engine.
-export function ExerciseCard({ entry, token, onResult, compactListening = false, sequence, preview = false }: ExerciseCardProps) {
+// response + duration to the server's adaptive engine — unless simulateSubmit
+// is provided, in which case the response is graded locally and no attempt
+// is recorded.
+export function ExerciseCard({ entry, token, onResult, compactListening = false, sequence, simulateSubmit }: ExerciseCardProps) {
   // Normalize server snake_case fields for the renderers, then sanitize so
   // object-shaped API values can never crash a renderer or print raw JSON.
   const raw: Partial<ExerciseItem> = entry && typeof entry === 'object' ? entry : {};
@@ -90,37 +101,37 @@ export function ExerciseCard({ entry, token, onResult, compactListening = false,
   let rendered: React.ReactNode;
   switch (rawType) {
     case 'word_order':
-      rendered = <WordOrder entry={item} token={token} onResult={onResult} preview={preview} />;
+      rendered = <WordOrder entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
     case 'spelling':
     case 'cloze':
     case 'free_text':
-      rendered = <Spelling entry={item} token={token} onResult={onResult} preview={preview} />;
+      rendered = <Spelling entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
     case 'dictation':
-      rendered = <Spelling entry={item} token={token} onResult={onResult} audioUrl={(item.media || [])[0]?.url} preview={preview} />;
+      rendered = <Spelling entry={item} token={token} onResult={onResult} audioUrl={(item.media || [])[0]?.url} simulateSubmit={simulateSubmit} />;
       break;
     case 'pronunciation_drill':
-      rendered = <PronunciationDrill entry={item} token={token} onResult={onResult} compact={compactListening} sequence={sequence} preview={preview} />;
+      rendered = <PronunciationDrill entry={item} token={token} onResult={onResult} compact={compactListening} sequence={sequence} simulateSubmit={simulateSubmit} />;
       break;
     case 'writing_prompt':
-      rendered = <WritingPrompt entry={item} token={token} onResult={onResult} preview={preview} />;
+      rendered = <WritingPrompt entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
     case 'speaking_prompt':
-      rendered = <SpeakingPrompt entry={item} token={token} onResult={onResult} preview={preview} />;
+      rendered = <SpeakingPrompt entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
     case 'multiple_choice':
     case 'reading':
     case 'grammar_focus':
     case 'listening':
     default:
-      rendered = <MultipleChoice entry={item} token={token} onResult={onResult} preview={preview} />;
+      rendered = <MultipleChoice entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
   }
-  return <ReportableExercise item={item} token={token} preview={preview}>{rendered}</ReportableExercise>;
+  return <ReportableExercise item={item} token={token}>{rendered}</ReportableExercise>;
 }
 
-function ReportableExercise({ item, token, preview = false, children }: { item: ExerciseItem; token?: string | null; preview?: boolean; children: React.ReactNode }) {
-  const reportable = item.item_kind === 'content_item' && item.id && token && !preview;
+function ReportableExercise({ item, token, children }: { item: ExerciseItem; token?: string | null; children: React.ReactNode }) {
+  const reportable = item.item_kind === 'content_item' && item.id && token;
   return (
     <Box className="exercise-card-wrap">
       {children}
