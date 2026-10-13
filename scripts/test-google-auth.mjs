@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {googleConfig,beginGoogle,consumeGoogleState,stateCookie,googleIdentity,googleReturn,googleAccount} from '../server/google-auth.js';
+import {googleConfig,beginGoogle,consumeGoogleState,stateCookie,googleIdentity,googleReturn,googleAccount,issueAuthCode,consumeAuthCode} from '../server/google-auth.js';
 const env={GOOGLE_CLIENT_ID:'test-client',GOOGLE_CLIENT_SECRET:'test-secret',GOOGLE_REDIRECT_URI:'http://localhost:8787/api/auth/google/callback',GOOGLE_FRONTEND_URL:'http://localhost:5173/'};
 const config=googleConfig(env);assert.ok(config);
 assert.equal(googleConfig({}),null);assert.equal(googleConfig({...env,GOOGLE_FRONTEND_URL:'http://example.com'}),null);
@@ -10,22 +10,127 @@ const record=consumeGoogleState(login.state,login.state,1100);assert.ok(record);
 const expired=beginGoogle(config,1000);assert.equal(consumeGoogleState(expired.state,expired.state,602000),null);
 assert.match(stateCookie(login.state,true),/HttpOnly; SameSite=Lax; Max-Age=600; Secure/);
 const client={async getToken(options){assert.equal(options.codeVerifier,record.verifier);return {tokens:{id_token:'test-id-token'}};},async verifyIdToken(options){assert.equal(options.audience,'test-client');return {getPayload:()=>({nonce:record.nonce,email_verified:true,email:'MARIE@example.com',sub:'google-subject',given_name:'Marie',family_name:'Curie'})};}};
-assert.deepEqual(await googleIdentity(config,'code',record,client),{email:'marie@example.com',firstName:'Marie',lastName:'Curie'});
+assert.deepEqual(await googleIdentity(config,'code',record,client),{email:'marie@example.com',firstName:'Marie',lastName:'Curie',sub:'google-subject'});
 await assert.rejects(googleIdentity(config,'code',record,{...client,async verifyIdToken(){return {getPayload:()=>({nonce:'wrong',email_verified:true,email:'x@example.com',sub:'x'})};}}));
 await assert.rejects(googleIdentity(config,'code',record,{...client,async verifyIdToken(){return {getPayload:()=>({nonce:record.nonce,email_verified:false,email:'x@example.com',sub:'x'})};}}));
-assert.equal(new URL(googleReturn(config,'session')).hash,'#auth_token=session');
+assert.equal(new URL(googleReturn(config,'session')).hash,'#auth_code=session');
 console.log('Google OAuth checks passed');
 
-const identity={email:'marie@example.com',firstName:'Marie',lastName:'Curie'};
-const queries=[];let profileId='';
-const services={query:async(sql,params)=>{queries.push([sql,params]);return [{id:'existing-password-account'}];},createProfileForUser:async(id)=>{profileId=id;},password:()=>({hash:'random-hash',salt:'random-salt'})};
-assert.equal((await googleAccount(identity,services)).id,'existing-password-account');assert.equal(queries.length,2);assert.match(queries[1][0],/email_verified=TRUE/);assert.equal(profileId,'existing-password-account');
-queries.length=0;let first=true;
-const created=await googleAccount(identity,{...services,query:async(sql,params)=>{queries.push([sql,params]);if(first){first=false;return [];}return sql.startsWith('SELECT') ? [{id:'created-account'}] : [];}});
-assert.equal(created.id,'created-account');assert.equal(queries.length,4);assert.match(queries[1][0],/ON CONFLICT\(email\) DO NOTHING/);assert.equal(queries[1][1][1],'marie@example.com');assert.equal(queries[1][1][5],'random-hash');assert.equal(profileId,'created-account');
+// --- FRA-57: account linking rules (sub-first lookup, pre-hijack defense) ---
+function fakeDb(rows) {
+  const log=[];
+  return { log, rows, async query(sql,params) {
+    log.push([sql,params]);
+    if (sql.startsWith('SELECT * FROM users WHERE google_sub=')) return rows.filter(r=>r.google_sub&&r.google_sub===params[0]);
+    if (sql.startsWith('SELECT * FROM users WHERE email=')) return rows.filter(r=>r.email===params[0]);
+    if (sql.startsWith('SELECT id FROM users WHERE email=')) return rows.filter(r=>r.email===params[0]&&r.id!==params[1]).map(r=>({id:r.id}));
+    if (sql.startsWith('SELECT * FROM users WHERE id=')) return rows.filter(r=>r.id===params[0]);
+    if (sql.startsWith('INSERT INTO users')) { rows.push({id:params[0],email:params[1],password_hash:params[5],password_salt:params[6],email_verified:true,google_sub:params[7]}); return []; }
+    if (sql.startsWith('UPDATE users SET password_hash=')) { const r=rows.find(x=>x.id===params[3]); r.password_hash=params[0]; r.password_salt=params[1]; r.email_verified=true; r.google_sub=params[2]; return []; }
+    if (sql.startsWith('UPDATE users SET google_sub=')) { rows.find(x=>x.id===params[1]).google_sub=params[0]; return []; }
+    if (sql.startsWith('UPDATE users SET email=')) { const r=rows.find(x=>x.id===params[1]); r.email=params[0]; r.email_verified=true; return []; }
+    if (sql.startsWith('UPDATE users SET email_verified=TRUE')) { rows.find(x=>x.id===params[0]).email_verified=true; return []; }
+    throw new Error('unexpected query: '+sql);
+  } };
+}
+const linkingServices=db=>({query:db.query,createProfileForUser:async()=>{},password:()=>({hash:'random-hash',salt:'random-salt'})});
+const googleId={email:'marie@example.com',firstName:'Marie',lastName:'Curie',sub:'sub-1'};
+
+// 1. Brand-new Google user: row created verified, linked, with an
+//    inaccessible random password.
+{
+  const db=fakeDb([]);const row=await googleAccount(googleId,linkingServices(db));
+  assert.equal(row.email,'marie@example.com');assert.equal(row.google_sub,'sub-1');assert.equal(row.email_verified,true);
+  assert.equal(row.password_hash,'random-hash');assert.equal(db.log.filter(([s])=>s.startsWith('INSERT INTO users'))[0][1][7],'sub-1');
+}
+// 2. Verified password account + Google login: sub linked, password kept.
+{
+  const db=fakeDb([{id:'u1',email:'marie@example.com',password_hash:'user-secret',password_salt:'s',email_verified:true,google_sub:null}]);
+  const row=await googleAccount(googleId,linkingServices(db));
+  assert.equal(row.id,'u1');assert.equal(row.google_sub,'sub-1');
+  assert.equal(db.rows[0].password_hash,'user-secret');
+  assert.ok(!db.log.some(([s])=>s.startsWith('UPDATE users SET password_hash=')));
+}
+// 3. Pre-hijacking defense: unverified password row claimed by the Google
+//    identity; the attacker's password is rotated away, account verified.
+{
+  const rows=[{id:'u2',email:'marie@example.com',password_hash:'attacker-secret',password_salt:'s',email_verified:false,google_sub:null}];
+  const db=fakeDb(rows);const row=await googleAccount(googleId,linkingServices(db));
+  assert.equal(row.id,'u2');assert.equal(row.google_sub,'sub-1');assert.equal(row.email_verified,true);
+  assert.notEqual(rows[0].password_hash,'attacker-secret');
+}
+// 4. Google email change: sub-first lookup finds the row, adopts the new
+//    Google-verified email instead of creating a duplicate.
+{
+  const rows=[{id:'u3',email:'old@example.com',password_hash:'random-hash',password_salt:'s',email_verified:true,google_sub:'sub-1'}];
+  const db=fakeDb(rows);
+  const row=await googleAccount({...googleId,email:'new@example.com'},linkingServices(db));
+  assert.equal(row.id,'u3');assert.equal(rows[0].email,'new@example.com');assert.equal(rows.length,1);
+}
+// 5. Email change colliding with another account: fail closed, no merge.
+{
+  const rows=[
+    {id:'u4',email:'a@example.com',password_hash:'random-hash',password_salt:'s',email_verified:true,google_sub:'sub-1'},
+    {id:'u5',email:'b@example.com',password_hash:'h',password_salt:'s',email_verified:true,google_sub:null},
+  ];
+  const db=fakeDb(rows);
+  await assert.rejects(googleAccount({...googleId,email:'b@example.com'},linkingServices(db)));
+  assert.equal(rows[0].email,'a@example.com');
+}
+// 6. Already-linked account: no password rotation, no duplicate writes.
+{
+  const rows=[{id:'u6',email:'marie@example.com',password_hash:'h',password_salt:'s',email_verified:true,google_sub:'sub-1'}];
+  const db=fakeDb(rows);const row=await googleAccount(googleId,linkingServices(db));
+  assert.equal(row.id,'u6');assert.ok(!db.log.some(([s])=>s.startsWith('UPDATE users SET password_hash=')));
+}
+// 7. Email reassignment: a *different* Google identity already owns this
+//    account (e.g. Workspace admin recycled the address). Fail closed —
+//    never silently re-link one human's account to another.
+{
+  const rows=[{id:'u7',email:'marie@example.com',password_hash:'h',password_salt:'s',email_verified:true,google_sub:'sub-other'}];
+  const db=fakeDb(rows);
+  await assert.rejects(googleAccount(googleId,linkingServices(db)),/different Google account/);
+  assert.equal(db.rows[0].google_sub,'sub-other');
+}
+// 8. Concurrent first-login race: loser of the google_sub unique race
+//    adopts the winner's row instead of 500ing.
+{
+  const winner={id:'u8',email:'marie@example.com',password_hash:'random-hash',password_salt:'s',email_verified:true,google_sub:'sub-1'};
+  const db=fakeDb([]); // winner not yet committed at lookup time
+  const racy={query:async(sql,params)=>{
+    if(sql.startsWith('INSERT INTO users')){
+      db.rows.push(winner); // winner commits between our lookups and insert
+      const e=new Error('duplicate key value violates unique constraint "users_google_sub_uidx"');e.code='23505';throw e;
+    }
+    return db.query(sql,params);
+  }};
+  const row=await googleAccount(googleId,{...linkingServices(db),query:racy.query});
+  assert.equal(row.id,'u8');
+}
 console.log('Google account-linking checks passed');
+
+// --- FRA-57: single-use handoff codes ---
+{
+  const stored=new Map();
+  const db={async query(sql,params){
+    if (sql.startsWith('INSERT INTO oauth_codes')) { stored.set(params[2],{user_id:params[1],used:false}); return []; }
+    if (sql.startsWith('UPDATE oauth_codes')) {
+      const rec=stored.get(params[0]);
+      if (!rec||rec.used) return [];
+      rec.used=true;return [{user_id:rec.user_id}];
+    }
+    throw new Error('unexpected query: '+sql);
+  }};
+  const code=await issueAuthCode(db.query,'user-9');
+  assert.match(code,/^[a-f0-9]{64}$/);
+  assert.equal(await consumeAuthCode(db.query,code),'user-9');
+  assert.equal(await consumeAuthCode(db.query,code),null); // single-use
+  assert.equal(await consumeAuthCode(db.query,'0'.repeat(64)),null);
+  assert.equal(await consumeAuthCode(db.query,'not-hex'),null);
+}
+console.log('Google handoff-code checks passed');
 
 assert.match(stateCookie(login.state,true),/^__Host-franco_google_state=/);
 assert.match(stateCookie(login.state,true),/Path=\/;/);
 
-const returnState='a'.repeat(64);const bound=beginGoogle(config,1000,returnState);assert.equal(consumeGoogleState(bound.state,bound.state,1001).returnState,returnState);assert.equal(new URL(googleReturn(config,'token',false,returnState)).hash,'#auth_token=token&auth_state='+returnState);
+const returnState='a'.repeat(64);const bound=beginGoogle(config,1000,returnState);assert.equal(consumeGoogleState(bound.state,bound.state,1001).returnState,returnState);assert.equal(new URL(googleReturn(config,'token',false,returnState)).hash,'#auth_code=token&auth_state='+returnState);

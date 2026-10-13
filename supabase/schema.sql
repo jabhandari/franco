@@ -10,8 +10,17 @@ CREATE TABLE public.users (
   first_name text,
   last_name text,
   email_verified boolean NOT NULL DEFAULT false,
+  google_sub text UNIQUE,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT users_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.oauth_codes (
+  id text PRIMARY KEY,
+  user_id text NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  code_hash text NOT NULL UNIQUE,
+  expires_at timestamp with time zone NOT NULL,
+  used_at timestamp with time zone,
+  created_at timestamp with time zone NOT NULL DEFAULT now()
 );
 CREATE TABLE public.email_tokens (
   id text PRIMARY KEY,

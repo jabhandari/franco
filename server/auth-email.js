@@ -2,7 +2,7 @@ import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { isIP } from 'node:net';
 import { query, pool } from './database.js';
 import { sendMail } from './email.js';
-import { buildResetEmail, buildVerifyEmail } from './auth-email-templates.js';
+import { buildResetEmail, buildVerifyEmail, buildGoogleResetEmail } from './auth-email-templates.js';
 
 export const hashEmailToken = value => createHash('sha256').update(value).digest('hex');
 export const validEmailToken = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
@@ -26,13 +26,22 @@ function frontendLink(path, token, origin) {
   url.searchParams.set('token', token);
   return url.href;
 }
-export async function sendAuthEmail(userId, email, type, origin) {
+// Login-page URL for the Google-aware reset email's primary CTA. The login
+// view is the default route, so the frontend origin root renders it.
+function frontendLoginUrl(origin) {
+  return frontendOrigin(origin) || process.env.FRONTEND_URL || 'https://franco-dsh.pages.dev';
+}
+export async function sendAuthEmail(userId, email, type, origin, opts = {}) {
   const token = randomBytes(32).toString('hex');
   const minutes = type === 'verify' ? 24 * 60 : 60;
   await query("INSERT INTO email_tokens(id,user_id,token_hash,type,expires_at) VALUES(?,?,?,?,NOW()+(? * INTERVAL '1 minute'))",
     [randomUUID(), userId, hashEmailToken(token), type, minutes]);
   const link = frontendLink(type === 'verify' ? '/verify-email' : '/reset-password', token, origin);
-  const { subject, text, html } = type === 'verify' ? buildVerifyEmail(link, email) : buildResetEmail(link, email);
+  // Google-linked accounts get tailored reset copy: the link still works
+  // (inbox ownership is the same trust level), but the email leads with
+  // "Continue with Google" so it never reads as a password you forgot.
+  const { subject, text, html } = type === 'verify' ? buildVerifyEmail(link, email)
+    : opts.googleLinked ? buildGoogleResetEmail(link, email, frontendLoginUrl(origin)) : buildResetEmail(link, email);
   try {
     await sendMail({ to: email, subject, text, html });
   } catch (error) {

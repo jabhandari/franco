@@ -15,6 +15,16 @@ export async function migrate() {
     -- Backfill existing users as verified before changing the default for new users.
     ALTER TABLE users ADD COLUMN IF NOT EXISTS email_verified BOOLEAN NOT NULL DEFAULT TRUE;
     ALTER TABLE users ALTER COLUMN email_verified SET DEFAULT FALSE;
+    -- FRA-57: Google account linkage. sub is Google's stable user key; NULL
+    -- for password-only accounts. UNIQUE index (NULLs never conflict).
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS google_sub TEXT;
+    CREATE UNIQUE INDEX IF NOT EXISTS users_google_sub_uidx ON users(google_sub);
+    -- FRA-57: single-use OAuth handoff codes. The callback 302s the SPA with a
+    -- 60-second code in the URL fragment instead of the session token, so
+    -- bearer tokens never appear in URLs, history, or server logs. The SPA
+    -- exchanges the code for a session via POST /api/auth/google/exchange.
+    CREATE TABLE IF NOT EXISTS oauth_codes (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,code_hash TEXT NOT NULL UNIQUE,expires_at TIMESTAMPTZ NOT NULL,used_at TIMESTAMPTZ,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
+    DELETE FROM oauth_codes WHERE expires_at < NOW() - INTERVAL '1 hour';
     CREATE TABLE IF NOT EXISTS email_tokens (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,token_hash TEXT NOT NULL UNIQUE,type TEXT NOT NULL CHECK(type IN ('verify','reset')),expires_at TIMESTAMPTZ NOT NULL,used_at TIMESTAMPTZ,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE INDEX IF NOT EXISTS email_tokens_user_type_idx ON email_tokens(user_id,type,created_at DESC);
     CREATE TABLE IF NOT EXISTS auth_email_requests (id TEXT PRIMARY KEY,scope_hash TEXT NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());

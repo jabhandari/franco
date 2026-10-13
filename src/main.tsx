@@ -66,15 +66,17 @@ type NavItem = {
 
 const TOKEN_KEY = 'franco_auth_token';
 const googleCallback=new URLSearchParams(window.location.hash.slice(1));
-const returnedToken=googleCallback.get('auth_token');
+const returnedCode=googleCallback.get('auth_code');
 const returnedState=googleCallback.get('auth_state');
 const expectedState=sessionStorage.getItem('franco_oauth_return_state');
 const matchesCallback=Boolean(expectedState && returnedState===expectedState);
-const googleToken=matchesCallback ? returnedToken : null;
-const googleError=googleCallback.get('auth_error') || (returnedToken && !matchesCallback ? 'google_failed' : null);
+// Single-use 60s handoff code: only accepted when this tab initiated the
+// flow. The URL is scrubbed immediately so the code never lingers in the
+// address bar or history; the session token itself never appears in a URL.
+const pendingGoogleCode=matchesCallback && !googleCallback.get('auth_error') ? returnedCode : null;
+const googleError=googleCallback.get('auth_error') || (returnedCode && !matchesCallback ? 'google_failed' : null);
 if(matchesCallback) sessionStorage.removeItem('franco_oauth_return_state');
-if(googleToken) sessionStorage.setItem(TOKEN_KEY,googleToken);
-if(returnedToken || googleError || returnedState) window.history.replaceState({},'',window.location.pathname+window.location.search);
+if(returnedCode || googleError || returnedState) window.history.replaceState({},'',window.location.pathname+window.location.search);
 
 
 const navItems: NavItem[] = [
@@ -124,7 +126,7 @@ function App(): React.JSX.Element {
   React.useLayoutEffect(()=>{latestAuthToken.current=authToken;},[authToken]);
   const [view, setView] = React.useState<ViewId>(() => viewFromPath(window.location.pathname));
   const [sessionLevel, setSessionLevel] = React.useState<string | null>(null);
-  const [loading, setLoading] = React.useState<boolean>(Boolean(authToken));
+  const [loading, setLoading] = React.useState<boolean>(Boolean(authToken) || Boolean(pendingGoogleCode));
   const [error, setError] = React.useState<string>(googleError==='google_cancelled' ? 'Google sign-in was cancelled. Please try again or use email.' : googleError ? 'Google sign-in could not be completed. Please try again or use email.' : '');
   const { resolvedTheme: theme, setTheme } = useTheme();
   function navigate(nextView: ViewId, replace = false, params?: URLSearchParams): void {
@@ -136,6 +138,26 @@ function App(): React.JSX.Element {
     const onPopState = () => { setView(viewFromPath(window.location.pathname)); setAuthMode(authViewFromPath()); };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  // FRA-57: exchange the single-use Google handoff code for a session token.
+  // The session is fetched by the existing [authToken] effect once set.
+  React.useEffect(() => {
+    if (!pendingGoogleCode) return;
+    let active = true;
+    setLoading(true);
+    apiPost<{token: string}>('/api/auth/google/exchange', { code: pendingGoogleCode })
+      .then(({ token }) => {
+        if (!active) return;
+        sessionStorage.setItem(TOKEN_KEY, token);
+        latestAuthToken.current = token;
+        setAuthToken(token);
+      })
+      .catch(() => {
+        if (active) setError('Google sign-in could not be completed. Please try again or use email.');
+      })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
   }, []);
 
   // Page navigation refreshes the shared learner snapshot after any exercise
