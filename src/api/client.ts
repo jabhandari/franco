@@ -636,6 +636,7 @@ export type SpeakingCompletion = {
 // ---------------------------------------------------------------------------
 
 export type ConversationTarget = {
+  hint?: {sentence:string|null;pointer:string};
   id: string;
   section: string;
   title: string;

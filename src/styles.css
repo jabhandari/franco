@@ -2182,3 +2182,47 @@ html[data-theme] .skill-card .ring-label { color: var(--color-text); font-size: 
   .skill-card { padding: var(--space-3); }
   .skill-card-heading { flex-wrap: wrap; }
 }
+
+/* FRA-94: two-minute speaking drill; paint comes entirely from theme tokens. */
+.conversation-page { max-width:1000px; margin-inline:auto; }
+.conversation-header h1 { font-family:var(--font-heading); font-size:34px; font-weight:500; margin:0 0 12px; }
+.conversation-header > p:last-child { font-size:13px; color:var(--color-muted); }
+.conversation-scenario { padding-block:28px 24px; border-bottom:1px solid var(--color-border); }
+.conversation-scenario-heading { display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.conversation-scenario h2 { font-size:20px; line-height:1.5; max-width:760px; margin:12px 0 8px; letter-spacing:0; }
+.conversation-scenario > p { color:var(--color-muted); font-size:12px; margin:0; }
+.conversation-page .text-button { color:var(--color-accent); width:auto; font-size:12px; }
+.conversation-drill { display:grid; grid-template-columns:240px minmax(0,1fr); gap:40px; padding-block:30px; }
+.conversation-controls { display:grid; justify-items:center; align-content:start; min-width:0; }
+.conversation-timer { position:relative; width:170px; height:170px; }
+.conversation-timer circle { fill:none; stroke-width:8px; }
+.conversation-timer .timer-track { stroke:var(--color-border); }
+.conversation-timer .timer-fill { stroke:var(--color-primary); }
+.conversation-timer > div { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:4px; }
+.conversation-timer strong { font-size:32px; color:var(--color-text); font-variant-numeric:tabular-nums; }
+.conversation-timer small { font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--color-muted); }
+.conversation-phase { font-size:12px; color:var(--color-muted); margin:12px 0; }
+.conversation-buttons { display:flex; justify-content:center; gap:8px; }
+.conversation-buttons .primary-button, .conversation-record .primary-button { padding:10px 16px; width:auto; font-size:12px; }
+.conversation-record { width:100%; display:grid; justify-items:center; gap:12px; border-top:1px solid var(--color-border); padding-top:20px; margin-top:20px; }
+.conversation-record .audio-player { padding:0; background:transparent; border:0; width:100%; }
+.conversation-record audio { width:100%; }
+.conversation-record h3 { font-size:13px; margin:0; }
+.conversation-record textarea { width:100%; min-width:0; font-weight:400; color:var(--color-text); border-color:var(--color-border); background:var(--color-surface); }
+.conversation-record > p { font-size:12px; color:var(--color-muted); margin:0; text-align:center; }
+.conversation-suggestions > h2 { font-size:14px; margin:0 0 12px; letter-spacing:0; }
+.conversation-suggestion { border-block-end:1px solid var(--color-border); padding-block:16px; }
+.conversation-suggestion > div:first-child { display:flex; justify-content:space-between; gap:12px; align-items:center; }
+.conversation-suggestion h3 { font-size:13px; margin:0; font-weight:600; }
+.conversation-suggestion > p { font-size:12px; color:var(--color-muted); line-height:1.7; margin:8px 0 0; }
+.conversation-hint { padding:12px; margin-top:12px; border-radius:var(--radius-control); background:color-mix(in srgb,var(--color-accent) 10%,transparent); }
+.conversation-hint p { font-size:12px; line-height:1.7; margin:0; color:var(--color-text); }
+.conversation-hint p:first-child { font-family:var(--font-heading); font-style:italic; margin-bottom:4px; }
+.conversation-method { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:28px; padding:24px 0 0 18px; margin:0; border-top:1px solid var(--color-border); font-size:12px; color:var(--color-muted); line-height:1.7; }
+.conversation-method li::marker { color:var(--color-accent); }
+.conversation-done { display:flex; align-items:center; gap:16px; padding:24px 0 0; color:var(--color-accent); }
+.conversation-done h2 { font-family:var(--font-heading); font-size:24px; font-weight:500; margin:0 0 6px; }
+.conversation-done p { color:var(--color-muted); margin:0; font-size:12px; }
+@media(max-width:700px) { .conversation-drill { grid-template-columns:minmax(0,1fr); gap:30px; } .conversation-record { max-width:360px; } .conversation-method { grid-template-columns:minmax(0,1fr); gap:12px; } .conversation-header h1 { font-size:28px; } }
+.conversation-page .text-button { margin:0; padding:6px 0; min-height:32px; }
+.conversation-buttons { align-items:center; }
