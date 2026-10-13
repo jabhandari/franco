@@ -6,6 +6,22 @@ info:
 servers:
   - url: https://franco.example.com
 paths:
+  /api/auth/google/status:
+    get:
+      responses:
+        '200': { description: available is true only when all Google OAuth server settings are valid }
+  /api/auth/google:
+    get:
+      description: Starts the Google authorization-code flow with PKCE, nonce and a single-use HTTP-only state cookie.
+      responses:
+        '302': { description: Redirect to Google }
+        '503': { description: OAuth not configured or temporary capacity reached }
+  /api/auth/google/callback:
+    get:
+      description: Verifies cookie-bound state and Google identity, finds/creates the email account, and issues the existing Franco session. Returns to the configured app URL with a token or friendly error in the fragment.
+      responses:
+        '302': { description: Return to Franco; fragment is consumed and immediately removed by the app }
+        '503': { description: OAuth not configured }
   /api/me/lesson-position:
     get:
       security: [{ LearnerSession: [] }]

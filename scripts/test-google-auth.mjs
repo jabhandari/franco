@@ -1,0 +1,26 @@
+import assert from 'node:assert/strict';
+import {googleConfig,beginGoogle,consumeGoogleState,stateCookie,googleIdentity,googleReturn,googleAccount} from '../server/google-auth.js';
+const env={GOOGLE_CLIENT_ID:'test-client',GOOGLE_CLIENT_SECRET:'test-secret',GOOGLE_REDIRECT_URI:'http://localhost:8787/api/auth/google/callback',GOOGLE_FRONTEND_URL:'http://localhost:5173/'};
+const config=googleConfig(env);assert.ok(config);
+assert.equal(googleConfig({}),null);assert.equal(googleConfig({...env,GOOGLE_FRONTEND_URL:'http://example.com'}),null);
+const login=beginGoogle(config,1000);const url=new URL(login.url);
+assert.equal(url.hostname,'accounts.google.com');assert.equal(url.searchParams.get('code_challenge_method'),'S256');assert.equal(url.searchParams.get('state'),login.state);
+assert.equal(consumeGoogleState(login.state,'0'.repeat(64),1100),null);
+const record=consumeGoogleState(login.state,login.state,1100);assert.ok(record);assert.equal(consumeGoogleState(login.state,login.state,1100),null);
+const expired=beginGoogle(config,1000);assert.equal(consumeGoogleState(expired.state,expired.state,602000),null);
+assert.match(stateCookie(login.state,true),/HttpOnly; SameSite=Lax; Max-Age=600; Secure/);
+const client={async getToken(options){assert.equal(options.codeVerifier,record.verifier);return {tokens:{id_token:'test-id-token'}};},async verifyIdToken(options){assert.equal(options.audience,'test-client');return {getPayload:()=>({nonce:record.nonce,email_verified:true,email:'MARIE@example.com',sub:'google-subject',given_name:'Marie',family_name:'Curie'})};}};
+assert.deepEqual(await googleIdentity(config,'code',record,client),{email:'marie@example.com',firstName:'Marie',lastName:'Curie'});
+await assert.rejects(googleIdentity(config,'code',record,{...client,async verifyIdToken(){return {getPayload:()=>({nonce:'wrong',email_verified:true,email:'x@example.com',sub:'x'})};}}));
+await assert.rejects(googleIdentity(config,'code',record,{...client,async verifyIdToken(){return {getPayload:()=>({nonce:record.nonce,email_verified:false,email:'x@example.com',sub:'x'})};}}));
+assert.equal(new URL(googleReturn(config,'session')).hash,'#auth_token=session');
+console.log('Google OAuth checks passed');
+
+const identity={email:'marie@example.com',firstName:'Marie',lastName:'Curie'};
+const queries=[];let profileId='';
+const services={query:async(sql,params)=>{queries.push([sql,params]);return [{id:'existing-password-account'}];},createProfileForUser:async(id)=>{profileId=id;},password:()=>({hash:'random-hash',salt:'random-salt'})};
+assert.equal((await googleAccount(identity,services)).id,'existing-password-account');assert.equal(queries.length,1);assert.equal(profileId,'existing-password-account');
+queries.length=0;let first=true;
+const created=await googleAccount(identity,{...services,query:async(sql,params)=>{queries.push([sql,params]);if(first){first=false;return [];}return sql.startsWith('SELECT') ? [{id:'created-account'}] : [];}});
+assert.equal(created.id,'created-account');assert.equal(queries.length,3);assert.match(queries[1][0],/ON CONFLICT\(email\) DO NOTHING/);assert.equal(queries[1][1][1],'marie@example.com');assert.equal(queries[1][1][5],'random-hash');assert.equal(profileId,'created-account');
+console.log('Google account-linking checks passed');

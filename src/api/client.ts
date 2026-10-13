@@ -882,6 +882,8 @@ async function parseApiResponse<T = ApiResponse>(response: Response): Promise<T>
 // Falls back to same-origin relative URLs, which is what local dev uses.
 const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
 
+export function startGoogleSignIn(): void { window.location.assign(apiUrl('/api/auth/google')); }
+
 function apiUrl(path: string): string {
   return API_BASE ? `${API_BASE}${path}` : path;
 }

@@ -6,6 +6,7 @@ import { sm2Update, masteryDelta } from './sm2.js';
 import { localDateString, normalizeTimeZone, shiftDate, summarizeActivity } from './streak.js';
 import { evaluate, gradeExamQuestion, gradeExerciseItem, normalizeText } from './evaluate.js';
 import { SpeechError, speechConfig, audioMime, readAudio, audioDuration, transcribeSpeech, validateSpeakingCompletion } from './speech.js';
+import { googleConfig,beginGoogle,consumeGoogleState,googleStateCookie,stateCookie,googleIdentity,googleReturn,googleAccount } from './google-auth.js';
 import { getSpeakingLesson } from '../shared/speaking-lessons.js';
 import { getPort, getHost, corsOrigin } from './config.js';
 import { displayName, isNonEmptyName } from './user-names.js';
@@ -251,6 +252,34 @@ async function main() {
         try {
             res.setHeader('access-control-allow-origin', corsOrigin(req.headers.origin));
             if (req.method === 'OPTIONS') return json(res, 204, {}); const u = new URL(req.url, `http://${req.headers.host}`);
+            if (req.method === 'GET' && u.pathname === '/api/auth/google/status') return json(res,200,{available:Boolean(googleConfig())});
+            if (req.method === 'GET' && u.pathname === '/api/auth/google') {
+              const config=googleConfig();
+              if(!config) return json(res,503,{error:'Google sign-in is not configured yet. Please use email and password.'});
+              try {
+                const login=beginGoogle(config);
+                res.writeHead(302,{'location':login.url,'set-cookie':stateCookie(login.state,config.secure),'cache-control':'no-store'});return res.end();
+              } catch {return json(res,503,{error:'Google sign-in is busy. Please try later.'});}
+            }
+            if (req.method === 'GET' && u.pathname === '/api/auth/google/callback') {
+              const config=googleConfig();
+              if(!config) return json(res,503,{error:'Google sign-in is not configured.'});
+              const record=consumeGoogleState(u.searchParams.get('state'),googleStateCookie(req));
+              const headers={'set-cookie':stateCookie('',config.secure,true),'cache-control':'no-store','referrer-policy':'no-referrer'};
+              const code=u.searchParams.get('code');
+              if(!record || !code || u.searchParams.get('error')) {
+                res.writeHead(302,{...headers,location:googleReturn(config,'google_cancelled',true)});return res.end();
+              }
+              try {
+                const identity=await googleIdentity(config,code,record);
+                const row=await googleAccount(identity,{query,createProfileForUser,password});
+                const token=randomBytes(32).toString('hex');
+                await query("INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(?,?,?,NOW()+INTERVAL '14 days')",[randomUUID(),row.id,hashToken(token)]);
+                res.writeHead(302,{...headers,location:googleReturn(config,token)});return res.end();
+              } catch {
+                res.writeHead(302,{...headers,location:googleReturn(config,'google_failed',true)});return res.end();
+              }
+            }
             if (req.method === 'GET' && u.pathname === '/api/health') return json(res, 200, { ok: true, database: 'supabase-postgres' });
             if (req.method === 'GET' && u.pathname === '/api/speech/status') { const viewer = await user(req); if (!viewer) return json(res, 401, { error: 'Authentication required.' }); const config = speechConfig(); return json(res, 200, { available: config.enabled, max_seconds: config.maxSeconds }); }
             if (req.method === 'POST' && u.pathname === '/api/speech/transcribe') {
