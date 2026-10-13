@@ -106,3 +106,6 @@ export type ContentItemSummary = {
   cefr_level: CefrLevel;
   prompt: string;
 };
+
+export type TranslationResult = { text:string;translation:string;source:'fr'|'en';target:'fr'|'en' };
+export type DiaryEntry = TranslationResult & { id:string;saved_at:string };
