@@ -121,7 +121,7 @@ function App(): React.JSX.Element {
   const [view, setView] = React.useState<ViewId>(() => viewFromPath(window.location.pathname));
   const [sessionLevel, setSessionLevel] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(Boolean(authToken) || Boolean(pendingGoogleCode));
-  const [error, setError] = React.useState<string>(googleError==='google_cancelled' ? 'Google sign-in was cancelled. Please try again or use email.' : googleError ? 'Google sign-in could not be completed. Please try again or use email.' : '');
+  const [error, setError] = React.useState<string>(googleError==='google_cancelled' ? 'Google sign-in was cancelled. Please try again or use email.' : googleError==='email_taken' ? 'An account with this email already exists. Please log in with your password instead.' : googleError ? 'Google sign-in could not be completed. Please try again or use email.' : '');
   const { resolvedTheme: theme, setTheme } = useTheme();
   function navigate(nextView: ViewId, replace = false, params?: URLSearchParams): void {
     setView(nextView);

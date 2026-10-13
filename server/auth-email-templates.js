@@ -92,26 +92,21 @@ export function buildResetEmail(link, email) {
   });
 }
 
-// Variant for Google-linked accounts (FRA-57). The reset link still works —
-// inbox ownership is the same trust level as the Google flow — but the copy
-// leads with "Continue with Google" so it never reads as a forgotten
-// password, and setting one is framed as optional. Capability language only:
-// an account may have started as password-based and linked Google later, so
-// no claims about how it was created.
-export function buildGoogleResetEmail(link, email, loginUrl) {
-  const safePasswordLink = escapeHtml(link);
+// Separate silos (FRA-57): a Google identity is Google-only — no password
+// link is ever issued for it. The email just points at Continue with Google.
+export function buildGoogleSignInEmail(loginUrl, email) {
   return authEmailShell({
     title: 'Your Franco account uses Google sign-in',
     preheader: 'Continue with Google to sign in — no password needed.',
     headline: 'Your account uses Google sign-in',
-    introHtml: `The fastest way back in is <strong>Continue with Google</strong> on the login page — no password needed. Prefer email login instead? You can also <a href="${safePasswordLink}" style="color:${BRAND.teal};">set a password for this account</a>.`,
-    introText: `The fastest way back in is Continue with Google on the login page — no password needed: ${loginUrl}\n\nPrefer email login instead? You can also set a password for this account with this link: ${link}`,
+    introHtml: 'This account signs in with Google — there&rsquo;s no password to reset. Click below to open the login page and choose <strong>Continue with Google</strong>.',
+    introText: `This account signs in with Google — there's no password to reset. Open the login page and choose Continue with Google: ${loginUrl}`,
     ctaLabel: 'Continue with Google',
     link: loginUrl,
     email,
-    expiryNote: 'The optional password link expires in 1 hour.',
-    reassuranceHtml: 'If you didn&rsquo;t request this, just ignore this email — your Google sign-in keeps working exactly as before.',
-    reassuranceText: "If you didn't request this, just ignore this email — your Google sign-in keeps working exactly as before.",
+    expiryNote: 'This email contains no expiring link.',
+    reassuranceHtml: 'If you didn&rsquo;t request this, just ignore this email — nothing about your account changes.',
+    reassuranceText: "If you didn't request this, just ignore this email — nothing about your account changes.",
     sentReason: 'a password reset was requested for this address',
   });
 }

@@ -16,18 +16,20 @@ await assert.rejects(googleIdentity(config,'code',record,{...client,async verify
 assert.equal(new URL(googleReturn(config,'session')).hash,'#auth_code=session');
 console.log('Google OAuth checks passed');
 
-// --- FRA-57: account linking rules (sub-first lookup, pre-hijack defense) ---
+// --- FRA-57: separate silos — a Google identity resolves by sub only,
+// never merges into a password row; email collisions point at the method ---
 function fakeDb(rows) {
   const log=[];
   return { log, rows, async query(sql,params) {
     log.push([sql,params]);
     if (sql.startsWith('SELECT * FROM users WHERE google_sub=')) return rows.filter(r=>r.google_sub&&r.google_sub===params[0]);
     if (sql.startsWith('SELECT * FROM users WHERE email=')) return rows.filter(r=>r.email===params[0]);
-    if (sql.startsWith('SELECT id FROM users WHERE email=')) return rows.filter(r=>r.email===params[0]&&r.id!==params[1]).map(r=>({id:r.id}));
+    if (sql.startsWith('SELECT id FROM users WHERE email=')) {
+      if (sql.includes('id<>?')) return rows.filter(r=>r.email===params[0]&&r.id!==params[1]).map(r=>({id:r.id}));
+      return rows.filter(r=>r.email===params[0]).map(r=>({id:r.id}));
+    }
     if (sql.startsWith('SELECT * FROM users WHERE id=')) return rows.filter(r=>r.id===params[0]);
     if (sql.startsWith('INSERT INTO users')) { rows.push({id:params[0],email:params[1],password_hash:params[5],password_salt:params[6],email_verified:true,google_sub:params[7]}); return []; }
-    if (sql.startsWith('UPDATE users SET password_hash=')) { const r=rows.find(x=>x.id===params[3]); r.password_hash=params[0]; r.password_salt=params[1]; r.email_verified=true; r.google_sub=params[2]; return []; }
-    if (sql.startsWith('UPDATE users SET google_sub=')) { rows.find(x=>x.id===params[1]).google_sub=params[0]; return []; }
     if (sql.startsWith('UPDATE users SET email=')) { const r=rows.find(x=>x.id===params[1]); r.email=params[0]; r.email_verified=true; return []; }
     if (sql.startsWith('UPDATE users SET email_verified=TRUE')) { rows.find(x=>x.id===params[0]).email_verified=true; return []; }
     throw new Error('unexpected query: '+sql);
@@ -35,6 +37,7 @@ function fakeDb(rows) {
 }
 const linkingServices=db=>({query:db.query,createProfileForUser:async()=>{},password:()=>({hash:'random-hash',salt:'random-salt'})});
 const googleId={email:'marie@example.com',firstName:'Marie',lastName:'Curie',sub:'sub-1'};
+const emailTaken=(e)=>e && e.code==='EMAIL_TAKEN';
 
 // 1. Brand-new Google user: row created verified, linked, with an
 //    inaccessible random password.
@@ -43,21 +46,19 @@ const googleId={email:'marie@example.com',firstName:'Marie',lastName:'Curie',sub
   assert.equal(row.email,'marie@example.com');assert.equal(row.google_sub,'sub-1');assert.equal(row.email_verified,true);
   assert.equal(row.password_hash,'random-hash');assert.equal(db.log.filter(([s])=>s.startsWith('INSERT INTO users'))[0][1][7],'sub-1');
 }
-// 2. Verified password account + Google login: sub linked, password kept.
+// 2. Verified password account + Google login with the same email: no merge.
+//    The user is pointed at their password login; the row is untouched.
 {
   const db=fakeDb([{id:'u1',email:'marie@example.com',password_hash:'user-secret',password_salt:'s',email_verified:true,google_sub:null}]);
-  const row=await googleAccount(googleId,linkingServices(db));
-  assert.equal(row.id,'u1');assert.equal(row.google_sub,'sub-1');
-  assert.equal(db.rows[0].password_hash,'user-secret');
-  assert.ok(!db.log.some(([s])=>s.startsWith('UPDATE users SET password_hash=')));
+  await assert.rejects(googleAccount(googleId,linkingServices(db)),emailTaken);
+  assert.equal(db.rows[0].password_hash,'user-secret');assert.equal(db.rows[0].google_sub,null);
 }
-// 3. Pre-hijacking defense: unverified password row claimed by the Google
-//    identity; the attacker's password is rotated away, account verified.
+// 3. Unverified password row + Google login: still no merge. (Anyone can type
+//    an address into a signup form — claiming it would be pre-hijacking.)
 {
-  const rows=[{id:'u2',email:'marie@example.com',password_hash:'attacker-secret',password_salt:'s',email_verified:false,google_sub:null}];
-  const db=fakeDb(rows);const row=await googleAccount(googleId,linkingServices(db));
-  assert.equal(row.id,'u2');assert.equal(row.google_sub,'sub-1');assert.equal(row.email_verified,true);
-  assert.notEqual(rows[0].password_hash,'attacker-secret');
+  const db=fakeDb([{id:'u2',email:'marie@example.com',password_hash:'attacker-secret',password_salt:'s',email_verified:false,google_sub:null}]);
+  await assert.rejects(googleAccount(googleId,linkingServices(db)),emailTaken);
+  assert.equal(db.rows[0].password_hash,'attacker-secret');assert.equal(db.rows[0].google_sub,null);
 }
 // 4. Google email change: sub-first lookup finds the row, adopts the new
 //    Google-verified email instead of creating a duplicate.
@@ -77,19 +78,19 @@ const googleId={email:'marie@example.com',firstName:'Marie',lastName:'Curie',sub
   await assert.rejects(googleAccount({...googleId,email:'b@example.com'},linkingServices(db)));
   assert.equal(rows[0].email,'a@example.com');
 }
-// 6. Already-linked account: no password rotation, no duplicate writes.
+// 6. Already-linked account: straight through, no extra writes.
 {
   const rows=[{id:'u6',email:'marie@example.com',password_hash:'h',password_salt:'s',email_verified:true,google_sub:'sub-1'}];
   const db=fakeDb(rows);const row=await googleAccount(googleId,linkingServices(db));
-  assert.equal(row.id,'u6');assert.ok(!db.log.some(([s])=>s.startsWith('UPDATE users SET password_hash=')));
+  assert.equal(row.id,'u6');assert.ok(!db.log.some(([s])=>s.startsWith('UPDATE users SET')));
 }
 // 7. Email reassignment: a *different* Google identity already owns this
-//    account (e.g. Workspace admin recycled the address). Fail closed —
-//    never silently re-link one human's account to another.
+//    address (e.g. Workspace admin recycled it). Sub-first lookup misses,
+//    email hits — no silent re-link, just the "already exists" error.
 {
   const rows=[{id:'u7',email:'marie@example.com',password_hash:'h',password_salt:'s',email_verified:true,google_sub:'sub-other'}];
   const db=fakeDb(rows);
-  await assert.rejects(googleAccount(googleId,linkingServices(db)),/different Google account/);
+  await assert.rejects(googleAccount(googleId,linkingServices(db)),emailTaken);
   assert.equal(db.rows[0].google_sub,'sub-other');
 }
 // 8. Concurrent first-login race: loser of the google_sub unique race
@@ -106,6 +107,17 @@ const googleId={email:'marie@example.com',firstName:'Marie',lastName:'Curie',sub
   }};
   const row=await googleAccount(googleId,{...linkingServices(db),query:racy.query});
   assert.equal(row.id,'u8');
+}
+// 9. Lost race against a password signup for the same email: friendly
+//    "already exists" error, not a 500.
+{
+  const passwordRow={id:'u9',email:'marie@example.com',password_hash:'h',password_salt:'s',email_verified:false,google_sub:null};
+  const db=fakeDb([]);
+  const racy={query:async(sql,params)=>{
+    if(sql.startsWith('INSERT INTO users')){ db.rows.push(passwordRow); return []; } // ON CONFLICT(email) DO NOTHING
+    return db.query(sql,params);
+  }};
+  await assert.rejects(googleAccount(googleId,{...linkingServices(db),query:racy.query}),emailTaken);
 }
 console.log('Google account-linking checks passed');
 
