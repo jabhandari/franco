@@ -2464,3 +2464,12 @@ html[data-theme] .profile-heatmap .heat-cell.l0 { background:var(--color-border)
 .profile-header > div:last-child { min-width:0; }
 .profile-header h1 { overflow-wrap:anywhere; }
 .auth-b-back { margin-top:20px; padding:0; border:0; background:transparent; color:var(--color-accent); font-size:14px; }
+
+/* FRA-121: one continuous Learn texture, including space outside the map. */
+:root { --color-roadmap-dot: color-mix(in srgb, var(--color-text) 30%, transparent); }
+html:not([data-theme="light"]) { --color-roadmap-dot: var(--color-border); }
+html[data-theme] body:has(.learn-page-shell) {
+  background-image: radial-gradient(var(--color-roadmap-dot) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.learn-page-shell .learn-roadmap { background-image: none; }
