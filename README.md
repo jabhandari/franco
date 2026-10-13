@@ -26,7 +26,11 @@ npm install
 npm run dev
 ```
 
-The API requires `DATABASE_URL` (your Supabase PostgreSQL connection string) in `.env`. To load the founding content dataset, run:
+The API requires `DATABASE_URL` (your Supabase PostgreSQL connection string) in `.env`. Email signup verification and password reset also require `RESEND_API_KEY`, `EMAIL_FROM`, and `FRONTEND_URL` in the API environment. Set `FRONTEND_URL=http://localhost:5173` locally and `https://franco-dsh.pages.dev` in Render. Use a verified Resend domain for `EMAIL_FROM` in production: the default `onboarding@resend.dev` sandbox sender can only send to the Resend account owner. Keep `RESEND_API_KEY` server-side; the web app only receives email links. Existing users are backfilled as verified when the database migration runs; new email/password signups must verify before login. Google sign-in uses Google's verified email claim.
+
+To run the email flow integration test against a **local** PostgreSQL database, set `TEST_DATABASE_URL` to its connection string and run `node scripts/test-auth-email.mjs`. The test uses a local fake Resend endpoint and never sends mail externally.
+
+To load the founding content dataset, run:
 
 ```bash
 npm run import:normalized

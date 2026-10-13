@@ -19,10 +19,10 @@ console.log('Google OAuth checks passed');
 const identity={email:'marie@example.com',firstName:'Marie',lastName:'Curie'};
 const queries=[];let profileId='';
 const services={query:async(sql,params)=>{queries.push([sql,params]);return [{id:'existing-password-account'}];},createProfileForUser:async(id)=>{profileId=id;},password:()=>({hash:'random-hash',salt:'random-salt'})};
-assert.equal((await googleAccount(identity,services)).id,'existing-password-account');assert.equal(queries.length,1);assert.equal(profileId,'existing-password-account');
+assert.equal((await googleAccount(identity,services)).id,'existing-password-account');assert.equal(queries.length,2);assert.match(queries[1][0],/email_verified=TRUE/);assert.equal(profileId,'existing-password-account');
 queries.length=0;let first=true;
 const created=await googleAccount(identity,{...services,query:async(sql,params)=>{queries.push([sql,params]);if(first){first=false;return [];}return sql.startsWith('SELECT') ? [{id:'created-account'}] : [];}});
-assert.equal(created.id,'created-account');assert.equal(queries.length,3);assert.match(queries[1][0],/ON CONFLICT\(email\) DO NOTHING/);assert.equal(queries[1][1][1],'marie@example.com');assert.equal(queries[1][1][5],'random-hash');assert.equal(profileId,'created-account');
+assert.equal(created.id,'created-account');assert.equal(queries.length,4);assert.match(queries[1][0],/ON CONFLICT\(email\) DO NOTHING/);assert.equal(queries[1][1][1],'marie@example.com');assert.equal(queries[1][1][5],'random-hash');assert.equal(profileId,'created-account');
 console.log('Google account-linking checks passed');
 
 assert.match(stateCookie(login.state,true),/^__Host-franco_google_state=/);

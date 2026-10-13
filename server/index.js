@@ -16,6 +16,7 @@ import { getPort, getHost, corsOrigin } from './config.js';
 import { displayName, isNonEmptyName } from './user-names.js';
 import { getLearnerProgress } from './learner-progress.js';
 import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
+import { allowAuthEmail, genericEmailResponse, hashEmailToken, sendAuthEmail, validEmailToken } from './auth-email.js';
 
 const PORT = getPort(); const HOST = getHost(); const hashToken = (v) => createHash('sha256').update(v).digest('hex');
 const json = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-headers': 'content-type, authorization', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-expose-headers': 'retry-after', ...headers }); res.end(JSON.stringify(body)); };
@@ -486,7 +487,66 @@ async function main() {
               await query("UPDATE learner_profiles SET current_level=?,placement_status='complete',updated_at=NOW() WHERE user_id=?", [level, x.id]);
               return json(res, 200, { level, placement_status: 'complete' });
             }
-            if (req.method === 'POST' && (u.pathname === '/api/auth/signup' || u.pathname === '/api/auth/login')) { const b = await body(req), email = b.email?.trim().toLowerCase(); let row = (await query('SELECT * FROM users WHERE email=?', [email]))[0]; if (u.pathname.endsWith('signup')) { if (!email || !b.password || b.password.length < 8) return json(res, 400, { error: 'Email and an 8 character password are required.' }); const firstName = String(b.first_name ?? '').trim(), lastName = String(b.last_name ?? '').trim(); if (!isNonEmptyName(firstName) || !isNonEmptyName(lastName)) return json(res, 400, { error: 'First name and last name are required.' }); if (row) return json(res, 409, { error: 'An account already exists for this email.' }); const id = randomUUID(), p = password(b.password), name = displayName(firstName, lastName); await query('INSERT INTO users(id,email,name,first_name,last_name,password_hash,password_salt) VALUES(?,?,?,?,?,?,?)', [id, email, name, firstName, lastName, p.hash, p.salt]); row = { id, email, name, first_name: firstName, last_name: lastName, password_hash: p.hash, password_salt: p.salt }; await createProfileForUser(id); } else { if (!row) return json(res, 401, { error: 'Invalid email or password.' }); if (password(b.password || '', row.password_salt).hash !== row.password_hash) return json(res, 401, { error: 'Invalid email or password.' }); } const token = randomBytes(32).toString('hex'); await query('INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(?,?,?,NOW()+INTERVAL \'14 days\')', [randomUUID(), row.id, hashToken(token)]); return json(res, 200, { token, user: userPayload(row), profile: null, progress: [], mistakes: [], attempts: [] }); }
+            if (req.method === 'POST' && u.pathname === '/api/auth/signup') {
+              const b = await body(req) || {}, email = typeof b.email === 'string' ? b.email.trim().toLowerCase() : '';
+              if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || typeof b.password !== 'string' || b.password.length < 8) return json(res,400,{error:'Email and an 8 character password are required.'});
+              const firstName = String(b.first_name ?? '').trim(), lastName = String(b.last_name ?? '').trim();
+              if (!isNonEmptyName(firstName) || !isNonEmptyName(lastName)) return json(res,400,{error:'First name and last name are required.'});
+              if ((await query('SELECT id FROM users WHERE email=?',[email])).length) return json(res,409,{error:'An account already exists for this email.'});
+              const id = randomUUID(), p = password(b.password), name = displayName(firstName,lastName);
+              await query('INSERT INTO users(id,email,name,first_name,last_name,password_hash,password_salt,email_verified) VALUES(?,?,?,?,?,?,?,FALSE)',[id,email,name,firstName,lastName,p.hash,p.salt]);
+              await createProfileForUser(id);
+              try { await sendAuthEmail(id,email,'verify'); }
+              catch (error) { console.error('Signup verification email failed:',error); return json(res,503,{code:'verification_email_failed',error:'Account created, but verification email could not be sent. Please request a new link.'}); }
+              return json(res,201,{message:'Check your email for a verification link.'});
+            }
+            if (req.method === 'POST' && u.pathname === '/api/auth/login') {
+              const b = await body(req) || {}, email = typeof b.email === 'string' ? b.email.trim().toLowerCase() : '';
+              const row = (await query('SELECT * FROM users WHERE email=?',[email]))[0];
+              if (!row || password(typeof b.password === 'string' ? b.password : '',row.password_salt).hash !== row.password_hash) return json(res,401,{error:'Invalid email or password.'});
+              if (!row.email_verified) return json(res,403,{code:'email_not_verified',error:'Please verify your email before logging in. You can request a new verification link.'});
+              const token = randomBytes(32).toString('hex');
+              await query("INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(?,?,?,NOW()+INTERVAL '14 days')",[randomUUID(),row.id,hashToken(token)]);
+              return json(res,200,{token,user:userPayload(row),profile:null,progress:[],mistakes:[],attempts:[]});
+            }
+            if (req.method === 'POST' && u.pathname === '/api/auth/verify-email') {
+              const b = await body(req) || {};
+              if (!validEmailToken(b.token)) return json(res,400,{error:'This verification link is invalid or expired.'});
+              const rows = await query("WITH consumed AS (UPDATE email_tokens SET used_at=NOW() WHERE token_hash=? AND type='verify' AND used_at IS NULL AND expires_at>NOW() RETURNING user_id) UPDATE users SET email_verified=TRUE WHERE id IN (SELECT user_id FROM consumed) RETURNING id",[hashEmailToken(b.token)]);
+              if (!rows.length) return json(res,400,{error:'This verification link is invalid or expired.'});
+              return json(res,200,{message:'Email verified. You can now log in.'});
+            }
+            if (req.method === 'POST' && (u.pathname === '/api/auth/resend-verification' || u.pathname === '/api/auth/forgot-password')) {
+              const b = await body(req) || {}, email = typeof b.email === 'string' ? b.email.trim().toLowerCase() : '';
+              if (!email || email.length > 254) return json(res,200,genericEmailResponse);
+              const type = u.pathname.endsWith('forgot-password') ? 'reset' : 'verify';
+              const allowed = await allowAuthEmail(type,email,req.socket.remoteAddress || '',5);
+              if (allowed) {
+                const row = (await query('SELECT id,email_verified FROM users WHERE email=?',[email]))[0];
+                if (row && (type === 'reset' || !row.email_verified)) {
+                  try { await sendAuthEmail(row.id,email,type); }
+                  catch (error) { console.error('Authentication email failed:',error); }
+                }
+              }
+              return json(res,200,genericEmailResponse);
+            }
+            if (req.method === 'POST' && u.pathname === '/api/auth/reset-password') {
+              const b = await body(req) || {};
+              if (typeof b.password !== 'string' || b.password.length < 8) return json(res,400,{error:'Password must be at least 8 characters.'});
+              if (!validEmailToken(b.token)) return json(res,400,{error:'This reset link is invalid or expired.'});
+              const client = await pool.connect();
+              try {
+                await client.query('BEGIN');
+                const { rows } = await client.query("UPDATE email_tokens SET used_at=NOW() WHERE token_hash=$1 AND type='reset' AND used_at IS NULL AND expires_at>NOW() RETURNING user_id",[hashEmailToken(b.token)]);
+                if (!rows.length) { await client.query('ROLLBACK'); return json(res,400,{error:'This reset link is invalid or expired.'}); }
+                const p = password(b.password);
+                await client.query('UPDATE users SET password_hash=$1,password_salt=$2 WHERE id=$3',[p.hash,p.salt,rows[0].user_id]);
+                await client.query('DELETE FROM sessions WHERE user_id=$1',[rows[0].user_id]);
+                await client.query('COMMIT');
+                return json(res,200,{message:'Password updated. Log in with your new password.'});
+              } catch (error) { await client.query('ROLLBACK'); throw error; }
+              finally { client.release(); }
+            }
             // FRA-56: update the signed-in user's first/last name. The display
             // name is derived ("First Last") so the sidebar never drifts.
             if (req.method === 'POST' && u.pathname === '/api/me/profile') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const b = await body(req); const firstName = String(b.first_name ?? '').trim(), lastName = String(b.last_name ?? '').trim(); if (!isNonEmptyName(firstName) || !isNonEmptyName(lastName)) return json(res, 400, { error: 'First name and last name are required.' }); const name = displayName(firstName, lastName); await query('UPDATE users SET first_name=?,last_name=?,name=? WHERE id=?', [firstName, lastName, name, x.id]); return json(res, 200, { user: userPayload({ ...x, name, first_name: firstName, last_name: lastName }) }); }

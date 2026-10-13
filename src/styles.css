@@ -2444,3 +2444,4 @@ html[data-theme] .profile-skills .ring-label { color:var(--color-text); font-siz
 html[data-theme] .profile-heatmap .heat-cell.l0 { background:var(--color-border); }
 .profile-header > div:last-child { min-width:0; }
 .profile-header h1 { overflow-wrap:anywhere; }
+.auth-b-back { margin-top:20px; padding:0; border:0; background:transparent; color:var(--color-accent); font-size:14px; }
