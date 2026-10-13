@@ -3,7 +3,7 @@ import { Flame, LogOut, ArrowRight } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { skillCompletion } from '../presenters/progress.presenter';
 import { clbForCefr } from '../presenters/levels.presenter';
-import type { MeResponse, StreakResponse } from '../api/client';
+import type { AuthResponse, MeResponse, StreakResponse } from '../api/client';
 import type { SkillId } from '../types';
 import { apiPost, type UpdateProfileResponse } from '../api/client.js';
 import type { UserPayload } from '../types';
@@ -13,7 +13,7 @@ import { Box, Button, CheckRow, ErrorMessage, Field, Text, TextInput, StreakHeat
 export type ProfileProps = {
   token: string | null;
   user: UserPayload | null;
-  userData: MeResponse | null;
+  userData: MeResponse | AuthResponse | null;
   streak: StreakResponse | null;
   onLogout: () => void;
   onRoadmap: () => void;
@@ -33,12 +33,13 @@ export function Profile({ token, user, userData, streak, onSaved, onLogout, onRo
   // No notification-preferences API exists yet. These are session-only controls.
   const [reminder, setReminder] = React.useState(false);
   const [emailUpdates, setEmailUpdates] = React.useState(false);
-  const level = userData?.profile?.current_level;
+  const learner=userData && 'skill_progress' in userData ? userData : null;
+  const level = learner?.profile?.current_level;
   const clb = clbForCefr(level);
   const skills: { id: SkillId; label: string }[] = [{id:'lire',label:'Lire'},{id:'ecouter',label:'Écouter'},{id:'ecrire',label:'Écrire'},{id:'parler',label:'Parler'}];
-  const done = userData?.skill_progress.reduce((sum, row) => sum + row.exercises_done, 0) || 0;
-  const correct = userData?.skill_progress.reduce((sum, row) => sum + row.exercises_correct, 0) || 0;
-  const completed = userData?.progress.filter(row => row.state === 'completed').length || 0;
+  const done = learner?.skill_progress.reduce((sum, row) => sum + row.exercises_done, 0) || 0;
+  const correct = learner?.skill_progress.reduce((sum, row) => sum + row.exercises_correct, 0) || 0;
+  const completed = learner?.progress.filter(row => row.state === 'completed').length || 0;
 
 
   async function save(event: React.FormEvent): Promise<void> {
@@ -74,7 +75,7 @@ export function Profile({ token, user, userData, streak, onSaved, onLogout, onRo
       <Box className="profile-header">
         <Box className="profile-avatar" aria-hidden="true">{Array.from(user?.name.trim() || 'F')[0].toUpperCase()}</Box>
         <Box><Text as="h1">{user?.name || 'Your profile'}</Text><Text>{user?.email}</Text>
-          <Text className="profile-facts">{level ? `Level ${level}${clb ? ` · CLB ${clb}` : ''}` : 'Not placed yet'} · {userData?.profile?.placement_status === 'complete' ? 'Placement complete' : 'Placement pending'}</Text>
+          <Text className="profile-facts">{!learner ? 'Loading your learning profile…' : `${level ? `Level ${level}${clb ? ` · CLB ${clb}` : ''}` : 'Not placed yet'} · ${learner.profile?.placement_status === 'complete' ? 'Placement complete' : 'Placement pending'}`}</Text>
         </Box>
       </Box>
       <Box className="profile-columns">
@@ -107,8 +108,8 @@ export function Profile({ token, user, userData, streak, onSaved, onLogout, onRo
         </Box>
         <Box as="section" aria-label="Your progress" className="profile-progress">
           <Text as="h2" className="profile-section-title">Your progress</Text>
-          {!userData && <Text variant="muted">Loading progress…</Text>}
-          {userData && <Box className="profile-stats">
+          {!learner && <Text variant="muted">Loading progress…</Text>}
+          {learner && <Box className="profile-stats">
             <Box><Text as="strong">{streak ? <><Flame size={18} aria-hidden="true" /> {streak.currentStreak}</> : '—'}</Text><Text>Day streak · best {streak?.longestStreak ?? '—'}</Text></Box>
             <Box><Text as="strong">{completed}</Text><Text>Lessons completed</Text></Box>
             <Box><Text as="strong">{done}</Text><Text>Exercises done</Text></Box>
@@ -119,8 +120,8 @@ export function Profile({ token, user, userData, streak, onSaved, onLogout, onRo
           {streak?.today ? <Box className="profile-heatmap"><StreakHeatmap days={streak.days} today={streak.today} weeks={16} /><Text className="profile-activity-summary">Any day with an exercise counts toward your streak.</Text></Box> : <Text variant="muted">Activity is currently unavailable.</Text>}
           <Text as="h3" className="profile-section-title">Skills</Text>
           <Box className="profile-skills">{skills.map(skill => {
-            const progress = skillCompletion(userData?.skill_progress || [], skill.id);
-            return <Box key={skill.id}>{userData && <ProgressRing percent={progress.percent} size={62} label={`${skill.label}: ${progress.done} of ${progress.total} exercises done`} />}<Text>{skill.label}</Text></Box>;
+            const progress = skillCompletion(learner?.skill_progress || [], skill.id);
+            return <Box key={skill.id}>{learner && <ProgressRing percent={progress.percent} size={62} label={`${skill.label}: ${progress.done} of ${progress.total} exercises done`} />}<Text>{skill.label}</Text></Box>;
           })}</Box>
           <Button variant="text" icon={ArrowRight} iconPosition="after" onClick={onRoadmap}>Explore your roadmap</Button>
         </Box>

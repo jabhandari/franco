@@ -2234,3 +2234,5 @@ html[data-theme] .profile-skills .ring-label { color:var(--color-text); font-siz
 @media(max-width:800px) { .profile-columns { grid-template-columns:minmax(0,1fr); gap:30px; } }
 @media(max-width:400px) { .profile-name-fields { grid-template-columns:minmax(0,1fr); } .profile-skills { gap:4px; } }
 html[data-theme] .profile-heatmap .heat-cell.l0 { background:var(--color-border); }
+.profile-header > div:last-child { min-width:0; }
+.profile-header h1 { overflow-wrap:anywhere; }
