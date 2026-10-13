@@ -2061,9 +2061,14 @@ html[data-theme] .sidebar .nav-button:is(:hover, .active), html[data-theme] .sid
 .sidebar .theme-toggle, .sidebar-actions .nav-button { width: calc(var(--sidebar-width) - 2 * var(--space-4)); }
 .user-menu {
   display: flex; align-items: center; gap: var(--space-3); flex-shrink: 0;
-  padding: var(--space-4) 0 0; border: 0; border-top: 1px solid var(--color-sidebar-line);
+  padding: var(--space-2) 7px; border: 1px solid transparent; border-top-color: var(--color-sidebar-line);
+  border-radius: var(--radius-control);
   width: calc(var(--sidebar-width) - 2 * var(--space-4)); background: transparent;
   color: var(--color-sidebar-text); text-align: left;
+}
+.sidebar .user-menu:is(:hover, .active) {
+  background: color-mix(in srgb, var(--color-sidebar-active) 20%, transparent);
+  border-color: var(--color-sidebar-active);
 }
 .user-avatar {
   display: grid; place-items: center; width: 32px; height: 32px;
@@ -2407,7 +2412,6 @@ html[data-theme] .language-tools-enabled .main-content { padding-top:80px; }
 @media(max-width:480px) { .learn-level-bar { flex-direction:column; align-items:flex-start; gap:12px; } .learn-level-pills { gap:6px; } .learn-level-pills button { padding:6px 12px; } }
 @media(prefers-reduced-motion:reduce) { .learn-roadmap-page .concept-modal { animation:none; } }
 /* FRA-95: Profile. Shared tokens keep light/dark geometry identical. */
-.user-menu.active { background: color-mix(in srgb,var(--color-sidebar-active) 28%,transparent); border-radius: var(--radius-control); }
 .profile-page { display:grid; gap:24px; max-width:1050px; margin-inline:auto; }
 .profile-header { display:flex; align-items:center; gap:18px; padding-bottom:24px; border-bottom:1px solid var(--color-border); }
 .profile-avatar { width:64px; height:64px; flex:0 0 64px; display:grid; place-items:center; border-radius:50%; background:var(--color-accent); color:var(--palette-white); font-size:28px; }
