@@ -44,7 +44,7 @@ export function Practice({token}:PracticeProps) {
     {step===2 && <>
       <Box className="practice-bar"><Button variant="text" icon={ArrowLeft} onClick={()=>setStep(1)}>Skills</Button><Text as="h1">{label?.title} · {label?.gloss}</Text></Box>
       {!learner && !progressError && <LoadingSpinner label="Loading your levels…"/>}
-      {learner && <Box className="practice-level-grid">{CEFR_LEVELS.map(value=><PracticeLevelCard key={value} level={value} clb={clbForCefr(value) || ''} description={LEVEL_DESCRIPTIONS[value]} {...skillCompletion(learner.skill_progress,skill,value)} selected={level===value} yourLevel={ownLevel===value} onSelect={()=>setLevel(value)} onStart={()=>start(value)}/>)}</Box>}
+      {learner && <Box className="practice-level-grid">{CEFR_LEVELS.map(value=><PracticeLevelCard key={value} level={value} clb={clbForCefr(value) || ''} description={LEVEL_DESCRIPTIONS[value]} {...skillCompletion(learner.skill_progress,skill,value)} selected={level===value} yourLevel={ownLevel===value} onStart={()=>start(value)}/>)}</Box>}
     </>}
     {step===3 && <>
       <Box className="practice-bar"><Button variant="text" icon={ArrowLeft} onClick={()=>setStep(2)}>Levels</Button><Text as="h1">{label?.title} · {formatLevelWithClb(level)}</Text></Box>
