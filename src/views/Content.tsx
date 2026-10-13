@@ -51,7 +51,7 @@ export function Content({token,onPractice}:ContentProps) {
     document.addEventListener('click',outside);
     document.addEventListener('keydown',trapFocus);
     return()=>{document.removeEventListener('click',outside);document.removeEventListener('keydown',trapFocus);if(previous instanceof HTMLElement) previous.focus();};
-  },[active?.slug,Boolean(learner),progressError]);
+  },[active?.slug]);
   function recordSection(section:LessonSection) {
     if(!token || !active || active.metadata.stub) return;
     saveLessonBookmark(active.slug,section,token).then(()=>{setBookmarkError('');setProgressRevision(value=>value+1);}).catch(()=>setBookmarkError('Your reading position could not be saved.'));
