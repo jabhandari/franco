@@ -7,6 +7,8 @@ import { localDateString, normalizeTimeZone, shiftDate, summarizeActivity } from
 import { evaluate, gradeExamQuestion, gradeExerciseItem, normalizeText } from './evaluate.js';
 import { SpeechError, speechConfig, audioMime, readAudio, audioDuration, transcribeSpeech, validateSpeakingCompletion } from './speech.js';
 import { googleConfig,beginGoogle,consumeGoogleState,googleStateCookie,stateCookie,googleIdentity,googleReturn,googleAccount } from './google-auth.js';
+
+import { translateText, TranslationError } from './translation.js';
 import { getSpeakingLesson } from '../shared/speaking-lessons.js';
 import { getPort, getHost, corsOrigin } from './config.js';
 import { displayName, isNonEmptyName } from './user-names.js';
@@ -281,6 +283,13 @@ async function main() {
               } catch {
                 res.writeHead(302,{...headers,location:googleReturn(config,'google_failed',true,record.returnState)});return res.end();
               }
+            }
+            if (req.method === 'POST' && u.pathname === '/api/me/translate') {
+              const viewer = await user(req);
+              if (!viewer) return json(res,401,{error:'Authentication required.'});
+              const input = await body(req);
+              try {return json(res,200,await translateText({...input,userId:viewer.id}));}
+              catch(error) {if(error instanceof TranslationError) return json(res,error.status,{error:error.message});throw error;}
             }
             if (req.method === 'GET' && u.pathname === '/api/health') return json(res, 200, { ok: true, database: 'supabase-postgres' });
             if (req.method === 'GET' && u.pathname === '/api/speech/status') { const viewer = await user(req); if (!viewer) return json(res, 401, { error: 'Authentication required.' }); const config = speechConfig(); return json(res, 200, { available: config.enabled, max_seconds: config.maxSeconds }); }

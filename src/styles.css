@@ -2226,6 +2226,50 @@ html[data-theme] .auth-b-rail h1 { color:var(--color-sidebar-text); font-size:28
 @media(max-width:650px) { .auth-direction-b { padding:20px 16px; align-items:start; } .auth-b-card { grid-template-columns:minmax(0,1fr); } .auth-b-rail { padding:20px 24px; } .auth-b-rail h1, .auth-b-values, .auth-b-saved { display:none; } .auth-b-form { padding:24px; } }
 @media(max-width:380px) { .auth-b-name-row { grid-template-columns:minmax(0,1fr); } }
 
+/* FRA-96: shell-level language help. Reserve a row so the trigger overlaps no content. */
+html[data-theme] .language-tools-enabled .main-content { padding-top:80px; }
+.language-tools-button { position:fixed; z-index:45; top:16px; right:20px; width:42px; height:42px; display:grid; place-items:center; border:0; border-radius:50%; background:var(--color-sidebar); color:var(--color-sidebar-text); box-shadow:0 4px 12px color-mix(in srgb,var(--color-text) 12%,transparent); }
+.language-mode-dot { position:absolute; top:1px; right:1px; width:7px; height:7px; border-radius:50%; background:var(--color-accent); border:1px solid var(--color-background); }
+.language-menu { position:fixed; z-index:46; top:68px; right:20px; width:250px; max-width:calc(100vw - 32px); padding:8px; border:1px solid var(--color-border); border-radius:var(--radius-control); background:var(--color-surface); box-shadow:0 8px 30px color-mix(in srgb,var(--color-text) 12%,transparent); }
+.language-menu button { display:flex; justify-content:space-between; align-items:center; width:100%; padding:10px; border:0; border-radius:6px; color:var(--color-text); background:transparent; font-size:13px; text-align:left; }
+.language-menu button.checked { background:color-mix(in srgb,var(--color-accent) 12%,transparent); }
+.language-check { display:grid; place-items:center; width:20px; height:20px; color:var(--palette-white); background:var(--color-accent); border-radius:50%; }
+.language-menu small { color:var(--color-muted); font-size:11px; }
+.language-panel { position:fixed; z-index:55; inset:0 0 0 auto; width:min(420px,100vw); padding:38px 24px 28px; overflow-y:auto; background:var(--color-surface); color:var(--color-text); border-left:1px solid var(--color-border); box-shadow:-10px 0 30px color-mix(in srgb,var(--color-text) 10%,transparent); }
+.language-panel h2 { font-family:var(--font-heading); font-size:26px; font-weight:500; margin:0 0 24px; }
+.language-close { position:absolute; top:12px; right:12px; width:30px; height:30px; display:grid; place-items:center; border:0; background:transparent; color:var(--color-muted); }
+.language-directions { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; font-size:13px; }
+.language-directions > span { flex:1; padding:8px; text-align:center; border:1px solid var(--color-border); border-radius:var(--radius-control); }
+.language-directions button { border:0; background:transparent; color:var(--color-accent); }
+.language-panel label { display:grid; gap:8px; font-size:12px; font-weight:400; }
+.language-panel textarea { width:100%; min-width:0; border:1px solid var(--color-border); border-radius:var(--radius-control); background:var(--color-background); color:var(--color-text); padding:12px; font-weight:400; }
+.language-panel .primary-button { width:100%; min-height:40px; padding:10px; margin-top:12px; font-size:13px; justify-content:center; }
+.language-result { background:color-mix(in srgb,var(--color-accent) 10%,transparent); padding:12px; border-radius:var(--radius-control); margin-top:16px; }
+.language-result p { font-family:var(--font-heading); font-size:18px; margin:0 0 12px; overflow-wrap:anywhere; }
+.language-result > div { display:flex; gap:16px; flex-wrap:wrap; }
+.language-result button { display:flex; align-items:center; gap:4px; border:0; background:transparent; color:var(--color-accent); font-size:12px; padding:0; }
+.language-panel h3 { font-size:10px; text-transform:uppercase; letter-spacing:.12em; color:var(--color-muted); margin:24px 0 10px; }
+.language-recents { display:grid; gap:8px; }
+.language-recents button { display:flex; justify-content:space-between; gap:12px; border:0; background:transparent; color:var(--color-text); padding:8px 0; border-bottom:1px solid var(--color-border); font-size:12px; text-align:left; }
+.language-recents span { min-width:0; overflow-wrap:anywhere; }
+.language-recents span:last-child { color:var(--color-muted); text-align:right; }
+.language-note, .language-recents > p, .language-diary > p { font-size:12px; color:var(--color-muted); line-height:1.7; }
+.language-diary { display:grid; gap:16px; }
+.language-diary article { padding:16px 0; border-bottom:1px solid var(--color-border); }
+.language-diary strong { font-size:16px; overflow-wrap:anywhere; }
+.language-diary p { font-size:13px; color:var(--color-muted); overflow-wrap:anywhere; }
+.language-diary article > div { display:flex; gap:12px; }
+.language-diary button { width:30px; height:30px; border:0; background:transparent; color:var(--color-accent); }
+.language-status { font-size:12px; color:var(--color-accent); margin:16px 0 0; }
+.language-bubble { position:fixed; z-index:54; width:290px; padding:22px 14px 14px; border:1px solid var(--color-border); border-radius:var(--radius-control); color:var(--color-text); background:var(--color-surface); box-shadow:0 6px 24px color-mix(in srgb,var(--color-text) 12%,transparent); }
+.language-bubble > strong { display:block; margin-top:6px; font-size:14px; overflow-wrap:anywhere; }
+.language-bubble > small { font-size:10px; color:var(--color-muted); }
+.language-bubble .language-result { margin-top:10px; }
+.language-bubble .language-result p { font-size:16px; }
+@media(max-width:680px) { .language-tools-button { top:76px; right:16px; } .language-menu { top:126px; right:16px; } .language-panel { top:var(--phone-header-height); bottom:var(--phone-tabs-height); padding-top:38px; } }
+.language-tools { position:fixed; z-index:70; width:0; height:0; }
+.language-bubble { max-height:min(320px,calc(100dvh - 24px)); max-width:calc(100vw - 24px); overflow-y:auto; }
+
 /* FRA-92: one roadmap format, fixed desktop cards and a page-scrolling path. */
 .learn-roadmap-page { min-width:0; }
 .learn-level-bar { display:flex; justify-content:space-between; align-items:center; gap:16px; padding-bottom:24px; }

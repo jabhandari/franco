@@ -30,6 +30,8 @@ import { Conversation } from './views/Conversation.js';
 import { Placement } from './views/Placement.js';
 import { ReviewQueue } from './views/ReviewQueue.js';
 import { AuthScreen } from './views/Auth';
+
+import { LanguageTools } from './components/LanguageTools';
 import { Profile } from './views/Profile.js';
 
 // next-themes ships its own types, but this repo has no @types/react, so
@@ -282,7 +284,8 @@ function App(): React.JSX.Element {
   }
 
   return (
-    <Box className="app-shell">
+    <Box className="app-shell language-tools-enabled">
+      <LanguageTools key={session.id} userId={session.id} token={authToken} page={view}/>
       <Box as="aside" className="sidebar">
         <Brand onClick={() => navigate('home')} />
 
