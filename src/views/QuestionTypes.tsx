@@ -114,7 +114,7 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
   {
     id: 'listening',
     label: 'Listening',
-    description: 'Listen to the audio, then answer. (Audio playback disabled in showcase.)',
+    description: 'Listen to the audio, then answer the comprehension question.',
     entry: {
       id: 'showcase-listening-1',
       item_kind: 'content_item',
@@ -176,7 +176,7 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
   {
     id: 'dictation',
     label: 'Dictation',
-    description: 'Listen and type exactly what you hear. (Audio playback disabled in showcase.)',
+    description: 'Listen to the audio and type exactly what you hear.',
     entry: {
       id: 'showcase-dictation-1',
       item_kind: 'content_item',
@@ -184,13 +184,20 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
       level: 'B1',
       skill: 'listening',
       prompt: 'Type what you hear.',
-      expected: 'Bonjour, comment allez-vous aujourd\'hui?',
+      expected: 'Bonjour',
+      media: [
+        {
+          kind: 'audio',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/c/c8/Fr-bonjour.ogg',
+          transcript: 'Bonjour',
+        },
+      ],
     },
   },
   {
     id: 'pronunciation',
     label: 'Pronunciation',
-    description: 'Say the word aloud — get feedback on your pronunciation.',
+    description: 'Listen, say the word aloud, then check yourself.',
     entry: {
       id: 'showcase-pronunciation-1',
       item_kind: 'content_item',
@@ -199,6 +206,13 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
       skill: 'speaking',
       prompt: 'Pronounce this word:',
       expected: 'bonjour',
+      media: [
+        {
+          kind: 'audio',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/c/c8/Fr-bonjour.ogg',
+          transcript: 'bonjour',
+        },
+      ],
     },
   },
   {
