@@ -29,6 +29,8 @@ import { Progress } from './views/Progress.js';
 import { Conversation } from './views/Conversation.js';
 import { Placement } from './views/Placement.js';
 import { ReviewQueue } from './views/ReviewQueue.js';
+import { AuthScreen } from './views/Auth';
+
 import { LanguageTools } from './components/LanguageTools';
 import { Profile } from './views/Profile.js';
 
@@ -59,6 +61,17 @@ type NavItem = {
 };
 
 const TOKEN_KEY = 'franco_auth_token';
+const googleCallback=new URLSearchParams(window.location.hash.slice(1));
+const returnedToken=googleCallback.get('auth_token');
+const returnedState=googleCallback.get('auth_state');
+const expectedState=sessionStorage.getItem('franco_oauth_return_state');
+const matchesCallback=Boolean(expectedState && returnedState===expectedState);
+const googleToken=matchesCallback ? returnedToken : null;
+const googleError=googleCallback.get('auth_error') || (returnedToken && !matchesCallback ? 'google_failed' : null);
+if(matchesCallback) sessionStorage.removeItem('franco_oauth_return_state');
+if(googleToken) sessionStorage.setItem(TOKEN_KEY,googleToken);
+if(returnedToken || googleError || returnedState) window.history.replaceState({},'',window.location.pathname+window.location.search);
+
 
 const navItems: NavItem[] = [
   { id: 'home', label: 'Home', icon: HomeIcon },
@@ -105,7 +118,7 @@ function App(): React.JSX.Element {
   const [view, setView] = React.useState<ViewId>(() => viewFromPath(window.location.pathname));
   const [sessionLevel, setSessionLevel] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(Boolean(authToken));
-  const [error, setError] = React.useState<string>('');
+  const [error, setError] = React.useState<string>(googleError==='google_cancelled' ? 'Google sign-in was cancelled. Please try again or use email.' : googleError ? 'Google sign-in could not be completed. Please try again or use email.' : '');
   const { resolvedTheme: theme, setTheme } = useTheme();
   function navigate(nextView: ViewId, replace = false, params?: URLSearchParams): void {
     setView(nextView);
@@ -267,7 +280,7 @@ function App(): React.JSX.Element {
   }
 
   if (!session) {
-    return <AuthScreen mode={authView} onModeChange={setAuthView} onSubmit={handleAuthSubmit} loading={loading} error={error} />;
+    return <AuthScreen mode={authView} onModeChange={(mode) => {setAuthView(mode);setError('');}} onSubmit={handleAuthSubmit} loading={loading} error={error} />;
   }
 
   return (
@@ -323,95 +336,6 @@ function App(): React.JSX.Element {
         {view === 'conversation' && <Conversation token={authToken} />}
         {view === 'review' && <ReviewQueue />}
         {view === 'profile' && <Profile token={authToken} user={session} userData={userData} streak={streak} onSaved={handleProfileSaved} onLogout={logout} onRoadmap={() => navigate('content')} />}
-      </Box>
-    </Box>
-  );
-}
-
-type AuthScreenProps = {
-  mode: AuthView;
-  onModeChange: (mode: AuthView) => void;
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  loading: boolean;
-  error: string;
-};
-
-function AuthScreen({ mode, onModeChange, onSubmit, loading, error }: AuthScreenProps): React.JSX.Element {
-  const isSignup = mode === 'signup';
-
-  return (
-    <Box as="main" className="auth-page">
-      <Box className="auth-topbar">
-        <Box className="auth-brand-wrap">
-          <Text as="span" className="auth-brand-mark">fr</Text>
-          <Text as="strong" className="auth-brand-name">Franco</Text>
-          <Text as="span" className="auth-brand-subtitle">FRENCH LEARNING PLATFORM</Text>
-        </Box>
-      </Box>
-
-      <Box className="auth-shell">
-        <Box as="section" className="auth-intro">
-          <Text as="p" className="auth-kicker">APPRENDRE. PROGRESSER. RÉUSSIR.</Text>
-          <Text as="h1" className="auth-hero-title"><Text as="span" className="auth-hero-line">A little French,</Text><Text as="span" className="auth-hero-line">every day.</Text></Text>
-          <Text className="auth-hero-copy">
-            Build confidence through lessons, practice and review that fit your level.
-          </Text>
-
-          <Box
-            as="button"
-            type="button"
-            className="auth-practice-panel"
-            aria-label="Today's practice"
-          >
-            <Box as="span" className="auth-practice-icon"><BookOpen size={26} /></Box>
-            <Box as="span" className="auth-practice-copy">
-              <Text as="span" className="auth-practice-label">TODAY'S PRACTICE</Text>
-              <Text as="strong">Les habitudes quotidiennes</Text>
-              <Text as="small">Learn to talk about your daily routine.</Text>
-            </Box>
-            <ChevronRight className="auth-practice-arrow" size={25} aria-hidden="true" />
-          </Box>
-        </Box>
-
-        <Box as="section" className="auth-card">
-          <Text variant="eyebrow">{isSignup ? 'Create your account' : 'Welcome back'}</Text>
-          <Text as="h2">{isSignup ? 'Start learning with Franco' : 'Log in to Franco'}</Text>
-          <Text className="auth-card-subtitle">{isSignup ? 'Build a practice habit that fits your life.' : 'Pick up where you left off.'}</Text>
-          <Box as="form" onSubmit={onSubmit}>
-            {isSignup && (
-              <Box className="auth-name-row">
-                <Field label="First name" icon={UserRound}>
-                  <TextInput name="first_name" type="text" placeholder="Marie" autoComplete="given-name" required />
-                </Field>
-                <Field label="Last name" icon={UserRound}>
-                  <TextInput name="last_name" type="text" placeholder="Curie" autoComplete="family-name" required />
-                </Field>
-              </Box>
-            )}
-            <Field label="Email" icon={Mail}>
-              <TextInput name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
-            </Field>
-            <Field label="Password" icon={Lock}>
-              <TextInput
-                name="password"
-                type="password"
-                placeholder="Password"
-                autoComplete={isSignup ? 'new-password' : 'current-password'}
-                required
-              />
-            </Field>
-            {!isSignup && <Text as="span" className="auth-forgot">Forgot password?</Text>}
-            {error && <ErrorMessage message={error} />}
-            <Button variant="primary" wide type="submit" disabled={loading} icon={ChevronRight} iconSize={18} iconPosition="after">
-              {loading ? 'Connecting...' : isSignup ? 'Create account' : 'Log in'}
-            </Button>
-          </Box>
-          <Box className="auth-divider"><Box as="span" />or<Box as="span" /></Box>
-          <Box as="button" type="button" className="auth-secondary" onClick={() => onModeChange(isSignup ? 'login' : 'signup')}>
-            {isSignup ? 'Already have an account? ' : 'New to Franco? '}
-            <Text as="span">{isSignup ? 'Log in' : 'Create an account'}</Text>
-          </Box>
-        </Box>
       </Box>
     </Box>
   );
