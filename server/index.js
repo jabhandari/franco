@@ -264,7 +264,7 @@ async function main() {
             if (req.method === 'GET' && u.pathname === '/api/auth/google/callback') {
               const config=googleConfig();
               if(!config) return json(res,503,{error:'Google sign-in is not configured.'});
-              const record=consumeGoogleState(u.searchParams.get('state'),googleStateCookie(req));
+              const record=consumeGoogleState(u.searchParams.get('state'),googleStateCookie(req,config.secure));
               const headers={'set-cookie':stateCookie('',config.secure,true),'cache-control':'no-store','referrer-policy':'no-referrer'};
               const code=u.searchParams.get('code');
               if(!record || !code || u.searchParams.get('error')) {

@@ -24,3 +24,6 @@ queries.length=0;let first=true;
 const created=await googleAccount(identity,{...services,query:async(sql,params)=>{queries.push([sql,params]);if(first){first=false;return [];}return sql.startsWith('SELECT') ? [{id:'created-account'}] : [];}});
 assert.equal(created.id,'created-account');assert.equal(queries.length,3);assert.match(queries[1][0],/ON CONFLICT\(email\) DO NOTHING/);assert.equal(queries[1][1][1],'marie@example.com');assert.equal(queries[1][1][5],'random-hash');assert.equal(profileId,'created-account');
 console.log('Google account-linking checks passed');
+
+assert.match(stateCookie(login.state,true),/^__Host-franco_google_state=/);
+assert.match(stateCookie(login.state,true),/Path=\/;/);

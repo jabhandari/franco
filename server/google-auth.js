@@ -28,11 +28,13 @@ export function consumeGoogleState(state,cookie,now=Date.now()) {
   if(!record || now-record.created>600000) return null;
   return record;
 }
-export function googleStateCookie(req) {
-  return String(req.headers.cookie || '').split(';').map(part=>part.trim()).find(part=>part.startsWith('franco_google_state='))?.slice('franco_google_state='.length) || '';
+export function googleStateCookie(req,secure=false) {
+  const name=secure ? '__Host-franco_google_state=' : 'franco_google_state=';
+  return String(req.headers.cookie || '').split(';').map(part=>part.trim()).find(part=>part.startsWith(name))?.slice(name.length) || '';
 }
 export function stateCookie(value,secure,clear=false) {
-  return `franco_google_state=${value}; Path=/api/auth/google; HttpOnly; SameSite=Lax; Max-Age=${clear?0:600}${secure?'; Secure':''}`;
+  const name=secure ? '__Host-franco_google_state' : 'franco_google_state';
+  return `${name}=${value}; Path=${secure?'/' : '/api/auth/google'}; HttpOnly; SameSite=Lax; Max-Age=${clear?0:600}${secure?'; Secure':''}`;
 }
 export async function googleIdentity(config,code,record,client=new OAuth2Client(config.clientId,config.clientSecret,config.redirectUri)) {
   const {tokens}=await client.getToken({code,codeVerifier:record.verifier,redirect_uri:config.redirectUri});
