@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import { translateText, TranslationError } from '../server/translation.js';
+const original=process.env.GROQ_API_KEY;process.env.GROQ_API_KEY='test-placeholder';
+let calls=0;
+const provider=async(url,options)=>{calls++;assert.equal(url,'https://api.groq.com/openai/v1/chat/completions');const request=JSON.parse(options.body);assert.equal(request.response_format.type,'json_object');return new Response(JSON.stringify({choices:[{message:{content:JSON.stringify({source:'fr',target:'en',translation:'hello'})}}]}));};
+assert.deepEqual(await translateText({text:' bonjour ',userId:'test'},provider),{text:'bonjour',translation:'hello',source:'fr',target:'en'});
+await assert.rejects(translateText({text:'',userId:'test'},provider),error=>error instanceof TranslationError && error.status===400);
+await assert.rejects(translateText({text:'x'.repeat(241),userId:'test'},provider),error=>error.status===400);
+await assert.rejects(translateText({text:'hi',source:'de',userId:'test'},provider),error=>error.status===400);
+await assert.rejects(translateText({text:'hi',source:'en',userId:'test'},provider),error=>error.status===502);
+await assert.rejects(translateText({text:'hi',userId:'test'},async()=>new Response('unavailable',{status:429})),error=>error.status===429);
+await assert.rejects(translateText({text:'hi',userId:'test'},async()=>new Response('{"choices":[]}')),error=>error.status===502);
+await assert.rejects(translateText({text:'hi',userId:'test'},async()=>{throw new Error('network');}),error=>error.status===502);
+assert.ok(calls>=2);
+if(original===undefined) delete process.env.GROQ_API_KEY;else process.env.GROQ_API_KEY=original;
+console.log('translation tests passed');

@@ -19,6 +19,45 @@ paths:
         '200': { description: Scenario, message and suggestions with hint sentence/pointer; sentence is null for concepts without authored examples }
         '400': { description: Invalid pick }
         '401': { description: Missing or expired session }
+
+  /api/auth/google/status:
+    get:
+      responses:
+        '200': { description: available is true only when all Google OAuth server settings are valid }
+  /api/auth/google:
+    get:
+      description: Starts the Google authorization-code flow with PKCE, nonce and a single-use HTTP-only state cookie.
+      responses:
+        '302': { description: Redirect to Google }
+        '503': { description: OAuth not configured or temporary capacity reached }
+  /api/auth/google/callback:
+    get:
+      description: Verifies cookie-bound state and Google identity, finds/creates the email account, and issues the existing Franco session. Returns to the configured app URL with a token or friendly error in the fragment.
+      responses:
+        '302': { description: Return to Franco; fragment is consumed and immediately removed by the app }
+        '503': { description: OAuth not configured }
+
+  /api/me/translate:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Translates a short phrase through the server-side Groq provider. No learner progress, review queue, or scheduling writes. Diary saves are scoped per account in browser storage.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text: { type: string, minLength: 1, maxLength: 240 }
+                source: { type: string, enum: [auto, fr, en], default: auto }
+      responses:
+        '200': { description: text, translation, source and target (fr/en) }
+        '400': { description: Invalid phrase or direction }
+        '401': { description: Missing or expired session }
+        '429': { description: Translation capacity reached; retry later }
+        '502': { description: Provider failed or returned invalid output }
+        '503': { description: Provider not configured }
   /api/me/lesson-position:
     get:
       security: [{ LearnerSession: [] }]
