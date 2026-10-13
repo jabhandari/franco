@@ -7,7 +7,12 @@ export function emailConfigured() {
 export async function sendMail({ to, subject, html, text }) {
   if ((process.env.EMAIL_PROVIDER || 'resend') !== 'resend') throw new Error('Unsupported email provider.');
   if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY is required to send email.');
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  // RESEND_BASE_URL is a test-only escape hatch: the integration script points
+  // it at a fake local mail server so no real mail leaves the machine. Unset
+  // in production, where the Resend SDK default (https://api.resend.com) applies.
+  const resend = new Resend(process.env.RESEND_API_KEY, {
+    baseUrl: process.env.RESEND_BASE_URL || undefined,
+  });
   const { error } = await resend.emails.send({
     from: process.env.EMAIL_FROM || 'onboarding@resend.dev', to, subject, html, text,
   });
