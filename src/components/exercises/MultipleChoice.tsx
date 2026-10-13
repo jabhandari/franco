@@ -1,6 +1,7 @@
 import React from 'react';
 import type { AttemptItemKind } from '../../api/client';
 import { reportAttempt } from '../../api/client.js';
+import type { SimulateSubmit } from './ExerciseCard';
 import { getErrorMessage, humanize, choiceLabel } from '../../presenters/format.presenter.js';
 import { shuffle } from '../../presenters/collections.presenter.js';
 import {
@@ -103,10 +104,10 @@ type MultipleChoiceProps = {
   entry: MultipleChoiceItem;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
-  preview?: boolean;
+  simulateSubmit?: SimulateSubmit;
 };
 
-export function MultipleChoice({ entry, token, onResult, preview = false }: MultipleChoiceProps) {
+export function MultipleChoice({ entry, token, onResult, simulateSubmit }: MultipleChoiceProps) {
   const [selected, setSelected] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<AttemptResult | null>(null);
   const [options] = React.useState<MultipleChoiceOption[]>(() => shuffle(entry.choices || []));
@@ -116,7 +117,9 @@ export function MultipleChoice({ entry, token, onResult, preview = false }: Mult
     if (result) return;
     setSelected(choice.key);
     try {
-      const res: AttemptResult = await reportAttempt(entry, choice.key, token, { durationMs: elapsedMs(startRef.current) });
+      const res: AttemptResult = simulateSubmit
+        ? await simulateSubmit(entry, choice.key)
+        : await reportAttempt(entry, choice.key, token, { durationMs: elapsedMs(startRef.current) });
       setResult(res);
       onResult?.(res);
     } catch (error) {
@@ -140,7 +143,7 @@ export function MultipleChoice({ entry, token, onResult, preview = false }: Mult
         selectedKey={selected}
         answered={hasResult(result)}
         correct={Boolean(result?.correct)}
-        disabled={Boolean(result) || preview}
+        disabled={Boolean(result)}
         onSelect={(key: string) => choose(options.find((option) => option.key === key))}
       />
       {hasResult(result) && (

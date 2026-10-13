@@ -2,6 +2,7 @@ import React from 'react';
 import { useAudioRecorder } from '../../hooks/useAudioRecorder';
 import type { AttemptItemKind } from '../../api/client';
 import { getErrorMessage, getSpeechStatus, reportAttempt, uploadSpeech } from '../../api/client.js';
+import type { SimulateSubmit } from './ExerciseCard';
 import { getSpeakingLesson } from '../../../shared/speaking-lessons.js';
 import { speechFeedback } from '../../../shared/speech-feedback.js';
 import * as UIRaw from '../ui';
@@ -117,7 +118,7 @@ type SpeakingPromptProps = {
   entry: SpeakingPromptItem;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
-  preview?: boolean;
+  simulateSubmit?: SimulateSubmit;
 };
 
 // Lesson shape from shared/speaking-lessons.js (getSpeakingLesson): six
@@ -150,7 +151,7 @@ function WordTokens({ title, tokens }: { title: string; tokens: SpeechWordToken[
   );
 }
 
-export function SpeakingPrompt({ entry, token, onResult, preview: isPreview = false }: SpeakingPromptProps) {
+export function SpeakingPrompt({ entry, token, onResult, simulateSubmit }: SpeakingPromptProps) {
   const lesson: SpeakingLesson | null = getSpeakingLesson(entry.external_id, entry.id);
   const [mode, setMode] = React.useState<string>(lesson ? 'guided' : 'free');
   const [phraseIndex, setPhraseIndex] = React.useState<number>(0);
@@ -215,7 +216,9 @@ export function SpeakingPrompt({ entry, token, onResult, preview: isPreview = fa
           response.transcription_id = String(transcription.transcription_id);
         }
       }
-      const saved = await reportAttempt(entry, response, token, { durationMs: Date.now() - startedAt.current });
+      const saved = simulateSubmit
+        ? await simulateSubmit(entry, response)
+        : await reportAttempt(entry, response, token, { durationMs: Date.now() - startedAt.current });
       completed.current = true;
       setResult(saved);
       onResult?.(saved);
@@ -281,7 +284,7 @@ export function SpeakingPrompt({ entry, token, onResult, preview: isPreview = fa
             <Box className="speech-controls">
               {phase === 'idle' && <Box className="speaking-button-row">
                 <Button variant="primary" onClick={startRecording}>{mode === 'guided' ? 'Record phrase' : 'Record answer'}</Button>
-                {mode === 'guided' && lesson ? <Button variant="text" onClick={() => choosePractice('free')}>Continue to full prompt →</Button> : <Button variant="text" onClick={markComplete} disabled={isPreview}>Finish practice</Button>}
+                {mode === 'guided' && lesson ? <Button variant="text" onClick={() => choosePractice('free')}>Continue to full prompt →</Button> : <Button variant="text" onClick={markComplete}>Finish practice</Button>}
               </Box>}
               {phase === 'requesting' && <Text role="status">Requesting microphone access…</Text>}
               {phase === 'recording' && <Box className="speaking-button-row"><Text role="status">Recording · {elapsed}s / {maxSeconds}s</Text><Button variant="primary" onClick={stopRecording}>Stop recording</Button></Box>}
@@ -296,7 +299,7 @@ export function SpeakingPrompt({ entry, token, onResult, preview: isPreview = fa
               </>}
             </Box>
           )}
-          {!recordingSupported && <Box className="speaking-button-row">{mode === 'guided' && lesson ? <Button variant="text" onClick={() => choosePractice('free')}>Continue to full prompt →</Button> : <Button variant="text" onClick={markComplete} disabled={isPreview}>Finish practice</Button>}</Box>}
+          {!recordingSupported && <Box className="speaking-button-row">{mode === 'guided' && lesson ? <Button variant="text" onClick={() => choosePractice('free')}>Continue to full prompt →</Button> : <Button variant="text" onClick={markComplete}>Finish practice</Button>}</Box>}
           <Button variant="text" disabled={choosingDisabled} onClick={()=>setTyping(value=>!value)}>{typing ? 'Hide typing' : 'Type instead'}</Button>
           {typing && <Box className="speaking-type-fallback"><Textarea rows={4} value={typedText} onChange={event=>setTypedText(event.target.value)} aria-label="Typed speaking answer" placeholder="Write the phrase you would say in French…"/><Button variant="primary" disabled={!typedText.trim()} onClick={()=>markComplete(typedText)}>Submit typed answer</Button></Box>}
           {recordingError && <Text className="error-message" role="alert">{recordingError}</Text>}

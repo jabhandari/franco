@@ -1,6 +1,7 @@
 import React from 'react';
-import type { AttemptItemKind, AttemptResult } from '../../api/client';
+import type { AttemptItemKind } from '../../api/client';
 import { reportAttempt } from '../../api/client.js';
+import type { AttemptResult, SimulateSubmit } from './ExerciseCard';
 import { getErrorMessage, humanize } from '../../presenters/format.presenter.js';
 import { hasResult, elapsedMs } from '../../presenters/attempt.presenter.js';
 import * as UIRaw from '../ui';
@@ -83,11 +84,11 @@ type WritingPromptProps = {
   entry: WritingPromptItem;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
-  preview?: boolean;
+  simulateSubmit?: SimulateSubmit;
 };
 
 // Writing prompt: free-form text graded against the server-side rubric.
-export function WritingPrompt({ entry, token, onResult, preview = false }: WritingPromptProps) {
+export function WritingPrompt({ entry, token, onResult, simulateSubmit }: WritingPromptProps) {
   const [value, setValue] = React.useState<string>('');
   const [result, setResult] = React.useState<AttemptResult | null>(null);
   const startRef = React.useRef<number>(Date.now());
@@ -97,7 +98,9 @@ export function WritingPrompt({ entry, token, onResult, preview = false }: Writi
     event?.preventDefault();
     if (result || value.trim().length < 10) return;
     try {
-      const res: AttemptResult = await reportAttempt(entry, value, token, { durationMs: elapsedMs(startRef.current) });
+      const res: AttemptResult = simulateSubmit
+        ? await simulateSubmit(entry, value)
+        : await reportAttempt(entry, value, token, { durationMs: elapsedMs(startRef.current) });
       setResult(res);
       onResult?.(res);
     } catch (error) {
@@ -127,7 +130,7 @@ export function WritingPrompt({ entry, token, onResult, preview = false }: Writi
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => setValue(event.target.value)}
         placeholder="Write your answer in French…"
         disabled={Boolean(result)}
-        submitDisabled={value.trim().length < 10 || preview}
+        submitDisabled={value.trim().length < 10}
         hideSubmit={Boolean(result)}
         submitLabel="Submit writing"
         onSubmit={submit}
