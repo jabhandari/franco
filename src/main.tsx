@@ -276,12 +276,20 @@ function App(): React.JSX.Element {
     setUserData((prev) => (prev ? { ...prev, user } : prev));
   }
 
+  function handlePasswordReset(): void {
+    latestAuthToken.current=null;latestMeRequest.current++;
+    setSession(null);setAuthToken(null);setUserData(null);
+    sessionStorage.removeItem(TOKEN_KEY);
+    setAuthMode('login');setError('');
+    window.history.replaceState({},'','/');
+  }
+
   if (loading && authToken && !session) {
     return <LoadingScreen />;
   }
 
   if (!session || ['forgot','reset','verify'].includes(authView)) {
-    return <AuthScreen mode={authView} onModeChange={(mode) => {setAuthMode(mode);setError(''); const path = mode === 'forgot' ? '/forgot-password' : mode === 'reset' ? '/reset-password' : mode === 'verify' ? '/verify-email' : '/'; window.history.pushState({},'',path); }} onSubmit={handleAuthSubmit} loading={loading} error={error} onPasswordReset={() => {latestAuthToken.current=null;latestMeRequest.current++;setSession(null);setAuthToken(null);setUserData(null);sessionStorage.removeItem(TOKEN_KEY);}} />;
+    return <AuthScreen mode={authView} onModeChange={(mode) => {setAuthMode(mode);setError(''); const path = mode === 'forgot' ? '/forgot-password' : mode === 'reset' ? '/reset-password' : mode === 'verify' ? '/verify-email' : '/'; window.history.pushState({},'',path); }} onSubmit={handleAuthSubmit} loading={loading} error={error} onPasswordReset={handlePasswordReset} />;
   }
 
   return (
