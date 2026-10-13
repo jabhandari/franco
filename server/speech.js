@@ -175,7 +175,13 @@ export async function validateSpeakingCompletion(response, userId, itemId, looku
   }
   const transcriptionId = response?.transcription_id;
   const transcript = response?.transcript;
-  if (!transcriptionId && !transcript) return { completed: true };
+  if (!transcriptionId && !transcript) {
+    if (response?.typed_text !== undefined) {
+      if (typeof response.typed_text !== 'string' || !response.typed_text.trim() || response.typed_text.length > 10000) throw new SpeechError(400,'speech_invalid_typed_answer','Enter a short speaking answer.');
+      return { completed:true,typed_text:response.typed_text.trim() };
+    }
+    return { completed: true };
+  }
   if (typeof transcriptionId !== 'string' || typeof transcript !== 'string' || !transcript.trim() || transcript.length > 10000) {
     throw new SpeechError(400, 'speech_invalid_transcript', 'A valid transcription ID and transcript are required.');
   }

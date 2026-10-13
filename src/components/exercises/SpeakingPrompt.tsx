@@ -4,6 +4,7 @@ import { getErrorMessage, getSpeechStatus, reportAttempt, uploadSpeech } from '.
 import { getSpeakingLesson } from '../../../shared/speaking-lessons.js';
 import { speechFeedback } from '../../../shared/speech-feedback.js';
 import * as UIRaw from '../ui';
+import { Textarea } from '../ui';
 
 type AudioPlayerProps = {
   src?: string;
@@ -95,6 +96,7 @@ export type TranscriptionResult = {
 // the server's attempt response (stored in `result` below) has the
 // AttemptResult shape.
 export type SavedAttemptResult = {
+  typed_text?: string;
   completed: boolean;
   transcript?: string;
   transcription_id?: string;
@@ -162,6 +164,8 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
   const [mode, setMode] = React.useState<string>(lesson ? 'guided' : 'free');
   const [phraseIndex, setPhraseIndex] = React.useState<number>(0);
   const phrase = lesson?.phrases[phraseIndex];
+  const [typing,setTyping]=React.useState(false);
+  const [typedText,setTypedText]=React.useState('');
   const [result, setResult] = React.useState<AttemptResult | null>(null);
   const [completionError, setCompletionError] = React.useState<string>('');
   const [recordingError, setRecordingError] = React.useState<string>('');
@@ -308,12 +312,13 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
     }
   }
 
-  async function markComplete() {
+  async function markComplete(typedAnswer = '') {
     if (result) return;
     setCompletionError('');
     try {
       const response: SavedAttemptResult = { completed: true };
-      if (transcription) {
+      if(typeof typedAnswer==='string' && typedAnswer.trim()) {response.typed_text=typedAnswer.trim();}
+      else if (transcription) {
         response.transcript = transcription.transcript;
         if (transcription.transcription_id != null) {
           response.transcription_id = String(transcription.transcription_id);
@@ -406,6 +411,8 @@ export function SpeakingPrompt({ entry, token, onResult }: SpeakingPromptProps) 
             </Box>
           )}
           {!recordingSupported && <Box className="speaking-button-row">{mode === 'guided' && lesson ? <Button variant="text" onClick={() => choosePractice('free')}>Continue to full prompt →</Button> : <Button variant="text" onClick={markComplete}>Finish practice</Button>}</Box>}
+          <Button variant="text" disabled={choosingDisabled} onClick={()=>setTyping(value=>!value)}>{typing ? 'Hide typing' : 'Type instead'}</Button>
+          {typing && <Box className="speaking-type-fallback"><Textarea rows={4} value={typedText} onChange={event=>setTypedText(event.target.value)} aria-label="Typed speaking answer" placeholder="Write the phrase you would say in French…"/><Button variant="primary" disabled={!typedText.trim()} onClick={()=>markComplete(typedText)}>Submit typed answer</Button></Box>}
           {recordingError && <Text className="error-message" role="alert">{recordingError}</Text>}
           {transcription && <Box className="speech-feedback" aria-live="polite">
             <Text as="strong">{mode === 'guided' ? 'Transcript comparison' : 'Your transcript'}</Text>

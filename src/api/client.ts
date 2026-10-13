@@ -626,6 +626,7 @@ export type SpeechTranscribeResponse = {
 
 /** The speaking-completion token reportAttempt sends back for speaking items. */
 export type SpeakingCompletion = {
+  typed_text?: string;
   completed: boolean;
   transcript?: string;
   transcription_id?: string;

@@ -51,6 +51,8 @@ paths:
         Records and grades a learner answer. content_item uses item_id;
         exam_question and exercise use legacy_ref. Both correct and incorrect
         answers are stored; the response supplies correct, reveal and attempt.
+        Speaking type-instead answers use completed true plus typed_text; this
+        is stored as a typed completion, not as a provider-verified transcript.
       responses:
         '201': { description: Stored attempt and authoritative evaluation }
         '400': { description: Missing response or invalid item reference }
