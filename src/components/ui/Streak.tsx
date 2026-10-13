@@ -107,6 +107,7 @@ export function StreakHero({ streak }: StreakHeroProps) {
 }
 
 export type StreakHeatmapProps = {
+  weeks?: number;
   days?: StreakDay[];
   today?: string;
   key?: React.Key;
@@ -114,13 +115,15 @@ export type StreakHeatmapProps = {
 
 // GitHub-style activity heatmap: week columns, Sunday..Saturday rows,
 // intensity buckets from the streak presenter.
-export function StreakHeatmap({ days, today }: StreakHeatmapProps) {
+export function StreakHeatmap({ days, today, weeks = 53 }: StreakHeatmapProps) {
   // FRA-81: buildHeatmap requires a real YYYY-MM-DD string (an invalid date
   // throws, same as before); the optional prop stays for API-shape honesty.
-  const { columns, months } = buildHeatmap(days || [], today ?? '');
-  const monthByColumn = new Map(months.map((month) => [month.column, month.label]));
+  const { columns, months } = buildHeatmap(days || [], today ?? '', weeks);
+  const activeDays = columns.flat().filter(cell => !cell.isFuture && cell.count > 0).length;
+  const attempts = columns.flat().filter(cell => !cell.isFuture).reduce((sum, cell) => sum + cell.count, 0);
+  const monthByColumn = new Map(months.filter((month, index) => !months[index + 1] || months[index + 1].column - month.column >= 3).map(month => [month.column, month.label]));
   return (
-    <Box className="heat-wrap">
+    <Box className="heat-wrap" role="img" aria-label={`${activeDays} active days and ${attempts} exercises answered in the last ${weeks} weeks.`}>
       <Box className="heat-months" aria-hidden="true">
         {columns.map((_, column) => (
           <Box as="span" key={column}>{monthByColumn.get(column) || ''}</Box>

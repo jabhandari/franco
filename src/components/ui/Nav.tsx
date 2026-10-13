@@ -25,13 +25,14 @@ export function NavButton({ icon, active = false, onClick, children }: NavButton
 
 export type UserMenuProps = {
   name: string;
+  active?: boolean;
   level?: string | null;
   onClick: () => void;
 };
 
-export function UserMenu({ name, level, onClick }: UserMenuProps) {
+export function UserMenu({ name, level, onClick, active = false }: UserMenuProps) {
   return (
-    <button type="button" className="user-menu" onClick={onClick} aria-label={`Open profile for ${name}`} title={`${name} · ${level || 'Not placed yet'}`}>
+    <button type="button" className={`user-menu${active ? ' active' : ''}`} aria-current={active ? 'page' : undefined} onClick={onClick} aria-label={`Open profile for ${name}`} title={`${name} · ${level || 'Not placed yet'}`}>
       <span className="user-avatar" aria-hidden="true">{Array.from(name.trim())[0]?.toUpperCase() || 'F'}</span>
       <span className="user-details"><strong>{name}</strong><small>{level ? `${level} · French learner` : 'Not placed yet'}</small></span>
       <ChevronRight className="user-chevron" size={16} aria-hidden="true" />
