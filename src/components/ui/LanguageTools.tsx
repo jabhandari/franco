@@ -45,7 +45,7 @@ export function LanguageTools(props:LanguageToolsProps) {
     return <div className="language-result"><p>{result.translation}</p><div><button type="button" onClick={()=>props.onSpeak(result.translation,result.target)}><Volume2 size={15} aria-hidden="true"/> Pronounce</button><button type="button" onClick={()=>props.onSave(result)}>+ Add to diary</button></div></div>;
   }
   return <div className="language-tools" ref={root}>
-    <button type="button" ref={opener} className="language-tools-button" aria-label="Language tools" aria-expanded={props.menu || Boolean(props.panel)} onClick={props.onMenu}><Languages size={22} aria-hidden="true"/>{props.mode && <span className="language-mode-dot"/>}</button>
+    <button type="button" ref={opener} className="language-tools-button" aria-label="Toggle language tools menu" aria-expanded={props.menu || Boolean(props.panel)} onClick={props.onMenu}><Languages size={22} aria-hidden="true"/>{props.mode && <span className="language-mode-dot"/>}</button>
     {props.menu && <div className="language-menu" role="group" aria-label="Language tools menu">
       <button type="button" role="checkbox" aria-checked={props.mode==='translate'} className={props.mode==='translate' ? 'checked' : ''} onClick={()=>props.onMode('translate')}>Translate selection {check(props.mode==='translate')}</button>
       <button type="button" role="checkbox" aria-checked={props.mode==='diary'} className={props.mode==='diary' ? 'checked' : ''} onClick={()=>props.onMode('diary')}>Add to diary {check(props.mode==='diary')}</button>
