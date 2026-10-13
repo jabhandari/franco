@@ -22,7 +22,6 @@ import { ThemeProvider, useTheme } from 'next-themes';
 import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput, UserMenu } from './components/ui';
 import { streakPath } from './presenters/streak.presenter.js';
 import { Home } from './views/Home.js';
-import { Learn } from './views/Learn.js';
 import { Session } from './views/Session.js';
 import { Content } from './views/Content.js';
 import { PastQuestions } from './views/PastQuestions.js';
@@ -96,8 +95,13 @@ function App(): React.JSX.Element {
   const [authView, setAuthView] = React.useState<AuthView>('login');
   const [session, setSession] = React.useState<UserPayload | null>(null);
   const [authToken, setAuthToken] = React.useState<string | null>(() => sessionStorage.getItem(TOKEN_KEY));
-  const [userData, setUserData] = React.useState<MeResponse | null>(null);
+  const [userData, setUserData] = React.useState<MeResponse | AuthResponse | null>(null);
   const [streak, setStreak] = React.useState<StreakResponse | null>(null);
+  const latestAuthToken=React.useRef(authToken);
+  const latestMeRequest=React.useRef(0);
+  const profileRevision=React.useRef(0);
+  const latestSavedProfile=React.useRef<UserPayload|null>(null);
+  React.useLayoutEffect(()=>{latestAuthToken.current=authToken;},[authToken]);
   const [view, setView] = React.useState<ViewId>(() => viewFromPath(window.location.pathname));
   const [sessionLevel, setSessionLevel] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(Boolean(authToken));
@@ -119,8 +123,10 @@ function App(): React.JSX.Element {
   React.useEffect(() => {
     if (!authToken || !session) return;
     let cancelled = false;
+    const request = ++latestMeRequest.current;
+    const revision = profileRevision.current;
     apiGet<MeResponse>('/api/me', authToken).then(payload => {
-      if (!cancelled) { setSession(payload.user); setUserData(payload); }
+      if (!cancelled) applyUserSnapshot(payload, request, revision, authToken);
     }).catch(() => {});
     apiGet<StreakResponse>(streakPath(), authToken).then(payload => {
       if (!cancelled) setStreak(payload);
@@ -128,36 +134,46 @@ function App(): React.JSX.Element {
     return () => { cancelled = true; };
   }, [view, authToken]);
 
+  function applyUserSnapshot(payload:MeResponse,request:number,revision:number,token:string):void {
+    if(token!==latestAuthToken.current || request!==latestMeRequest.current) return;
+    const savedUser=latestSavedProfile.current;
+    const user=revision!==profileRevision.current && savedUser?.id===payload.user.id ? savedUser : payload.user;
+    setSession(user);
+    setUserData({...payload,user});
+    setError('');
+  }
+
   function refreshUserData(): void {
-    if (!authToken) return;
+    if (!authToken || authToken!==latestAuthToken.current) return;
+    const request=++latestMeRequest.current,revision=profileRevision.current;
     apiGet<MeResponse>('/api/me', authToken)
       .then((payload) => {
-        setSession(payload.user);
-        setUserData(payload);
-        setError('');
+        applyUserSnapshot(payload,request,revision,authToken);
       })
       .catch(() => {
+        if(authToken!==latestAuthToken.current || request!==latestMeRequest.current) return;
+        latestAuthToken.current=null;
         sessionStorage.removeItem(TOKEN_KEY);
         setAuthToken(null);
         setSession(null);
         setUserData(null);
       });
-    apiGet<StreakResponse>(streakPath(), authToken).then(setStreak).catch(() => {});
+    apiGet<StreakResponse>(streakPath(), authToken).then(payload=>{if(authToken===latestAuthToken.current) setStreak(payload);}).catch(() => {});
   }
 
   React.useEffect(() => {
     if (!authToken) return;
     let cancelled = false;
+    const request=++latestMeRequest.current,revision=profileRevision.current;
     setLoading(true);
     apiGet<MeResponse>('/api/me', authToken)
       .then((payload) => {
         if (cancelled) return;
-        setSession(payload.user);
-        setUserData(payload);
-        setError('');
+        applyUserSnapshot(payload,request,revision,authToken);
       })
       .catch(() => {
-        if (cancelled) return;
+        if (cancelled || authToken!==latestAuthToken.current || request!==latestMeRequest.current) return;
+        latestAuthToken.current=null;
         sessionStorage.removeItem(TOKEN_KEY);
         setAuthToken(null);
         setSession(null);
@@ -216,6 +232,7 @@ function App(): React.JSX.Element {
           : { email, password },
       );
       sessionStorage.setItem(TOKEN_KEY, payload.token);
+      latestAuthToken.current=payload.token;
       setAuthToken(payload.token);
       setSession(payload.user);
       setUserData(payload);
@@ -229,6 +246,7 @@ function App(): React.JSX.Element {
   }
 
   function logout(): void {
+    latestAuthToken.current=null;latestMeRequest.current++;latestSavedProfile.current=null;profileRevision.current++;
     setSession(null);
     setAuthToken(null);
     setUserData(null);
@@ -238,6 +256,8 @@ function App(): React.JSX.Element {
   }
 
   function handleProfileSaved(user: UserPayload): void {
+    if(!authToken || authToken!==latestAuthToken.current) return;
+    latestSavedProfile.current=user;profileRevision.current++;
     setSession(user);
     setUserData((prev) => (prev ? { ...prev, user } : prev));
   }
@@ -278,7 +298,7 @@ function App(): React.JSX.Element {
             <Text as="span">Log out</Text>
           </Button>
         </Box>
-        <UserMenu name={session.name} level={userData?.profile?.current_level} onClick={() => navigate('profile')} />
+        <UserMenu active={view === 'profile'} name={session.name} level={userData?.profile?.current_level} onClick={() => navigate('profile')} />
       </Box>
 
       <Box as="nav" className="phone-tabs" aria-label="Phone navigation">
@@ -294,15 +314,15 @@ function App(): React.JSX.Element {
           onExplore={() => navigate('content', false, new URLSearchParams({ level:userData?.profile?.current_level || 'A1' }))}
           onConversation={() => navigate('conversation')}
         />}
-        {view === 'learn' && <Learn token={authToken} onQuiz={(level) => { setSessionLevel(level); navigate('session'); }} />}
+        {view === 'learn' && <Content token={authToken} onPractice={(level) => { setSessionLevel(level); navigate('session'); }} />}
         {view === 'placement' && <Placement token={authToken} onPlaced={() => refreshUserData()} />}
         {view === 'session' && <Session key={sessionLevel || 'default'} token={authToken} initialLevel={sessionLevel} />}
-        {view === 'content' && <Content token={authToken} />}
+        {view === 'content' && <Content token={authToken} onPractice={(level) => { setSessionLevel(level); navigate('session'); }} />}
         {(view === 'past' || view === 'practice') && <PastQuestions token={authToken} />}
         {view === 'progress' && <Progress token={authToken} />}
         {view === 'conversation' && <Conversation token={authToken} />}
         {view === 'review' && <ReviewQueue />}
-        {view === 'profile' && <Profile token={authToken} user={session} onSaved={handleProfileSaved} />}
+        {view === 'profile' && <Profile token={authToken} user={session} userData={userData} streak={streak} onSaved={handleProfileSaved} onLogout={logout} onRoadmap={() => navigate('content')} />}
       </Box>
     </Box>
   );
