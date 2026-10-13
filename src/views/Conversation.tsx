@@ -1,109 +1,62 @@
 import React from 'react';
-import { Database, Timer } from 'lucide-react';
-import { useApiResource } from '../hooks/useApi.js';
-import { safeText } from '../presenters/format.presenter.js';
-import {
-  Checklist,
-  Chip,
-  EmptyState,
-  LoadingSpinner,
-  Page,
-  PageHeader,
-  Panel,
-  PanelHeader,
-  Steps,
-  Text,
-} from '../components/ui';
+import { Mic, Square, RotateCcw, RefreshCw, Check } from 'lucide-react';
+import { useApiResource } from '../hooks/useApi';
+import { useAudioRecorder } from '../hooks/useAudioRecorder';
+import { useCountdown } from '../hooks/useCountdown';
+import type { ConversationTargetsResponse } from '../api/client';
+import { Box, Text, Button, LoadingSpinner, ErrorMessage, TimerRing, AudioPlayer, Textarea } from '../components/ui';
 
-// FRA-67: local type for the GET /api/me/conversation-targets payload.
-// Targets are built from concept rows as { id, section, title, text } in
-// server/index.js; canonical ownership belongs to a later ticket (see
-// "Notes for FRA-68").
-type ConversationTarget = {
-  id: string;
-  section: string;
-  title: string;
-  text: string;
-};
-
-type ConversationApiResponse = {
-  scenario?: string;
-  message?: string;
-  targets?: ConversationTarget[];
-};
-
-type ConversationProps = {
-  token?: string | null;
-};
-
-// Guided speaking practice. There is no scripted chatbot here: the server
-// picks a roleplay scenario from your weakest concepts (or starter concepts
-// for your level), and you practice it out loud, with a partner, or into a
-// voice recorder — weaving each target concept into what you say.
-const STEPS = [
-  { title: 'Lancez le minuteur', text: 'Deux minutes de français continu, sans pause. Two minutes, no stopping.' },
-  { title: 'Placez chaque objectif', text: 'Cochez chaque objectif dès que vous l’avez utilisé. Tick each one off as you use it.' },
-  { title: 'Enregistrez-vous', text: 'Réécoutez-vous et notez vos hésitations : c’est votre prochaine révision. Listen back — your hesitations are your next review.' },
-];
-
-export function Conversation({ token }: ConversationProps) {
-  const { data, loading, error } = useApiResource<ConversationApiResponse>('/api/me/conversation-targets', token);
-  const [checked, setChecked] = React.useState<Record<string, boolean>>({});
-  React.useEffect(() => setChecked({}), [data?.scenario]);
-  const toggle = (id: string) => setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
-  const targets: ConversationTarget[] = (data?.targets || []).filter(
-    (target: ConversationTarget) => target && (safeText(target.title) || safeText(target.section)),
-  );
-  const done = targets.filter((target) => checked[target.id]).length;
-
-  return (
-    <Page>
-      <PageHeader
-        eyebrow="Conversation"
-        title="À vous de parler"
-        lede={
-          <>
-            Deux minutes de français continu, construites autour de vos objectifs du moment.
-            <Text as="span" className="lede-sub"> A two-minute speaking drill built around your current targets — out loud, with a partner, or into a voice recorder.</Text>
-          </>
-        }
-      />
-      {loading && <LoadingSpinner label="Préparation de votre scénario — loading your speaking scenario…" />}
-      {error && <EmptyState icon={Database} title="Pratique indisponible" text={error} />}
-      {data && (
-        <>
-          <Panel>
-            <PanelHeader
-              eyebrow="Votre scénario"
-              title={safeText(data.scenario) || 'Introduce yourself: name, where you live, what you do.'}
-              aside={<Chip icon={Timer} iconSize={14}>2 min</Chip>}
-            />
-            {safeText(data.message) && <Text variant="muted">{safeText(data.message)}</Text>}
-          </Panel>
-          {targets.length > 0 && (
-            <Panel>
-              <PanelHeader
-                eyebrow="Objectifs"
-                title="Glissez-les dans votre discours"
-                aside={<Text as="span" variant="muted" size="sm" nowrap>{done} sur {targets.length}</Text>}
-              />
-              <Checklist
-                items={targets.map((target) => ({
-                  id: target.id,
-                  title: safeText(target.title) || safeText(target.section),
-                  sub: safeText(target.text) || undefined,
-                }))}
-                checked={checked}
-                onToggle={toggle}
-              />
-            </Panel>
-          )}
-          <Panel>
-            <Text variant="eyebrow">Méthode</Text>
-            <Steps steps={STEPS} />
-          </Panel>
-        </>
-      )}
-    </Page>
-  );
+type ConversationProps = {token?:string|null};
+export function Conversation({token}:ConversationProps) {
+  const [pick,setPick]=React.useState(0);
+  const {data,loading,error}=useApiResource<ConversationTargetsResponse>(`/api/me/conversation-targets?pick=${pick}`,token);
+  const timer=useCountdown(120);
+  const audio=useAudioRecorder(120);
+  const [hints,setHints]=React.useState<Record<string,boolean>>({});
+  const [typing,setTyping]=React.useState(false);
+  const [typed,setTyped]=React.useState('');
+  React.useEffect(()=>{if(timer.phase==='done') {if(audio.phase==='requesting') audio.cancelRecording();else audio.stopRecording();}},[timer.phase,audio.phase]);
+  function reset() {timer.reset();audio.cancelRecording();setTyped('');}
+  function newScenario() {reset();setHints({});setPick(value=>value+1);}
+  const busy=audio.phase==='recording' || audio.phase==='requesting';
+  return <Box as="section" className="conversation-page">
+    <Box className="conversation-header"><Text className="home-kicker">Conversation</Text><Text as="h1">À vous de parler</Text><Text>Two minutes of French, out loud.</Text></Box>
+    <Box className="conversation-scenario">
+      <Box className="conversation-scenario-heading"><Text className="home-kicker">Your scenario · 2 min</Text><Button variant="text" icon={RefreshCw} disabled={loading} onClick={newScenario}>New scenario</Button></Box>
+      {loading && <LoadingSpinner label="Preparing your scenario…"/>}
+      {error && <ErrorMessage message={error}/>}
+      {data && <><Text as="h2">{data.scenario}</Text><Text>{data.message}</Text></>}
+    </Box>
+    {data && <>
+      {timer.phase==='done' && <Box className="conversation-done" role="status"><Check size={22} aria-hidden="true"/><Box><Text as="h2">Bravo — two full minutes of French</Text><Text>You made time to talk. Listen back and try again whenever you like.</Text></Box></Box>}
+      <Box className="conversation-drill">
+        <Box className="conversation-controls">
+          <TimerRing remaining={timer.remaining}/>
+          <Text className="conversation-phase" role="status">{timer.phase==='speaking' ? 'Speaking' : timer.phase==='paused' ? 'Paused' : timer.phase==='done' ? 'Done' : 'Ready'}</Text>
+          <Box className="conversation-buttons">
+            {timer.phase==='done' ? <Button variant="primary" onClick={reset}>Again</Button> : <Button variant="primary" onClick={timer.phase==='speaking' ? timer.pause : timer.start}>{timer.phase==='speaking' ? 'Pause' : timer.phase==='paused' ? 'Resume' : 'Start'}</Button>}
+            <Button variant="text" icon={RotateCcw} onClick={reset}>Reset</Button>
+          </Box>
+          <Box className="conversation-record">
+            {audio.browserSupported && timer.phase!=='done' && <Button variant="primary" icon={audio.phase==='recording' ? Square : Mic} disabled={audio.phase==='requesting'} onClick={audio.phase==='recording' ? audio.stopRecording : audio.startRecording}>{audio.phase==='requesting' ? 'Requesting microphone…' : audio.phase==='recording' ? 'Stop recording' : audio.previewUrl ? 'Record again' : 'Record yourself'}</Button>}
+            {audio.phase==='recording' && <Text role="status">Recording · {audio.elapsed}s</Text>}
+            {audio.recordingError && <ErrorMessage message={`${audio.recordingError} You can type instead.`}/>}
+            {audio.previewUrl && <><Text as="h3">Listen back</Text><AudioPlayer src={audio.previewUrl}/></>}
+            {!audio.browserSupported && <Text>Recording is unavailable in this browser. You can type instead.</Text>}
+            <Button variant="text" disabled={busy} aria-expanded={typing} onClick={()=>setTyping(value=>!value)}>{typing ? 'Hide typing' : 'Type instead'}</Button>
+            {typing && <><Textarea value={typed} onChange={event=>setTyped(event.target.value)} rows={4} aria-label="Your conversation" placeholder="Write what you would like to say in French…"/><Text className="conversation-local-note">Your text and recording stay on this device for this drill.</Text></>}
+          </Box>
+        </Box>
+        <Box className="conversation-suggestions">
+          <Text className="home-kicker">Suggestions</Text><Text as="h2">Suggestions — try to weave these in</Text>
+          {data.targets.map(target=><Box className="conversation-suggestion" key={target.id}>
+            <Box><Text as="h3">{target.title}</Text><Button variant="text" aria-expanded={Boolean(hints[target.id])} aria-controls={`hint-${target.id}`} onClick={()=>setHints(value=>({...value,[target.id]:!value[target.id]}))}>{hints[target.id] ? 'Hide hint' : 'Hint'}</Button></Box>
+            <Text>{target.text}</Text>
+            {hints[target.id] && <Box id={`hint-${target.id}`} className="conversation-hint">{target.hint?.sentence ? <Text>« {target.hint.sentence} »</Text> : <Text>No model sentence has been authored for this concept yet.</Text>}<Text>{target.hint?.pointer || 'Try this concept in a sentence of your own.'}</Text></Box>}
+          </Box>)}
+        </Box>
+      </Box>
+      <Box as="ol" className="conversation-method"><Box as="li">Start the timer — two minutes of French.</Box><Box as="li">Glance at the suggestions — prompts to help you talk.</Box><Box as="li">Record and listen back — notice a phrase to try again.</Box></Box>
+    </>}
+  </Box>;
 }

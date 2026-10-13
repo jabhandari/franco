@@ -6,6 +6,20 @@ info:
 servers:
   - url: https://franco.example.com
 paths:
+  /api/me/conversation-targets:
+    get:
+      security: [{ LearnerSession: [] }]
+      description: Read-only scenario and four suggestions from the learner's weakest tracked concepts, or starter concepts. Hints use authored examples and theory; opening one writes no data.
+      parameters:
+        - name: pick
+          in: query
+          schema: { type: integer, minimum: 0, default: 0 }
+          description: Rotates the scenario and suggestion pick without changing learner progress.
+      responses:
+        '200': { description: Scenario, message and suggestions with hint sentence/pointer; sentence is null for concepts without authored examples }
+        '400': { description: Invalid pick }
+        '401': { description: Missing or expired session }
+
   /api/auth/google/status:
     get:
       responses:
