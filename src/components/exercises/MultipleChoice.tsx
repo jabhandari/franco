@@ -103,9 +103,10 @@ type MultipleChoiceProps = {
   entry: MultipleChoiceItem;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
+  preview?: boolean;
 };
 
-export function MultipleChoice({ entry, token, onResult }: MultipleChoiceProps) {
+export function MultipleChoice({ entry, token, onResult, preview = false }: MultipleChoiceProps) {
   const [selected, setSelected] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<AttemptResult | null>(null);
   const [options] = React.useState<MultipleChoiceOption[]>(() => shuffle(entry.choices || []));
@@ -139,7 +140,7 @@ export function MultipleChoice({ entry, token, onResult }: MultipleChoiceProps) 
         selectedKey={selected}
         answered={hasResult(result)}
         correct={Boolean(result?.correct)}
-        disabled={Boolean(result)}
+        disabled={Boolean(result) || preview}
         onSelect={(key: string) => choose(options.find((option) => option.key === key))}
       />
       {hasResult(result) && (

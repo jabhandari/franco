@@ -100,10 +100,11 @@ type WordOrderProps = {
   entry: WordOrderItem;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
+  preview?: boolean;
 };
 
 // Tap-to-order sentence builder for word_order items.
-export function WordOrder({ entry, token, onResult }: WordOrderProps) {
+export function WordOrder({ entry, token, onResult, preview = false }: WordOrderProps) {
   const [bank, setBank] = React.useState<string[]>(() => shuffle(entry.tokens || []));
   const [answer, setAnswer] = React.useState<string[]>([]);
   const [result, setResult] = React.useState<AttemptResult | null>(null);
@@ -167,7 +168,7 @@ export function WordOrder({ entry, token, onResult }: WordOrderProps) {
         ))}
       </TokenTray>
       {!result && (
-        <Button variant="primary" onClick={submit} disabled={!answer.length}>
+        <Button variant="primary" onClick={submit} disabled={!answer.length || preview}>
           Check answer
         </Button>
       )}

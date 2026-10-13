@@ -93,11 +93,12 @@ type SpellingProps = {
   token?: string | null;
   audioUrl?: string;
   onResult?: (result: AttemptResult) => void;
+  preview?: boolean;
 };
 
 // Typed-answer renderer for spelling / cloze / free-text items, and dictation
 // when an audioUrl is provided.
-export function Spelling({ entry, token, audioUrl, onResult }: SpellingProps) {
+export function Spelling({ entry, token, audioUrl, onResult, preview = false }: SpellingProps) {
   const [value, setValue] = React.useState<string>('');
   const [result, setResult] = React.useState<AttemptResult | null>(null);
   const startRef = React.useRef<number>(Date.now());
@@ -135,9 +136,9 @@ export function Spelling({ entry, token, audioUrl, onResult }: SpellingProps) {
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => setValue(event.target.value)}
         placeholder={isDictation ? 'Type exactly what you hear…' : 'Type your answer…'}
         disabled={Boolean(result)}
-        submitDisabled={!value.trim()}
+        submitDisabled={!value.trim() || preview}
         hideSubmit={Boolean(result)}
-        submitLabel="Check answer"
+        submitLabel={preview ? "Preview mode" : "Check answer"}
         onSubmit={submit}
       />
       {hasResult(result) && (
