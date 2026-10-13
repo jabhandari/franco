@@ -8,7 +8,7 @@ import { evaluate, gradeExamQuestion, gradeExerciseItem, normalizeText } from '.
 import { SpeechError, speechConfig, audioMime, readAudio, audioDuration, transcribeSpeech, validateSpeakingCompletion } from './speech.js';
 import { conversationScenario } from './conversation.js';
 
-import { googleConfig,beginGoogle,consumeGoogleState,googleStateCookie,stateCookie,googleIdentity,googleReturn,googleAccount } from './google-auth.js';
+import { googleConfig,beginGoogle,consumeGoogleState,googleStateCookie,stateCookie,googleIdentity,googleReturn,googleAccount,issueAuthCode,consumeAuthCode } from './google-auth.js';
 
 import { translateText, TranslationError } from './translation.js';
 import { getSpeakingLesson } from '../shared/speaking-lessons.js';
@@ -281,12 +281,21 @@ async function main() {
               try {
                 const identity=await googleIdentity(config,code,record);
                 const row=await googleAccount(identity,{query,createProfileForUser,password});
-                const token=randomBytes(32).toString('hex');
-                await query("INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(?,?,?,NOW()+INTERVAL '14 days')",[randomUUID(),row.id,hashToken(token)]);
-                res.writeHead(302,{...headers,location:googleReturn(config,token,false,record.returnState)});return res.end();
+                // Hand the SPA a single-use 60-second code, not the session:
+                // bearer tokens never travel in URLs (history, logs).
+                const authCode=await issueAuthCode(query,row.id);
+                res.writeHead(302,{...headers,location:googleReturn(config,authCode,false,record.returnState)});return res.end();
               } catch {
                 res.writeHead(302,{...headers,location:googleReturn(config,'google_failed',true,record.returnState)});return res.end();
               }
+            }
+            if (req.method === 'POST' && u.pathname === '/api/auth/google/exchange') {
+              const b = await body(req) || {};
+              const userId = await consumeAuthCode(query,b.code);
+              if (!userId) return json(res,400,{error:'Google sign-in could not be completed. Please try again.'});
+              const token=randomBytes(32).toString('hex');
+              await query("INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(?,?,?,NOW()+INTERVAL '14 days')",[randomUUID(),userId,hashToken(token)]);
+              return json(res,200,{token});
             }
             if (req.method === 'POST' && u.pathname === '/api/me/translate') {
               const viewer = await user(req);
@@ -493,7 +502,13 @@ async function main() {
               if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || typeof b.password !== 'string' || b.password.length < 8) return json(res,400,{error:'Email and an 8 character password are required.'});
               const firstName = String(b.first_name ?? '').trim(), lastName = String(b.last_name ?? '').trim();
               if (!isNonEmptyName(firstName) || !isNonEmptyName(lastName)) return json(res,400,{error:'First name and last name are required.'});
-              if ((await query('SELECT id FROM users WHERE email=?',[email])).length) return json(res,409,{error:'An account already exists for this email.'});
+              const existing = (await query('SELECT google_sub FROM users WHERE email=?',[email]))[0];
+              if (existing) {
+                // FRA-57: point Google-linked accounts at the Google button —
+                // this is the "which method did I use?" moment. Login stays a
+                // uniform 401 by design (no method oracle there).
+                return json(res,409,{error: existing.google_sub ? 'An account already exists for this email. Try "Continue with Google" instead.' : 'An account already exists for this email.'});
+              }
               if (!emailConfigured()) return json(res,503,{code:'email_unavailable',error:'Email delivery is not configured on this server. Please try again later.'});
               if (!await allowAuthEmail('signup',email,authClientIp(req),5)) return json(res,429,{error:'Too many signup attempts. Please try again later.'});
               const id = randomUUID(), p = password(b.password), name = displayName(firstName,lastName);
@@ -526,9 +541,9 @@ async function main() {
               const type = u.pathname.endsWith('forgot-password') ? 'reset' : 'verify';
               const allowed = await allowAuthEmail(type,email,authClientIp(req),5);
               if (allowed) {
-                const row = (await query('SELECT id,email_verified FROM users WHERE email=?',[email]))[0];
+                const row = (await query('SELECT id,email_verified,google_sub FROM users WHERE email=?',[email]))[0];
                 if (row && (type === 'reset' || !row.email_verified)) {
-                  try { await sendAuthEmail(row.id,email,type,req.headers.origin); }
+                  try { await sendAuthEmail(row.id,email,type,req.headers.origin,{googleLinked:Boolean(row.google_sub)}); }
                   catch (error) { console.error('Authentication email failed:',error); }
                 }
               }
