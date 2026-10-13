@@ -1,4 +1,5 @@
 import React from 'react';
+import { CheckCircle2 } from 'lucide-react';
 import { Button } from './Button';
 
 export type FeedbackTone = 'info' | 'correct' | 'incorrect';
@@ -58,4 +59,10 @@ export type ErrorMessageProps = {
 export function ErrorMessage({ message, children }: ErrorMessageProps) {
   if (!message && !children) return null;
   return <p className="error-message">{message || children}</p>;
+}
+
+export type SuccessMessageProps = { message: string };
+
+export function SuccessMessage({ message }: SuccessMessageProps) {
+  return <div role="status" className="ui-success-message"><CheckCircle2 size={20} aria-hidden="true"/><p>{message}</p></div>;
 }
