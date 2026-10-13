@@ -12,11 +12,11 @@ export function googleConfig(env = process.env) {
   } catch {return null;}
 }
 const states=new Map();
-export function beginGoogle(config,now=Date.now()) {
+export function beginGoogle(config,now=Date.now(),returnState='') {
   for(const [key,value] of states) if(now-value.created>600000) states.delete(key);
   if(states.size>=400) throw new Error('Google sign-in is busy. Please try later.');
   const state=randomBytes(32).toString('hex'),nonce=randomBytes(32).toString('hex'),verifier=randomBytes(48).toString('base64url');
-  states.set(state,{nonce,verifier,created:now});
+  states.set(state,{nonce,verifier,returnState,created:now});
   const client=new OAuth2Client(config.clientId,config.clientSecret,config.redirectUri);
   const url=client.generateAuthUrl({scope:['openid','email','profile'],state,nonce,code_challenge:createHash('sha256').update(verifier).digest('base64url'),code_challenge_method:'S256',prompt:'select_account'});
   return {state,url};
@@ -45,8 +45,8 @@ export async function googleIdentity(config,code,record,client=new OAuth2Client(
   if(!claims || claims.nonce!==record.nonce || claims.email_verified!==true || typeof claims.email!=='string' || !claims.email.trim() || !claims.sub) throw new Error('Google identity could not be verified.');
   return {email:claims.email.trim().toLowerCase(),firstName:claims.given_name || claims.name?.split(' ')[0] || claims.email.split('@')[0],lastName:claims.family_name || null};
 }
-export function googleReturn(config,value,error=false) {
-  const url=new URL(config.frontendUrl);url.hash=new URLSearchParams({[error?'auth_error':'auth_token']:value}).toString();return url.href;
+export function googleReturn(config,value,error=false,returnState='') {
+  const url=new URL(config.frontendUrl);url.hash=new URLSearchParams({[error?'auth_error':'auth_token']:value,...(returnState?{auth_state:returnState}:{})}).toString();return url.href;
 }
 
 export async function googleAccount(identity,{query,createProfileForUser,password}) {

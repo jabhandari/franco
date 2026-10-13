@@ -61,10 +61,15 @@ type NavItem = {
 
 const TOKEN_KEY = 'franco_auth_token';
 const googleCallback=new URLSearchParams(window.location.hash.slice(1));
-const googleToken=googleCallback.get('auth_token');
-const googleError=googleCallback.get('auth_error');
+const returnedToken=googleCallback.get('auth_token');
+const returnedState=googleCallback.get('auth_state');
+const expectedState=sessionStorage.getItem('franco_oauth_return_state');
+const matchesCallback=Boolean(expectedState && returnedState===expectedState);
+const googleToken=matchesCallback ? returnedToken : null;
+const googleError=googleCallback.get('auth_error') || (returnedToken && !matchesCallback ? 'google_failed' : null);
+if(matchesCallback) sessionStorage.removeItem('franco_oauth_return_state');
 if(googleToken) sessionStorage.setItem(TOKEN_KEY,googleToken);
-if(googleToken || googleError) window.history.replaceState({},'',window.location.pathname+window.location.search);
+if(returnedToken || googleError || returnedState) window.history.replaceState({},'',window.location.pathname+window.location.search);
 
 
 const navItems: NavItem[] = [

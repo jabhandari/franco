@@ -27,3 +27,5 @@ console.log('Google account-linking checks passed');
 
 assert.match(stateCookie(login.state,true),/^__Host-franco_google_state=/);
 assert.match(stateCookie(login.state,true),/Path=\/;/);
+
+const returnState='a'.repeat(64);const bound=beginGoogle(config,1000,returnState);assert.equal(consumeGoogleState(bound.state,bound.state,1001).returnState,returnState);assert.equal(new URL(googleReturn(config,'token',false,returnState)).hash,'#auth_token=token&auth_state='+returnState);

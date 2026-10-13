@@ -3,7 +3,7 @@
 The Direction B button checks `/api/auth/google/status`, then navigates to
 `/api/auth/google` on the configured API origin. The server uses the established
 Google OAuth SDK for authorization-code exchange and ID-token verification.
-State is single-use and expires in ten minutes, bound to a secure HTTP-only
+State is single-use and expires in ten minutes, bound to a secure Host-prefixed HTTP-only
 SameSite=Lax cookie. PKCE and the ID-token nonce protect the redirect flow.
 Verified Google emails link to the existing Franco account, or create a user
 and profile; sign-in issues the same opaque session as password login.
@@ -28,3 +28,7 @@ No client secret is exposed to the browser.
 
 Password reset remains a separate missing backend flow. The visible Forgot
 password link opens an explanation rather than navigating to a dead endpoint.
+
+The frontend starts each handoff with its own random, single-use return state.
+A callback token is accepted only when that state matches this browser tab; a
+crafted token fragment cannot silently switch an unsuspecting learner account.

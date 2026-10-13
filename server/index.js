@@ -257,7 +257,9 @@ async function main() {
               const config=googleConfig();
               if(!config) return json(res,503,{error:'Google sign-in is not configured yet. Please use email and password.'});
               try {
-                const login=beginGoogle(config);
+                const returnState=u.searchParams.get('return_state');
+                if(!returnState || !/^[a-f0-9]{64}$/.test(returnState)) return json(res,400,{error:'Start Google sign-in from the Franco login page.'});
+                const login=beginGoogle(config,Date.now(),returnState);
                 res.writeHead(302,{'location':login.url,'set-cookie':stateCookie(login.state,config.secure),'cache-control':'no-store'});return res.end();
               } catch {return json(res,503,{error:'Google sign-in is busy. Please try later.'});}
             }
@@ -268,16 +270,16 @@ async function main() {
               const headers={'set-cookie':stateCookie('',config.secure,true),'cache-control':'no-store','referrer-policy':'no-referrer'};
               const code=u.searchParams.get('code');
               if(!record || !code || u.searchParams.get('error')) {
-                res.writeHead(302,{...headers,location:googleReturn(config,'google_cancelled',true)});return res.end();
+                res.writeHead(302,{...headers,location:googleReturn(config,'google_cancelled',true,record?.returnState)});return res.end();
               }
               try {
                 const identity=await googleIdentity(config,code,record);
                 const row=await googleAccount(identity,{query,createProfileForUser,password});
                 const token=randomBytes(32).toString('hex');
                 await query("INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(?,?,?,NOW()+INTERVAL '14 days')",[randomUUID(),row.id,hashToken(token)]);
-                res.writeHead(302,{...headers,location:googleReturn(config,token)});return res.end();
+                res.writeHead(302,{...headers,location:googleReturn(config,token,false,record.returnState)});return res.end();
               } catch {
-                res.writeHead(302,{...headers,location:googleReturn(config,'google_failed',true)});return res.end();
+                res.writeHead(302,{...headers,location:googleReturn(config,'google_failed',true,record.returnState)});return res.end();
               }
             }
             if (req.method === 'GET' && u.pathname === '/api/health') return json(res, 200, { ok: true, database: 'supabase-postgres' });
