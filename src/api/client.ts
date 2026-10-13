@@ -637,6 +637,7 @@ export type SpeakingCompletion = {
 // ---------------------------------------------------------------------------
 
 export type ConversationTarget = {
+  hint?: {sentence:string|null;pointer:string};
   id: string;
   section: string;
   title: string;
@@ -882,6 +883,12 @@ async function parseApiResponse<T = ApiResponse>(response: Response): Promise<T>
 // (e.g. Cloudflare Pages) to point the frontend at the API origin.
 // Falls back to same-origin relative URLs, which is what local dev uses.
 const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+
+export function startGoogleSignIn(): void {
+  const state=Array.from(crypto.getRandomValues(new Uint8Array(32)),value=>value.toString(16).padStart(2,'0')).join('');
+  sessionStorage.setItem('franco_oauth_return_state',state);
+  window.location.assign(`${apiUrl('/api/auth/google')}?return_state=${state}`);
+}
 
 function apiUrl(path: string): string {
   return API_BASE ? `${API_BASE}${path}` : path;

@@ -82,5 +82,9 @@ export { ReportButton } from './Report';
 export type { ReportButtonProps, ReportState } from './Report';
 export { PracticeLevelCard } from './PracticeLevelCard';
 
+export { TimerRing } from './TimerRing';
+
+export { LanguageTools } from './LanguageTools';
+
 export { Roadmap } from './Roadmap';
 export { CheckRow } from './CheckRow';
