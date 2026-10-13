@@ -16,7 +16,8 @@ import { getPort, getHost, corsOrigin } from './config.js';
 import { displayName, isNonEmptyName } from './user-names.js';
 import { getLearnerProgress } from './learner-progress.js';
 import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
-import { allowAuthEmail, genericEmailResponse, hashEmailToken, sendAuthEmail, validEmailToken } from './auth-email.js';
+import { allowAuthEmail, authClientIp, genericEmailResponse, hashEmailToken, sendAuthEmail, validEmailToken } from './auth-email.js';
+import { emailConfigured } from './email.js';
 
 const PORT = getPort(); const HOST = getHost(); const hashToken = (v) => createHash('sha256').update(v).digest('hex');
 const json = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-headers': 'content-type, authorization', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-expose-headers': 'retry-after', ...headers }); res.end(JSON.stringify(body)); };
@@ -493,10 +494,12 @@ async function main() {
               const firstName = String(b.first_name ?? '').trim(), lastName = String(b.last_name ?? '').trim();
               if (!isNonEmptyName(firstName) || !isNonEmptyName(lastName)) return json(res,400,{error:'First name and last name are required.'});
               if ((await query('SELECT id FROM users WHERE email=?',[email])).length) return json(res,409,{error:'An account already exists for this email.'});
+              if (!emailConfigured()) return json(res,503,{code:'email_unavailable',error:'Email delivery is not configured on this server. Please try again later.'});
+              if (!await allowAuthEmail('signup',email,authClientIp(req),5)) return json(res,429,{error:'Too many signup attempts. Please try again later.'});
               const id = randomUUID(), p = password(b.password), name = displayName(firstName,lastName);
               await query('INSERT INTO users(id,email,name,first_name,last_name,password_hash,password_salt,email_verified) VALUES(?,?,?,?,?,?,?,FALSE)',[id,email,name,firstName,lastName,p.hash,p.salt]);
               await createProfileForUser(id);
-              try { await sendAuthEmail(id,email,'verify'); }
+              try { await sendAuthEmail(id,email,'verify',req.headers.origin); }
               catch (error) { console.error('Signup verification email failed:',error); return json(res,503,{code:'verification_email_failed',error:'Account created, but verification email could not be sent. Please request a new link.'}); }
               return json(res,201,{message:'Check your email for a verification link.'});
             }
@@ -519,12 +522,13 @@ async function main() {
             if (req.method === 'POST' && (u.pathname === '/api/auth/resend-verification' || u.pathname === '/api/auth/forgot-password')) {
               const b = await body(req) || {}, email = typeof b.email === 'string' ? b.email.trim().toLowerCase() : '';
               if (!email || email.length > 254) return json(res,200,genericEmailResponse);
+              if (!emailConfigured()) return json(res,503,{code:'email_unavailable',error:'Email delivery is not configured on this server. Please try again later.'});
               const type = u.pathname.endsWith('forgot-password') ? 'reset' : 'verify';
-              const allowed = await allowAuthEmail(type,email,req.socket.remoteAddress || '',5);
+              const allowed = await allowAuthEmail(type,email,authClientIp(req),5);
               if (allowed) {
                 const row = (await query('SELECT id,email_verified FROM users WHERE email=?',[email]))[0];
                 if (row && (type === 'reset' || !row.email_verified)) {
-                  try { await sendAuthEmail(row.id,email,type); }
+                  try { await sendAuthEmail(row.id,email,type,req.headers.origin); }
                   catch (error) { console.error('Authentication email failed:',error); }
                 }
               }
@@ -541,6 +545,7 @@ async function main() {
                 if (!rows.length) { await client.query('ROLLBACK'); return json(res,400,{error:'This reset link is invalid or expired.'}); }
                 const p = password(b.password);
                 await client.query('UPDATE users SET password_hash=$1,password_salt=$2 WHERE id=$3',[p.hash,p.salt,rows[0].user_id]);
+                await client.query("UPDATE email_tokens SET used_at=NOW() WHERE user_id=$1 AND type='reset' AND used_at IS NULL",[rows[0].user_id]);
                 await client.query('DELETE FROM sessions WHERE user_id=$1',[rows[0].user_id]);
                 await client.query('COMMIT');
                 return json(res,200,{message:'Password updated. Log in with your new password.'});

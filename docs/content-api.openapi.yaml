@@ -20,6 +20,106 @@ paths:
         '400': { description: Invalid pick }
         '401': { description: Missing or expired session }
 
+  /api/auth/signup:
+    post:
+      description: Creates an unverified email/password account and sends a 24-hour verification link. No session is issued until email verification and login.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, first_name, last_name]
+              properties:
+                email: { type: string, format: email, maxLength: 254 }
+                password: { type: string, minLength: 8 }
+                first_name: { type: string, minLength: 1 }
+                last_name: { type: string, minLength: 1 }
+      responses:
+        '201': { description: Verification email sent; message returned, no session token }
+        '400': { description: Invalid email, password or names }
+        '409': { description: Account already exists }
+        '429': { description: Signup rate limit reached }
+        '503': { description: Email delivery is not configured or the provider rejected the message }
+  /api/auth/login:
+    post:
+      description: Returns an opaque session only for a verified email/password account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '200': { description: Session token and user payload }
+        '401': { description: Invalid credentials }
+        '403': { description: Valid credentials but email unverified; code email_not_verified }
+  /api/auth/verify-email:
+    post:
+      description: Consumes a 24-hour, single-use verification token from the email link.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token]
+              properties:
+                token: { type: string, pattern: '^[a-f0-9]{64}$' }
+      responses:
+        '200': { description: Email verified; user may now log in }
+        '400': { description: Invalid, expired or already used token }
+  /api/auth/resend-verification:
+    post:
+      description: Sends another verification link only for an unverified account. Eligible and ineligible addresses receive the same 200 response; per-address and per-IP limits apply.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string, format: email }
+      responses:
+        '200': { description: Generic response that does not reveal account status or rate-limit state }
+        '503': { description: Email delivery is not configured, independent of account status }
+  /api/auth/forgot-password:
+    post:
+      description: Sends a one-hour reset link for an account. Eligible and ineligible addresses receive the same 200 response; per-address and per-IP limits apply.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string, format: email }
+      responses:
+        '200': { description: Generic response that does not reveal account status or rate-limit state }
+        '503': { description: Email delivery is not configured, independent of account status }
+  /api/auth/reset-password:
+    post:
+      description: Consumes a one-hour reset token, replaces the password with a fresh salt, invalidates all other reset tokens and revokes every session for the account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, password]
+              properties:
+                token: { type: string, pattern: '^[a-f0-9]{64}$' }
+                password: { type: string, minLength: 8 }
+      responses:
+        '200': { description: Password reset; existing sessions revoked }
+        '400': { description: Weak password or invalid, expired or used token }
+
   /api/auth/google/status:
     get:
       responses:

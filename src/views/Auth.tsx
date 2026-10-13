@@ -2,8 +2,8 @@ import React from 'react';
 import { BookOpen, RotateCcw, Flame, Check, Circle } from 'lucide-react';
 import { apiGet, apiPost, getErrorMessage, startGoogleSignIn } from '../api/client';
 import { Box, Text, Field, TextInput, Button, ErrorMessage } from '../components/ui';
+import type { AuthMode } from '../types';
 
-export type AuthMode = 'login' | 'signup' | 'forgot' | 'reset' | 'verify' | 'check-email' | 'unverified';
 type AuthScreenProps = {mode:AuthMode;onModeChange:(mode:AuthMode)=>void;onSubmit:(event:React.FormEvent<HTMLFormElement>)=>void;loading:boolean;error:string;onPasswordReset:()=>void};
 const linkToken = new URLSearchParams(window.location.search).get('token');
 if (linkToken && ['/verify-email','/reset-password'].includes(window.location.pathname)) window.history.replaceState({},'',window.location.pathname);
