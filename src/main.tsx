@@ -293,7 +293,7 @@ function App(): React.JSX.Element {
   }
 
   return (
-    <Box className="app-shell language-tools-enabled">
+    <Box className={`app-shell language-tools-enabled${view === 'learn' || view === 'content' ? ' learn-page-shell' : ''}`}>
       <LanguageTools key={session.id} userId={session.id} token={authToken} page={view}/>
       <Box as="aside" className="sidebar">
         <Brand onClick={() => navigate('home')} />
