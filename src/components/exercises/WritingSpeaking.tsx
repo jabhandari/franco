@@ -83,10 +83,11 @@ type WritingPromptProps = {
   entry: WritingPromptItem;
   token?: string | null;
   onResult?: (result: AttemptResult) => void;
+  preview?: boolean;
 };
 
 // Writing prompt: free-form text graded against the server-side rubric.
-export function WritingPrompt({ entry, token, onResult }: WritingPromptProps) {
+export function WritingPrompt({ entry, token, onResult, preview = false }: WritingPromptProps) {
   const [value, setValue] = React.useState<string>('');
   const [result, setResult] = React.useState<AttemptResult | null>(null);
   const startRef = React.useRef<number>(Date.now());
@@ -126,7 +127,7 @@ export function WritingPrompt({ entry, token, onResult }: WritingPromptProps) {
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => setValue(event.target.value)}
         placeholder="Write your answer in French…"
         disabled={Boolean(result)}
-        submitDisabled={value.trim().length < 10}
+        submitDisabled={value.trim().length < 10 || preview}
         hideSubmit={Boolean(result)}
         submitLabel="Submit writing"
         onSubmit={submit}

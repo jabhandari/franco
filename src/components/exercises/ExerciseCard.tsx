@@ -67,11 +67,12 @@ type ExerciseCardProps = {
   onResult?: (result: AttemptResult) => void;
   compactListening?: boolean;
   sequence?: number;
+  preview?: boolean;
 };
 
 // One renderer per item type. Every answered item reports an attempt with
 // response + duration to the server's adaptive engine.
-export function ExerciseCard({ entry, token, onResult, compactListening = false, sequence }: ExerciseCardProps) {
+export function ExerciseCard({ entry, token, onResult, compactListening = false, sequence, preview = false }: ExerciseCardProps) {
   // Normalize server snake_case fields for the renderers, then sanitize so
   // object-shaped API values can never crash a renderer or print raw JSON.
   const raw: Partial<ExerciseItem> = entry && typeof entry === 'object' ? entry : {};
@@ -89,37 +90,37 @@ export function ExerciseCard({ entry, token, onResult, compactListening = false,
   let rendered: React.ReactNode;
   switch (rawType) {
     case 'word_order':
-      rendered = <WordOrder entry={item} token={token} onResult={onResult} />;
+      rendered = <WordOrder entry={item} token={token} onResult={onResult} preview={preview} />;
       break;
     case 'spelling':
     case 'cloze':
     case 'free_text':
-      rendered = <Spelling entry={item} token={token} onResult={onResult} />;
+      rendered = <Spelling entry={item} token={token} onResult={onResult} preview={preview} />;
       break;
     case 'dictation':
-      rendered = <Spelling entry={item} token={token} onResult={onResult} audioUrl={(item.media || [])[0]?.url} />;
+      rendered = <Spelling entry={item} token={token} onResult={onResult} audioUrl={(item.media || [])[0]?.url} preview={preview} />;
       break;
     case 'pronunciation_drill':
-      rendered = <PronunciationDrill entry={item} token={token} onResult={onResult} compact={compactListening} sequence={sequence} />;
+      rendered = <PronunciationDrill entry={item} token={token} onResult={onResult} compact={compactListening} sequence={sequence} preview={preview} />;
       break;
     case 'writing_prompt':
-      rendered = <WritingPrompt entry={item} token={token} onResult={onResult} />;
+      rendered = <WritingPrompt entry={item} token={token} onResult={onResult} preview={preview} />;
       break;
     case 'speaking_prompt':
-      rendered = <SpeakingPrompt entry={item} token={token} onResult={onResult} />;
+      rendered = <SpeakingPrompt entry={item} token={token} onResult={onResult} preview={preview} />;
       break;
     case 'multiple_choice':
     case 'reading':
     case 'grammar_focus':
     case 'listening':
     default:
-      rendered = <MultipleChoice entry={item} token={token} onResult={onResult} />;
+      rendered = <MultipleChoice entry={item} token={token} onResult={onResult} preview={preview} />;
   }
-  return <ReportableExercise item={item} token={token}>{rendered}</ReportableExercise>;
+  return <ReportableExercise item={item} token={token} preview={preview}>{rendered}</ReportableExercise>;
 }
 
-function ReportableExercise({ item, token, children }: { item: ExerciseItem; token?: string | null; children: React.ReactNode }) {
-  const reportable = item.item_kind === 'content_item' && item.id && token;
+function ReportableExercise({ item, token, preview = false, children }: { item: ExerciseItem; token?: string | null; preview?: boolean; children: React.ReactNode }) {
+  const reportable = item.item_kind === 'content_item' && item.id && token && !preview;
   return (
     <Box className="exercise-card-wrap">
       {children}

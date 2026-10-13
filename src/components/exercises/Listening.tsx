@@ -34,10 +34,11 @@ type PronunciationDrillProps = {
   onResult?: (result: AttemptResult) => void;
   compact?: boolean;
   sequence?: number;
+  preview?: boolean;
 };
 
 // The answer stays hidden until the learner has listened and tried saying it.
-export function PronunciationDrill({ entry, token, onResult, compact = false, sequence }: PronunciationDrillProps) {
+export function PronunciationDrill({ entry, token, onResult, compact = false, sequence, preview = false }: PronunciationDrillProps) {
   const [revealed, setRevealed] = React.useState(false);
   const [result, setResult] = React.useState<AttemptResult | null>(null);
   const [submitting, setSubmitting] = React.useState(false);
@@ -96,8 +97,8 @@ export function PronunciationDrill({ entry, token, onResult, compact = false, se
             <Text as="strong" className="pronunciation-word">{word || 'No transcript available'}</Text>
             {!result && (
               <Box className="pronunciation-mark-row">
-                <Button variant="primary" disabled={submitting} onClick={() => selfMark(true)}>Got it</Button>
-                <Button variant="retry" disabled={submitting} onClick={() => selfMark(false)}>Not yet</Button>
+                <Button variant="primary" disabled={submitting || preview} onClick={() => selfMark(true)}>Got it</Button>
+                <Button variant="retry" disabled={submitting || preview} onClick={() => selfMark(false)}>Not yet</Button>
               </Box>
             )}
           </Box>

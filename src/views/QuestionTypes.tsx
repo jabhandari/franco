@@ -1,5 +1,6 @@
 import React from 'react';
 import { ExerciseCard, type ExerciseItem } from '../components/exercises/ExerciseCard';
+import type { Choice } from '../presenters/collections.presenter.js';
 import {
   Box,
   Page,
@@ -16,7 +17,7 @@ import type { TabOption } from '../components/ui';
  */
 
 type ShowcaseEntry = ExerciseItem & {
-  choices?: { key: string; text: string }[];
+  choices?: Choice[];
   tokens?: string[];
   expected?: string;
   context?: string;
@@ -290,10 +291,12 @@ export function QuestionTypes({ token }: QuestionTypesProps): React.JSX.Element 
       </Box>
       <Box className="question-types-body">
         <Text as="p" variant="lede">{active.description}</Text>
+        <Text as="p" variant="note">Preview mode — submissions are disabled. This page shows the question UI only.</Text>
         <ExerciseCard
           key={active.id}
           entry={active.entry}
           token={token}
+          preview
         />
       </Box>
     </Page>
