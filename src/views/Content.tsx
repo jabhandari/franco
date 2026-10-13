@@ -33,7 +33,7 @@ export function Content({token,onPractice}:ContentProps) {
   const dialogRef=React.useRef<HTMLDivElement>(null);
 
   React.useEffect(()=>{
-    if(!active || (!learner && !progressError)) return;
+    if(!active) return;
     const previous=document.activeElement;
     const dialog=dialogRef.current;
     dialog?.querySelector<HTMLElement>('button')?.focus();
@@ -51,9 +51,9 @@ export function Content({token,onPractice}:ContentProps) {
     document.addEventListener('click',outside);
     document.addEventListener('keydown',trapFocus);
     return()=>{document.removeEventListener('click',outside);document.removeEventListener('keydown',trapFocus);if(previous instanceof HTMLElement) previous.focus();};
-  },[active?.slug,Boolean(learner),progressError]);
+  },[active?.slug]);
   function recordSection(section:LessonSection) {
-    if(!token || !active || active.metadata.stub || lessonState(active,learner?.progress || null)==='locked') return;
+    if(!token || !active || active.metadata.stub) return;
     saveLessonBookmark(active.slug,section,token).then(()=>{setBookmarkError('');setProgressRevision(value=>value+1);}).catch(()=>setBookmarkError('Your reading position could not be saved.'));
   }
   function selectLevel(next:typeof level) {setLevel(next);setActiveSlug(null);window.history.replaceState({},'',`${window.location.pathname}?level=${next}`);}
@@ -67,16 +67,16 @@ export function Content({token,onPractice}:ContentProps) {
     </Box>
     {loading && <LoadingSpinner label="Loading lessons…"/>}
     {error && <ErrorMessage message={error}/>}
-    {progressError && <ErrorMessage message="Couldn't load your progress. Lesson practice is unavailable until you reload."/>}
+    {progressError && <ErrorMessage message="Couldn't load your progress. You can still open and practice lessons."/>}
     {bookmarkError && <ErrorMessage message={bookmarkError}/>}
     {!loading && !error && !learner && !progressError && <LoadingSpinner label="Loading your learning progress…"/>}
-    {!loading && !error && (learner || progressError) && <Box>
+    {!loading && !error && <Box>
       <Roadmap lessons={lessons} edges={edges} selected={activeSlug} onSelect={slug=>setActiveSlug(activeSlug===slug ? null : slug)}/>
       {!nodes.length && <Text variant="muted">No lessons are available at this level yet.</Text>}
     </Box>}
-    {active && (learner || progressError) && <Modal ref={dialogRef} key={active.slug} closeLabel="Close lesson" onClose={()=>setActiveSlug(null)} resumeSection={resumeSection} onReadingSectionChange={recordSection}>
+    {active && <Modal ref={dialogRef} key={active.slug} closeLabel="Close lesson" onClose={()=>setActiveSlug(null)} resumeSection={resumeSection} onReadingSectionChange={recordSection}>
       <ConceptDetail concept={detail(active)}/>
-      <Button variant="primary" disabled={active.metadata.stub || lessonState(active,learner?.progress || null)==='locked'} onClick={()=>onPractice(level)}>Practice this lesson</Button>
+      <Button variant="primary" disabled={Boolean(active.metadata.stub)} onClick={()=>onPractice(level)}>Practice this lesson</Button>
       {active.metadata.stub ? <Text variant="muted">In preparation — practice will be available when this lesson is ready.</Text> : <Text variant="muted">Practice currently starts a session at {level}, covering the whole level.</Text>}
     </Modal>}
   </Box>;
