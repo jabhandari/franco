@@ -34,7 +34,7 @@ export function useAudioRecorder(maxSeconds = 60) {
   const cancelRecording=React.useCallback(()=>{
     generation.current++;
     if(recorder.current) {
-      recorder.current.onstop=null;recorder.current.ondataavailable=null;
+      recorder.current.onstop=null;recorder.current.ondataavailable=null;recorder.current.onerror=null;
       if(recorder.current.state!=='inactive') recorder.current.stop();
     }
     recorder.current=null;stopTracks();releasePreview();
@@ -58,8 +58,8 @@ export function useAudioRecorder(maxSeconds = 60) {
       const chunks:Blob[]=[];
       current.ondataavailable=event=>{if(event.data?.size) chunks.push(event.data);};
       current.onstop=()=>{
-        stopTracks();
         if(!mounted.current || request!==generation.current) return;
+        stopTracks();
         const recorded=new Blob(chunks,{type:current.mimeType || mimeType || ''});
         if(!recorded.size || recorded.size>MAX_BYTES) {
           setRecordingError(recorded.size ? 'This recording is too large. Try a shorter sample.' : 'No audio was recorded. Please try again.');setPhase('idle');return;
@@ -67,6 +67,7 @@ export function useAudioRecorder(maxSeconds = 60) {
         preview.current=URL.createObjectURL(recorded);setPreviewUrl(preview.current);setBlob(recorded);setPhase('ready');
       };
       current.onerror=()=>{
+        if(request!==generation.current) return;
         current.onstop=null;stopTracks();
         if(mounted.current && request===generation.current) {setRecordingError('The recording failed. Please try again.');setPhase('idle');}
       };
@@ -74,6 +75,7 @@ export function useAudioRecorder(maxSeconds = 60) {
       interval.current=setInterval(()=>setElapsed(Math.min(maxSeconds,Math.floor((performance.now()-start)/1000))),250);
       cutoff.current=setTimeout(()=>{if(current.state==='recording') current.stop();},Math.max(100,maxSeconds*1000-500));
     } catch {
+      if(request!==generation.current) return;
       stopTracks();
       if(mounted.current && request===generation.current) {setRecordingError('Microphone access was denied or unavailable.');setPhase('idle');}
     }
