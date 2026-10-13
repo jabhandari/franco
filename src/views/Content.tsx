@@ -16,7 +16,10 @@ export function Content({token,onPractice}:ContentProps) {
   const [activeSlug,setActiveSlug]=React.useState<string|null>(()=>params.get('concept'));
   const [bookmarkError,setBookmarkError]=React.useState('');
   const {data,loading,error}=useApiResource<ContentConceptsResponse>('/api/content/v1/concepts',token);
-  const {data:learner,error:progressError}=useApiResource<MeResponse>('/api/me',token);
+  const [progressRevision,setProgressRevision]=React.useState(0);
+  const [learner,setLearner]=React.useState<MeResponse|null>(null);
+  const {data:progressData,error:progressError}=useApiResource<MeResponse>(`/api/me?roadmap=${progressRevision}`,token);
+  React.useEffect(()=>{if(progressData) setLearner(progressData);else if(progressError) setLearner(null);},[progressData,progressError]);
   const concepts=data?.concepts || [];
   const nodes=React.useMemo(()=>concepts.filter(concept=>concept.level_code===level),[concepts,level]);
   const positions=React.useMemo(()=>roadmapPositions(nodes),[nodes]);
@@ -51,7 +54,7 @@ export function Content({token,onPractice}:ContentProps) {
   },[active?.slug]);
   function recordSection(section:LessonSection) {
     if(!token || !active || active.metadata.stub || lessonState(active,learner?.progress || null)==='locked') return;
-    saveLessonBookmark(active.slug,section,token).then(()=>setBookmarkError('')).catch(()=>setBookmarkError('Your reading position could not be saved.'));
+    saveLessonBookmark(active.slug,section,token).then(()=>{setBookmarkError('');setProgressRevision(value=>value+1);}).catch(()=>setBookmarkError('Your reading position could not be saved.'));
   }
   function selectLevel(next:typeof level) {setLevel(next);setActiveSlug(null);window.history.replaceState({},'',`${window.location.pathname}?level=${next}`);}
   function detail(concept:ContentConcept) {
