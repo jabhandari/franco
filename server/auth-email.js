@@ -2,6 +2,7 @@ import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { isIP } from 'node:net';
 import { query, pool } from './database.js';
 import { sendMail } from './email.js';
+import { buildResetEmail, buildVerifyEmail } from './auth-email-templates.js';
 
 export const hashEmailToken = value => createHash('sha256').update(value).digest('hex');
 export const validEmailToken = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
@@ -25,20 +26,15 @@ function frontendLink(path, token, origin) {
   url.searchParams.set('token', token);
   return url.href;
 }
-function escapeHtml(value) {
-  return value.replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char]);
-}
 export async function sendAuthEmail(userId, email, type, origin) {
   const token = randomBytes(32).toString('hex');
   const minutes = type === 'verify' ? 24 * 60 : 60;
   await query("INSERT INTO email_tokens(id,user_id,token_hash,type,expires_at) VALUES(?,?,?,?,NOW()+(? * INTERVAL '1 minute'))",
     [randomUUID(), userId, hashEmailToken(token), type, minutes]);
   const link = frontendLink(type === 'verify' ? '/verify-email' : '/reset-password', token, origin);
-  const subject = type === 'verify' ? 'Verify your Franco email' : 'Reset your Franco password';
-  const action = type === 'verify' ? 'Verify your email' : 'Reset your password';
-  const text = `${action}: ${link}\n\nThis link expires in ${type === 'verify' ? '24 hours' : '1 hour'}. If you did not request this, you can ignore this email.`;
+  const { subject, text, html } = type === 'verify' ? buildVerifyEmail(link, email) : buildResetEmail(link, email);
   try {
-    await sendMail({ to: email, subject, text, html: `<p>${escapeHtml(action)}</p><p><a href="${escapeHtml(link)}">${escapeHtml(action)}</a></p><p>This link expires in ${type === 'verify' ? '24 hours' : '1 hour'}.</p><p>If you did not request this, you can ignore this email.</p>` });
+    await sendMail({ to: email, subject, text, html });
   } catch (error) {
     await query('DELETE FROM email_tokens WHERE token_hash=?', [hashEmailToken(token)]);
     throw error;
