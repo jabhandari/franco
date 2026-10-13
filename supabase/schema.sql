@@ -7,9 +7,32 @@ CREATE TABLE public.users (
   name text NOT NULL,
   password_hash text NOT NULL,
   password_salt text NOT NULL,
+  first_name text,
+  last_name text,
+  email_verified boolean NOT NULL DEFAULT false,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT users_pkey PRIMARY KEY (id)
 );
+CREATE TABLE public.email_tokens (
+  id text PRIMARY KEY,
+  user_id text NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  token_hash text NOT NULL UNIQUE,
+  type text NOT NULL CHECK (type IN ('verify', 'reset')),
+  expires_at timestamp with time zone NOT NULL,
+  used_at timestamp with time zone,
+  created_at timestamp with time zone NOT NULL DEFAULT now()
+);
+CREATE INDEX email_tokens_user_type_idx ON public.email_tokens(user_id, type, created_at DESC);
+CREATE TABLE public.auth_email_requests (
+  id text PRIMARY KEY,
+  scope_hash text NOT NULL,
+  ip_hash text,
+  scope text,
+  created_at timestamp with time zone NOT NULL DEFAULT now()
+);
+CREATE INDEX auth_email_requests_scope_time_idx ON public.auth_email_requests(scope_hash, created_at DESC);
+CREATE INDEX auth_email_requests_ip_time_idx ON public.auth_email_requests(ip_hash, created_at DESC);
+CREATE INDEX auth_email_requests_created_idx ON public.auth_email_requests(created_at);
 CREATE TABLE public.sessions (
   id text NOT NULL,
   user_id text NOT NULL,

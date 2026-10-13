@@ -2295,7 +2295,8 @@ html[data-theme] .auth-b-rail h1 { color:var(--color-sidebar-text); font-size:28
 .auth-b-form input { padding:12px; width:100%; min-width:0; font-size:16px; font-weight:400; background:transparent; color:var(--color-text); }
 .auth-b-form .primary-button { margin:6px 0 0; padding:14px; min-height:48px; font-size:14px; justify-content:center; }
 .auth-b-name-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; }
-.auth-b-forgot { justify-self:end; color:var(--color-accent); font-size:14px; text-decoration:none; }
+.auth-b-forgot { justify-self:end; padding:0; border:0; background:transparent; color:var(--color-accent); font-size:14px; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+.auth-b-forgot:focus-visible { outline:2px solid var(--color-accent); outline-offset:4px; border-radius:2px; }
 .auth-b-help { font-size:14px; line-height:1.7; color:var(--color-muted); padding:12px; background:var(--color-background); border-radius:var(--radius-control); }
 .auth-b-checklist { display:grid; gap:6px; padding:0; margin:-4px 0 0; list-style:none; color:var(--color-muted); }
 .auth-b-checklist li { display:flex; gap:6px; align-items:center; font-size:13px; }

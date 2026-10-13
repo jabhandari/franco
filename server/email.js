@@ -1,5 +1,9 @@
 import { Resend } from 'resend';
 
+export function emailConfigured() {
+  return (process.env.EMAIL_PROVIDER || 'resend') === 'resend' && Boolean(process.env.RESEND_API_KEY);
+}
+
 export async function sendMail({ to, subject, html, text }) {
   if ((process.env.EMAIL_PROVIDER || 'resend') !== 'resend') throw new Error('Unsupported email provider.');
   if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY is required to send email.');

@@ -17,7 +17,7 @@ import type { LucideIcon } from 'lucide-react';
 import './styles.css';
 import { ApiError, apiGet, apiPost, getErrorMessage } from './api/client.js';
 import type { AuthResponse, MeResponse, StreakResponse } from './api/client.js';
-import type { UserPayload } from './types';
+import type { AuthMode, UserPayload } from './types';
 import { ThemeProvider, useTheme } from 'next-themes';
 import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput, UserMenu } from './components/ui';
 import { streakPath } from './presenters/streak.presenter.js';
@@ -53,8 +53,7 @@ declare module 'next-themes' {
 // auth gate, router, and nav all speak it, so a bad view id is a type
 // error, not a silent blank page.
 type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile';
-type AuthView = 'login' | 'signup' | 'forgot' | 'reset' | 'verify' | 'check-email' | 'unverified';
-const authViewFromPath = (): AuthView => window.location.pathname === '/reset-password' ? 'reset' : window.location.pathname === '/verify-email' ? 'verify' : window.location.pathname === '/forgot-password' ? 'forgot' : 'login';
+const authViewFromPath = (): AuthMode => window.location.pathname === '/reset-password' ? 'reset' : window.location.pathname === '/verify-email' ? 'verify' : window.location.pathname === '/forgot-password' ? 'forgot' : 'login';
 
 type NavItem = {
   id: ViewId;
@@ -107,7 +106,7 @@ function viewFromPath(pathname: string): ViewId {
 }
 
 function App(): React.JSX.Element {
-  const [authView, setAuthView] = React.useState<AuthView>(authViewFromPath);
+  const [authView, setAuthMode] = React.useState<AuthMode>(authViewFromPath);
   const [session, setSession] = React.useState<UserPayload | null>(null);
   const [authToken, setAuthToken] = React.useState<string | null>(() => sessionStorage.getItem(TOKEN_KEY));
   const [userData, setUserData] = React.useState<MeResponse | AuthResponse | null>(null);
@@ -128,7 +127,7 @@ function App(): React.JSX.Element {
   }
 
   React.useEffect(() => {
-    const onPopState = () => { setView(viewFromPath(window.location.pathname)); setAuthView(authViewFromPath()); };
+    const onPopState = () => { setView(viewFromPath(window.location.pathname)); setAuthMode(authViewFromPath()); };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
@@ -241,7 +240,7 @@ function App(): React.JSX.Element {
     try {
       if (authView === 'signup') {
         await apiPost<{message:string}>('/api/auth/signup', { email, first_name: firstName, last_name: lastName, password });
-        setAuthView('check-email');
+        setAuthMode('check-email');
         return;
       }
       const payload = await apiPost<AuthResponse>('/api/auth/login', { email, password });
@@ -253,7 +252,7 @@ function App(): React.JSX.Element {
       navigate('home', true);
     } catch (requestError) {
       // Type boundary: narrow the unknown catch value before reading it.
-      if (requestError instanceof ApiError && ['email_not_verified','verification_email_failed'].includes(requestError.code || '')) setAuthView('unverified');
+      if (requestError instanceof ApiError && ['email_not_verified','verification_email_failed'].includes(requestError.code || '')) setAuthMode('unverified');
       setError(requestError instanceof Error ? getErrorMessage(requestError) : 'Something went wrong. Please try again.');
     } finally {
       setLoading(false);
@@ -266,7 +265,7 @@ function App(): React.JSX.Element {
     setAuthToken(null);
     setUserData(null);
     sessionStorage.removeItem(TOKEN_KEY);
-    setAuthView('login');
+    setAuthMode('login');
     navigate('home', true);
   }
 
@@ -282,7 +281,7 @@ function App(): React.JSX.Element {
   }
 
   if (!session || ['forgot','reset','verify'].includes(authView)) {
-    return <AuthScreen mode={authView} onModeChange={(mode) => {setAuthView(mode);setError(''); const path = mode === 'forgot' ? '/forgot-password' : mode === 'reset' ? '/reset-password' : mode === 'verify' ? '/verify-email' : '/'; window.history.pushState({},'',path); }} onSubmit={handleAuthSubmit} loading={loading} error={error} onPasswordReset={() => {latestAuthToken.current=null;latestMeRequest.current++;setSession(null);setAuthToken(null);setUserData(null);sessionStorage.removeItem(TOKEN_KEY);}} />;
+    return <AuthScreen mode={authView} onModeChange={(mode) => {setAuthMode(mode);setError(''); const path = mode === 'forgot' ? '/forgot-password' : mode === 'reset' ? '/reset-password' : mode === 'verify' ? '/verify-email' : '/'; window.history.pushState({},'',path); }} onSubmit={handleAuthSubmit} loading={loading} error={error} onPasswordReset={() => {latestAuthToken.current=null;latestMeRequest.current++;setSession(null);setAuthToken(null);setUserData(null);sessionStorage.removeItem(TOKEN_KEY);}} />;
   }
 
   return (
