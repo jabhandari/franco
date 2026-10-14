@@ -38,6 +38,26 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
     audio.cancelRecording(); setHeard(null); setError(''); setMode(next);
   }
 
+  function useSpokenInput() {
+    if (busy || result || audio.phase === 'requesting') return;
+    if (mode !== 'spoken') choose('spoken');
+    if (simulateSubmit) {
+      setHeard({
+        transcription_id: 'preview', transcript: phrase, duration_seconds: 2,
+        feedback: { mode: 'word_diff', expected: [], heard: [] },
+        pronunciation: { mode: 'recording_hints', unclear_words: [{ word: phrase || 'Bonjour', start: 0, end: 1, reason: 'uncertain_audio' }],
+          word_signals: phrase.trim().split(/\s+/).filter(Boolean).map((word) => ({ word, status: 'recognized', audio_confidence_percent: 45 })) },
+        quota: { user_requests_remaining_today: 0, user_audio_seconds_remaining_today: 0, resets_at: '' },
+      });
+      return;
+    }
+    if (audio.phase === 'recording') audio.stopRecording();
+    else if (available && audio.browserSupported) {
+      if (audio.phase === 'ready') { audio.cancelRecording(); setHeard(null); }
+      void audio.startRecording();
+    }
+  }
+
   async function compare() {
     if (busy || result || !listened) return;
     if (mode === 'typed' ? !typed.trim() : !heard && (!audio.blob || !token)) return;
@@ -64,6 +84,8 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
 
   const ready = mode === 'typed' ? Boolean(typed.trim()) : Boolean(heard || audio.blob);
   const answer = mode === 'spoken' ? heard?.transcript || '' : typed.trim();
+  const wordSignals = heard?.pronunciation.word_signals || [];
+  const recognizedWords = wordSignals.filter((word) => word.status === 'recognized').length;
 
   return <ExerciseShell variant="pronunciation" answered={result ? (result.correct ? 'correct' : 'wrong') : null}>
     <Box className="pronunciation-drill">
@@ -72,23 +94,17 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
       <Text className="pronunciation-hint">{!listened ? 'Play the sound to begin.' : result ? 'Listen back and compare your answer with the words in the audio.' : 'Choose how to answer, then compare with the words in the audio.'}</Text>
       <ClipPlayer src={clip?.url} onPlay={() => setListened(true)} />
       {listened && !result && <>
-        <AnswerModePicker value={mode} onChange={choose} disabled={busy} />
+        <AnswerModePicker value={mode} onChange={choose} onSpokenAction={useSpokenInput} disabled={busy || audio.phase === 'requesting'}
+          spokenLabel={simulateSubmit ? 'Use sample recording' : audio.phase === 'recording' ? 'Finish recording' : audio.phase === 'ready' ? 'Record again' : 'Start recording'} />
         {mode === 'typed'
           ? <Textarea rows={3} value={typed} onChange={(event) => setTyped(event.target.value)} placeholder="Type what you heard…" />
-          : <Box className="answer-recording">
-            {simulateSubmit && !heard && !audio.blob && <Button variant="primary" onClick={() => setHeard({
-              transcription_id: 'preview', transcript: phrase, duration_seconds: 2,
-              feedback: { mode: 'word_diff', expected: [], heard: [] },
-              pronunciation: { mode: 'recording_hints', unclear_words: [{ word: phrase || 'Bonjour', start: 0, end: 1, reason: 'uncertain_audio' }] },
-              quota: { user_requests_remaining_today: 0, user_audio_seconds_remaining_today: 0, resets_at: '' },
-            })}>Use sample recording</Button>}
+          : <>
             {!available && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable. You can type your answer instead.</Text>}
-            {available && audio.browserSupported && audio.phase === 'idle' && <Button variant="primary" onClick={audio.startRecording}>Start recording</Button>}
             {audio.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
-            {audio.phase === 'recording' && <><Text role="status">Recording · {audio.elapsed}s</Text><Button variant="primary" onClick={audio.stopRecording}>Finish recording</Button></>}
-            {audio.phase === 'ready' && <><Text as="strong">Listen to your recording</Text><AudioPlayer src={audio.previewUrl} /><Button variant="text" disabled={busy} onClick={() => { audio.cancelRecording(); setHeard(null); }}>Record again</Button></>}
-          </Box>}
-        {ready && <Box className="answer-submit"><Button variant="primary" disabled={busy} onClick={compare}>{busy ? 'Comparing…' : 'Show answer & compare'}</Button></Box>}
+            {audio.phase === 'recording' && <Text role="status">Recording · {audio.elapsed}s</Text>}
+            {audio.phase === 'ready' && <Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={audio.previewUrl} /></Box>}
+          </>}
+        {ready && <Box className="answer-submit"><Button variant="primary" wide disabled={busy} onClick={compare}>{busy ? 'Comparing…' : 'Show answer & compare'}</Button></Box>}
       </>}
       {result && <>
         {audio.previewUrl && <Box className="answer-recording"><Text as="strong">Your recording</Text><AudioPlayer src={audio.previewUrl} /></Box>}
@@ -98,9 +114,23 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
         </Box>
         {mode === 'typed' && <Text className="speaking-feedback-note">{result.correct ? 'Your typed answer matches.' : 'Compare the words and try the sound again.'}</Text>}
         {mode === 'spoken' && <Box className="answer-hints">
-          <Text as="strong">Recording hints</Text>
-          <Text>{heard?.pronunciation.unclear_words.length ? `These words sounded unclear: ${heard.pronunciation.unclear_words.map((word) => word.word).join(' · ')}` : 'No unclear words were detected.'}</Text>
-          <Text className="speaking-feedback-note">Hints are approximate and can be affected by microphone noise.</Text>
+          <Text as="strong">What Groq recognized</Text>
+          {wordSignals.length ? <>
+            <Text>Recognition match: {Math.round(recognizedWords / wordSignals.length * 100)}% · {recognizedWords} of {wordSignals.length} expected word{wordSignals.length === 1 ? '' : 's'} recognized.</Text>
+            {heard?.pronunciation.audio_confidence_percent !== null && heard?.pronunciation.audio_confidence_percent !== undefined
+              && <Text>Groq audio certainty: ~{heard.pronunciation.audio_confidence_percent}% for its transcript.</Text>}
+            <Box className="answer-word-signals">
+              {wordSignals.map((word, index) => <Box key={`${word.word}-${index}`} className="answer-word-signal">
+                <Text as="strong">{word.word}</Text>
+                <Text>{word.status === 'recognized' ? 'Recognized' : 'Not recognized'}</Text>
+                {word.audio_confidence_percent !== null && <Text>Audio certainty ~{word.audio_confidence_percent}%</Text>}
+              </Box>)}
+            </Box>
+            {heard?.pronunciation.audio_confidence_percent == null && !wordSignals.some((word) => word.audio_confidence_percent !== null)
+              && <Text>Groq did not provide an audio certainty value for this recording.</Text>}
+          </> : <Text>A word-by-word check is unavailable for this recording.</Text>}
+          {heard?.pronunciation.unclear_words.length ? <Text>These words sounded unclear: {heard.pronunciation.unclear_words.map((word) => word.word).join(' · ')}</Text> : null}
+          <Text className="speaking-feedback-note">Groq’s certainty is an approximate transcription signal, not a pronunciation grade. Microphone noise can affect it.</Text>
         </Box>}
         <Button variant="text" onClick={reset}>Try again</Button>
       </>}

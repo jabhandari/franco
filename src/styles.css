@@ -1663,7 +1663,7 @@ html[data-theme="light"] .learn-view .report-button { border-color:transparent; 
 .pronunciation-card .pronunciation-answer-label { color:var(--palette-slate); font-size: var(--text-10); letter-spacing:.1em; }
 .pronunciation-word { color:var(--palette-ink); font-size: var(--text-22); letter-spacing:-.03em; }
 .pronunciation-mark-row { display:flex; flex-wrap:wrap; gap:7px; margin-left:auto; }
-.answer-mode-picker { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); width:min(100%,440px); gap:6px; padding:5px; border:1px solid var(--color-border); border-radius:12px; background:color-mix(in srgb,var(--color-text) 5%,var(--color-surface)); }
+.answer-mode-picker { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); width:100%; gap:6px; padding:5px; border:1px solid var(--color-border); border-radius:12px; background:color-mix(in srgb,var(--color-text) 5%,var(--color-surface)); }
 .answer-mode-picker button { display:flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:8px 14px; border:0; border-radius:8px; background:transparent; color:var(--color-muted); font:inherit; font-size:var(--text-13); font-weight:700; cursor:pointer; }
 .answer-mode-picker button:hover:not(:disabled) { color:var(--color-text); }
 .answer-mode-picker button[aria-pressed="true"] { background:var(--color-accent); color:var(--palette-white); }
@@ -1671,9 +1671,8 @@ html[data-theme="light"] .learn-view .report-button { border-color:transparent; 
 .answer-recording { display:grid; justify-items:start; gap:12px; width:100%; max-width:600px; padding:18px; border:1px solid var(--color-border); border-radius:12px; background:color-mix(in srgb,var(--color-text) 3%,var(--color-surface)); }
 .answer-recording > strong { font-size:var(--text-13); color:var(--color-text); }
 .answer-recording .audio-player { width:100%; margin:0; padding:0; border:0; background:transparent; }
-.answer-recording > .primary-button { width:100%; min-height:44px; padding:10px 18px; margin:0; }
-.answer-submit .primary-button { width:auto; min-width:180px; min-height:44px; padding:10px 18px; margin:0; }
-.answer-recording .text-button,.pronunciation-drill > .text-button { width:auto; min-height:34px; margin:0; padding:4px 0; color:var(--color-accent); }
+.answer-submit .primary-button { width:100%; min-height:44px; padding:10px 18px; margin:0; }
+.pronunciation-drill > .text-button { width:auto; min-height:34px; margin:0; padding:4px 0; color:var(--color-accent); }
 .answer-submit { padding-top:4px; }
 .pronunciation-drill .clip-player { max-width:560px; }
 .pronunciation-drill .clip-play-button { width:100%; }
@@ -1682,6 +1681,10 @@ html[data-theme="light"] .learn-view .report-button { border-color:transparent; 
 .answer-comparison-label { color:var(--color-muted); font-size:var(--text-11); font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
 .answer-comparison strong { font-size:var(--text-19); line-height:1.45; overflow-wrap:anywhere; }
 .answer-hints { gap:6px; }
+.answer-word-signals { display:flex; flex-wrap:wrap; gap:8px; }
+.answer-word-signal { display:grid; gap:3px; min-width:150px; padding:10px 12px; border:1px solid var(--color-border); border-radius:8px; }
+.answer-word-signal > strong { color:var(--color-text); }
+.answer-word-signal > p { margin:0; color:var(--color-muted); font-size:var(--text-12); }
 @media(max-width:600px) { .answer-comparison { grid-template-columns:1fr; } .answer-mode-picker button { padding-inline:7px; font-size:var(--text-12); } }
 .freeform-exercise,.read-aloud-exercise { display:grid; gap:16px; }
 .freeform-exercise .free-text-input { min-height:180px; }

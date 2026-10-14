@@ -241,7 +241,7 @@ export async function transcribeSpeech({ userId, item, audio, mime, extension, d
       transcript,
       duration_seconds: duration,
       feedback: speechFeedback(expected ?? item.response_json?.expected, transcript),
-      pronunciation: pronunciationFeedback(payload),
+      pronunciation: pronunciationFeedback(payload, expected ?? item.response_json?.expected),
       quota: { user_requests_remaining_today: admitted.userRequestsRemainingToday, user_audio_seconds_remaining_today: admitted.userSecondsRemainingToday, resets_at: admitted.resetsAt },
     };
   } catch (error) {

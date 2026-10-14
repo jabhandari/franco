@@ -623,6 +623,8 @@ export type SpeechTranscribeResponse = {
   feedback: SpeechFeedback;
   pronunciation: { mode: 'recording_hints'; unclear_words: Array<{
     word: string; start: number; end: number; reason: 'uncertain_audio' | 'slow_audio';
+  }>; audio_confidence_percent?: number | null; word_signals?: Array<{
+    word: string; status: 'recognized' | 'not_recognized'; audio_confidence_percent: number | null;
   }> };
   quota: SpeechQuota;
 };

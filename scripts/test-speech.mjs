@@ -107,6 +107,16 @@ const success = await transcribeSpeech({ ...request, fetchImpl: async (_url, opt
 } });
 assert.equal(success.feedback.mode, 'word_diff');
 assert.deepEqual(success.pronunciation.unclear_words, []);
+assert.deepEqual(success.pronunciation.word_signals, [{ word: 'Bonjour', status: 'recognized', audio_confidence_percent: null }]);
+const mismatch = pronunciationFeedback({ text: 'Hrón 3' }, 'rentrer');
+assert.deepEqual(mismatch.word_signals, [{ word: 'rentrer', status: 'not_recognized', audio_confidence_percent: null }]);
+assert.equal(mismatch.audio_confidence_percent, null);
+assert.equal(pronunciationFeedback({ text: 'Hrón 3', segments: [{ start: 0, end: 1, avg_logprob: -1 }] }, 'rentrer').audio_confidence_percent, 37);
+assert.deepEqual(pronunciationFeedback({ text: 'rentrer' }, 'rentrer').word_signals,
+  [{ word: 'rentrer', status: 'recognized', audio_confidence_percent: null }]);
+assert.deepEqual(pronunciationFeedback({ text: 'rentrer', words: [{ word: 'rentrer', start: 0, end: 0.5 }],
+  segments: [{ start: 0, end: 0.5, avg_logprob: -1 }] }, 'rentrer').word_signals,
+  [{ word: 'rentrer', status: 'recognized', audio_confidence_percent: 37 }]);
 assert.deepEqual(pronunciationFeedback({ words: [
   { word: 'Je', start: 0, end: 0.2 }, { word: 'parle', start: 0.2, end: 0.6 },
   { word: 'lentement', start: 0.6, end: 2.1 },
