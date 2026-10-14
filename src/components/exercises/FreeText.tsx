@@ -47,6 +47,7 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
   function useSpokenInput() {
     if (busy || recorder.phase === 'requesting') return;
     if (mode !== 'spoken') choose('spoken');
+    if (recorder.phase === 'recording' || recorder.phase === 'ready' || heard) return;
     if (simulateSubmit) {
       setHeard({
         transcription_id: 'preview', transcript: 'J’aime le parc parce que je peux me promener avec mes amis.', duration_seconds: 5,
@@ -55,11 +56,12 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
       });
       return;
     }
-    if (recorder.phase === 'recording') recorder.stopRecording();
-    else if (available && recorder.browserSupported) {
-      if (recorder.phase === 'ready') { recorder.cancelRecording(); setHeard(null); }
-      void recorder.startRecording();
-    }
+    if (available && recorder.browserSupported) void recorder.startRecording();
+  }
+
+  function recordAgain() {
+    recorder.cancelRecording(); setHeard(null); setError('');
+    void recorder.startRecording();
   }
 
   async function saveResponse(response: FreeformResponse) {
@@ -100,8 +102,12 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
       <Text className="speaking-task-note">{GUIDANCE[entry.level || 'A1'] || GUIDANCE.A1}</Text>
       {entry.example && <Box as="details" className="speaking-followups"><Box as="summary">See an example</Box><Text>{entry.example}</Text></Box>}
       {!feedback && <>
-        <AnswerModePicker value={mode} onChange={choose} onSpokenAction={useSpokenInput} disabled={busy || recorder.phase === 'requesting'}
-          spokenLabel={simulateSubmit ? 'Use sample recording' : recorder.phase === 'recording' ? 'Finish recording' : recorder.phase === 'ready' ? 'Record again' : 'Start recording'} />
+        <Box className="answer-mode-row">
+          <AnswerModePicker value={mode} onChange={choose} onSpokenAction={useSpokenInput} disabled={busy || recorder.phase === 'requesting'}
+            spokenLabel={simulateSubmit ? 'Use sample recording' : recorder.phase === 'recording' || recorder.phase === 'ready' ? 'Record yourself' : 'Start recording'} />
+          {mode === 'spoken' && recorder.phase === 'recording' && <Button variant="primary" onClick={recorder.stopRecording}>Finish recording</Button>}
+          {mode === 'spoken' && recorder.phase === 'ready' && <Button variant="primary" onClick={recordAgain}>Record again</Button>}
+        </Box>
         {mode === 'typed' ? <Textarea rows={7} value={value} onChange={(event) => setValue(event.target.value)} placeholder="Write your answer in French…" />
           : <>
             {!available && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable. You can type your answer instead.</Text>}

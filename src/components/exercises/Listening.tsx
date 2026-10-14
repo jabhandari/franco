@@ -41,6 +41,7 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
   function useSpokenInput() {
     if (busy || result || audio.phase === 'requesting') return;
     if (mode !== 'spoken') choose('spoken');
+    if (audio.phase === 'recording' || audio.phase === 'ready' || heard) return;
     if (simulateSubmit) {
       setHeard({
         transcription_id: 'preview', transcript: phrase, duration_seconds: 2,
@@ -51,11 +52,12 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
       });
       return;
     }
-    if (audio.phase === 'recording') audio.stopRecording();
-    else if (available && audio.browserSupported) {
-      if (audio.phase === 'ready') { audio.cancelRecording(); setHeard(null); }
-      void audio.startRecording();
-    }
+    if (available && audio.browserSupported) void audio.startRecording();
+  }
+
+  function recordAgain() {
+    audio.cancelRecording(); setHeard(null); setError('');
+    void audio.startRecording();
   }
 
   async function compare() {
@@ -94,8 +96,12 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
       <Text className="pronunciation-hint">{!listened ? 'Play the sound to begin.' : result ? 'Listen back and compare your answer with the words in the audio.' : 'Choose how to answer, then compare with the words in the audio.'}</Text>
       <ClipPlayer src={clip?.url} onPlay={() => setListened(true)} />
       {listened && !result && <>
-        <AnswerModePicker value={mode} onChange={choose} onSpokenAction={useSpokenInput} disabled={busy || audio.phase === 'requesting'}
-          spokenLabel={simulateSubmit ? 'Use sample recording' : audio.phase === 'recording' ? 'Finish recording' : audio.phase === 'ready' ? 'Record again' : 'Start recording'} />
+        <Box className="answer-mode-row">
+          <AnswerModePicker value={mode} onChange={choose} onSpokenAction={useSpokenInput} disabled={busy || audio.phase === 'requesting'}
+            spokenLabel={simulateSubmit ? 'Use sample recording' : audio.phase === 'recording' || audio.phase === 'ready' ? 'Record yourself' : 'Start recording'} />
+          {mode === 'spoken' && audio.phase === 'recording' && <Button variant="primary" onClick={audio.stopRecording}>Finish recording</Button>}
+          {mode === 'spoken' && audio.phase === 'ready' && <Button variant="primary" onClick={recordAgain}>Record again</Button>}
+        </Box>
         {mode === 'typed'
           ? <Textarea rows={3} value={typed} onChange={(event) => setTyped(event.target.value)} placeholder="Type what you heard…" />
           : <>
