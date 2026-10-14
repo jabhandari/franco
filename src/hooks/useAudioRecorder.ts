@@ -44,7 +44,7 @@ export function useAudioRecorder(maxSeconds = 60) {
     mounted.current=true;
     return()=>{mounted.current=false;cancelRecording();};
   },[cancelRecording]);
-  async function startRecording() {
+  async function startRecording(): Promise<boolean> {
     if(!browserSupported || phase==='requesting' || phase==='recording' || phase==='uploading') return false;
     const request=++generation.current;
     setRecordingError('');releasePreview();setPhase('requesting');

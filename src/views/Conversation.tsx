@@ -20,8 +20,9 @@ export function Conversation({token,previewData}:ConversationProps) {
   const [feedback,setFeedback]=React.useState<ContentFeedbackResult['feedback']|null>(null);
   const [feedbackError,setFeedbackError]=React.useState('');
   const [feedbackBusy,setFeedbackBusy]=React.useState(false);
+  const feedbackGeneration=React.useRef(0);
   React.useEffect(()=>{if(timer.phase==='done') {if(audio.phase==='requesting') audio.cancelRecording();else audio.stopRecording();}},[timer.phase,audio.phase]);
-  function reset() {timer.reset();audio.cancelRecording();setTyped('');setFeedback(null);setFeedbackError('');setFeedbackBusy(false);}
+  function reset() {feedbackGeneration.current++;timer.reset();audio.cancelRecording();setTyped('');setFeedback(null);setFeedbackError('');setFeedbackBusy(false);}
   function newScenario() {reset();setHints({});setPick(value=>value+1);}
   const busy=audio.phase==='recording' || audio.phase==='requesting';
   async function startRecording() {
@@ -31,17 +32,19 @@ export function Conversation({token,previewData}:ConversationProps) {
   function stopRecording() {audio.stopRecording();timer.stop();}
   async function getFeedback() {
     if(!data || feedbackBusy || (!token && !previewData)) return;
+    const generation=++feedbackGeneration.current;
     setFeedbackBusy(true);setFeedbackError('');setFeedback(null);
     try {
       const answer=typing ? typed.trim() : audio.blob && token ? (await uploadConversationSpeech(audio.blob,token)).transcript.trim() : '';
+      if(generation!==feedbackGeneration.current) return;
       if(!answer) {setFeedbackError('No speech was detected. Record again or type an answer.');return;}
       const result=previewData
         ? {feedback:{what_went_well:[{point:'You included a concrete phrase for this scenario.',quote:answer.slice(0,60).trim()}],needs_work:[{point:'Build on this phrase with a reason or example.',quote:answer.slice(0,60).trim()}]}}
         : await requestContentFeedback({response:answer,prompt:data.scenario,context:data.message,
           targets:data.targets.map(target=>target.title+': '+target.text),level:'B1'},token);
-      setFeedback(result.feedback);
-    } catch(caught) {setFeedbackError(caught instanceof Error ? caught.message : 'Feedback is unavailable. Please try again.');}
-    finally {setFeedbackBusy(false);}
+      if(generation===feedbackGeneration.current) setFeedback(result.feedback);
+    } catch(caught) {if(generation===feedbackGeneration.current) setFeedbackError(caught instanceof Error ? caught.message : 'Feedback is unavailable. Please try again.');}
+    finally {if(generation===feedbackGeneration.current) setFeedbackBusy(false);}
   }
   return <Box as="section" className="conversation-page">
     <Box className="conversation-header"><Text className="home-kicker">Conversation</Text><Text as="h1">À vous de parler</Text><Text>Two minutes of French, out loud.</Text></Box>

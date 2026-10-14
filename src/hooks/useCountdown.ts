@@ -1,8 +1,11 @@
 import React from 'react';
 
-export function useCountdown(seconds = 120) {
+type CountdownPhase = 'ready'|'speaking'|'paused'|'done';
+export type CountdownState = { remaining:number; phase:CountdownPhase; start:()=>void; pause:()=>void; stop:()=>void; reset:()=>void };
+
+export function useCountdown(seconds = 120): CountdownState {
   const [remaining,setRemaining]=React.useState(seconds);
-  const [phase,setPhase]=React.useState<'ready'|'speaking'|'paused'|'done'>('ready');
+  const [phase,setPhase]=React.useState<CountdownPhase>('ready');
   const left=React.useRef(seconds*1000);
   const deadline=React.useRef(0);
   const phaseRef=React.useRef(phase);
