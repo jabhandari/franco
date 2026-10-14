@@ -29,9 +29,12 @@ export function Practice({token}:PracticeProps) {
   const inventory=usePracticeInventory(skill,level,step===3,token);
   const label=SKILLS.find(row=>row.id===skill);
   const ownLevel=learner?.profile?.current_level;
+  const firstPage=Math.max(0,Math.min(inventory.page-2,inventory.pageCount-5));
+  const visiblePages=Array.from({length:Math.min(5,inventory.pageCount)},(_,index)=>firstPage+index);
   function chooseSkill(next:SkillId) {setSkill(next);if(!chosen.current) {setLevel(CEFR_LEVELS.find(value=>value===ownLevel) || level);chosen.current=true;}setStep(2);}
   function start(next:CefrLevel) {setLevel(next);setStep(3);}
   function refresh() {setRevision(value=>value+1);}
+  function goPage(next:number) {void inventory.goToPage(next).then(()=>document.getElementById('practice-exercise-list')?.scrollIntoView({behavior:'smooth',block:'start'}));}
   return <Box as="section" className="practice-page">
     <Box className="practice-steps" role="group" aria-label="Practice steps">
       <Box as="button" type="button" aria-current={step===1 ? 'step' : undefined} onClick={()=>setStep(1)}>1 · Skill</Box>
@@ -48,13 +51,22 @@ export function Practice({token}:PracticeProps) {
     </>}
     {step===3 && <>
       <Box className="practice-bar"><Button variant="text" icon={ArrowLeft} onClick={()=>setStep(2)}>Levels</Button><Text as="h1">{label?.title} · {formatLevelWithClb(level)}</Text></Box>
-      <Box className="practice-exercise-bar"><Text as="span">{inventory.loading ? 'Loading exercises…' : `${inventory.items.length+inventory.questions.length} question${inventory.items.length+inventory.questions.length===1 ? '' : 's'}`}</Text><Button variant="reset" disabled={inventory.loading} onClick={()=>setResetKey(value=>value+1)}>Reset all</Button></Box>
-      {inventory.loading && <LoadingSpinner label="Loading the full exercise inventory…"/>}
+      <Box className="practice-exercise-bar"><Text as="span">{inventory.loading ? 'Loading exercises…' : `${inventory.total+inventory.questions.length} question${inventory.total+inventory.questions.length===1 ? '' : 's'}`}</Text><Button variant="reset" disabled={inventory.loading} onClick={()=>setResetKey(value=>value+1)}>Reset all</Button></Box>
+      {inventory.loading && <LoadingSpinner label="Loading exercises…"/>}
       {inventory.error && <ErrorMessage message={inventory.error}/>}
-      {!inventory.loading && !inventory.error && <Box key={resetKey} className="practice-exercises">
-        {inventory.questions.length>0 && <ExamQuestionList token={token} onAttempt={refresh} data={{questions:inventory.questions,section:`${label?.gloss} · ${level}`}}/>}
-        {inventory.items.map(item=><Box key={item.id}>{item.type==='listening' && <AudioPlayer src={item.media?.find(media=>media.kind==='audio')?.url} emptyText="Audio is unavailable for this question."/>}<ExerciseCard entry={item} token={token} onResult={refresh}/></Box>)}
-        {!inventory.items.length && !inventory.questions.length && <Text variant="muted">No exercises yet</Text>}
+      {!inventory.loading && !inventory.error && <Box id="practice-exercise-list" className="practice-exercises">
+        {inventory.loadingPage ? <LoadingSpinner label="Loading this page…"/> : <Box key={resetKey} className="practice-exercises">
+          {inventory.page===0 && inventory.questions.length>0 && <ExamQuestionList token={token} onAttempt={refresh} data={{questions:inventory.questions,section:`${label?.gloss} · ${level}`}}/>}
+          {inventory.items.map(item=><Box key={item.id}>{item.type==='listening' && <AudioPlayer src={item.media?.find(media=>media.kind==='audio')?.url} emptyText="Audio is unavailable for this question."/>}<ExerciseCard entry={item} token={token} onResult={refresh}/></Box>)}
+          {!inventory.items.length && !(inventory.page===0 && inventory.questions.length) && <Text variant="muted">No exercises yet</Text>}
+        </Box>}
+        {inventory.pageError && <ErrorMessage message={inventory.pageError}/>}
+        {inventory.pageCount>1 && <Box className="practice-pagination" role="navigation" aria-label="Exercise pages">
+          <Button variant="text" disabled={inventory.page===0 || inventory.loadingPage} onClick={()=>goPage(inventory.page-1)}>Previous</Button>
+          {visiblePages.map(page=><Box as="button" type="button" key={page} aria-current={inventory.page===page ? 'page' : undefined} disabled={inventory.loadingPage} onClick={()=>goPage(page)}>{page+1}</Box>)}
+          <Button variant="text" disabled={inventory.page===inventory.pageCount-1 || inventory.loadingPage} onClick={()=>goPage(inventory.page+1)}>Next</Button>
+          <Text as="span" variant="muted">Page {inventory.page+1} of {inventory.pageCount}</Text>
+        </Box>}
       </Box>}
     </>}
   </Box>;

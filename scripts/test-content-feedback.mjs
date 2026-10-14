@@ -26,6 +26,19 @@ assert.deepEqual(calls, ['https://api.mistral.ai/v1/chat/completions', 'https://
 assert.equal(result.model, 'qwen/qwen3.8-27b');
 assert.equal(completed[0][1][1], 123);
 
+const backupCalls = [];
+const backup = await contentFeedback({ userId: 'me', input,
+  reserve: async () => 'two', finish: async () => {}, log: () => {},
+  fetchImpl: async (url, options) => {
+    const model = JSON.parse(options.body).model;
+    backupCalls.push(model);
+    if (model !== 'openai/gpt-oss-20b') return { ok: false, status: 429 };
+    return { ok: true, json: async () => ({ choices: [{ message: { content: JSON.stringify(valid) } }], usage: { total_tokens: 90 } }) };
+  },
+});
+assert.deepEqual(backupCalls, ['mistral-small-latest', 'qwen/qwen3.8-27b', 'openai/gpt-oss-20b']);
+assert.equal(backup.model, 'openai/gpt-oss-20b');
+
 let rolledBack = false;
 await assert.rejects(reserveFeedback('me', 1000, { dailyRequests: 1, dailyTokens: 1000 }, async () => ({
   query: async (sql) => {

@@ -18,6 +18,7 @@ const positive = (name, fallback) => {
 export const feedbackConfig = () => ({
   mistralModel: process.env.MISTRAL_FEEDBACK_MODEL || 'mistral-small-latest',
   groqModel: process.env.GROQ_FEEDBACK_MODEL || 'qwen/qwen3.8-27b',
+  groqBackupModel: process.env.GROQ_BACKUP_FEEDBACK_MODEL || 'openai/gpt-oss-20b',
   dailyRequests: positive('SPEECH_FEEDBACK_DAILY_REQUESTS', 10),
   dailyTokens: positive('SPEECH_FEEDBACK_DAILY_TOKENS', 12000),
   maxOutputTokens: positive('SPEECH_FEEDBACK_MAX_OUTPUT_TOKENS', 700),
@@ -109,18 +110,22 @@ export async function contentFeedback({ userId, input, config = feedbackConfig()
   const providers = [
     { name: 'mistral', key: process.env.MISTRAL_API_KEY, model: config.mistralModel, url: 'https://api.mistral.ai/v1/chat/completions' },
     { name: 'groq', key: process.env.GROQ_API_KEY, model: config.groqModel, url: 'https://api.groq.com/openai/v1/chat/completions' },
+    { name: 'groq-backup', key: process.env.GROQ_API_KEY, model: config.groqBackupModel, url: 'https://api.groq.com/openai/v1/chat/completions' },
   ].filter((provider) => provider.key);
   try {
     for (const provider of providers) {
+      let result;
+      let feedback;
       try {
-        const result = await providerFeedback({ ...provider, messages: feedbackMessages(valid), config, fetchImpl });
-        const feedback = validateFeedbackResult(result.parsed, valid.response);
-        await finish("UPDATE content_feedback_requests SET status='succeeded',model=?,used_tokens=? WHERE id=?", [provider.model, result.usedTokens || estimatedTokens, id]);
-        log(`content feedback served by ${provider.name}/${provider.model}`);
-        return { feedback, model: provider.model };
+        result = await providerFeedback({ ...provider, messages: feedbackMessages(valid), config, fetchImpl });
+        feedback = validateFeedbackResult(result.parsed, valid.response);
       } catch (error) {
         log(`content feedback provider ${provider.name}/${provider.model} failed: ${error.message}`);
+        continue;
       }
+      await finish("UPDATE content_feedback_requests SET status='succeeded',model=?,used_tokens=? WHERE id=?", [provider.model, result.usedTokens || estimatedTokens, id]);
+      log(`content feedback served by ${provider.name}/${provider.model}`);
+      return { feedback, model: provider.model };
     }
     throw new ContentFeedbackError(503, 'feedback_provider_unavailable', 'Feedback is busy right now. Try again shortly.');
   } catch (error) {
