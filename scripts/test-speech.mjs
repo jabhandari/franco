@@ -44,6 +44,7 @@ const webmAt = (milliseconds) => {
 const browserWebm = webmAt(59000);
 assert.ok((await audioDuration(browserWebm, 'audio/webm', 60)) > 59);
 await rejectsCode(audioDuration(webmAt(60001), 'audio/webm', 60), 'speech_too_long');
+assert.ok((await audioDuration(webmAt(60001), 'audio/webm', 120)) > 60);
 const openSegmentWebm = Buffer.from(browserWebm);
 openSegmentWebm[openSegmentWebm.indexOf(Buffer.from('18538067', 'hex')) + 4] = 0xff;
 assert.ok((await audioDuration(openSegmentWebm, 'audio/webm', 60)) > 59);
@@ -116,6 +117,9 @@ assert.deepEqual(pronunciationFeedback({ words: [{ word: 'bonjour', start: 0, en
   segments: [{ start: 0, end: 0.4, avg_logprob: -0.1 }] }).unclear_words, []);
 assert.equal(completions.at(-1)[1], 'succeeded');
 assert.equal(completions.at(-1)[2].hash, transcriptHash('bonjour'));
+const conversation = await transcribeSpeech({ ...request, item: { id: null, response_json: {} }, duration: 90,
+  fetchImpl: async () => ({ ok: true, headers: new Headers(), json: async () => ({ text: 'Bonjour' }) }) });
+assert.equal(conversation.feedback.mode, 'transcript_only');
 await rejectsCode(transcribeSpeech({ ...request, fetchImpl: async () => ({ ok: true, headers: new Headers(), json: async () => ({ text: '' }) }) }), 'speech_no_speech');
 assert.equal(completions.at(-1)[1], 'no_speech');
 await rejectsCode(transcribeSpeech({ ...request, fetchImpl: async () => ({ status: 429, ok: false, headers: new Headers({ 'retry-after': '3' }) }) }), 'speech_provider_limited');

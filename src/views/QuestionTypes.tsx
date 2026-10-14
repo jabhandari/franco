@@ -14,6 +14,7 @@ import {
   Text,
 } from '../components/ui';
 import type { TabOption } from '../components/ui';
+import { Conversation } from './Conversation';
 
 /**
  * Internal showcase of every distinct question type on the platform.
@@ -253,6 +254,12 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
       example: 'J’aime le parc près de chez moi. Il est calme et j’y vais le week-end.',
     },
   },
+  {
+    id: 'conversation',
+    label: 'Conversation',
+    description: 'Two-minute scenario with one recording timer and content feedback. Type an answer to preview feedback.',
+    entry: { id: 'showcase-conversation', item_kind: 'content_item', type: 'conversation_preview', prompt: 'Talk about your weekend.' },
+  },
 ];
 
 type QuestionTypesProps = {
@@ -359,15 +366,22 @@ export function QuestionTypes({ token }: QuestionTypesProps): React.JSX.Element 
           ariaLabel="Question types"
         />
       </Box>
-      <Box className="question-types-body">
+      <Box className={active.id === 'conversation' ? 'question-types-body question-types-conversation' : 'question-types-body'}>
         <Text as="p" variant="lede">{active.description}</Text>
         <Text as="p" variant="note">Simulated submissions — answers are graded locally, nothing is saved.</Text>
-        <ExerciseCard
+        {active.id === 'conversation' ? <Conversation previewData={{
+          scenario: 'Plan a weekend with a friend',
+          message: 'Suggest an activity and explain why you would enjoy it.',
+          targets: [
+            { id: 'invitation', section: 'A2', title: 'Make an invitation', text: 'Invite your friend using a complete sentence.' },
+            { id: 'reason', section: 'B1', title: 'Give a reason', text: 'Say why this activity appeals to you.' },
+          ],
+        }} /> : <ExerciseCard
           key={active.id}
           entry={active.entry}
           token={token}
           simulateSubmit={simulateSubmit}
-        />
+        />}
       </Box>
     </Page>
   );

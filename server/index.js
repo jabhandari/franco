@@ -308,6 +308,22 @@ async function main() {
             }
             if (req.method === 'GET' && u.pathname === '/api/health') return json(res, 200, { ok: true, database: 'supabase-postgres' });
             if (req.method === 'GET' && u.pathname === '/api/speech/status') { const viewer = await user(req); if (!viewer) return json(res, 401, { error: 'Authentication required.' }); const config = speechConfig(); return json(res, 200, { available: config.enabled, max_seconds: config.maxSeconds }); }
+            if (req.method === 'POST' && u.pathname === '/api/speech/conversation/transcribe') {
+              const viewer = await user(req);
+              if (!viewer) return json(res, 401, { code: 'speech_auth_required', error: 'Authentication required.' });
+              const config = speechConfig();
+              if (!config.enabled) return json(res, 503, { code: 'speech_unavailable', error: 'Transcription is not available right now.' });
+              try {
+                const { mime, extension } = audioMime(req.headers['content-type']);
+                const audio = await readAudio(req, config.maxBytes);
+                const duration = await audioDuration(audio, mime, 120);
+                return json(res, 200, await transcribeSpeech({ userId: viewer.id, item: { id: null, response_json: {} }, audio, mime, extension, duration, config }));
+              } catch (error) {
+                if (!(error instanceof SpeechError)) throw error;
+                const headers = error.retryAfter ? { 'retry-after': String(error.retryAfter) } : {};
+                return json(res, error.status, { code: error.code, error: error.message }, headers);
+              }
+            }
             if (req.method === 'POST' && u.pathname === '/api/speech/transcribe') {
               const viewer = await user(req);
               if (!viewer) return json(res, 401, { code: 'speech_auth_required', error: 'Authentication required.' });

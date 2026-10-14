@@ -981,6 +981,13 @@ export async function uploadSpeech(itemId: string, audio: Blob, token: string, p
   return parseApiResponse(response);
 }
 
+export async function uploadConversationSpeech(audio: Blob, token: string): Promise<SpeechTranscribeResponse> {
+  const response = await fetch(apiUrl('/api/speech/conversation/transcribe'), {
+    method: 'POST', headers: { authorization: 'Bearer ' + token, 'content-type': audio.type }, body: audio,
+  });
+  return parseApiResponse(response);
+}
+
 // Report an answered exercise to the adaptive engine. Every renderer calls
 // this; the server grades, updates SM-2 state, and returns { correct, reveal }.
 export function reportAttempt(entry: ReportAttemptEntry, response: AttemptResponse, token?: string | null, extra: ReportAttemptExtra = {}): Promise<AttemptResult> {

@@ -2244,11 +2244,11 @@ html[data-theme] .practice-level-card .ring-label { color:var(--color-text); fon
 /* FRA-94: two-minute speaking drill; paint comes entirely from theme tokens. */
 .conversation-page { max-width:1000px; margin-inline:auto; }
 .conversation-header h1 { font-family:var(--font-heading); font-size:34px; font-weight:500; margin:0 0 12px; }
-.conversation-header > p:last-child { font-size:13px; color:var(--color-muted); }
+.conversation-header > p:last-child { font-size:16px; color:var(--color-muted); }
 .conversation-scenario { padding-block:28px 24px; border-bottom:1px solid var(--color-border); }
 .conversation-scenario-heading { display:flex; justify-content:space-between; align-items:center; gap:16px; }
-.conversation-scenario h2 { font-size:20px; line-height:1.5; max-width:760px; margin:12px 0 8px; letter-spacing:0; }
-.conversation-scenario > p { color:var(--color-muted); font-size:12px; margin:0; }
+.conversation-scenario h2 { font-size:clamp(24px,3vw,30px); line-height:1.4; max-width:760px; margin:12px 0 8px; letter-spacing:0; }
+.conversation-scenario > p { color:var(--color-muted); font-size:16px; line-height:1.6; margin:0; }
 .conversation-page .text-button { color:var(--color-accent); width:auto; font-size:12px; }
 .conversation-drill { display:grid; grid-template-columns:240px minmax(0,1fr); gap:40px; padding-block:30px; }
 .conversation-controls { display:grid; justify-items:center; align-content:start; min-width:0; }
@@ -2266,13 +2266,13 @@ html[data-theme] .practice-level-card .ring-label { color:var(--color-text); fon
 .conversation-record .audio-player { padding:0; background:transparent; border:0; width:100%; }
 .conversation-record audio { width:100%; }
 .conversation-record h3 { font-size:13px; margin:0; }
-.conversation-record textarea { width:100%; min-width:0; font-weight:400; color:var(--color-text); border-color:var(--color-border); background:var(--color-surface); }
+.conversation-record textarea { width:100%; min-width:0; min-height:230px; font-size:16px; line-height:1.6; font-weight:400; color:var(--color-text); border-color:var(--color-border); background:var(--color-surface); }
 .conversation-record > p { font-size:12px; color:var(--color-muted); margin:0; text-align:center; }
-.conversation-suggestions > h2 { font-size:14px; margin:0 0 12px; letter-spacing:0; }
+.conversation-suggestions > h2 { font-size:19px; margin:0 0 12px; letter-spacing:0; }
 .conversation-suggestion { border-block-end:1px solid var(--color-border); padding-block:16px; }
 .conversation-suggestion > div:first-child { display:flex; justify-content:space-between; gap:12px; align-items:center; }
-.conversation-suggestion h3 { font-size:13px; margin:0; font-weight:600; }
-.conversation-suggestion > p { font-size:12px; color:var(--color-muted); line-height:1.7; margin:8px 0 0; }
+.conversation-suggestion h3 { font-size:17px; margin:0; font-weight:600; }
+.conversation-suggestion > p { font-size:16px; color:var(--color-muted); line-height:1.7; margin:8px 0 0; }
 .conversation-hint { padding:12px; margin-top:12px; border-radius:var(--radius-control); background:color-mix(in srgb,var(--color-accent) 10%,transparent); }
 .conversation-hint p { font-size:12px; line-height:1.7; margin:0; color:var(--color-text); }
 .conversation-hint p:first-child { font-family:var(--font-heading); font-style:italic; margin-bottom:4px; }
@@ -2484,4 +2484,5 @@ html[data-theme] body:has(.learn-page-shell) {
 /* Question types showcase (internal, /question-types). */
 .question-types-tabs { margin: 16px 0 24px; }
 .question-types-body { display: grid; gap: 20px; max-width: 720px; }
+.question-types-conversation { max-width: 1000px; }
 .question-types-body .lede { margin: 0; }

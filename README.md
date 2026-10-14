@@ -122,6 +122,8 @@ Content feedback uses `MISTRAL_API_KEY` on the API server as its primary provide
 
 `free_text` is an open response: typed answers count toward Writing, spoken answers are transcribed and count toward Speaking, and both use the same content-feedback rubric. New items can carry `response.example` for an optional collapsible example. `speaking_prompt` is now Read aloud: its `prompt` and `response.expected` must contain the same exact phrase. The FRA-126 startup migration archives historical attempts from legacy exact-answer Free Text items, deletes only those items, and reclassifies existing open speaking prompts as Free Text once.
 
+Conversation recordings can run for two minutes through `POST /api/speech/conversation/transcribe`. They use the same speech usage ledger and limits, with a nullable content item reference. A recording is sent to Groq only when the learner requests feedback; the transcript and scenario targets are then sent through the content-feedback service. Typed answers skip transcription.
+
 ## Learner API (implemented)
 
 - `GET /api/speech/status` — authenticated transcription availability

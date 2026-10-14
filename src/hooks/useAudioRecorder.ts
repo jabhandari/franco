@@ -45,12 +45,12 @@ export function useAudioRecorder(maxSeconds = 60) {
     return()=>{mounted.current=false;cancelRecording();};
   },[cancelRecording]);
   async function startRecording() {
-    if(!browserSupported || phase==='requesting' || phase==='recording' || phase==='uploading') return;
+    if(!browserSupported || phase==='requesting' || phase==='recording' || phase==='uploading') return false;
     const request=++generation.current;
     setRecordingError('');releasePreview();setPhase('requesting');
     try {
       const microphone=await navigator.mediaDevices.getUserMedia({audio:true});
-      if(!mounted.current || request!==generation.current) {microphone.getTracks().forEach(track=>track.stop());return;}
+      if(!mounted.current || request!==generation.current) {microphone.getTracks().forEach(track=>track.stop());return false;}
       stream.current=microphone;
       const mimeType=FORMATS.find(value=>MediaRecorder.isTypeSupported(value));
       const current=mimeType ? new MediaRecorder(microphone,{mimeType}) : new MediaRecorder(microphone);
@@ -74,10 +74,12 @@ export function useAudioRecorder(maxSeconds = 60) {
       current.start();const start=performance.now();setElapsed(0);setPhase('recording');
       interval.current=setInterval(()=>setElapsed(Math.min(maxSeconds,Math.floor((performance.now()-start)/1000))),250);
       cutoff.current=setTimeout(()=>{if(current.state==='recording') current.stop();},Math.max(100,maxSeconds*1000-500));
+      return true;
     } catch {
-      if(request!==generation.current) return;
+      if(request!==generation.current) return false;
       stopTracks();
       if(mounted.current && request===generation.current) {setRecordingError('Microphone access was denied or unavailable.');setPhase('idle');}
+      return false;
     }
   }
   function stopRecording() {if(recorder.current?.state==='recording') recorder.current.stop();}

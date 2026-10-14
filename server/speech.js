@@ -95,7 +95,7 @@ export async function audioDuration(audio, mime, maxSeconds, metadataParser = pa
     throw new SpeechError(400, 'speech_invalid_audio', 'The recording could not be read. Please record again.');
   }
   if (duration > maxSeconds) {
-    throw new SpeechError(400, 'speech_too_long', 'Recordings must be 60 seconds or less.');
+    throw new SpeechError(400, 'speech_too_long', `Recordings must be ${maxSeconds} seconds or less.`);
   }
   return duration;
 }

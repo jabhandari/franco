@@ -26,6 +26,11 @@ export function useCountdown(seconds = 120) {
     left.current=Math.max(0,deadline.current-performance.now());setRemaining(Math.ceil(left.current/1000));
     phaseRef.current=left.current ? 'paused' : 'done';setPhase(phaseRef.current);
   }
+  function stop() {
+    if(phase!=='speaking') return;
+    left.current=Math.max(0,deadline.current-performance.now());setRemaining(Math.ceil(left.current/1000));
+    phaseRef.current='done';setPhase('done');
+  }
   function reset() {left.current=seconds*1000;phaseRef.current='ready';setPhase('ready');setRemaining(seconds);}
-  return {remaining,phase,start,pause,reset};
+  return {remaining,phase,start,pause,stop,reset};
 }
