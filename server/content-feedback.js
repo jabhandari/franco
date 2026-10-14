@@ -16,7 +16,6 @@ const positive = (name, fallback) => {
 };
 
 export const feedbackConfig = () => ({
-  mistralModel: process.env.MISTRAL_FEEDBACK_MODEL || 'mistral-small-latest',
   groqModel: process.env.GROQ_FEEDBACK_MODEL || 'qwen/qwen3.8-27b',
   groqBackupModel: process.env.GROQ_BACKUP_FEEDBACK_MODEL || 'openai/gpt-oss-20b',
   dailyRequests: positive('SPEECH_FEEDBACK_DAILY_REQUESTS', 10),
@@ -103,15 +102,14 @@ async function providerFeedback({ url, key, model, messages, config, fetchImpl }
 
 export async function contentFeedback({ userId, input, config = feedbackConfig(), fetchImpl = fetch, reserve = reserveFeedback, finish = query, log = console.info }) {
   const valid = validateFeedbackInput(input);
-  if (!process.env.MISTRAL_API_KEY && !process.env.GROQ_API_KEY) throw new ContentFeedbackError(503, 'feedback_unavailable', 'Feedback is unavailable right now.');
+  if (!process.env.GROQ_API_KEY) throw new ContentFeedbackError(503, 'feedback_unavailable', 'Feedback is unavailable right now.');
   const estimatedTokens = Math.ceil((valid.response.length + valid.prompt.length + valid.context.length + JSON.stringify(valid.targets).length) / 3) + config.maxOutputTokens + 400;
   if (estimatedTokens > config.dailyTokens) throw new ContentFeedbackError(400, 'feedback_too_long', 'Shorten your answer to request feedback.');
   const id = await reserve(userId, estimatedTokens, config);
   const providers = [
-    { name: 'mistral', key: process.env.MISTRAL_API_KEY, model: config.mistralModel, url: 'https://api.mistral.ai/v1/chat/completions' },
     { name: 'groq', key: process.env.GROQ_API_KEY, model: config.groqModel, url: 'https://api.groq.com/openai/v1/chat/completions' },
     { name: 'groq-backup', key: process.env.GROQ_API_KEY, model: config.groqBackupModel, url: 'https://api.groq.com/openai/v1/chat/completions' },
-  ].filter((provider) => provider.key);
+  ].filter((provider, index, list) => list.findIndex((candidate) => candidate.model === provider.model) === index);
   try {
     for (const provider of providers) {
       let result;

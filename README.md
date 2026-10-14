@@ -118,15 +118,13 @@ The full FRA-10 implementation and setup guide is [docs/FRA-10-speaking-transcri
 
 Copy the speech variables from [.env.example](.env.example) into the API environment, set GROQ_API_KEY there, and set SPEECH_TRANSCRIPTION_ENABLED=true. Keep the key out of Vite variables and browser code. The API startup migration creates the usage ledger; the equivalent SQL is in [supabase/migrations/002_speech_transcriptions.sql](supabase/migrations/002_speech_transcriptions.sql) for manual deployment. Speech recording requires HTTPS or localhost. Listen & repeat accepts a typed answer when recording is unavailable; Read aloud requires a recording and gives tentative pronunciation hints.
 
-Content feedback uses `MISTRAL_API_KEY` on the API server as its primary
-provider and `GROQ_API_KEY` for Qwen and GPT-OSS backup models. If a provider
-fails or returns invalid feedback, the next configured model is tried.
-`MISTRAL_FEEDBACK_MODEL`, `GROQ_FEEDBACK_MODEL`, and
-`GROQ_BACKUP_FEEDBACK_MODEL` allow model changes without a deploy. Configure
-the `SPEECH_FEEDBACK_*` limits in [.env.example](.env.example) to cap each
-learner's daily requests and tokens. The API logs the serving model but never
-the learner's answer. Neither provider key belongs in Cloudflare Pages or a
-`VITE_` variable.
+Content feedback uses `GROQ_API_KEY` on the API server. It tries Qwen first,
+then GPT-OSS 20B if Qwen fails or returns invalid feedback. Set
+`GROQ_FEEDBACK_MODEL` and `GROQ_BACKUP_FEEDBACK_MODEL` to change the models.
+Configure the `SPEECH_FEEDBACK_*` limits in [.env.example](.env.example) to cap
+each learner's daily requests and tokens. The API logs the serving model but
+never the learner's answer. Keep the key out of Cloudflare Pages and `VITE_`
+variables.
 
 `free_text` is an open response: typed answers count toward Writing, spoken answers are transcribed and count toward Speaking, and both use the same content-feedback rubric. New items can carry `response.example` for an optional collapsible example. `speaking_prompt` is now Read aloud: its `prompt` and `response.expected` must contain the same exact phrase. The FRA-126 startup migration archives historical attempts from legacy exact-answer Free Text items, deletes only those items, and reclassifies existing open speaking prompts as Free Text once.
 
