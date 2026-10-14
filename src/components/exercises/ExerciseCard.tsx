@@ -108,6 +108,8 @@ export function ExerciseCard({ entry, token, onResult, compactListening = false,
     case 'free_text':
       rendered = <Spelling entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
+    // Legacy labels use the same renderer until the startup migration maps
+    // their content items to listen_repeat. This is one shared switch arm.
     case 'listen_repeat':
     case 'dictation':
     case 'pronunciation_drill':

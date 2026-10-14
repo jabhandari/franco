@@ -74,6 +74,7 @@ export async function migrate() {
     ALTER TABLE learning_attempts ALTER COLUMN item_id DROP NOT NULL;
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS item_kind TEXT NOT NULL DEFAULT 'content_item';
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS legacy_ref TEXT;
+    -- Nullable for legacy exam/drill attempts; new content attempts snapshot the type.
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS item_type TEXT;
     UPDATE learning_attempts a SET item_type=i.item_type FROM content_items i WHERE a.item_id=i.id AND a.item_type IS NULL;
     -- Keep the historical item type on attempts, then consolidate the live catalog.
