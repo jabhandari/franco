@@ -14,6 +14,7 @@ type Props = { entry: ListenRepeatItem; token?: string | null; onResult?: (resul
 export function ListenRepeat({ entry, token, onResult, compact = false, sequence, simulateSubmit }: Props) {
   const [revealed, setRevealed] = React.useState(false);
   const [listened, setListened] = React.useState(false);
+  const [attempted, setAttempted] = React.useState(false);
   const [typing, setTyping] = React.useState(false);
   const [typed, setTyped] = React.useState('');
   const [result, setResult] = React.useState<AttemptResult | null>(null);
@@ -39,7 +40,7 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
     try {
       const saved = simulateSubmit ? await simulateSubmit(entry, response)
         : await reportAttempt(entry, response, token, { durationMs: Date.now() - started.current });
-      setResult(saved); onResult?.(saved); audio.cancelRecording();
+      setResult(saved); setAttempted(true); onResult?.(saved); audio.cancelRecording();
     } catch (caught) { setError(getErrorMessage(caught)); }
     finally { setBusy(false); }
   }
@@ -47,31 +48,29 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
   async function transcribe() {
     if (!audio.blob || !token) return;
     setBusy(true); setError('');
-    try { setHeard(await uploadSpeech(entry.id, audio.blob, token)); audio.releasePreview(); }
+    try { setHeard(await uploadSpeech(entry.id, audio.blob, token)); setAttempted(true); audio.releasePreview(); }
     catch (caught) { setError(getErrorMessage(caught)); }
     finally { setBusy(false); }
   }
 
   function reset() {
     audio.cancelRecording(); setResult(null); setHeard(null); setTyped(''); setTyping(false);
-    setRevealed(false); setListened(false); setError(''); started.current = Date.now();
+    setRevealed(false); setListened(false); setAttempted(false); setError(''); started.current = Date.now();
   }
 
   return <ExerciseShell variant="pronunciation" answered={result ? (result.correct ? 'correct' : 'wrong') : null}>
     <Box className="pronunciation-drill">
       <ExerciseEyebrow level={entry.level} kind={compact && sequence ? 'Sound ' + String(sequence).padStart(2, '0') : 'Listen & repeat'} />
       {!compact && <Text as="h3" className="pronunciation-title">Listen, then say what you hear</Text>}
-      <Text className="pronunciation-hint">Play the sound first. Reveal the words when you are ready.</Text>
+      <Text className="pronunciation-hint">{!listened ? 'First, play the sound.' : !attempted ? 'Now record yourself or type what you heard.' : 'You can now show the words below.'}</Text>
       <ClipPlayer src={clip?.url} onPlay={() => setListened(true)} />
-      {!revealed && <Button variant="text" disabled={!listened} onClick={() => setRevealed(true)}>Show words</Button>}
-      {revealed && <Box className="pronunciation-reveal"><Text as="span" className="pronunciation-answer-label">THE WORDS</Text><Text as="strong" className="pronunciation-word">{phrase || 'No transcript available'}</Text></Box>}
-      {!result && <Box className="listen-repeat-actions">
-        {simulateSubmit && !heard && <Button variant="primary" disabled={!listened} onClick={() => setHeard({
+      {listened && !result && <Box className="listen-repeat-actions">
+        {simulateSubmit && !heard && <Button variant="primary" onClick={() => { setAttempted(true); setHeard({
           transcription_id: 'preview', transcript: phrase, duration_seconds: 2,
           feedback: { mode: 'word_diff', expected: [], heard: [] },
           pronunciation: { mode: 'recording_hints', unclear_words: [{ word: phrase || 'Bonjour', start: 0, end: 1, reason: 'uncertain_audio' }] },
           quota: { user_requests_remaining_today: 0, user_audio_seconds_remaining_today: 0, resets_at: '' },
-        })}>Preview recording feedback</Button>}
+        }); }}>Preview recording feedback</Button>}
         {available && audio.browserSupported && !typing && <>
           {audio.phase === 'idle' && <Button variant="primary" onClick={audio.startRecording}>Record yourself</Button>}
           {audio.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
@@ -91,6 +90,9 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
       {result && <Feedback tone={result.correct ? 'correct' : 'incorrect'} title={result.correct ? 'Practice saved.' : 'Not quite — listen again.'} reveal={result.correct ? undefined : result.reveal} onRetry={result.correct ? undefined : reset} />}
       {error && <ErrorMessage message={error} />}
       {audio.recordingError && <ErrorMessage message={audio.recordingError} />}
+      {listened && attempted && (!revealed
+        ? <Button variant="text" onClick={() => setRevealed(true)}>Show words</Button>
+        : <Box className="pronunciation-reveal"><Text as="span" className="pronunciation-answer-label">THE WORDS</Text><Text as="strong" className="pronunciation-word">{phrase || 'No transcript available'}</Text></Box>)}
     </Box>
   </ExerciseShell>;
 }

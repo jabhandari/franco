@@ -33,7 +33,6 @@ export function ClipPlayer({ src, onPlay }: { src?: string; onPlay?: () => void 
   async function replay() {
     const audio = audioRef.current;
     if (!audio) return;
-    onPlay?.();
     audio.currentTime = 0;
     try {
       await audio.play();
@@ -49,7 +48,7 @@ export function ClipPlayer({ src, onPlay }: { src?: string; onPlay?: () => void 
 
   return (
     <div className="clip-player">
-      <audio ref={audioRef} src={src} preload="none" onPlay={() => setPlaying(true)} onEnded={() => setPlaying(false)} onPause={() => setPlaying(false)} onError={() => setError(true)} />
+      <audio ref={audioRef} src={src} preload="none" onPlay={() => { setPlaying(true); onPlay?.(); }} onEnded={() => setPlaying(false)} onPause={() => setPlaying(false)} onError={() => setError(true)} />
       <button type="button" className={`clip-play-button${playing ? ' is-playing' : ''}`} onClick={replay} aria-label={played ? 'Replay pronunciation' : 'Play pronunciation'}>
         <span className="clip-play-icon"><Volume2 size={20} aria-hidden="true" /></span>
         <span>{played ? 'Replay sound' : 'Play sound'}</span>

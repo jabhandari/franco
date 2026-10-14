@@ -3,6 +3,7 @@ import {
   SKILL_TABS,
   SKILL_ITEM_TYPES,
   skillForItemType,
+  itemBelongsToSkill,
   countsForSkill,
   levelMastery,
   MASTERED_THRESHOLD,
@@ -38,6 +39,9 @@ assert(skillForItemType('word_order') === 'ecrire', "skillForItemType: word_orde
 assert(skillForItemType('speaking_prompt') === 'parler', "skillForItemType: speaking_prompt -> parler");
 assert(skillForItemType('unknown_future_type') === null, 'skillForItemType: unknown types return null');
 assert(skillForItemType(null) === null, 'skillForItemType: null-safe');
+assert(itemBelongsToSkill('listen_repeat', 'ecouter') && itemBelongsToSkill('listen_repeat', 'parler'), 'Listen & Repeat appears in Listening and Speaking inventories');
+assert(itemBelongsToSkill('free_text', 'ecrire') && itemBelongsToSkill('free_text', 'parler'), 'Free Text appears in Writing and Speaking inventories');
+assert(!itemBelongsToSkill('reading', 'parler') && !itemBelongsToSkill(null, 'parler'), 'Speaking excludes unrelated and missing types');
 
 assert(
   countsForSkill({ listen_repeat: 8, reading: 7 }, 'ecouter') === 8,

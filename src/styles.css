@@ -1665,6 +1665,15 @@ html[data-theme="light"] .learn-view .report-button { border-color:transparent; 
 .pronunciation-mark-row { display:flex; flex-wrap:wrap; gap:7px; margin-left:auto; }
 .listen-repeat-actions { display:flex; flex-direction:column; align-items:flex-start; gap:12px; }
 .listen-repeat-actions .speaking-type-fallback { width:100%; }
+.freeform-exercise .speaking-route { width:max-content; max-width:100%; gap:4px; padding:4px; border:1px solid var(--palette-teal-soft); border-radius:10px; background:var(--palette-navy-soft); }
+.freeform-exercise .speaking-route button { min-height:38px; padding:8px 16px; border:0; border-radius:7px; background:transparent; color:var(--palette-silver); font:inherit; font-size:var(--text-13); font-weight:700; cursor:pointer; }
+.freeform-exercise .speaking-route button:hover { color:var(--palette-white); }
+.freeform-exercise .speaking-route button[aria-pressed="true"] { background:var(--palette-teal-deep); color:var(--palette-white); box-shadow:0 2px 6px color-mix(in srgb,var(--palette-navy-deep) 18%,transparent); }
+.freeform-exercise .speaking-route button:focus-visible { outline:2px solid var(--palette-mint); outline-offset:2px; }
+html[data-theme="light"] .freeform-exercise .speaking-route { background:var(--palette-paper); }
+html[data-theme="light"] .freeform-exercise .speaking-route button { color:var(--palette-slate); }
+html[data-theme="light"] .freeform-exercise .speaking-route button:hover { color:var(--palette-teal-deep); }
+html[data-theme="light"] .freeform-exercise .speaking-route button[aria-pressed="true"] { color:var(--palette-white); }
 .freeform-exercise,.read-aloud-exercise { display:grid; gap:16px; }
 .freeform-exercise .free-text-input { min-height:180px; }
 .read-aloud-phrase { font-size:clamp(1.4rem,3vw,2rem); line-height:1.45; font-weight:650; }

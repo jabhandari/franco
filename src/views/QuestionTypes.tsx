@@ -189,7 +189,7 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
   {
     id: 'listen_repeat',
     label: 'Listen & repeat',
-    description: 'Listen to the audio, speak it back, or type what you heard. Reveal the words when ready.',
+    description: 'Play the audio, then record or type your attempt. Reveal the words afterward.',
     entry: {
       id: 'showcase-dictation-1',
       item_kind: 'content_item',

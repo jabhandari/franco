@@ -46,6 +46,13 @@ export function skillForItemType(itemType: string | null | undefined): SkillId |
   return TYPE_TO_SKILL[itemType.trim().toLowerCase()] ?? null;
 }
 
+// An exercise may train more than one skill (for example Listen & Repeat).
+// Use this for tab inventories; the reverse lookup above only supplies a
+// primary skill for single-skill callers.
+export function itemBelongsToSkill(itemType: string | null | undefined, skill: SkillId): boolean {
+  return typeof itemType === 'string' && SKILL_ITEM_TYPES[skill].includes(itemType.trim().toLowerCase());
+}
+
 /**
  * Item-counts payload from GET /api/content/v1/item-counts
  * ({ byType: { <item_type>: <count> } }).
