@@ -12,7 +12,7 @@ import { googleConfig,beginGoogle,consumeGoogleState,googleStateCookie,stateCook
 
 import { translateText, TranslationError } from './translation.js';
 import { getSpeakingLesson } from '../shared/speaking-lessons.js';
-import { getPort, getHost, corsOrigin } from './config.js';
+import { getPort, getHost, corsOrigin, getEnforceEmailVerification } from './config.js';
 import { displayName, isNonEmptyName } from './user-names.js';
 import { getLearnerProgress } from './learner-progress.js';
 import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
@@ -500,14 +500,20 @@ async function main() {
               await query('INSERT INTO users(id,email,name,first_name,last_name,password_hash,password_salt,email_verified) VALUES(?,?,?,?,?,?,?,FALSE)',[id,email,name,firstName,lastName,p.hash,p.salt]);
               await createProfileForUser(id);
               try { await sendAuthEmail(id,email,'verify',req.headers.origin); }
-              catch (error) { console.error('Signup verification email failed:',error); return json(res,503,{code:'verification_email_failed',error:'Account created, but verification email could not be sent. Please request a new link.'}); }
-              return json(res,201,{message:'Check your email for a verification link.'});
+              catch (error) {
+                console.error('Signup verification email failed:',error);
+                // The verification email is best-effort while verification is
+                // not enforced (no production sending domain yet): the account
+                // is usable immediately, so a failed send must not fail signup.
+                if (getEnforceEmailVerification()) return json(res,503,{code:'verification_email_failed',error:'Account created, but verification email could not be sent. Please request a new link.'});
+              }
+              return json(res,201,{message:getEnforceEmailVerification() ? 'Check your email for a verification link.' : 'Account created.'});
             }
             if (req.method === 'POST' && u.pathname === '/api/auth/login') {
               const b = await body(req) || {}, email = typeof b.email === 'string' ? b.email.trim().toLowerCase() : '';
               const row = (await query('SELECT * FROM users WHERE email=?',[email]))[0];
               if (!row || password(typeof b.password === 'string' ? b.password : '',row.password_salt).hash !== row.password_hash) return json(res,401,{error:'Invalid email or password.'});
-              if (!row.email_verified) return json(res,403,{code:'email_not_verified',error:'Please verify your email before logging in. You can request a new verification link.'});
+              if (getEnforceEmailVerification() && !row.email_verified) return json(res,403,{code:'email_not_verified',error:'Please verify your email before logging in. You can request a new verification link.'});
               const token = randomBytes(32).toString('hex');
               await query("INSERT INTO sessions(id,user_id,token_hash,expires_at) VALUES(?,?,?,NOW()+INTERVAL '14 days')",[randomUUID(),row.id,hashToken(token)]);
               return json(res,200,{token,user:userPayload(row),profile:null,progress:[],mistakes:[],attempts:[]});

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 
-const { getPort, getHost, getCorsOrigins, corsOrigin } = await import('../server/config.js');
+const { getPort, getHost, getCorsOrigins, corsOrigin, getEnforceEmailVerification } = await import('../server/config.js');
 
 // Defaults (no env overrides).
 delete process.env.PORT; delete process.env.HOST; delete process.env.CORS_ORIGINS;
@@ -37,5 +37,17 @@ process.env.PORT = '10000'; process.env.HOST = '127.0.0.1';
 assert.equal(getPort(), 10000);
 assert.equal(getHost(), '127.0.0.1');
 delete process.env.PORT; delete process.env.HOST;
+
+// Email verification enforcement defaults to off; only the exact string
+// 'true' enables it.
+delete process.env.ENFORCE_EMAIL_VERIFICATION;
+assert.equal(getEnforceEmailVerification(), false);
+process.env.ENFORCE_EMAIL_VERIFICATION = 'true';
+assert.equal(getEnforceEmailVerification(), true);
+process.env.ENFORCE_EMAIL_VERIFICATION = 'false';
+assert.equal(getEnforceEmailVerification(), false);
+process.env.ENFORCE_EMAIL_VERIFICATION = 'TRUE';
+assert.equal(getEnforceEmailVerification(), false);
+delete process.env.ENFORCE_EMAIL_VERIFICATION;
 
 console.log('server config tests passed');
