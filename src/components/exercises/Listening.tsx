@@ -4,7 +4,8 @@ import { getSpeechStatus, reportAttempt, uploadSpeech } from '../../api/client.j
 import type { SimulateSubmit } from './ExerciseCard';
 import { getErrorMessage } from '../../presenters/format.presenter.js';
 import { useAudioRecorder } from '../../hooks/useAudioRecorder';
-import { AudioPlayer, Box, Button, ClipPlayer, ErrorMessage, ExerciseEyebrow, ExerciseShell, Feedback, Text, Textarea } from '../ui';
+import { AnswerModePicker, AudioPlayer, Box, Button, ClipPlayer, ErrorMessage, ExerciseEyebrow, ExerciseShell, Text, Textarea } from '../ui';
+import type { AnswerMode } from '../ui';
 
 export type MediaAsset = { kind: 'audio' | 'image' | 'video' | 'document'; url: string; duration_seconds?: number; transcript?: string; checksum?: string };
 export type ListenRepeatItem = { id: string; item_kind: AttemptItemKind; level?: string; prompt?: string; expected?: string; media?: MediaAsset[] };
@@ -12,10 +13,8 @@ type AttemptResult = { correct?: boolean; reveal?: string | null; error?: string
 type Props = { entry: ListenRepeatItem; token?: string | null; onResult?: (result: AttemptResult) => void; compact?: boolean; sequence?: number; simulateSubmit?: SimulateSubmit };
 
 export function ListenRepeat({ entry, token, onResult, compact = false, sequence, simulateSubmit }: Props) {
-  const [revealed, setRevealed] = React.useState(false);
   const [listened, setListened] = React.useState(false);
-  const [attempted, setAttempted] = React.useState(false);
-  const [typing, setTyping] = React.useState(false);
+  const [mode, setMode] = React.useState<AnswerMode>('spoken');
   const [typed, setTyped] = React.useState('');
   const [result, setResult] = React.useState<AttemptResult | null>(null);
   const [heard, setHeard] = React.useState<SpeechTranscribeResponse | null>(null);
@@ -34,65 +33,79 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
     return () => { active = false; };
   }, [token, simulateSubmit]);
 
-  async function save(response: string | { completed: true; transcript: string; transcription_id: string }) {
-    if (busy || result) return;
+  function choose(next: AnswerMode) {
+    if (next === mode || busy || result) return;
+    audio.cancelRecording(); setHeard(null); setError(''); setMode(next);
+  }
+
+  async function compare() {
+    if (busy || result || !listened) return;
+    if (mode === 'typed' ? !typed.trim() : !heard && (!audio.blob || !token)) return;
     setBusy(true); setError('');
     try {
+      let transcript = mode === 'spoken' ? heard : null;
+      if (mode === 'spoken' && !transcript && audio.blob && token) transcript = await uploadSpeech(entry.id, audio.blob, token);
+      if (mode === 'spoken' && !transcript) throw new Error('Record an answer before comparing.');
+      if (transcript && !heard) setHeard(transcript);
+      const response = transcript
+        ? { completed: true, transcript: transcript.transcript, transcription_id: transcript.transcription_id }
+        : typed.trim();
       const saved = simulateSubmit ? await simulateSubmit(entry, response)
         : await reportAttempt(entry, response, token, { durationMs: Date.now() - started.current });
-      setResult(saved); setAttempted(true); onResult?.(saved); audio.cancelRecording();
+      setResult(saved); onResult?.(saved);
     } catch (caught) { setError(getErrorMessage(caught)); }
     finally { setBusy(false); }
   }
 
-  async function transcribe() {
-    if (!audio.blob || !token) return;
-    setBusy(true); setError('');
-    try { setHeard(await uploadSpeech(entry.id, audio.blob, token)); setAttempted(true); audio.releasePreview(); }
-    catch (caught) { setError(getErrorMessage(caught)); }
-    finally { setBusy(false); }
+  function reset() {
+    audio.cancelRecording(); setResult(null); setHeard(null); setTyped(''); setMode('spoken');
+    setError(''); started.current = Date.now();
   }
 
-  function reset() {
-    audio.cancelRecording(); setResult(null); setHeard(null); setTyped(''); setTyping(false);
-    setRevealed(false); setListened(false); setAttempted(false); setError(''); started.current = Date.now();
-  }
+  const ready = mode === 'typed' ? Boolean(typed.trim()) : Boolean(heard || audio.blob);
+  const answer = mode === 'spoken' ? heard?.transcript || '' : typed.trim();
 
   return <ExerciseShell variant="pronunciation" answered={result ? (result.correct ? 'correct' : 'wrong') : null}>
     <Box className="pronunciation-drill">
       <ExerciseEyebrow level={entry.level} kind={compact && sequence ? 'Sound ' + String(sequence).padStart(2, '0') : 'Listen & repeat'} />
       {!compact && <Text as="h3" className="pronunciation-title">Listen, then say what you hear</Text>}
-      <Text className="pronunciation-hint">{!listened ? 'First, play the sound.' : !attempted ? 'Now record yourself or type what you heard.' : 'You can now show the words below.'}</Text>
+      <Text className="pronunciation-hint">{!listened ? 'Play the sound to begin.' : result ? 'Listen back and compare your answer with the words in the audio.' : 'Choose how to answer, then compare with the words in the audio.'}</Text>
       <ClipPlayer src={clip?.url} onPlay={() => setListened(true)} />
-      {listened && !result && <Box className="listen-repeat-actions">
-        {simulateSubmit && !heard && <Button variant="primary" onClick={() => { setAttempted(true); setHeard({
-          transcription_id: 'preview', transcript: phrase, duration_seconds: 2,
-          feedback: { mode: 'word_diff', expected: [], heard: [] },
-          pronunciation: { mode: 'recording_hints', unclear_words: [{ word: phrase || 'Bonjour', start: 0, end: 1, reason: 'uncertain_audio' }] },
-          quota: { user_requests_remaining_today: 0, user_audio_seconds_remaining_today: 0, resets_at: '' },
-        }); }}>Preview recording feedback</Button>}
-        {available && audio.browserSupported && !typing && <>
-          {audio.phase === 'idle' && <Button variant="primary" onClick={audio.startRecording}>Record yourself</Button>}
-          {audio.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
-          {audio.phase === 'recording' && <><Text role="status">Recording · {audio.elapsed}s</Text><Button variant="primary" onClick={audio.stopRecording}>Stop</Button></>}
-          {audio.phase === 'ready' && <><AudioPlayer src={audio.previewUrl} /><Button variant="primary" disabled={busy} onClick={transcribe}>{busy ? 'Transcribing…' : 'Check recording'}</Button><Button variant="text" onClick={audio.cancelRecording}>Discard</Button></>}
-        </>}
-        <Button variant="text" onClick={() => { audio.cancelRecording(); setTyping(!typing); }} disabled={busy}>{typing ? 'Hide typing' : 'Type instead'}</Button>
-        {typing && <Box className="speaking-type-fallback"><Textarea rows={3} value={typed} onChange={(event) => setTyped(event.target.value)} placeholder="Type what you heard…" /><Button variant="primary" disabled={!typed.trim() || busy} onClick={() => save(typed)}>Check answer</Button></Box>}
-      </Box>}
-      {heard && !result && <Box className="speech-feedback" aria-live="polite">
-        <Text as="strong">What was heard</Text><Text>{heard.transcript}</Text>
-        {heard.pronunciation.unclear_words.length > 0 && <><Text as="strong">These words sounded unclear — try again</Text><Text>{heard.pronunciation.unclear_words.map((word) => word.word).join(' · ')}</Text></>}
-        <Text className="speaking-feedback-note">Recording hints can be affected by microphone noise; they are not a pronunciation grade.</Text>
-        <Button variant="primary" disabled={busy} onClick={() => save({ completed: true, transcript: heard.transcript, transcription_id: heard.transcription_id })}>Save practice</Button>
-        <Button variant="text" onClick={() => { setHeard(null); audio.cancelRecording(); }}>Try again</Button>
-      </Box>}
-      {result && <Feedback tone={result.correct ? 'correct' : 'incorrect'} title={result.correct ? 'Practice saved.' : 'Not quite — listen again.'} reveal={result.correct ? undefined : result.reveal} onRetry={result.correct ? undefined : reset} />}
+      {listened && !result && <>
+        <AnswerModePicker value={mode} onChange={choose} disabled={busy} />
+        {mode === 'typed'
+          ? <Textarea rows={3} value={typed} onChange={(event) => setTyped(event.target.value)} placeholder="Type what you heard…" />
+          : <Box className="answer-recording">
+            {simulateSubmit && !heard && !audio.blob && <Button variant="primary" onClick={() => setHeard({
+              transcription_id: 'preview', transcript: phrase, duration_seconds: 2,
+              feedback: { mode: 'word_diff', expected: [], heard: [] },
+              pronunciation: { mode: 'recording_hints', unclear_words: [{ word: phrase || 'Bonjour', start: 0, end: 1, reason: 'uncertain_audio' }] },
+              quota: { user_requests_remaining_today: 0, user_audio_seconds_remaining_today: 0, resets_at: '' },
+            })}>Use sample recording</Button>}
+            {!available && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable. You can type your answer instead.</Text>}
+            {available && audio.browserSupported && audio.phase === 'idle' && <Button variant="primary" onClick={audio.startRecording}>Start recording</Button>}
+            {audio.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
+            {audio.phase === 'recording' && <><Text role="status">Recording · {audio.elapsed}s</Text><Button variant="primary" onClick={audio.stopRecording}>Finish recording</Button></>}
+            {audio.phase === 'ready' && <><Text as="strong">Listen to your recording</Text><AudioPlayer src={audio.previewUrl} /><Button variant="text" disabled={busy} onClick={() => { audio.cancelRecording(); setHeard(null); }}>Record again</Button></>}
+          </Box>}
+        {ready && <Box className="answer-submit"><Button variant="primary" disabled={busy} onClick={compare}>{busy ? 'Comparing…' : 'Show answer & compare'}</Button></Box>}
+      </>}
+      {result && <>
+        {audio.previewUrl && <Box className="answer-recording"><Text as="strong">Your recording</Text><AudioPlayer src={audio.previewUrl} /></Box>}
+        <Box className="answer-comparison" aria-live="polite">
+          <Box><Text as="span" className="answer-comparison-label">Your answer</Text><Text as="strong">{answer || 'No words detected'}</Text></Box>
+          <Box><Text as="span" className="answer-comparison-label">Words in the audio</Text><Text as="strong">{phrase || 'No transcript available'}</Text></Box>
+        </Box>
+        {mode === 'typed' && <Text className="speaking-feedback-note">{result.correct ? 'Your typed answer matches.' : 'Compare the words and try the sound again.'}</Text>}
+        {mode === 'spoken' && <Box className="answer-hints">
+          <Text as="strong">Recording hints</Text>
+          <Text>{heard?.pronunciation.unclear_words.length ? `These words sounded unclear: ${heard.pronunciation.unclear_words.map((word) => word.word).join(' · ')}` : 'No unclear words were detected.'}</Text>
+          <Text className="speaking-feedback-note">Hints are approximate and can be affected by microphone noise.</Text>
+        </Box>}
+        <Button variant="text" onClick={reset}>Try again</Button>
+      </>}
       {error && <ErrorMessage message={error} />}
       {audio.recordingError && <ErrorMessage message={audio.recordingError} />}
-      {listened && attempted && (!revealed
-        ? <Button variant="text" onClick={() => setRevealed(true)}>Show words</Button>
-        : <Box className="pronunciation-reveal"><Text as="span" className="pronunciation-answer-label">THE WORDS</Text><Text as="strong" className="pronunciation-word">{phrase || 'No transcript available'}</Text></Box>)}
     </Box>
   </ExerciseShell>;
 }

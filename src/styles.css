@@ -1663,17 +1663,25 @@ html[data-theme="light"] .learn-view .report-button { border-color:transparent; 
 .pronunciation-card .pronunciation-answer-label { color:var(--palette-slate); font-size: var(--text-10); letter-spacing:.1em; }
 .pronunciation-word { color:var(--palette-ink); font-size: var(--text-22); letter-spacing:-.03em; }
 .pronunciation-mark-row { display:flex; flex-wrap:wrap; gap:7px; margin-left:auto; }
-.listen-repeat-actions { display:flex; flex-direction:column; align-items:flex-start; gap:12px; }
-.listen-repeat-actions .speaking-type-fallback { width:100%; }
-.freeform-exercise .speaking-route { width:max-content; max-width:100%; gap:4px; padding:4px; border:1px solid var(--palette-teal-soft); border-radius:10px; background:var(--palette-navy-soft); }
-.freeform-exercise .speaking-route button { min-height:38px; padding:8px 16px; border:0; border-radius:7px; background:transparent; color:var(--palette-silver); font:inherit; font-size:var(--text-13); font-weight:700; cursor:pointer; }
-.freeform-exercise .speaking-route button:hover { color:var(--palette-white); }
-.freeform-exercise .speaking-route button[aria-pressed="true"] { background:var(--palette-teal-deep); color:var(--palette-white); box-shadow:0 2px 6px color-mix(in srgb,var(--palette-navy-deep) 18%,transparent); }
-.freeform-exercise .speaking-route button:focus-visible { outline:2px solid var(--palette-mint); outline-offset:2px; }
-html[data-theme="light"] .freeform-exercise .speaking-route { background:var(--palette-paper); }
-html[data-theme="light"] .freeform-exercise .speaking-route button { color:var(--palette-slate); }
-html[data-theme="light"] .freeform-exercise .speaking-route button:hover { color:var(--palette-teal-deep); }
-html[data-theme="light"] .freeform-exercise .speaking-route button[aria-pressed="true"] { color:var(--palette-white); }
+.answer-mode-picker { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); width:min(100%,440px); gap:6px; padding:5px; border:1px solid var(--color-border); border-radius:12px; background:color-mix(in srgb,var(--color-text) 5%,var(--color-surface)); }
+.answer-mode-picker button { display:flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:8px 14px; border:0; border-radius:8px; background:transparent; color:var(--color-muted); font:inherit; font-size:var(--text-13); font-weight:700; cursor:pointer; }
+.answer-mode-picker button:hover:not(:disabled) { color:var(--color-text); }
+.answer-mode-picker button[aria-pressed="true"] { background:var(--color-accent); color:var(--palette-white); }
+.answer-mode-picker button:disabled { cursor:default; opacity:.65; }
+.answer-recording { display:grid; justify-items:start; gap:12px; width:100%; max-width:600px; padding:18px; border:1px solid var(--color-border); border-radius:12px; background:color-mix(in srgb,var(--color-text) 3%,var(--color-surface)); }
+.answer-recording > strong { font-size:var(--text-13); color:var(--color-text); }
+.answer-recording .audio-player { width:100%; margin:0; padding:0; border:0; background:transparent; }
+.answer-recording .primary-button,.answer-submit .primary-button { width:auto; min-width:180px; min-height:44px; padding:10px 18px; margin:0; }
+.answer-recording .text-button,.pronunciation-drill > .text-button { width:auto; min-height:34px; margin:0; padding:4px 0; color:var(--color-accent); }
+.answer-submit { padding-top:4px; }
+.pronunciation-drill .clip-player { max-width:560px; }
+.pronunciation-drill .clip-play-button { width:100%; }
+.answer-comparison { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.answer-comparison > div,.answer-hints { display:grid; align-content:start; gap:8px; padding:18px; border:1px solid var(--color-border); border-radius:12px; background:color-mix(in srgb,var(--color-text) 3%,var(--color-surface)); }
+.answer-comparison-label { color:var(--color-muted); font-size:var(--text-11); font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
+.answer-comparison strong { font-size:var(--text-19); line-height:1.45; overflow-wrap:anywhere; }
+.answer-hints { gap:6px; }
+@media(max-width:600px) { .answer-comparison { grid-template-columns:1fr; } .answer-mode-picker button { padding-inline:7px; font-size:var(--text-12); } }
 .freeform-exercise,.read-aloud-exercise { display:grid; gap:16px; }
 .freeform-exercise .free-text-input { min-height:180px; }
 .read-aloud-phrase { font-size:clamp(1.4rem,3vw,2rem); line-height:1.45; font-weight:650; }
@@ -2248,7 +2256,6 @@ html[data-theme] .practice-level-card .ring-label { color:var(--color-text); fon
 .practice-exercises .audio-player { border-color:var(--color-border); background:var(--color-surface); }
 @media(max-width:850px) { .practice-level-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:550px) { .practice-skill-grid, .practice-level-grid { grid-template-columns:minmax(0,1fr); } .practice-steps { gap:8px; } .practice-bar { flex-wrap:wrap; gap:10px; } }
-.practice-exercises .speaking-type-fallback { display:grid; gap:12px; margin-block:12px; }
 
 /* FRA-94: two-minute speaking drill; paint comes entirely from theme tokens. */
 .conversation-page { max-width:1000px; margin-inline:auto; }
