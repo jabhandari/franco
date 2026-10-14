@@ -7,8 +7,22 @@ import type { SkillId, CefrLevel } from '../types';
 import { skillCompletion } from '../presenters/progress.presenter';
 import { CEFR_LEVELS, clbForCefr, formatLevelWithClb } from '../presenters/levels.presenter';
 import { ExamQuestionList } from './PastQuestions';
-import { ExerciseCard } from '../components/exercises/ExerciseCard';
+import { ExerciseCard, type ExerciseItem } from '../components/exercises/ExerciseCard';
 import { Box, Text, Button, SkillCard, PracticeLevelCard, LoadingSpinner, ErrorMessage, AudioPlayer } from '../components/ui';
+
+// Temporary probe (not real content): one Read aloud exercise rendered through
+// the real transcription pipeline so the flow can be tested end to end.
+// Uses a real speaking_prompt item id so /api/speech/transcribe accepts it;
+// the displayed phrase is overridden client-side.
+type ProbeEntry = ExerciseItem & { expected?: string };
+const READ_ALOUD_PROBE: ProbeEntry = {
+  id: 'it_orig_0007',
+  item_kind: 'content_item',
+  type: 'speaking_prompt',
+  level: 'A1',
+  prompt: 'TEST PROBE — read aloud',
+  expected: 'Je parle français avec mes amis.',
+};
 
 type PracticeProps = {token?:string|null};
 const SKILLS:{id:SkillId;title:string;gloss:string;description:string}[]=[
@@ -56,6 +70,11 @@ export function Practice({token}:PracticeProps) {
       {inventory.error && <ErrorMessage message={inventory.error}/>}
       {!inventory.loading && !inventory.error && <Box id="practice-exercise-list" className="practice-exercises">
         {inventory.loadingPage ? <LoadingSpinner label="Loading this page…"/> : <Box key={resetKey} className="practice-exercises">
+          {skill==='parler' && inventory.page===0 && <Box className="practice-test-probe">
+            <Text as="h3">Test probe — Read aloud</Text>
+            <Text variant="muted">Temporary probe for testing the read-aloud flow end to end (real recording, transcription and pronunciation hints). Not real content.</Text>
+            <ExerciseCard entry={READ_ALOUD_PROBE} token={token} onResult={refresh}/>
+          </Box>}
           {inventory.page===0 && inventory.questions.length>0 && <ExamQuestionList token={token} onAttempt={refresh} data={{questions:inventory.questions,section:`${label?.gloss} · ${level}`}}/>}
           {inventory.items.map(item=><Box key={item.id}>{item.type==='listening' && <AudioPlayer src={item.media?.find(media=>media.kind==='audio')?.url} emptyText="Audio is unavailable for this question."/>}<ExerciseCard entry={item} token={token} onResult={refresh}/></Box>)}
           {!inventory.items.length && !(inventory.page===0 && inventory.questions.length) && <Text variant="muted">No exercises yet</Text>}

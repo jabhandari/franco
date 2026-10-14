@@ -2251,6 +2251,7 @@ html[data-theme] .practice-level-card .ring-fill { stroke:var(--color-accent); }
 html[data-theme] .practice-level-card .ring-label { color:var(--color-text); font-size:11px; }
 .practice-exercise-bar { display:flex; justify-content:space-between; align-items:center; border-block:1px solid var(--color-border); padding-block:12px; font-size:13px; color:var(--color-muted); }
 .practice-exercises { display:grid; gap:20px; }
+.practice-test-probe { display:grid; gap:12px; padding:16px; border:2px dashed var(--color-border); border-radius:12px; }
 .practice-exercises .content-module { border:0; background:transparent; padding:0; }
 .practice-exercises .exercise-preview { width:100%; }
 .practice-exercises textarea { color:var(--color-text); background:var(--color-surface); border-color:var(--color-border); font-weight:400; }
