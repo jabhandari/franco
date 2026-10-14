@@ -22,6 +22,7 @@ export function Conversation({token,previewData}:ConversationProps) {
   const [feedbackBusy,setFeedbackBusy]=React.useState(false);
   const feedbackGeneration=React.useRef(0);
   React.useEffect(()=>{if(timer.phase==='done') {if(audio.phase==='requesting') audio.cancelRecording();else audio.stopRecording();}},[timer.phase,audio.phase]);
+  React.useEffect(()=>{if(timer.phase==='speaking' && audio.recordingError) timer.stop();},[timer.phase,audio.recordingError]);
   function reset() {feedbackGeneration.current++;timer.reset();audio.cancelRecording();setTyped('');setFeedback(null);setFeedbackError('');setFeedbackBusy(false);}
   function newScenario() {reset();setHints({});setPick(value=>value+1);}
   const busy=audio.phase==='recording' || audio.phase==='requesting';
