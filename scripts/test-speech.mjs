@@ -4,6 +4,7 @@ import { Readable } from 'node:stream';
 process.env.DATABASE_URL ||= 'postgres://unused:unused@127.0.0.1/unused';
 process.env.GROQ_API_KEY = 'test-key';
 const { speechFeedback } = await import('../server/evaluate.js');
+const { pronunciationFeedback } = await import('../shared/pronunciation-feedback.js');
 const {
   SpeechError, audioMime, readAudio, audioDuration, admitSpeech,
   speechConfig, transcribeSpeech, transcriptHash, validateSpeakingCompletion,
@@ -43,6 +44,7 @@ const webmAt = (milliseconds) => {
 const browserWebm = webmAt(59000);
 assert.ok((await audioDuration(browserWebm, 'audio/webm', 60)) > 59);
 await rejectsCode(audioDuration(webmAt(60001), 'audio/webm', 60), 'speech_too_long');
+assert.ok((await audioDuration(webmAt(60001), 'audio/webm', 120)) > 60);
 const openSegmentWebm = Buffer.from(browserWebm);
 openSegmentWebm[openSegmentWebm.indexOf(Buffer.from('18538067', 'hex')) + 4] = 0xff;
 assert.ok((await audioDuration(openSegmentWebm, 'audio/webm', 60)) > 59);
@@ -99,11 +101,25 @@ const request = { userId: 'me', item, audio: Buffer.from('audio'), mime: 'audio/
 const success = await transcribeSpeech({ ...request, fetchImpl: async (_url, options) => {
   assert.equal(options.body.get('language'), 'fr');
   assert.equal(options.body.get('model'), config.model);
-  return { ok: true, headers: new Headers(), json: async () => ({ text: 'bonjour' }) };
+  assert.equal(options.body.get('response_format'), 'verbose_json');
+  assert.equal(options.body.get('timestamp_granularities[]'), 'word');
+  return { ok: true, headers: new Headers(), json: async () => ({ text: 'bonjour', words: [{ word: 'bonjour', start: 0, end: 1.5 }] }) };
 } });
 assert.equal(success.feedback.mode, 'word_diff');
+assert.deepEqual(success.pronunciation.unclear_words, []);
+assert.deepEqual(pronunciationFeedback({ words: [
+  { word: 'Je', start: 0, end: 0.2 }, { word: 'parle', start: 0.2, end: 0.6 },
+  { word: 'lentement', start: 0.6, end: 2.1 },
+] }).unclear_words.map((hint) => hint.word), ['lentement']);
+assert.deepEqual(pronunciationFeedback({ words: [{ word: 'bonjour', start: 0, end: 0.4 }],
+  segments: [{ start: 0, end: 0.4, avg_logprob: -1 }] }).unclear_words.map((hint) => hint.reason), ['uncertain_audio']);
+assert.deepEqual(pronunciationFeedback({ words: [{ word: 'bonjour', start: 0, end: 0.4 }],
+  segments: [{ start: 0, end: 0.4, avg_logprob: -0.1 }] }).unclear_words, []);
 assert.equal(completions.at(-1)[1], 'succeeded');
 assert.equal(completions.at(-1)[2].hash, transcriptHash('bonjour'));
+const conversation = await transcribeSpeech({ ...request, item: { id: null, response_json: {} }, duration: 90,
+  fetchImpl: async () => ({ ok: true, headers: new Headers(), json: async () => ({ text: 'Bonjour' }) }) });
+assert.equal(conversation.feedback.mode, 'transcript_only');
 await rejectsCode(transcribeSpeech({ ...request, fetchImpl: async () => ({ ok: true, headers: new Headers(), json: async () => ({ text: '' }) }) }), 'speech_no_speech');
 assert.equal(completions.at(-1)[1], 'no_speech');
 await rejectsCode(transcribeSpeech({ ...request, fetchImpl: async () => ({ status: 429, ok: false, headers: new Headers({ 'retry-after': '3' }) }) }), 'speech_provider_limited');

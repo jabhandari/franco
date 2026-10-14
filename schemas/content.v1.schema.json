@@ -37,18 +37,20 @@
       "type": "object", "additionalProperties": false,
       "properties": { "band": { "enum": ["introductory", "basic", "intermediate", "advanced", "proficient"] }, "score": { "type": "number", "minimum": 0, "maximum": 100 }, "method": { "type": "string", "maxLength": 100 } }
     },
-    "response": { "type": "object", "additionalProperties": false, "properties": { "choices": { "type": "array", "minItems": 2, "maxItems": 20, "items": { "type": "object", "additionalProperties": false, "required": ["id", "text"], "properties": { "id": { "type": "string", "minLength": 1, "maxLength": 50 }, "text": { "type": "string", "minLength": 1, "maxLength": 5000 } } } }, "answer": {}, "accepted_answers": { "type": "array", "items": { "type": "string", "maxLength": 2000 } }, "tokens": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 100 } } } },
+    "response": { "type": "object", "additionalProperties": false, "properties": { "choices": { "type": "array", "minItems": 2, "maxItems": 20, "items": { "type": "object", "additionalProperties": false, "required": ["id", "text"], "properties": { "id": { "type": "string", "minLength": 1, "maxLength": 50 }, "text": { "type": "string", "minLength": 1, "maxLength": 5000 } } } }, "answer": {}, "expected": { "type": "string", "minLength": 1 }, "example": { "type": "string", "minLength": 1, "maxLength": 2000 }, "accepted_answers": { "type": "array", "items": { "type": "string", "maxLength": 2000 } }, "tokens": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 100 } } } },
     "evaluation": { "type": "object", "additionalProperties": false, "required": ["mode"], "properties": { "mode": { "enum": ["exact", "choice", "normalized_text", "token_order", "rubric", "external"] }, "rubric": { "type": "string", "maxLength": 10000 }, "case_sensitive": { "type": "boolean" } } },
     "item": {
       "type": "object", "additionalProperties": false,
       "required": ["external_id", "type", "cefr", "prompt", "response", "evaluation"],
       "allOf": [
         { "if": { "properties": { "type": { "const": "multiple_choice" } } }, "then": { "properties": { "response": { "required": ["choices", "answer"] }, "evaluation": { "properties": { "mode": { "const": "choice" } } } } } },
-        { "if": { "properties": { "type": { "const": "word_order" } } }, "then": { "properties": { "response": { "required": ["tokens"] }, "evaluation": { "properties": { "mode": { "const": "token_order" } } } } } }
+        { "if": { "properties": { "type": { "const": "word_order" } } }, "then": { "properties": { "response": { "required": ["tokens"] }, "evaluation": { "properties": { "mode": { "const": "token_order" } } } } } },
+        { "if": { "properties": { "type": { "const": "listen_repeat" } } }, "then": { "properties": { "response": { "required": ["answer"] }, "evaluation": { "properties": { "mode": { "const": "normalized_text" } } } } } },
+        { "if": { "properties": { "type": { "const": "speaking_prompt" } } }, "then": { "properties": { "response": { "required": ["expected"] } } } }
       ],
       "properties": {
         "external_id": { "type": "string", "minLength": 1, "maxLength": 500 },
-        "type": { "enum": ["multiple_choice", "cloze", "free_text", "word_order", "reading", "listening", "speaking", "vocabulary"] },
+        "type": { "enum": ["multiple_choice", "cloze", "free_text", "word_order", "reading", "listening", "speaking", "vocabulary", "listen_repeat", "speaking_prompt"] },
         "title": { "type": "string", "maxLength": 500 }, "prompt": { "type": "string", "minLength": 1, "maxLength": 20000 }, "instructions": { "type": "string", "maxLength": 10000 }, "context": { "type": "string", "maxLength": 100000 },
         "cefr": { "$ref": "#/$defs/cefr" }, "difficulty": { "$ref": "#/$defs/difficulty" }, "response": { "$ref": "#/$defs/response" }, "evaluation": { "$ref": "#/$defs/evaluation" },
         "concepts": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 200 } }, "tags": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 100 } },

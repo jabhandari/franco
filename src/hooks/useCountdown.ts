@@ -1,8 +1,11 @@
 import React from 'react';
 
-export function useCountdown(seconds = 120) {
+type CountdownPhase = 'ready'|'speaking'|'paused'|'done';
+export type CountdownState = { remaining:number; phase:CountdownPhase; start:()=>void; pause:()=>void; stop:()=>void; reset:()=>void };
+
+export function useCountdown(seconds = 120): CountdownState {
   const [remaining,setRemaining]=React.useState(seconds);
-  const [phase,setPhase]=React.useState<'ready'|'speaking'|'paused'|'done'>('ready');
+  const [phase,setPhase]=React.useState<CountdownPhase>('ready');
   const left=React.useRef(seconds*1000);
   const deadline=React.useRef(0);
   const phaseRef=React.useRef(phase);
@@ -26,6 +29,11 @@ export function useCountdown(seconds = 120) {
     left.current=Math.max(0,deadline.current-performance.now());setRemaining(Math.ceil(left.current/1000));
     phaseRef.current=left.current ? 'paused' : 'done';setPhase(phaseRef.current);
   }
+  function stop() {
+    if(phase!=='speaking') return;
+    left.current=Math.max(0,deadline.current-performance.now());setRemaining(Math.ceil(left.current/1000));
+    phaseRef.current='done';setPhase('done');
+  }
   function reset() {left.current=seconds*1000;phaseRef.current='ready';setPhase('ready');setRemaining(seconds);}
-  return {remaining,phase,start,pause,reset};
+  return {remaining,phase,start,pause,stop,reset};
 }

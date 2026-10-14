@@ -14,6 +14,7 @@ import {
   Text,
 } from '../components/ui';
 import type { TabOption } from '../components/ui';
+import { Conversation } from './Conversation';
 
 /**
  * Internal showcase of every distinct question type on the platform.
@@ -25,6 +26,7 @@ type ShowcaseEntry = ExerciseItem & {
   choices?: Choice[];
   tokens?: string[];
   expected?: string;
+  example?: string;
   correctKey?: string;
   context?: string;
   skill?: string;
@@ -185,13 +187,13 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
     },
   },
   {
-    id: 'dictation',
-    label: 'Dictation',
-    description: 'Listen to the audio and type exactly what you hear.',
+    id: 'listen_repeat',
+    label: 'Listen & repeat',
+    description: 'Listen to the audio, speak it back, or type what you heard. Reveal the words when ready.',
     entry: {
       id: 'showcase-dictation-1',
       item_kind: 'content_item',
-      type: 'dictation',
+      type: 'listen_repeat',
       level: 'B1',
       skill: 'listening',
       prompt: 'Type what you hear.',
@@ -201,27 +203,6 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
           kind: 'audio',
           url: 'https://upload.wikimedia.org/wikipedia/commons/c/c8/Fr-bonjour.ogg',
           transcript: 'Bonjour',
-        },
-      ],
-    },
-  },
-  {
-    id: 'pronunciation',
-    label: 'Pronunciation',
-    description: 'Listen, say the word aloud, then check yourself.',
-    entry: {
-      id: 'showcase-pronunciation-1',
-      item_kind: 'content_item',
-      type: 'pronunciation_drill',
-      level: 'A1',
-      skill: 'speaking',
-      prompt: 'Pronounce this word:',
-      expected: 'bonjour',
-      media: [
-        {
-          kind: 'audio',
-          url: 'https://upload.wikimedia.org/wikipedia/commons/c/c8/Fr-bonjour.ogg',
-          transcript: 'bonjour',
         },
       ],
     },
@@ -247,39 +228,37 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
   },
   {
     id: 'speaking',
-    label: 'Speaking',
-    description: 'Speak on the topic — cover the key points, then try a follow-up.',
+    label: 'Read aloud',
+    description: 'Read the exact text on screen and get tentative pronunciation hints.',
     entry: {
       id: 'showcase-speaking-1',
       item_kind: 'content_item',
       type: 'speaking_prompt',
       level: 'B1',
       skill: 'speaking',
-      prompt: 'Talk about your favorite hobby for 30 seconds.',
-      expected_points: [
-        'Name the hobby and say why you enjoy it',
-        'Mention how often you do it',
-        'Describe a memorable moment related to it',
-      ],
-      follow_up_questions: [
-        'Would you recommend this hobby to a friend? Why?',
-        'How did you first get interested in it?',
-      ],
+      prompt: 'Je parle français avec mes amis.',
+      expected: 'Je parle français avec mes amis.',
     },
   },
   {
     id: 'free_text',
     label: 'Free Text',
-    description: 'Type a free-form answer to the question.',
+    description: 'Respond freely by typing or speaking. Get specific content feedback with quotes from your answer.',
     entry: {
       id: 'showcase-freetext-1',
       item_kind: 'content_item',
       type: 'free_text',
-      level: 'A1',
-      skill: 'vocabulary',
-      prompt: 'What is the capital of France?',
-      expected: 'Paris',
+      level: 'A2',
+      skill: 'writing',
+      prompt: 'Décris un endroit que tu aimes dans ta ville.',
+      example: 'J’aime le parc près de chez moi. Il est calme et j’y vais le week-end.',
     },
+  },
+  {
+    id: 'conversation',
+    label: 'Conversation',
+    description: 'Two-minute scenario with one recording timer and content feedback. Type an answer to preview feedback.',
+    entry: { id: 'showcase-conversation', item_kind: 'content_item', type: 'conversation_preview', prompt: 'Talk about your weekend.' },
   },
 ];
 
@@ -336,19 +315,20 @@ export const simulateSubmit: SimulateSubmit = (entry, response): AttemptResult =
         given.every((token, index) => normalizeAnswer(token) === expected[index]);
       return { correct, reveal: correct ? null : sample.expected ?? null };
     }
-    case 'spelling':
-    case 'cloze':
     case 'free_text':
-    case 'dictation': {
+      return typeof response === 'object' && response !== null && 'text' in response && typeof response.text === 'string' && Boolean(response.text.trim())
+        ? { correct: true, reveal: null } : { correct: false, reveal: null };
+    case 'spelling':
+    case 'cloze': {
       // Server 'normalized_text' evaluator.
       if (typeof response !== 'string') return { correct: false, reveal: sample.expected ?? null };
       if (normalizeAnswer(response) === normalizeAnswer(sample.expected ?? '')) return { correct: true, reveal: null };
       return { correct: false, reveal: sample.expected ?? null };
     }
-    case 'pronunciation_drill':
-      // Self-marked: "Got it" submits the word (correct), "Not yet" submits '' (incorrect).
-      if (typeof response !== 'string') return { correct: false, reveal: null };
-      return { correct: normalizeAnswer(response) === normalizeAnswer(sample.expected ?? ''), reveal: null };
+    case 'listen_repeat':
+      if (typeof response !== 'string') return { correct: true, reveal: null };
+      return normalizeAnswer(response) === normalizeAnswer(sample.expected ?? '')
+        ? { correct: true, reveal: null } : { correct: false, reveal: sample.expected ?? null };
     case 'writing_prompt':
       // Server 'rubric' evaluator: any non-empty response counts as completed.
       return { correct: true, reveal: null };
@@ -386,15 +366,22 @@ export function QuestionTypes({ token }: QuestionTypesProps): React.JSX.Element 
           ariaLabel="Question types"
         />
       </Box>
-      <Box className="question-types-body">
+      <Box className={active.id === 'conversation' ? 'question-types-body question-types-conversation' : 'question-types-body'}>
         <Text as="p" variant="lede">{active.description}</Text>
         <Text as="p" variant="note">Simulated submissions — answers are graded locally, nothing is saved.</Text>
-        <ExerciseCard
+        {active.id === 'conversation' ? <Conversation previewData={{
+          scenario: 'Plan a weekend with a friend',
+          message: 'Suggest an activity and explain why you would enjoy it.',
+          targets: [
+            { id: 'invitation', section: 'A2', title: 'Make an invitation', text: 'Invite your friend using a complete sentence.' },
+            { id: 'reason', section: 'B1', title: 'Give a reason', text: 'Say why this activity appeals to you.' },
+          ],
+        }} /> : <ExerciseCard
           key={active.id}
           entry={active.entry}
           token={token}
           simulateSubmit={simulateSubmit}
-        />
+        />}
       </Box>
     </Page>
   );

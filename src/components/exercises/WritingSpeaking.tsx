@@ -146,4 +146,4 @@ export function WritingPrompt({ entry, token, onResult, simulateSubmit }: Writin
   );
 }
 
-export { SpeakingPrompt } from './SpeakingPrompt';
+export { ReadAloud } from './ReadAloud';

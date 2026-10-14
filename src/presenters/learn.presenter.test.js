@@ -22,15 +22,15 @@ assert(
   'SKILL_TABS: every tab has a French label and an English gloss'
 );
 
-// Every skill tab maps to at least one item type; no type maps to two tabs.
+// Listen & repeat builds both listening and speaking, so it appears in both tabs.
 {
   const allTypes = Object.values(SKILL_ITEM_TYPES).flat();
   assert(allTypes.length > 0, 'SKILL_ITEM_TYPES: tabs map to item types');
-  assert(new Set(allTypes).size === allTypes.length, 'SKILL_ITEM_TYPES: no item type maps to two tabs');
+  assert(allTypes.length - new Set(allTypes).size === 2, 'SKILL_ITEM_TYPES: listen_repeat and free_text span two tabs');
+  assert(SKILL_ITEM_TYPES.ecouter.includes('listen_repeat') && SKILL_ITEM_TYPES.parler.includes('listen_repeat'), 'SKILL_ITEM_TYPES: listen_repeat spans listening and speaking');
 }
 
-assert(skillForItemType('dictation') === 'ecouter', "skillForItemType: dictation -> ecouter");
-assert(skillForItemType('pronunciation_drill') === 'ecouter', "skillForItemType: pronunciation_drill -> ecouter");
+assert(skillForItemType('listen_repeat') === 'ecouter', "skillForItemType: listen_repeat -> ecouter");
 assert(skillForItemType('reading') === 'lire', "skillForItemType: reading -> lire");
 assert(skillForItemType('multiple_choice') === 'lire', "skillForItemType: multiple_choice -> lire");
 assert(skillForItemType('writing_prompt') === 'ecrire', "skillForItemType: writing_prompt -> ecrire");
@@ -40,7 +40,7 @@ assert(skillForItemType('unknown_future_type') === null, 'skillForItemType: unkn
 assert(skillForItemType(null) === null, 'skillForItemType: null-safe');
 
 assert(
-  countsForSkill({ dictation: 5, pronunciation_drill: 3, reading: 7 }, 'ecouter') === 8,
+  countsForSkill({ listen_repeat: 8, reading: 7 }, 'ecouter') === 8,
   'countsForSkill: sums the skill tab\'s item types'
 );
 assert(countsForSkill({}, 'lire') === 0, 'countsForSkill: missing data -> 0');

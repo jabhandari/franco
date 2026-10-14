@@ -10,7 +10,8 @@ assert.deepEqual(aggregates.find(row => row.skill==='lire' && row.level==='B1'),
 assert.equal(aggregates.find(row => row.skill==='parler' && row.level==='C2').percent,0);
 assert.ok(completeSkillAggregates([]).every(row => row.exercises_total===0 && row.exercises_done===0 && row.percent===0));
 const itemTypes = Object.values(LEARNING_SKILL_ITEM_TYPES).flat();
-assert.equal(new Set(itemTypes).size,itemTypes.length,'inventory taxonomy cannot double-count item types');
+assert.equal(itemTypes.length - new Set(itemTypes).size,2,'Listen & repeat and Free Text span two skill tabs');
+assert.match(SKILL_AGGREGATES_SQL, /item_type IN \('listen_repeat','free_text'\)/);
 
 // Query orchestration must bind the session user on every read and return
 // real rows rather than the legacy hard-coded arrays.

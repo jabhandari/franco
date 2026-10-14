@@ -331,7 +331,7 @@ export type ReportAttemptExtra = {
 /** The learner's answer payload. Renderers pass: the chosen choice key or
  *  typed text (string), the ordered tokens (string[]), or the
  *  speaking-completion object for speaking items. */
-export type AttemptResponse = string | string[] | SpeakingCompletion;
+export type AttemptResponse = string | string[] | SpeakingCompletion | { text: string; modality: 'typed' | 'spoken'; transcription_id?: string };
 
 /** POST /api/me/attempts request body. */
 export type AttemptRequest = {
@@ -621,8 +621,25 @@ export type SpeechTranscribeResponse = {
   transcript: string;
   duration_seconds: number;
   feedback: SpeechFeedback;
+  pronunciation: { mode: 'recording_hints'; unclear_words: Array<{
+    word: string; start: number; end: number; reason: 'uncertain_audio' | 'slow_audio';
+  }> };
   quota: SpeechQuota;
 };
+
+export type ContentFeedbackResult = {
+  feedback: {
+    what_went_well: Array<{ point: string; quote: string }>;
+    needs_work: Array<{ point: string; quote: string }>;
+  };
+  model: string;
+};
+
+export function requestContentFeedback(input: {
+  response: string; prompt: string; context?: string; targets?: string[]; level?: string; language?: 'en' | 'fr';
+}, token?: string | null): Promise<ContentFeedbackResult> {
+  return apiPost<ContentFeedbackResult>('/api/me/content-feedback', input, token);
+}
 
 /** The speaking-completion token reportAttempt sends back for speaking items. */
 export type SpeakingCompletion = {
@@ -960,6 +977,13 @@ export async function uploadSpeech(itemId: string, audio: Blob, token: string, p
     method: 'POST',
     headers: { authorization: 'Bearer ' + token, 'content-type': audio.type },
     body: audio,
+  });
+  return parseApiResponse(response);
+}
+
+export async function uploadConversationSpeech(audio: Blob, token: string): Promise<SpeechTranscribeResponse> {
+  const response = await fetch(apiUrl('/api/speech/conversation/transcribe'), {
+    method: 'POST', headers: { authorization: 'Bearer ' + token, 'content-type': audio.type }, body: audio,
   });
   return parseApiResponse(response);
 }

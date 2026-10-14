@@ -3,8 +3,9 @@ import type { AttemptItemKind, AttemptResponse } from '../../api/client';
 import { MultipleChoice } from './MultipleChoice';
 import { WordOrder } from './WordOrder';
 import { Spelling } from './Spelling';
-import { PronunciationDrill } from './Listening';
-import { WritingPrompt, SpeakingPrompt } from './WritingSpeaking';
+import { FreeText } from './FreeText';
+import { ListenRepeat } from './Listening';
+import { WritingPrompt, ReadAloud } from './WritingSpeaking';
 import type { MediaAsset } from './Listening';
 import * as UIRaw from '../ui/index.js';
 
@@ -44,6 +45,9 @@ export type ExerciseItem = {
   type?: string;
   level?: string;
   prompt?: string;
+  context?: string;
+  instructions?: string;
+  example?: string;
   media?: MediaAsset[];
   expectedPoints?: string[];
   expected_points?: string[];
@@ -105,20 +109,23 @@ export function ExerciseCard({ entry, token, onResult, compactListening = false,
       break;
     case 'spelling':
     case 'cloze':
-    case 'free_text':
       rendered = <Spelling entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
-    case 'dictation':
-      rendered = <Spelling entry={item} token={token} onResult={onResult} audioUrl={(item.media || [])[0]?.url} simulateSubmit={simulateSubmit} />;
+    case 'free_text':
+      rendered = <FreeText entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
+    // Legacy labels use the same renderer until the startup migration maps
+    // their content items to listen_repeat. This is one shared switch arm.
+    case 'listen_repeat':
+    case 'dictation':
     case 'pronunciation_drill':
-      rendered = <PronunciationDrill entry={item} token={token} onResult={onResult} compact={compactListening} sequence={sequence} simulateSubmit={simulateSubmit} />;
+      rendered = <ListenRepeat entry={item} token={token} onResult={onResult} compact={compactListening} sequence={sequence} simulateSubmit={simulateSubmit} />;
       break;
     case 'writing_prompt':
       rendered = <WritingPrompt entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
     case 'speaking_prompt':
-      rendered = <SpeakingPrompt entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
+      rendered = <ReadAloud entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
     case 'multiple_choice':
     case 'reading':
