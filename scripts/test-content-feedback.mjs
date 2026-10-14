@@ -23,7 +23,7 @@ const result = await contentFeedback({ userId: 'me', input,
   },
 });
 assert.deepEqual(calls, ['https://api.mistral.ai/v1/chat/completions', 'https://api.groq.com/openai/v1/chat/completions']);
-assert.equal(result.model, 'qwen/qwen3-32b');
+assert.equal(result.model, 'qwen/qwen3.8-27b');
 assert.equal(completed[0][1][1], 123);
 
 let rolledBack = false;

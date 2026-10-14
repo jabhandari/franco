@@ -2,7 +2,7 @@ import React from 'react';
 import { apiGet } from '../api/client';
 import type { ContentItemsResponse, ContentReviewQueueItem, ExamQuestion, ExamQuestionsResponse } from '../api/client';
 import type { SkillId, CefrLevel } from '../types';
-import { skillForItemType } from '../presenters/learn.presenter';
+import { itemBelongsToSkill } from '../presenters/learn.presenter';
 import { getErrorMessage } from '../presenters/format.presenter';
 import { EXAM_SKILLS } from '../../shared/learning-skills';
 
@@ -25,7 +25,7 @@ export function usePracticeInventory(skill:SkillId,level:CefrLevel,enabled:boole
         if(!page.items.length) throw new Error('The exercise inventory changed while loading. Please try again.');
         if(cancelled) return [];
       }
-      return items.filter(item=>skillForItemType(item.type)===skill);
+      return items.filter(item=>itemBelongsToSkill(item.type,skill));
     }
     Promise.all([loadContent(),apiGet<ExamQuestionsResponse>(`/api/exam/questions?section=${level}`,token)])
       .then(([items,exam])=>{

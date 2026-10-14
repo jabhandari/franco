@@ -17,7 +17,7 @@ const positive = (name, fallback) => {
 
 export const feedbackConfig = () => ({
   mistralModel: process.env.MISTRAL_FEEDBACK_MODEL || 'mistral-small-latest',
-  groqModel: process.env.GROQ_FEEDBACK_MODEL || 'qwen/qwen3-32b',
+  groqModel: process.env.GROQ_FEEDBACK_MODEL || 'qwen/qwen3.8-27b',
   dailyRequests: positive('SPEECH_FEEDBACK_DAILY_REQUESTS', 10),
   dailyTokens: positive('SPEECH_FEEDBACK_DAILY_TOKENS', 12000),
   maxOutputTokens: positive('SPEECH_FEEDBACK_MAX_OUTPUT_TOKENS', 700),
