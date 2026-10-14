@@ -4,6 +4,7 @@ import { Readable } from 'node:stream';
 process.env.DATABASE_URL ||= 'postgres://unused:unused@127.0.0.1/unused';
 process.env.GROQ_API_KEY = 'test-key';
 const { speechFeedback } = await import('../server/evaluate.js');
+const { pronunciationFeedback } = await import('../shared/pronunciation-feedback.js');
 const {
   SpeechError, audioMime, readAudio, audioDuration, admitSpeech,
   speechConfig, transcribeSpeech, transcriptHash, validateSpeakingCompletion,
@@ -99,9 +100,20 @@ const request = { userId: 'me', item, audio: Buffer.from('audio'), mime: 'audio/
 const success = await transcribeSpeech({ ...request, fetchImpl: async (_url, options) => {
   assert.equal(options.body.get('language'), 'fr');
   assert.equal(options.body.get('model'), config.model);
-  return { ok: true, headers: new Headers(), json: async () => ({ text: 'bonjour' }) };
+  assert.equal(options.body.get('response_format'), 'verbose_json');
+  assert.equal(options.body.get('timestamp_granularities[]'), 'word');
+  return { ok: true, headers: new Headers(), json: async () => ({ text: 'bonjour', words: [{ word: 'bonjour', start: 0, end: 1.5 }] }) };
 } });
 assert.equal(success.feedback.mode, 'word_diff');
+assert.deepEqual(success.pronunciation.unclear_words, []);
+assert.deepEqual(pronunciationFeedback({ words: [
+  { word: 'Je', start: 0, end: 0.2 }, { word: 'parle', start: 0.2, end: 0.6 },
+  { word: 'lentement', start: 0.6, end: 2.1 },
+] }).unclear_words.map((hint) => hint.word), ['lentement']);
+assert.deepEqual(pronunciationFeedback({ words: [{ word: 'bonjour', start: 0, end: 0.4 }],
+  segments: [{ start: 0, end: 0.4, avg_logprob: -1 }] }).unclear_words.map((hint) => hint.reason), ['uncertain_audio']);
+assert.deepEqual(pronunciationFeedback({ words: [{ word: 'bonjour', start: 0, end: 0.4 }],
+  segments: [{ start: 0, end: 0.4, avg_logprob: -0.1 }] }).unclear_words, []);
 assert.equal(completions.at(-1)[1], 'succeeded');
 assert.equal(completions.at(-1)[2].hash, transcriptHash('bonjour'));
 await rejectsCode(transcribeSpeech({ ...request, fetchImpl: async () => ({ ok: true, headers: new Headers(), json: async () => ({ text: '' }) }) }), 'speech_no_speech');

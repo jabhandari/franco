@@ -621,6 +621,9 @@ export type SpeechTranscribeResponse = {
   transcript: string;
   duration_seconds: number;
   feedback: SpeechFeedback;
+  pronunciation: { mode: 'recording_hints'; unclear_words: Array<{
+    word: string; start: number; end: number; reason: 'uncertain_audio' | 'slow_audio';
+  }> };
   quota: SpeechQuota;
 };
 

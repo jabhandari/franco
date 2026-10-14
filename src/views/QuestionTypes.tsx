@@ -389,6 +389,12 @@ export function QuestionTypes({ token }: QuestionTypesProps): React.JSX.Element 
       <Box className="question-types-body">
         <Text as="p" variant="lede">{active.description}</Text>
         <Text as="p" variant="note">Simulated submissions — answers are graded locally, nothing is saved.</Text>
+        {active.id === 'speaking' && <Box className="speech-feedback" aria-label="Pronunciation feedback example">
+          <Text as="strong">Pronunciation feedback example</Text>
+          <Text>These words sounded unclear — try again</Text>
+          <Text>français</Text>
+          <Text className="speaking-feedback-note">This is a sample of a tentative recording hint. Pauses and microphone noise can affect it.</Text>
+        </Box>}
         <ExerciseCard
           key={active.id}
           entry={active.entry}

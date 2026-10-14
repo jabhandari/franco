@@ -86,6 +86,9 @@ export type TranscriptionResult = {
   transcript?: string;
   transcription_id?: string | number | null;
   feedback?: SpeechFeedback;
+  pronunciation?: { mode: 'recording_hints'; unclear_words: Array<{
+    word: string; start: number; end: number; reason: 'uncertain_audio' | 'slow_audio';
+  }> };
   quota?: {
     user_requests_remaining_today?: number;
     user_audio_seconds_remaining_today?: number;
@@ -310,6 +313,11 @@ export function SpeakingPrompt({ entry, token, onResult, simulateSubmit }: Speak
               {(shownFeedback.heard || []).some((word) => word.status === 'extra') && <WordTokens title="What was heard" tokens={shownFeedback.heard || []} />}
               <Text className="speaking-feedback-note">Green: matched · Red: not heard · Amber: extra. This reflects the transcript, not a pronunciation grade.</Text>
             </> : <Text>{transcription.transcript}</Text>}
+            {transcription.pronunciation && transcription.pronunciation.unclear_words.length > 0 && <Box className="speaking-pronunciation-hints">
+              <Text as="strong">These words sounded unclear — try again</Text>
+              <Text>{transcription.pronunciation.unclear_words.map((hint) => hint.word).join(' · ')}</Text>
+              <Text className="speaking-feedback-note">This is a tentative recording hint. Pauses and microphone noise can affect it.</Text>
+            </Box>}
           </Box>}
           {quota && <Box as="details" className="speaking-usage"><Box as="summary">Daily usage</Box><Text>{quota.user_requests_remaining_today} requests and {Math.floor(quota.user_audio_seconds_remaining_today)} audio seconds remain today.</Text></Box>}
           {completionError && <Text className="error-message" role="alert">{completionError}</Text>}
