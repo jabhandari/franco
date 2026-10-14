@@ -53,6 +53,14 @@ export function itemBelongsToSkill(itemType: string | null | undefined, skill: S
   return typeof itemType === 'string' && SKILL_ITEM_TYPES[skill].includes(itemType.trim().toLowerCase());
 }
 
+// Practice requests only the selected skill's content types. The endpoint
+// accepts a comma-separated types filter and paginates the filtered result.
+export const PRACTICE_PAGE_SIZE = 40;
+export function practiceItemsUrl(skill: SkillId, level: string, offset = 0, limit = PRACTICE_PAGE_SIZE): string {
+  const types = encodeURIComponent(SKILL_ITEM_TYPES[skill].join(','));
+  return `/api/content/v1/items?level=${encodeURIComponent(level)}&types=${types}&limit=${limit}&offset=${offset}`;
+}
+
 /**
  * Item-counts payload from GET /api/content/v1/item-counts
  * ({ byType: { <item_type>: <count> } }).

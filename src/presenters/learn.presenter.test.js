@@ -4,6 +4,7 @@ import {
   SKILL_ITEM_TYPES,
   skillForItemType,
   itemBelongsToSkill,
+  practiceItemsUrl,
   countsForSkill,
   levelMastery,
   MASTERED_THRESHOLD,
@@ -42,6 +43,8 @@ assert(skillForItemType(null) === null, 'skillForItemType: null-safe');
 assert(itemBelongsToSkill('listen_repeat', 'ecouter') && itemBelongsToSkill('listen_repeat', 'parler'), 'Listen & Repeat appears in Listening and Speaking inventories');
 assert(itemBelongsToSkill('free_text', 'ecrire') && itemBelongsToSkill('free_text', 'parler'), 'Free Text appears in Writing and Speaking inventories');
 assert(!itemBelongsToSkill('reading', 'parler') && !itemBelongsToSkill(null, 'parler'), 'Speaking excludes unrelated and missing types');
+assert(practiceItemsUrl('parler', 'B1').includes('types=speaking_prompt%2Clisten_repeat%2Cfree_text&limit=40&offset=0'), 'Practice queries only Speaking types in a bounded first page');
+assert(practiceItemsUrl('lire', 'B2', 40).endsWith('&limit=40&offset=40'), 'Practice can request the next page without reloading the level');
 
 assert(
   countsForSkill({ listen_repeat: 8, reading: 7 }, 'ecouter') === 8,
