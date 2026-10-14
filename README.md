@@ -118,6 +118,8 @@ The full FRA-10 implementation and setup guide is [docs/FRA-10-speaking-transcri
 
 Copy the speech variables from [.env.example](.env.example) into the API environment, set GROQ_API_KEY there, and set SPEECH_TRANSCRIPTION_ENABLED=true. Keep the key out of Vite variables and browser code. The API startup migration creates the usage ledger; the equivalent SQL is in [supabase/migrations/002_speech_transcriptions.sql](supabase/migrations/002_speech_transcriptions.sql) for manual deployment. Speech recording requires HTTPS or localhost. The six original speaking tasks include short model phrases for guided word comparison; open answers show a transcript without a correctness score. When recording is unavailable, speaking prompts can still be completed without it.
 
+Content feedback uses `MISTRAL_API_KEY` on the API server as its primary provider and `GROQ_API_KEY` for the Qwen fallback. `MISTRAL_FEEDBACK_MODEL` and `GROQ_FEEDBACK_MODEL` allow model changes without a deploy. Configure the `SPEECH_FEEDBACK_*` limits in [.env.example](.env.example) to cap each learner's daily requests and tokens. The API logs the serving model but never the learner's answer. Neither provider key belongs in Cloudflare Pages or a `VITE_` variable.
+
 ## Learner API (implemented)
 
 - `GET /api/speech/status` — authenticated transcription availability

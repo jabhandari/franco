@@ -78,6 +78,8 @@ export async function migrate() {
     CREATE TABLE IF NOT EXISTS speech_transcriptions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,item_id TEXT REFERENCES content_items(id) ON DELETE SET NULL,model TEXT NOT NULL,duration_seconds DOUBLE PRECISION NOT NULL CHECK (duration_seconds > 0),status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','succeeded','no_speech','provider_error')),provider_request_id TEXT,error_code TEXT,transcript_hash TEXT,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),completed_at TIMESTAMPTZ);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_user_time_idx ON speech_transcriptions(user_id,created_at DESC);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_time_idx ON speech_transcriptions(created_at DESC);
+    CREATE TABLE IF NOT EXISTS content_feedback_requests (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,model TEXT NOT NULL,estimated_tokens INTEGER NOT NULL,used_tokens INTEGER NOT NULL DEFAULT 0,status TEXT NOT NULL DEFAULT 'pending',created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
+    CREATE INDEX IF NOT EXISTS content_feedback_requests_user_time_idx ON content_feedback_requests(user_id,created_at DESC);
     -- FRA-44: one row per learner per active (learner-local) day, rolled up
     -- from learning_attempts by the attempts handler. Streaks and the
     -- activity heatmap derive from this table at read time.
@@ -103,7 +105,7 @@ ALTER TABLE public.learner_lesson_positions ENABLE ROW LEVEL SECURITY;
 
     -- Match the private-data migrations on fresh or existing databases.
     DO $$ DECLARE table_name TEXT; BEGIN
-      FOREACH table_name IN ARRAY ARRAY['email_tokens','auth_email_requests','users','sessions','learner_profiles','user_skill_estimates','attempts','mistakes','learning_attempts','learner_item_state','learner_concept_mastery','learner_activity_days','speech_transcriptions','content_api_keys','content_reports','content_sources','example_sentences','exercise_items','exam_questions','learning_topics','tv5_exercises','concepts','schema_migrations','cefr_levels','content_batches','content_items','content_concepts','content_revisions','content_tags','tags','media_assets','content_duplicates','content_reviews','concept_prerequisites'] LOOP
+      FOREACH table_name IN ARRAY ARRAY['email_tokens','auth_email_requests','users','sessions','learner_profiles','user_skill_estimates','attempts','mistakes','learning_attempts','learner_item_state','learner_concept_mastery','learner_activity_days','speech_transcriptions','content_feedback_requests','content_api_keys','content_reports','content_sources','example_sentences','exercise_items','exam_questions','learning_topics','tv5_exercises','concepts','schema_migrations','cefr_levels','content_batches','content_items','content_concepts','content_revisions','content_tags','tags','media_assets','content_duplicates','content_reviews','concept_prerequisites'] LOOP
         IF to_regclass(format('public.%I',table_name)) IS NOT NULL THEN
           EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY',table_name);
         END IF;
