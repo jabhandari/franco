@@ -44,6 +44,24 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
     recorder.cancelRecording(); setHeard(null); setError(''); setMode(next);
   }
 
+  function useSpokenInput() {
+    if (busy || recorder.phase === 'requesting') return;
+    if (mode !== 'spoken') choose('spoken');
+    if (simulateSubmit) {
+      setHeard({
+        transcription_id: 'preview', transcript: 'J’aime le parc parce que je peux me promener avec mes amis.', duration_seconds: 5,
+        feedback: { mode: 'transcript_only' }, pronunciation: { mode: 'recording_hints', unclear_words: [] },
+        quota: { user_requests_remaining_today: 0, user_audio_seconds_remaining_today: 0, resets_at: '' },
+      });
+      return;
+    }
+    if (recorder.phase === 'recording') recorder.stopRecording();
+    else if (available && recorder.browserSupported) {
+      if (recorder.phase === 'ready') { recorder.cancelRecording(); setHeard(null); }
+      void recorder.startRecording();
+    }
+  }
+
   async function saveResponse(response: FreeformResponse) {
     try {
       const saved: AttemptResult = simulateSubmit ? await simulateSubmit(entry, response)
@@ -82,22 +100,17 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
       <Text className="speaking-task-note">{GUIDANCE[entry.level || 'A1'] || GUIDANCE.A1}</Text>
       {entry.example && <Box as="details" className="speaking-followups"><Box as="summary">See an example</Box><Text>{entry.example}</Text></Box>}
       {!feedback && <>
-        <AnswerModePicker value={mode} onChange={choose} disabled={busy} />
+        <AnswerModePicker value={mode} onChange={choose} onSpokenAction={useSpokenInput} disabled={busy || recorder.phase === 'requesting'}
+          spokenLabel={simulateSubmit ? 'Use sample recording' : recorder.phase === 'recording' ? 'Finish recording' : recorder.phase === 'ready' ? 'Record again' : 'Start recording'} />
         {mode === 'typed' ? <Textarea rows={7} value={value} onChange={(event) => setValue(event.target.value)} placeholder="Write your answer in French…" />
-          : <Box className="answer-recording">
-            {simulateSubmit && !heard && <Button variant="primary" onClick={() => setHeard({
-              transcription_id: 'preview', transcript: 'J’aime le parc parce que je peux me promener avec mes amis.', duration_seconds: 5,
-              feedback: { mode: 'transcript_only' }, pronunciation: { mode: 'recording_hints', unclear_words: [] },
-              quota: { user_requests_remaining_today: 0, user_audio_seconds_remaining_today: 0, resets_at: '' },
-            })}>Use sample recording</Button>}
+          : <>
             {!available && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable. You can type your answer instead.</Text>}
-            {available && recorder.browserSupported && recorder.phase === 'idle' && !heard && <Button variant="primary" onClick={recorder.startRecording}>Start recording</Button>}
-            {recorder.phase === 'recording' && <><Text role="status">Recording · {recorder.elapsed}s / 60s</Text><Button variant="primary" onClick={recorder.stopRecording}>Finish recording</Button></>}
+            {recorder.phase === 'recording' && <Text role="status">Recording · {recorder.elapsed}s / 60s</Text>}
             {recorder.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
-            {recorder.phase === 'ready' && <><Text as="strong">Listen to your recording</Text><AudioPlayer src={recorder.previewUrl} /><Button variant="text" disabled={busy} onClick={() => { recorder.cancelRecording(); setHeard(null); }}>Record again</Button></>}
+            {recorder.phase === 'ready' && <Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={recorder.previewUrl} /></Box>}
             {heard && !recorder.previewUrl && <Text className="speaking-task-note">Sample answer ready for feedback.</Text>}
-          </Box>}
-        {(mode === 'typed' ? Boolean(value.trim()) : Boolean(heard || recorder.blob)) && <Box className="answer-submit"><Button variant="primary" disabled={busy} onClick={submit}>{busy ? 'Getting feedback…' : 'Get feedback'}</Button></Box>}
+          </>}
+        {(mode === 'typed' ? Boolean(value.trim()) : Boolean(heard || recorder.blob)) && <Box className="answer-submit"><Button variant="primary" wide disabled={busy} onClick={submit}>{busy ? 'Getting feedback…' : 'Get feedback'}</Button></Box>}
       </>}
       {feedback && <Box className="content-feedback" aria-live="polite">
         <Text as="h3">What went well</Text>
