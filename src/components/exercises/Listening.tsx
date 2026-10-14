@@ -66,6 +66,12 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
       {!revealed && <Button variant="text" disabled={!listened} onClick={() => setRevealed(true)}>Show words</Button>}
       {revealed && <Box className="pronunciation-reveal"><Text as="span" className="pronunciation-answer-label">THE WORDS</Text><Text as="strong" className="pronunciation-word">{phrase || 'No transcript available'}</Text></Box>}
       {!result && <Box className="listen-repeat-actions">
+        {simulateSubmit && !heard && <Button variant="primary" disabled={!listened} onClick={() => setHeard({
+          transcription_id: 'preview', transcript: phrase, duration_seconds: 2,
+          feedback: { mode: 'word_diff', expected: [], heard: [] },
+          pronunciation: { mode: 'recording_hints', unclear_words: [{ word: phrase || 'Bonjour', start: 0, end: 1, reason: 'uncertain_audio' }] },
+          quota: { user_requests_remaining_today: 0, user_audio_seconds_remaining_today: 0, resets_at: '' },
+        })}>Preview recording feedback</Button>}
         {available && audio.browserSupported && !typing && <>
           {audio.phase === 'idle' && <Button variant="primary" onClick={audio.startRecording}>Record yourself</Button>}
           {audio.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
