@@ -74,6 +74,10 @@ export async function migrate() {
     ALTER TABLE learning_attempts ALTER COLUMN item_id DROP NOT NULL;
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS item_kind TEXT NOT NULL DEFAULT 'content_item';
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS legacy_ref TEXT;
+    ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS item_type TEXT;
+    UPDATE learning_attempts a SET item_type=i.item_type FROM content_items i WHERE a.item_id=i.id AND a.item_type IS NULL;
+    -- Keep the historical item type on attempts, then consolidate the live catalog.
+    UPDATE content_items SET item_type='listen_repeat' WHERE item_type IN ('dictation','pronunciation_drill');
     CREATE INDEX IF NOT EXISTS attempts_legacy_idx ON learning_attempts(user_id, item_kind, legacy_ref);
     CREATE TABLE IF NOT EXISTS speech_transcriptions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,item_id TEXT REFERENCES content_items(id) ON DELETE SET NULL,model TEXT NOT NULL,duration_seconds DOUBLE PRECISION NOT NULL CHECK (duration_seconds > 0),status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','succeeded','no_speech','provider_error')),provider_request_id TEXT,error_code TEXT,transcript_hash TEXT,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),completed_at TIMESTAMPTZ);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_user_time_idx ON speech_transcriptions(user_id,created_at DESC);

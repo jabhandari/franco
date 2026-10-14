@@ -21,7 +21,10 @@ export const PRACTICE_CATALOG_SQL = `
   FROM exam_questions q`;
 
 export const SKILL_AGGREGATES_SQL = `
-  WITH catalog AS (${PRACTICE_CATALOG_SQL}),
+  WITH catalog AS (${PRACTICE_CATALOG_SQL}
+    UNION ALL SELECT 'content_item'::text, i.id, i.cefr_level, 'parler'::text
+    FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision
+    WHERE i.status='published' AND i.item_type='listen_repeat'),
   answered AS (
     SELECT item_kind, COALESCE(item_id,legacy_ref) AS target_id, BOOL_OR(correct) AS correct
     FROM learning_attempts WHERE user_id=$1

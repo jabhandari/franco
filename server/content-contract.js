@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 export const CONTENT_SCHEMA_VERSION = 'content.v1';
-export const CONTENT_TYPES = ['multiple_choice', 'cloze', 'free_text', 'word_order', 'reading', 'listening', 'speaking', 'vocabulary'];
+export const CONTENT_TYPES = ['multiple_choice', 'cloze', 'free_text', 'word_order', 'reading', 'listening', 'speaking', 'vocabulary', 'listen_repeat'];
 export const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const METHODS = ['source', 'human_review', 'heuristic', 'model', 'mixed'];
 const EVALUATORS = ['exact', 'choice', 'normalized_text', 'token_order', 'rubric', 'external'];
@@ -64,7 +64,11 @@ function validateItem(item, index, errors) {
     if (!Array.isArray(item.response.tokens) || item.response.tokens.length < 2) errors.push(issue(`${p}.response.tokens`, 'word_order requires ordered tokens'));
     if (item.evaluation.mode !== 'token_order') errors.push(issue(`${p}.evaluation.mode`, 'word_order requires the token_order evaluator'));
   }
-  if (['listening', 'speaking'].includes(item.type) && (!Array.isArray(item.media) || !item.media.some(media => media.kind === 'audio'))) errors.push(issue(`${p}.media`, `${item.type} requires an audio media reference`));
+  if (item.type === 'listen_repeat') {
+    if (typeof item.response.answer !== 'string' || !item.response.answer.trim()) errors.push(issue(`${p}.response.answer`, 'listen_repeat requires the expected phrase'));
+    if (item.evaluation.mode !== 'normalized_text') errors.push(issue(`${p}.evaluation.mode`, 'listen_repeat requires normalized_text for typed answers'));
+  }
+  if (['listening', 'speaking', 'listen_repeat'].includes(item.type) && (!Array.isArray(item.media) || !item.media.some(media => media.kind === 'audio'))) errors.push(issue(`${p}.media`, `${item.type} requires an audio media reference`));
   for (const field of ['concepts', 'tags']) if (item[field] !== undefined && (!Array.isArray(item[field]) || item[field].some(x => typeof x !== 'string' || !x.trim()))) errors.push(issue(`${p}.${field}`, 'must be an array of non-empty strings'));
   if (item.media !== undefined && (!Array.isArray(item.media) || item.media.some(m => !isObject(m) || typeof m.url !== 'string' || !['audio', 'image', 'video', 'document'].includes(m.kind)))) errors.push(issue(`${p}.media`, 'contains invalid media reference'));
 }

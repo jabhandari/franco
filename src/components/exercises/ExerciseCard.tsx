@@ -3,7 +3,7 @@ import type { AttemptItemKind, AttemptResponse } from '../../api/client';
 import { MultipleChoice } from './MultipleChoice';
 import { WordOrder } from './WordOrder';
 import { Spelling } from './Spelling';
-import { PronunciationDrill } from './Listening';
+import { ListenRepeat } from './Listening';
 import { WritingPrompt, SpeakingPrompt } from './WritingSpeaking';
 import type { MediaAsset } from './Listening';
 import * as UIRaw from '../ui/index.js';
@@ -108,11 +108,10 @@ export function ExerciseCard({ entry, token, onResult, compactListening = false,
     case 'free_text':
       rendered = <Spelling entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
+    case 'listen_repeat':
     case 'dictation':
-      rendered = <Spelling entry={item} token={token} onResult={onResult} audioUrl={(item.media || [])[0]?.url} simulateSubmit={simulateSubmit} />;
-      break;
     case 'pronunciation_drill':
-      rendered = <PronunciationDrill entry={item} token={token} onResult={onResult} compact={compactListening} sequence={sequence} simulateSubmit={simulateSubmit} />;
+      rendered = <ListenRepeat entry={item} token={token} onResult={onResult} compact={compactListening} sequence={sequence} simulateSubmit={simulateSubmit} />;
       break;
     case 'writing_prompt':
       rendered = <WritingPrompt entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;

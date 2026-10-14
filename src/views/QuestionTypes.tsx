@@ -185,13 +185,13 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
     },
   },
   {
-    id: 'dictation',
-    label: 'Dictation',
-    description: 'Listen to the audio and type exactly what you hear.',
+    id: 'listen_repeat',
+    label: 'Listen & repeat',
+    description: 'Listen to the audio, speak it back, or type what you heard. Reveal the words when ready.',
     entry: {
       id: 'showcase-dictation-1',
       item_kind: 'content_item',
-      type: 'dictation',
+      type: 'listen_repeat',
       level: 'B1',
       skill: 'listening',
       prompt: 'Type what you hear.',
@@ -201,27 +201,6 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
           kind: 'audio',
           url: 'https://upload.wikimedia.org/wikipedia/commons/c/c8/Fr-bonjour.ogg',
           transcript: 'Bonjour',
-        },
-      ],
-    },
-  },
-  {
-    id: 'pronunciation',
-    label: 'Pronunciation',
-    description: 'Listen, say the word aloud, then check yourself.',
-    entry: {
-      id: 'showcase-pronunciation-1',
-      item_kind: 'content_item',
-      type: 'pronunciation_drill',
-      level: 'A1',
-      skill: 'speaking',
-      prompt: 'Pronounce this word:',
-      expected: 'bonjour',
-      media: [
-        {
-          kind: 'audio',
-          url: 'https://upload.wikimedia.org/wikipedia/commons/c/c8/Fr-bonjour.ogg',
-          transcript: 'bonjour',
         },
       ],
     },
@@ -338,17 +317,16 @@ export const simulateSubmit: SimulateSubmit = (entry, response): AttemptResult =
     }
     case 'spelling':
     case 'cloze':
-    case 'free_text':
-    case 'dictation': {
+    case 'free_text': {
       // Server 'normalized_text' evaluator.
       if (typeof response !== 'string') return { correct: false, reveal: sample.expected ?? null };
       if (normalizeAnswer(response) === normalizeAnswer(sample.expected ?? '')) return { correct: true, reveal: null };
       return { correct: false, reveal: sample.expected ?? null };
     }
-    case 'pronunciation_drill':
-      // Self-marked: "Got it" submits the word (correct), "Not yet" submits '' (incorrect).
-      if (typeof response !== 'string') return { correct: false, reveal: null };
-      return { correct: normalizeAnswer(response) === normalizeAnswer(sample.expected ?? ''), reveal: null };
+    case 'listen_repeat':
+      if (typeof response !== 'string') return { correct: true, reveal: null };
+      return normalizeAnswer(response) === normalizeAnswer(sample.expected ?? '')
+        ? { correct: true, reveal: null } : { correct: false, reveal: sample.expected ?? null };
     case 'writing_prompt':
       // Server 'rubric' evaluator: any non-empty response counts as completed.
       return { correct: true, reveal: null };

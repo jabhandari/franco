@@ -44,11 +44,12 @@
       "required": ["external_id", "type", "cefr", "prompt", "response", "evaluation"],
       "allOf": [
         { "if": { "properties": { "type": { "const": "multiple_choice" } } }, "then": { "properties": { "response": { "required": ["choices", "answer"] }, "evaluation": { "properties": { "mode": { "const": "choice" } } } } } },
-        { "if": { "properties": { "type": { "const": "word_order" } } }, "then": { "properties": { "response": { "required": ["tokens"] }, "evaluation": { "properties": { "mode": { "const": "token_order" } } } } } }
+        { "if": { "properties": { "type": { "const": "word_order" } } }, "then": { "properties": { "response": { "required": ["tokens"] }, "evaluation": { "properties": { "mode": { "const": "token_order" } } } } } },
+        { "if": { "properties": { "type": { "const": "listen_repeat" } } }, "then": { "properties": { "response": { "required": ["answer"] }, "evaluation": { "properties": { "mode": { "const": "normalized_text" } } } } } }
       ],
       "properties": {
         "external_id": { "type": "string", "minLength": 1, "maxLength": 500 },
-        "type": { "enum": ["multiple_choice", "cloze", "free_text", "word_order", "reading", "listening", "speaking", "vocabulary"] },
+        "type": { "enum": ["multiple_choice", "cloze", "free_text", "word_order", "reading", "listening", "speaking", "vocabulary", "listen_repeat"] },
         "title": { "type": "string", "maxLength": 500 }, "prompt": { "type": "string", "minLength": 1, "maxLength": 20000 }, "instructions": { "type": "string", "maxLength": 10000 }, "context": { "type": "string", "maxLength": 100000 },
         "cefr": { "$ref": "#/$defs/cefr" }, "difficulty": { "$ref": "#/$defs/difficulty" }, "response": { "$ref": "#/$defs/response" }, "evaluation": { "$ref": "#/$defs/evaluation" },
         "concepts": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 200 } }, "tags": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 100 } },
