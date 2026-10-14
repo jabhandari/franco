@@ -85,8 +85,12 @@ export async function migrate() {
     DO $$ BEGIN
       IF NOT EXISTS (SELECT 1 FROM schema_migrations WHERE version='fra-126-free-text') THEN
         UPDATE learning_attempts a SET legacy_ref=a.item_id,item_id=NULL,item_kind='archived_free_text'
-        FROM content_items i WHERE a.item_id=i.id AND i.item_type='free_text';
-        DELETE FROM content_items WHERE item_type='free_text';
+        FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision
+        WHERE a.item_id=i.id AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
+        DELETE FROM content_items i USING content_revisions r
+        WHERE r.item_id=i.id AND r.revision=i.current_revision AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
         UPDATE content_items SET item_type='free_text' WHERE item_type='speaking_prompt';
         INSERT INTO schema_migrations(version) VALUES('fra-126-free-text');
       END IF;

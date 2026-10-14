@@ -120,7 +120,7 @@ Copy the speech variables from [.env.example](.env.example) into the API environ
 
 Content feedback uses `MISTRAL_API_KEY` on the API server as its primary provider and `GROQ_API_KEY` for the Qwen fallback. `MISTRAL_FEEDBACK_MODEL` and `GROQ_FEEDBACK_MODEL` allow model changes without a deploy. Configure the `SPEECH_FEEDBACK_*` limits in [.env.example](.env.example) to cap each learner's daily requests and tokens. The API logs the serving model but never the learner's answer. Neither provider key belongs in Cloudflare Pages or a `VITE_` variable.
 
-`free_text` is an open response: typed answers count toward Writing, spoken answers are transcribed and count toward Speaking, and both use the same content-feedback rubric. New items can carry `response.example` for an optional collapsible example. `speaking_prompt` is now Read aloud: its `prompt` and `response.expected` must contain the same exact phrase. The FRA-126 startup migration archives historical attempts from old short-answer Free Text items, deletes those items, and reclassifies existing open speaking prompts as Free Text once.
+`free_text` is an open response: typed answers count toward Writing, spoken answers are transcribed and count toward Speaking, and both use the same content-feedback rubric. New items can carry `response.example` for an optional collapsible example. `speaking_prompt` is now Read aloud: its `prompt` and `response.expected` must contain the same exact phrase. The FRA-126 startup migration archives historical attempts from legacy exact-answer Free Text items, deletes only those items, and reclassifies existing open speaking prompts as Free Text once.
 
 ## Learner API (implemented)
 
