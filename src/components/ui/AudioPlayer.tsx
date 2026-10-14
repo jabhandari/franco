@@ -24,7 +24,7 @@ export function AudioPlayer({ src, transcript, emptyText }: AudioPlayerProps) {
 
 // A one-tap replay control for short clips. The native player remains for
 // longer recordings; a one-second word does not need a timeline.
-export function ClipPlayer({ src }: { src?: string }) {
+export function ClipPlayer({ src, onPlay }: { src?: string; onPlay?: () => void }) {
   const audioRef = React.useRef<HTMLAudioElement>(null);
   const [played, setPlayed] = React.useState(false);
   const [playing, setPlaying] = React.useState(false);
@@ -33,6 +33,7 @@ export function ClipPlayer({ src }: { src?: string }) {
   async function replay() {
     const audio = audioRef.current;
     if (!audio) return;
+    onPlay?.();
     audio.currentTime = 0;
     try {
       await audio.play();

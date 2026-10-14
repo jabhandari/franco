@@ -7,6 +7,7 @@ import { localDateString, normalizeTimeZone, shiftDate, summarizeActivity } from
 import { evaluate, gradeExamQuestion, gradeExerciseItem, normalizeText } from './evaluate.js';
 import { SpeechError, speechConfig, audioMime, readAudio, audioDuration, transcribeSpeech, validateSpeakingCompletion } from './speech.js';
 import { conversationScenario } from './conversation.js';
+import { contentFeedback, ContentFeedbackError } from './content-feedback.js';
 
 import { googleConfig,beginGoogle,consumeGoogleState,googleStateCookie,stateCookie,googleIdentity,googleReturn,googleAccount } from './google-auth.js';
 
@@ -104,6 +105,7 @@ function shapeContentItem(row, queueKind, mediaByItem) {
   else if (ev.expected !== undefined) entry.expected = ev.expected;
   else if (typeof resp.answer === 'string') entry.expected = resp.answer;
   else if (typeof ev.answer === 'string') entry.expected = ev.answer;
+  if (row.item_type === 'free_text' && typeof resp.example === 'string') entry.example = resp.example;
   return entry;
 }
 
@@ -295,8 +297,33 @@ async function main() {
               try {return json(res,200,await translateText({...input,userId:viewer.id}));}
               catch(error) {if(error instanceof TranslationError) return json(res,error.status,{error:error.message});throw error;}
             }
+            if (req.method === 'POST' && u.pathname === '/api/me/content-feedback') {
+              const viewer = await user(req);
+              if (!viewer) return json(res, 401, { error: 'Authentication required.' });
+              try { return json(res, 200, await contentFeedback({ userId: viewer.id, input: await body(req) })); }
+              catch (error) {
+                if (error instanceof ContentFeedbackError) return json(res, error.status, { code: error.code, error: error.message });
+                throw error;
+              }
+            }
             if (req.method === 'GET' && u.pathname === '/api/health') return json(res, 200, { ok: true, database: 'supabase-postgres' });
             if (req.method === 'GET' && u.pathname === '/api/speech/status') { const viewer = await user(req); if (!viewer) return json(res, 401, { error: 'Authentication required.' }); const config = speechConfig(); return json(res, 200, { available: config.enabled, max_seconds: config.maxSeconds }); }
+            if (req.method === 'POST' && u.pathname === '/api/speech/conversation/transcribe') {
+              const viewer = await user(req);
+              if (!viewer) return json(res, 401, { code: 'speech_auth_required', error: 'Authentication required.' });
+              const config = speechConfig();
+              if (!config.enabled) return json(res, 503, { code: 'speech_unavailable', error: 'Transcription is not available right now.' });
+              try {
+                const { mime, extension } = audioMime(req.headers['content-type']);
+                const audio = await readAudio(req, config.maxBytes);
+                const duration = await audioDuration(audio, mime, 120);
+                return json(res, 200, await transcribeSpeech({ userId: viewer.id, item: { id: null, response_json: {} }, audio, mime, extension, duration, config }));
+              } catch (error) {
+                if (!(error instanceof SpeechError)) throw error;
+                const headers = error.retryAfter ? { 'retry-after': String(error.retryAfter) } : {};
+                return json(res, error.status, { code: error.code, error: error.message }, headers);
+              }
+            }
             if (req.method === 'POST' && u.pathname === '/api/speech/transcribe') {
               const viewer = await user(req);
               if (!viewer) return json(res, 401, { code: 'speech_auth_required', error: 'Authentication required.' });
@@ -305,16 +332,18 @@ async function main() {
               try {
                 const itemId = u.searchParams.get('item_id');
                 if (!itemId) throw new SpeechError(400, 'speech_item_required', 'A speaking exercise is required.');
-                const item = (await query("SELECT i.id,i.external_id,i.item_type,r.response_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE i.id=? AND i.status<>'rejected'", [itemId]))[0];
-                if (!item || item.item_type !== 'speaking_prompt') throw new SpeechError(400, 'speech_wrong_item', 'Choose a speaking exercise to transcribe.');
+                const item = (await query("SELECT i.id,i.external_id,i.item_type,r.response_json,r.evaluation_json FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE i.id=? AND i.status<>'rejected'", [itemId]))[0];
+                if (!item || !['speaking_prompt','listen_repeat','free_text'].includes(item.item_type)) throw new SpeechError(400, 'speech_wrong_item', 'Choose a speaking exercise to transcribe.');
                 const practiceId = u.searchParams.get('practice');
+                if (practiceId && item.item_type !== 'speaking_prompt') throw new SpeechError(400, 'speech_invalid_practice', 'This exercise has no practice phrases.');
                 const lesson = getSpeakingLesson(item.external_id);
                 const practicePhrase = practiceId && lesson?.phrases.find((phrase) => phrase.id === practiceId);
                 if (practiceId && !practicePhrase) throw new SpeechError(400, 'speech_invalid_practice', 'Choose a valid practice phrase for this exercise.');
                 const { mime, extension } = audioMime(req.headers['content-type']);
                 const audio = await readAudio(req, config.maxBytes);
                 const duration = await audioDuration(audio, mime, config.maxSeconds);
-                return json(res, 200, await transcribeSpeech({ userId: viewer.id, item, audio, mime, extension, duration, config, expected: practicePhrase?.french }));
+                const repeatAudio = item.item_type === 'listen_repeat' ? (await query("SELECT transcript FROM media_assets WHERE item_id=? AND kind='audio' AND transcript IS NOT NULL LIMIT 1", [item.id]))[0] : null;
+                return json(res, 200, await transcribeSpeech({ userId: viewer.id, item, audio, mime, extension, duration, config, expected: practicePhrase?.french ?? item.response_json?.expected ?? item.response_json?.answer ?? item.evaluation_json?.expected ?? item.evaluation_json?.answer ?? repeatAudio?.transcript }));
               } catch (error) {
                 if (!(error instanceof SpeechError)) throw error;
                 const headers = error.retryAfter ? { 'retry-after': String(error.retryAfter) } : {};
@@ -424,8 +453,15 @@ async function main() {
                 legacyRow = (await query(`SELECT * FROM ${itemKind === 'exam_question' ? 'exam_questions' : 'exercise_items'} WHERE id=?`, [b.legacy_ref]))[0];
                 if (!legacyRow) return json(res, 404, { error: 'Legacy item not found.' });
               } else return json(res, 400, { error: 'Unknown item_kind.' });
-              if (target?.item_type === 'speaking_prompt') {
+              if (target?.item_type === 'speaking_prompt' || (target?.item_type === 'listen_repeat' && typeof b.response === 'object' && b.response !== null && b.response.transcription_id)) {
                 try { b.response = await validateSpeakingCompletion(b.response, x.id, target.id); }
+                catch (error) {
+                  if (!(error instanceof SpeechError)) throw error;
+                  return json(res, error.status, { code: error.code, error: error.message });
+                }
+              }
+              if (target?.item_type === 'free_text' && b.response?.modality === 'spoken') {
+                try { await validateSpeakingCompletion({ completed: true, transcript: b.response.text, transcription_id: b.response.transcription_id }, x.id, target.id); }
                 catch (error) {
                   if (!(error instanceof SpeechError)) throw error;
                   return json(res, error.status, { code: error.code, error: error.message });
@@ -433,21 +469,25 @@ async function main() {
               }
               let correct; let score;
               if (target) {
-                correct = target.item_type === 'speaking_prompt' ? true : evaluate(target, b.response);
-                if (!correct && target.item_type === 'pronunciation_drill') {
+                const spokenRepeat = target.item_type === 'listen_repeat' && typeof b.response === 'object' && b.response !== null && b.response.transcription_id;
+                const freeTextResponse = target.item_type === 'free_text' && typeof b.response === 'object' && b.response !== null && !Array.isArray(b.response) ? b.response : null;
+                if (target.item_type === 'free_text' && (!freeTextResponse || !['typed','spoken'].includes(freeTextResponse.modality) || typeof freeTextResponse.text !== 'string' || !freeTextResponse.text.trim() || freeTextResponse.text.length > 6000)) return json(res,400,{error:'Enter a valid freeform response.'});
+                correct = (target.item_type === 'speaking_prompt' || spokenRepeat || freeTextResponse) ? true : evaluate(target, target.item_type === 'listen_repeat' && typeof b.response === 'object' && b.response !== null ? b.response.typed_text : b.response);
+                if (!correct && target.item_type === 'listen_repeat') {
                   // Transcript-backed drills carry no expected/answer reference, so
                   // evaluate() rejects every response. Grade against the audio
                   // transcript instead — the same source the client reveals as the
                   // word and submits on a "Got it" self-mark.
                   const audioRow = (await query('SELECT transcript FROM media_assets WHERE item_id=? AND kind=? AND transcript IS NOT NULL LIMIT 1', [target.id, 'audio']))[0];
-                  if (audioRow) correct = normalizeText(b.response) === normalizeText(audioRow.transcript);
+                  if (audioRow) correct = normalizeText(b.response?.typed_text ?? b.response) === normalizeText(audioRow.transcript);
                 }
                 const selfAssessed = !target.evaluation_json?.mode && (target.evaluation_json?.rubric || target.evaluation_json?.expected_points);
-                score = (target.item_type === 'speaking_prompt' || target.evaluation_json?.mode === 'rubric' || selfAssessed) ? null : (correct ? 1 : 0);
+                score = (target.item_type === 'speaking_prompt' || spokenRepeat || freeTextResponse || target.evaluation_json?.mode === 'rubric' || selfAssessed) ? null : (correct ? 1 : 0);
               } else if (itemKind === 'exam_question') { correct = gradeExamQuestion(legacyRow, b.response); score = correct ? 1 : 0; }
               else { correct = gradeExerciseItem(legacyRow, b.response); score = correct ? 1 : 0; }
               const attemptNumber = Number((await query('SELECT COUNT(*)::int AS count FROM learning_attempts WHERE user_id=? AND item_kind=? AND COALESCE(legacy_ref, item_id)=?', [x.id, itemKind, target?.id ?? legacyRow.id]))[0].count) + 1;
-              const attempt = (await query('INSERT INTO learning_attempts(id,user_id,item_id,item_kind,legacy_ref,revision,response_json,evaluation_json,score,duration_ms,correct,attempt_number,session_id,hint_used) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING *', [randomUUID(), x.id, target?.id ?? null, itemKind, legacyRow?.id ?? null, target?.revision ?? 1, JSON.stringify(b.response), JSON.stringify({ correct, evaluator: target?.evaluation_json?.mode ?? itemKind }), score, b.duration_ms ?? null, correct, attemptNumber, b.session_id ?? null, Boolean(b.hint_used)]))[0];
+              const skillId = target?.item_type === 'free_text' ? (b.response.modality === 'spoken' ? 'parler' : 'ecrire') : null;
+              const attempt = (await query('INSERT INTO learning_attempts(id,user_id,item_id,item_kind,legacy_ref,item_type,skill_id,revision,response_json,evaluation_json,score,duration_ms,correct,attempt_number,session_id,hint_used) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING *', [randomUUID(), x.id, target?.id ?? null, itemKind, legacyRow?.id ?? null, target?.item_type ?? null, skillId, target?.revision ?? 1, JSON.stringify(b.response), JSON.stringify({ correct, evaluator: target?.evaluation_json?.mode ?? itemKind }), score, b.duration_ms ?? null, correct, attemptNumber, b.session_id ?? null, Boolean(b.hint_used)]))[0];
               // FRA-44: roll the attempt into the learner's activity day.
               // The client sends its IANA timezone; the day boundary is the
               // learner-local calendar date of the attempt.

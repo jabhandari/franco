@@ -33,7 +33,7 @@ export const SKILL_ITEM_TYPES: Record<SkillId, string[]> = {
 const TYPE_TO_SKILL: Record<string, SkillId> = {};
 for (const tab of SKILL_TABS) {
   for (const type of SKILL_ITEM_TYPES[tab.id]) {
-    TYPE_TO_SKILL[type] = tab.id;
+    TYPE_TO_SKILL[type] ??= tab.id;
   }
 }
 

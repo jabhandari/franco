@@ -21,17 +21,22 @@ export const PRACTICE_CATALOG_SQL = `
   FROM exam_questions q`;
 
 export const SKILL_AGGREGATES_SQL = `
-  WITH catalog AS (${PRACTICE_CATALOG_SQL}),
+  WITH catalog AS (
+    ${PRACTICE_CATALOG_SQL}
+    UNION ALL
+    SELECT 'content_item'::text, i.id, i.cefr_level, 'parler'::text
+    FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision
+    WHERE i.status='published' AND i.item_type IN ('listen_repeat','free_text')),
   answered AS (
-    SELECT item_kind, COALESCE(item_id,legacy_ref) AS target_id, BOOL_OR(correct) AS correct
+    SELECT item_kind, COALESCE(item_id,legacy_ref) AS target_id, skill_id, BOOL_OR(correct) AS correct
     FROM learning_attempts WHERE user_id=$1
-    GROUP BY item_kind, COALESCE(item_id,legacy_ref)
+    GROUP BY item_kind, COALESCE(item_id,legacy_ref), skill_id
   )
   SELECT c.skill, c.level, COUNT(*)::int AS exercises_total,
          COUNT(a.target_id)::int AS exercises_done,
          COUNT(*) FILTER (WHERE a.correct)::int AS exercises_correct
   FROM catalog c
-  LEFT JOIN answered a ON a.item_kind=c.item_kind AND a.target_id=c.id
+  LEFT JOIN answered a ON a.item_kind=c.item_kind AND a.target_id=c.id AND (a.skill_id IS NULL OR a.skill_id=c.skill)
   WHERE c.skill IS NOT NULL AND c.level IN ('A1','A2','B1','B2','C1','C2')
   GROUP BY c.skill,c.level`;
 

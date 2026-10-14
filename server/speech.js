@@ -3,6 +3,7 @@ import { parseBuffer } from 'music-metadata';
 import { pool, query } from './database.js';
 import { speechFeedback } from './evaluate.js';
 import { webmDurationSeconds } from './webm-duration.js';
+import { pronunciationFeedback } from '../shared/pronunciation-feedback.js';
 
 export class SpeechError extends Error {
   constructor(status, code, message, retryAfter = null) {
@@ -94,7 +95,7 @@ export async function audioDuration(audio, mime, maxSeconds, metadataParser = pa
     throw new SpeechError(400, 'speech_invalid_audio', 'The recording could not be read. Please record again.');
   }
   if (duration > maxSeconds) {
-    throw new SpeechError(400, 'speech_too_long', 'Recordings must be 60 seconds or less.');
+    throw new SpeechError(400, 'speech_too_long', `Recordings must be ${maxSeconds} seconds or less.`);
   }
   return duration;
 }
@@ -203,6 +204,8 @@ export async function transcribeSpeech({ userId, item, audio, mime, extension, d
     form.append('model', config.model);
     form.append('language', 'fr');
     form.append('temperature', '0');
+    form.append('response_format', 'verbose_json');
+    form.append('timestamp_granularities[]', 'word');
     const response = await fetchImpl('https://api.groq.com/openai/v1/audio/transcriptions', {
       method: 'POST',
       headers: { authorization: 'Bearer ' + process.env.GROQ_API_KEY },
@@ -238,6 +241,7 @@ export async function transcribeSpeech({ userId, item, audio, mime, extension, d
       transcript,
       duration_seconds: duration,
       feedback: speechFeedback(expected ?? item.response_json?.expected, transcript),
+      pronunciation: pronunciationFeedback(payload),
       quota: { user_requests_remaining_today: admitted.userRequestsRemainingToday, user_audio_seconds_remaining_today: admitted.userSecondsRemainingToday, resets_at: admitted.resetsAt },
     };
   } catch (error) {

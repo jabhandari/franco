@@ -74,10 +74,62 @@ export async function migrate() {
     ALTER TABLE learning_attempts ALTER COLUMN item_id DROP NOT NULL;
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS item_kind TEXT NOT NULL DEFAULT 'content_item';
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS legacy_ref TEXT;
+    -- Nullable for legacy exam/drill attempts; new content attempts snapshot the type.
+    ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS item_type TEXT;
+    ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS skill_id TEXT;
+    UPDATE learning_attempts a SET item_type=i.item_type FROM content_items i WHERE a.item_id=i.id AND a.item_type IS NULL;
+    -- Keep the historical item type on attempts, then consolidate the live catalog.
+    UPDATE content_items SET item_type='listen_repeat' WHERE item_type IN ('dictation','pronunciation_drill');
+    -- FRA-126 is a one-time taxonomy change. Old short-answer Free Text has no
+    -- live learning flow; old open speaking prompts become freeform content.
+    DO $$ BEGIN
+      IF NOT EXISTS (SELECT 1 FROM schema_migrations WHERE version='fra-126-free-text') THEN
+        UPDATE learning_attempts a SET legacy_ref=a.item_id,item_id=NULL,item_kind='archived_free_text'
+        FROM content_items i JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision
+        WHERE a.item_id=i.id AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
+        -- Delete child rows explicitly before the parent DELETE below. migrate()
+        -- creates these FKs ON DELETE CASCADE, but databases built from
+        -- supabase/schema.sql (the schema of record) define them without
+        -- actions — there the parent DELETE would throw and block server
+        -- boot. Scoped to the same legacy items; no-ops when none exist.
+        DELETE FROM content_concepts c USING content_items i, content_revisions r
+        WHERE c.item_id=i.id AND r.item_id=i.id AND r.revision=i.current_revision AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
+        DELETE FROM content_tags t USING content_items i, content_revisions r
+        WHERE t.item_id=i.id AND r.item_id=i.id AND r.revision=i.current_revision AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
+        DELETE FROM media_assets m USING content_items i, content_revisions r
+        WHERE m.item_id=i.id AND r.item_id=i.id AND r.revision=i.current_revision AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
+        DELETE FROM content_duplicates d USING content_items i, content_revisions r
+        WHERE (d.item_id=i.id OR d.candidate_item_id=i.id) AND r.item_id=i.id AND r.revision=i.current_revision AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
+        DELETE FROM content_reviews cr USING content_items i, content_revisions r
+        WHERE cr.item_id=i.id AND r.item_id=i.id AND r.revision=i.current_revision AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
+        DELETE FROM learner_item_state s USING content_items i, content_revisions r
+        WHERE s.item_id=i.id AND r.item_id=i.id AND r.revision=i.current_revision AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
+        UPDATE speech_transcriptions st SET item_id=NULL FROM content_items i, content_revisions r
+        WHERE st.item_id=i.id AND r.item_id=i.id AND r.revision=i.current_revision AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
+        DELETE FROM content_revisions cr USING content_items i, content_revisions r
+        WHERE cr.item_id=i.id AND r.item_id=i.id AND r.revision=i.current_revision AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
+        DELETE FROM content_items i USING content_revisions r
+        WHERE r.item_id=i.id AND r.revision=i.current_revision AND i.item_type='free_text'
+          AND (r.evaluation_json->>'mode' IN ('normalized_text','exact') OR r.response_json ? 'answer');
+        UPDATE content_items SET item_type='free_text' WHERE item_type='speaking_prompt';
+        INSERT INTO schema_migrations(version) VALUES('fra-126-free-text');
+      END IF;
+    END $$;
     CREATE INDEX IF NOT EXISTS attempts_legacy_idx ON learning_attempts(user_id, item_kind, legacy_ref);
     CREATE TABLE IF NOT EXISTS speech_transcriptions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,item_id TEXT REFERENCES content_items(id) ON DELETE SET NULL,model TEXT NOT NULL,duration_seconds DOUBLE PRECISION NOT NULL CHECK (duration_seconds > 0),status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','succeeded','no_speech','provider_error')),provider_request_id TEXT,error_code TEXT,transcript_hash TEXT,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),completed_at TIMESTAMPTZ);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_user_time_idx ON speech_transcriptions(user_id,created_at DESC);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_time_idx ON speech_transcriptions(created_at DESC);
+    CREATE TABLE IF NOT EXISTS content_feedback_requests (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,model TEXT NOT NULL,estimated_tokens INTEGER NOT NULL,used_tokens INTEGER NOT NULL DEFAULT 0,status TEXT NOT NULL DEFAULT 'pending',created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
+    CREATE INDEX IF NOT EXISTS content_feedback_requests_user_time_idx ON content_feedback_requests(user_id,created_at DESC);
     -- FRA-44: one row per learner per active (learner-local) day, rolled up
     -- from learning_attempts by the attempts handler. Streaks and the
     -- activity heatmap derive from this table at read time.
@@ -103,7 +155,7 @@ ALTER TABLE public.learner_lesson_positions ENABLE ROW LEVEL SECURITY;
 
     -- Match the private-data migrations on fresh or existing databases.
     DO $$ DECLARE table_name TEXT; BEGIN
-      FOREACH table_name IN ARRAY ARRAY['email_tokens','auth_email_requests','users','sessions','learner_profiles','user_skill_estimates','attempts','mistakes','learning_attempts','learner_item_state','learner_concept_mastery','learner_activity_days','speech_transcriptions','content_api_keys','content_reports','content_sources','example_sentences','exercise_items','exam_questions','learning_topics','tv5_exercises','concepts','schema_migrations','cefr_levels','content_batches','content_items','content_concepts','content_revisions','content_tags','tags','media_assets','content_duplicates','content_reviews','concept_prerequisites'] LOOP
+      FOREACH table_name IN ARRAY ARRAY['email_tokens','auth_email_requests','users','sessions','learner_profiles','user_skill_estimates','attempts','mistakes','learning_attempts','learner_item_state','learner_concept_mastery','learner_activity_days','speech_transcriptions','content_feedback_requests','content_api_keys','content_reports','content_sources','example_sentences','exercise_items','exam_questions','learning_topics','tv5_exercises','concepts','schema_migrations','cefr_levels','content_batches','content_items','content_concepts','content_revisions','content_tags','tags','media_assets','content_duplicates','content_reviews','concept_prerequisites'] LOOP
         IF to_regclass(format('public.%I',table_name)) IS NOT NULL THEN
           EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY',table_name);
         END IF;

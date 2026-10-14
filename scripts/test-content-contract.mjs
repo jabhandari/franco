@@ -4,10 +4,12 @@ const base = { schema_version: 'content.v1', batch_id: 'contract-test-1', idempo
 const item = (type, response = { answer: 'answer' }, evaluation = { mode: 'exact' }, extra = {}) => ({ external_id: `test-${type}`, type, cefr: { level: 'A1', method: 'human_review', confidence: 1 }, prompt: `Test ${type}`, response, evaluation, ...extra });
 const items = [
   item('multiple_choice', { choices: [{ id: 'a', text: 'A' }, { id: 'b', text: 'B' }], answer: 'a' }, { mode: 'choice' }),
-  item('cloze'), item('free_text'), item('reading'),
+  item('cloze'), item('free_text', { example: 'Je parle de mon quartier.' }, { mode: 'rubric' }), item('reading'),
   item('word_order', { tokens: ['Je', 'suis'] }, { mode: 'token_order' }),
   item('listening', undefined, undefined, { media: [{ kind: 'audio', url: 'https://example.com/a.mp3' }] }),
   item('speaking', undefined, { mode: 'rubric' }, { media: [{ kind: 'audio', url: 'https://example.com/a.mp3' }] }),
+  item('speaking_prompt', { expected: 'Test speaking_prompt' }, { mode: 'external' }),
+  item('listen_repeat', { answer: 'Bonjour' }, { mode: 'normalized_text' }, { media: [{ kind: 'audio', url: 'https://example.com/a.mp3' }] }),
   item('vocabulary')
 ];
 const valid = validateBatch({ ...base, items });
