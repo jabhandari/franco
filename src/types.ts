@@ -55,6 +55,8 @@ export type ContentItemType =
   | 'multiple_choice'
   | 'cloze'
   | 'free_text'
+  | 'listen_repeat'
+  | 'speaking_prompt'
   | 'word_order'
   | 'reading'
   | 'listening'

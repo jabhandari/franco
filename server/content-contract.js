@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 export const CONTENT_SCHEMA_VERSION = 'content.v1';
-export const CONTENT_TYPES = ['multiple_choice', 'cloze', 'free_text', 'word_order', 'reading', 'listening', 'speaking', 'vocabulary', 'listen_repeat'];
+export const CONTENT_TYPES = ['multiple_choice', 'cloze', 'free_text', 'word_order', 'reading', 'listening', 'speaking', 'vocabulary', 'listen_repeat', 'speaking_prompt'];
 export const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const METHODS = ['source', 'human_review', 'heuristic', 'model', 'mixed'];
 const EVALUATORS = ['exact', 'choice', 'normalized_text', 'token_order', 'rubric', 'external'];
@@ -50,7 +50,7 @@ function validateItem(item, index, errors) {
   if (item.difficulty !== undefined && checkObject(item.difficulty, `${p}.difficulty`, new Set(['band', 'score', 'method']), errors)) {
     if (item.difficulty.score !== undefined && (typeof item.difficulty.score !== 'number' || item.difficulty.score < 0 || item.difficulty.score > 100)) errors.push(issue(`${p}.difficulty.score`, 'must be between 0 and 100'));
   }
-  if (!checkObject(item.response, `${p}.response`, new Set(['choices', 'answer', 'accepted_answers', 'tokens']), errors)) return;
+  if (!checkObject(item.response, `${p}.response`, new Set(['choices', 'answer', 'accepted_answers', 'tokens', 'expected', 'example']), errors)) return;
   if (!checkObject(item.evaluation, `${p}.evaluation`, new Set(['mode', 'rubric', 'case_sensitive']), errors)) return;
   required(item.evaluation, ['mode'], `${p}.evaluation`, errors);
   if (!EVALUATORS.includes(item.evaluation.mode)) errors.push(issue(`${p}.evaluation.mode`, 'unsupported evaluator'));
@@ -67,6 +67,15 @@ function validateItem(item, index, errors) {
   if (item.type === 'listen_repeat') {
     if (typeof item.response.answer !== 'string' || !item.response.answer.trim()) errors.push(issue(`${p}.response.answer`, 'listen_repeat requires the expected phrase'));
     if (item.evaluation.mode !== 'normalized_text') errors.push(issue(`${p}.evaluation.mode`, 'listen_repeat requires normalized_text for typed answers'));
+  }
+  if (item.type === 'free_text') {
+    if (item.response.answer !== undefined || item.response.accepted_answers !== undefined) errors.push(issue(`${p}.response`, 'free_text is open-ended, without a fixed answer'));
+    if (!['rubric','external'].includes(item.evaluation.mode)) errors.push(issue(`${p}.evaluation.mode`, 'free_text requires an open-ended evaluator'));
+    if (item.response.example !== undefined) string(item.response.example, `${p}.response.example`, errors, 1, 2000);
+  }
+  if (item.type === 'speaking_prompt') {
+    if (typeof item.response.expected !== 'string' || !item.response.expected.trim()) errors.push(issue(`${p}.response.expected`, 'Read aloud requires the exact text'));
+    if (item.prompt !== item.response.expected) errors.push(issue(`${p}.prompt`, 'Read aloud prompt must be the exact text to speak'));
   }
   if (['listening', 'speaking', 'listen_repeat'].includes(item.type) && (!Array.isArray(item.media) || !item.media.some(media => media.kind === 'audio'))) errors.push(issue(`${p}.media`, `${item.type} requires an audio media reference`));
   for (const field of ['concepts', 'tags']) if (item[field] !== undefined && (!Array.isArray(item[field]) || item[field].some(x => typeof x !== 'string' || !x.trim()))) errors.push(issue(`${p}.${field}`, 'must be an array of non-empty strings'));

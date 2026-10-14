@@ -25,6 +25,7 @@ type ShowcaseEntry = ExerciseItem & {
   choices?: Choice[];
   tokens?: string[];
   expected?: string;
+  example?: string;
   correctKey?: string;
   context?: string;
   skill?: string;
@@ -226,38 +227,30 @@ const SAMPLE_ENTRIES: QuestionTypeDef[] = [
   },
   {
     id: 'speaking',
-    label: 'Speaking',
-    description: 'Speak on the topic — cover the key points, then try a follow-up.',
+    label: 'Read aloud',
+    description: 'Read the exact text on screen and get tentative pronunciation hints.',
     entry: {
       id: 'showcase-speaking-1',
       item_kind: 'content_item',
       type: 'speaking_prompt',
       level: 'B1',
       skill: 'speaking',
-      prompt: 'Talk about your favorite hobby for 30 seconds.',
-      expected_points: [
-        'Name the hobby and say why you enjoy it',
-        'Mention how often you do it',
-        'Describe a memorable moment related to it',
-      ],
-      follow_up_questions: [
-        'Would you recommend this hobby to a friend? Why?',
-        'How did you first get interested in it?',
-      ],
+      prompt: 'Je parle français avec mes amis.',
+      expected: 'Je parle français avec mes amis.',
     },
   },
   {
     id: 'free_text',
     label: 'Free Text',
-    description: 'Type a free-form answer to the question.',
+    description: 'Respond freely by typing or speaking. Get specific content feedback with quotes from your answer.',
     entry: {
       id: 'showcase-freetext-1',
       item_kind: 'content_item',
       type: 'free_text',
-      level: 'A1',
-      skill: 'vocabulary',
-      prompt: 'What is the capital of France?',
-      expected: 'Paris',
+      level: 'A2',
+      skill: 'writing',
+      prompt: 'Décris un endroit que tu aimes dans ta ville.',
+      example: 'J’aime le parc près de chez moi. Il est calme et j’y vais le week-end.',
     },
   },
 ];
@@ -315,9 +308,11 @@ export const simulateSubmit: SimulateSubmit = (entry, response): AttemptResult =
         given.every((token, index) => normalizeAnswer(token) === expected[index]);
       return { correct, reveal: correct ? null : sample.expected ?? null };
     }
+    case 'free_text':
+      return typeof response === 'object' && response !== null && 'text' in response && typeof response.text === 'string' && Boolean(response.text.trim())
+        ? { correct: true, reveal: null } : { correct: false, reveal: null };
     case 'spelling':
-    case 'cloze':
-    case 'free_text': {
+    case 'cloze': {
       // Server 'normalized_text' evaluator.
       if (typeof response !== 'string') return { correct: false, reveal: sample.expected ?? null };
       if (normalizeAnswer(response) === normalizeAnswer(sample.expected ?? '')) return { correct: true, reveal: null };
@@ -367,12 +362,6 @@ export function QuestionTypes({ token }: QuestionTypesProps): React.JSX.Element 
       <Box className="question-types-body">
         <Text as="p" variant="lede">{active.description}</Text>
         <Text as="p" variant="note">Simulated submissions — answers are graded locally, nothing is saved.</Text>
-        {active.id === 'speaking' && <Box className="speech-feedback" aria-label="Pronunciation feedback example">
-          <Text as="strong">Pronunciation feedback example</Text>
-          <Text>These words sounded unclear — try again</Text>
-          <Text>français</Text>
-          <Text className="speaking-feedback-note">This is a sample of a tentative recording hint. Pauses and microphone noise can affect it.</Text>
-        </Box>}
         <ExerciseCard
           key={active.id}
           entry={active.entry}

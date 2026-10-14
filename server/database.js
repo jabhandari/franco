@@ -76,9 +76,21 @@ export async function migrate() {
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS legacy_ref TEXT;
     -- Nullable for legacy exam/drill attempts; new content attempts snapshot the type.
     ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS item_type TEXT;
+    ALTER TABLE learning_attempts ADD COLUMN IF NOT EXISTS skill_id TEXT;
     UPDATE learning_attempts a SET item_type=i.item_type FROM content_items i WHERE a.item_id=i.id AND a.item_type IS NULL;
     -- Keep the historical item type on attempts, then consolidate the live catalog.
     UPDATE content_items SET item_type='listen_repeat' WHERE item_type IN ('dictation','pronunciation_drill');
+    -- FRA-126 is a one-time taxonomy change. Old short-answer Free Text has no
+    -- live learning flow; old open speaking prompts become freeform content.
+    DO $$ BEGIN
+      IF NOT EXISTS (SELECT 1 FROM schema_migrations WHERE version='fra-126-free-text') THEN
+        UPDATE learning_attempts a SET legacy_ref=a.item_id,item_id=NULL,item_kind='archived_free_text'
+        FROM content_items i WHERE a.item_id=i.id AND i.item_type='free_text';
+        DELETE FROM content_items WHERE item_type='free_text';
+        UPDATE content_items SET item_type='free_text' WHERE item_type='speaking_prompt';
+        INSERT INTO schema_migrations(version) VALUES('fra-126-free-text');
+      END IF;
+    END $$;
     CREATE INDEX IF NOT EXISTS attempts_legacy_idx ON learning_attempts(user_id, item_kind, legacy_ref);
     CREATE TABLE IF NOT EXISTS speech_transcriptions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,item_id TEXT REFERENCES content_items(id) ON DELETE SET NULL,model TEXT NOT NULL,duration_seconds DOUBLE PRECISION NOT NULL CHECK (duration_seconds > 0),status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','succeeded','no_speech','provider_error')),provider_request_id TEXT,error_code TEXT,transcript_hash TEXT,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),completed_at TIMESTAMPTZ);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_user_time_idx ON speech_transcriptions(user_id,created_at DESC);

@@ -1665,6 +1665,12 @@ html[data-theme="light"] .learn-view .report-button { border-color:transparent; 
 .pronunciation-mark-row { display:flex; flex-wrap:wrap; gap:7px; margin-left:auto; }
 .listen-repeat-actions { display:flex; flex-direction:column; align-items:flex-start; gap:12px; }
 .listen-repeat-actions .speaking-type-fallback { width:100%; }
+.freeform-exercise,.read-aloud-exercise { display:grid; gap:16px; }
+.freeform-exercise .free-text-input { min-height:180px; }
+.read-aloud-phrase { font-size:clamp(1.4rem,3vw,2rem); line-height:1.45; font-weight:650; }
+.content-feedback { display:grid; gap:10px; padding:18px; border:1px solid var(--palette-silver); border-radius:12px; }
+.content-feedback h3 { margin:8px 0 0; }
+.content-feedback p { margin:0; }
 .pronunciation-mark-row > button { flex:none; width:auto; min-height:36px; margin:0; padding:7px 12px; font-size: var(--text-12); }
 .pronunciation-mark-row > .retry-button { border-color:var(--palette-silver); }
 .pronunciation-card .mcq-feedback { margin-top:0; }

@@ -3,8 +3,9 @@ import type { AttemptItemKind, AttemptResponse } from '../../api/client';
 import { MultipleChoice } from './MultipleChoice';
 import { WordOrder } from './WordOrder';
 import { Spelling } from './Spelling';
+import { FreeText } from './FreeText';
 import { ListenRepeat } from './Listening';
-import { WritingPrompt, SpeakingPrompt } from './WritingSpeaking';
+import { WritingPrompt, ReadAloud } from './WritingSpeaking';
 import type { MediaAsset } from './Listening';
 import * as UIRaw from '../ui/index.js';
 
@@ -44,6 +45,9 @@ export type ExerciseItem = {
   type?: string;
   level?: string;
   prompt?: string;
+  context?: string;
+  instructions?: string;
+  example?: string;
   media?: MediaAsset[];
   expectedPoints?: string[];
   expected_points?: string[];
@@ -105,8 +109,10 @@ export function ExerciseCard({ entry, token, onResult, compactListening = false,
       break;
     case 'spelling':
     case 'cloze':
-    case 'free_text':
       rendered = <Spelling entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
+      break;
+    case 'free_text':
+      rendered = <FreeText entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
     // Legacy labels use the same renderer until the startup migration maps
     // their content items to listen_repeat. This is one shared switch arm.
@@ -119,7 +125,7 @@ export function ExerciseCard({ entry, token, onResult, compactListening = false,
       rendered = <WritingPrompt entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
     case 'speaking_prompt':
-      rendered = <SpeakingPrompt entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
+      rendered = <ReadAloud entry={item} token={token} onResult={onResult} simulateSubmit={simulateSubmit} />;
       break;
     case 'multiple_choice':
     case 'reading':

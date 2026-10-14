@@ -26,7 +26,7 @@ assert(
 {
   const allTypes = Object.values(SKILL_ITEM_TYPES).flat();
   assert(allTypes.length > 0, 'SKILL_ITEM_TYPES: tabs map to item types');
-  assert(allTypes.length - new Set(allTypes).size === 1, 'SKILL_ITEM_TYPES: only listen_repeat maps to two tabs');
+  assert(allTypes.length - new Set(allTypes).size === 2, 'SKILL_ITEM_TYPES: listen_repeat and free_text span two tabs');
   assert(SKILL_ITEM_TYPES.ecouter.includes('listen_repeat') && SKILL_ITEM_TYPES.parler.includes('listen_repeat'), 'SKILL_ITEM_TYPES: listen_repeat spans listening and speaking');
 }
 
