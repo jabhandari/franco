@@ -8,6 +8,7 @@ import { AudioPlayer, Box, Button, ErrorMessage, ExerciseEyebrow, ExerciseShell,
 
 type Entry = { id: string; item_kind: AttemptItemKind; level?: string; prompt?: string; context?: string; instructions?: string; example?: string };
 type AttemptResult = { correct?: boolean; reveal?: string | null; error?: string };
+type FreeformResponse = { text: string; modality: 'typed' | 'spoken'; transcription_id?: string };
 type Props = { entry: Entry; token?: string | null; onResult?: (result: AttemptResult) => void; simulateSubmit?: SimulateSubmit };
 const GUIDANCE: Record<string, string> = {
   A1: 'A few words or one short sentence is enough.',
@@ -23,6 +24,7 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
   const [value, setValue] = React.useState('');
   const [heard, setHeard] = React.useState<SpeechTranscribeResponse | null>(null);
   const [feedback, setFeedback] = React.useState<ContentFeedbackResult['feedback'] | null>(null);
+  const [pendingResponse, setPendingResponse] = React.useState<FreeformResponse | null>(null);
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState('');
   const [available, setAvailable] = React.useState(false);
@@ -48,6 +50,14 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
     finally { setBusy(false); }
   }
 
+  async function saveResponse(response: FreeformResponse) {
+    try {
+      const saved: AttemptResult = simulateSubmit ? await simulateSubmit(entry, response)
+        : await reportAttempt(entry, response, token, { durationMs: Date.now() - started.current });
+      setPendingResponse(null); onResult?.(saved); recorder.cancelRecording();
+    } catch (caught) { setError('Feedback is ready, but practice could not be saved. ' + getErrorMessage(caught)); }
+  }
+
   async function submit() {
     const answer = mode === 'spoken' ? heard?.transcript?.trim() : value.trim();
     if (!answer || busy || feedback) return;
@@ -58,9 +68,8 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
             needs_work: [{ point: 'Explain one reason or add a supporting detail.', quote: answer.slice(0, 60).trim() }] }
         : (await requestContentFeedback({ response: answer, prompt: entry.prompt || '', context: entry.context || '', level: entry.level }, token)).feedback;
       const response = { text: answer, modality: mode, ...(mode === 'spoken' && heard ? { transcription_id: heard.transcription_id } : {}) };
-      const saved: AttemptResult = simulateSubmit ? await simulateSubmit(entry, response)
-        : await reportAttempt(entry, response, token, { durationMs: Date.now() - started.current });
-      setFeedback(responseFeedback); onResult?.(saved); recorder.cancelRecording();
+      setFeedback(responseFeedback); setPendingResponse(response);
+      await saveResponse(response);
     } catch (caught) { setError(getErrorMessage(caught)); }
     finally { setBusy(false); }
   }
@@ -100,6 +109,7 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
         <Text as="h3">What to work on</Text>
         {feedback.needs_work.map((item, index) => <Box key={index}><Text>{item.point}</Text><Text className="speaking-feedback-note">“{item.quote}”</Text></Box>)}
       </Box>}
+      {pendingResponse && <Button variant="primary" disabled={busy} onClick={async () => { setBusy(true); setError(''); await saveResponse(pendingResponse); setBusy(false); }}>Retry saving practice</Button>}
       {recorder.recordingError && <ErrorMessage message={recorder.recordingError} />}
       {error && <ErrorMessage message={error} />}
     </Box>
