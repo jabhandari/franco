@@ -1663,7 +1663,9 @@ html[data-theme="light"] .learn-view .report-button { border-color:transparent; 
 .pronunciation-card .pronunciation-answer-label { color:var(--palette-slate); font-size: var(--text-10); letter-spacing:.1em; }
 .pronunciation-word { color:var(--palette-ink); font-size: var(--text-22); letter-spacing:-.03em; }
 .pronunciation-mark-row { display:flex; flex-wrap:wrap; gap:7px; margin-left:auto; }
-.answer-mode-picker { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); width:100%; gap:6px; padding:5px; border:1px solid var(--color-border); border-radius:12px; background:color-mix(in srgb,var(--color-text) 5%,var(--color-surface)); }
+.answer-mode-row { display:flex; align-items:stretch; gap:12px; }
+.answer-mode-row > .primary-button { flex:0 0 auto; min-width:170px; margin:0; }
+.answer-mode-picker { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); flex:1 1 auto; min-width:0; gap:6px; padding:5px; border:1px solid var(--color-border); border-radius:12px; background:color-mix(in srgb,var(--color-text) 5%,var(--color-surface)); }
 .answer-mode-picker button { display:flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:8px 14px; border:0; border-radius:8px; background:transparent; color:var(--color-muted); font:inherit; font-size:var(--text-13); font-weight:700; cursor:pointer; }
 .answer-mode-picker button:hover:not(:disabled) { color:var(--color-text); }
 .answer-mode-picker button[aria-pressed="true"] { background:var(--color-accent); color:var(--palette-white); }
@@ -1685,7 +1687,7 @@ html[data-theme="light"] .learn-view .report-button { border-color:transparent; 
 .answer-word-signal { display:grid; gap:3px; min-width:150px; padding:10px 12px; border:1px solid var(--color-border); border-radius:8px; }
 .answer-word-signal > strong { color:var(--color-text); }
 .answer-word-signal > p { margin:0; color:var(--color-muted); font-size:var(--text-12); }
-@media(max-width:600px) { .answer-comparison { grid-template-columns:1fr; } .answer-mode-picker button { padding-inline:7px; font-size:var(--text-12); } }
+@media(max-width:600px) { .answer-comparison { grid-template-columns:1fr; } .answer-mode-row { flex-direction:column; } .answer-mode-row > .primary-button { width:100%; min-height:44px; } .answer-mode-picker button { padding-inline:7px; font-size:var(--text-12); } }
 .freeform-exercise,.read-aloud-exercise { display:grid; gap:16px; }
 .freeform-exercise .free-text-input { min-height:180px; }
 .read-aloud-phrase { font-size:clamp(1.4rem,3vw,2rem); line-height:1.45; font-weight:650; }
