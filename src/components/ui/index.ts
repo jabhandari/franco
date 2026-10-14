@@ -21,6 +21,8 @@ export type { PanelProps, PanelHeaderProps } from './Panel';
 export { Card } from './Card';
 export type { CardProps } from './Card';
 export { Tabs } from './Tabs';
+export { AnswerModePicker } from './AnswerModePicker';
+export type { AnswerMode } from './AnswerModePicker';
 export type { TabsProps, TabsVariant, TabOption } from './Tabs';
 export { Badge, QueueKindLabel } from './Badge';
 export type { BadgeProps, BadgeVariant, QueueKindLabelProps } from './Badge';
