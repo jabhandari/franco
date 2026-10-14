@@ -649,6 +649,7 @@ summary {
 
   .sidebar nav {
     grid-auto-flow: column;
+    justify-content: center;
     overflow-x: auto;
     min-width: 0;
     flex: 1 1 0%;
