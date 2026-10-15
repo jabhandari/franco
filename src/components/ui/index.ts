@@ -91,6 +91,7 @@ export { LanguageTools } from './LanguageTools';
 export { Roadmap } from './Roadmap';
 export { CheckRow } from './CheckRow';
 
+
 export { ActionTile } from './ActionTile';
 export type { ActionTileProps } from './ActionTile';
 export { ProductTour } from './ProductTour';
@@ -101,3 +102,4 @@ export type { StoryPathProps } from './StoryPath';
 export { StoryTrophyShelf } from './StoryTrophyShelf';
 export type { StoryTrophyShelfProps } from './StoryTrophyShelf';
 export { RaceInviteCode } from './RaceInviteCode';
+export { PronunciationSpikePanel } from './PronunciationSpikePanel';

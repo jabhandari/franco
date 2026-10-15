@@ -2731,6 +2731,7 @@ html[data-theme] .verb-sprint-intro h1 { max-width:565px; color:white; font-fami
   .verb-sprint-over { padding:32px 20px; }
 }
 @media(prefers-reduced-motion:reduce) { .verb-sprint-choice { transition:none; } }
+
 /* FRA-151: visual home, shared action tiles, and product preview. */
 .action-tile { --tile-accent:var(--color-accent); display:flex; flex-direction:column; gap:20px; min-height:214px; width:100%; padding:22px; text-align:left; border:1px solid color-mix(in srgb,var(--tile-accent) 34%,var(--color-border)); border-radius:22px; color:var(--color-text); background:color-mix(in srgb,var(--tile-accent) 11%,var(--color-surface)); transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease; }
 .action-tile:hover { transform:translateY(-4px); border-color:var(--tile-accent); box-shadow:0 12px 28px color-mix(in srgb,var(--tile-accent) 12%,transparent); }
@@ -3015,7 +3016,6 @@ html:not([data-theme="light"]) .story-shelf-copy small { color: #f6a957; }
   .story-stop-button { transition: none; }
   .story-stop-button:hover { transform: none; }
 }
-
 /* FRA-146 — Friend Race */
 .race-page { display:grid; gap:28px; max-width:1200px; margin:0 auto; padding:10px clamp(18px,3vw,32px) 72px; }
 .race-topline { display:flex; align-items:center; justify-content:space-between; gap:18px; }
@@ -3156,3 +3156,24 @@ html:not([data-theme="light"]) .story-shelf-copy small { color: #f6a957; }
 @media(max-width:640px) { .race-page { gap:20px; padding-bottom:50px; } .race-topline > span { display:none; } .race-intro-copy { min-height:0; padding:30px 23px; } .race-intro-copy h1 { font-size:clamp(3.2rem,12vw,4.8rem); } .race-intro-art { min-height:240px; } .race-create-panel,.race-lobby-card,.race-lobby-settings,.race-join-panel,.race-question { padding:22px; } .race-settings { grid-template-columns:1fr; gap:18px; } .race-room-head { align-items:start; flex-direction:column; } .race-runners { grid-template-columns:minmax(0,1fr) 32px minmax(0,1fr); } .race-runner { padding:18px 6px; } .race-runner-avatar { width:50px; height:50px; border-radius:16px; } .race-scoreboard { grid-template-columns:1fr 1fr; } .race-scoreboard-clock { grid-column:1/-1; grid-row:1; min-height:78px; } .race-score { min-height:86px; padding:12px; } .race-score-avatar { display:none; } .race-score-points { align-self:start; } .race-score-person strong { font-size:var(--text-13); } .race-choices { grid-template-columns:1fr; } .race-feedback { flex-wrap:wrap; } .race-feedback > .primary-button { width:100%; } .race-results { padding:26px 16px; } .race-result-cards { grid-template-columns:1fr; } .race-result-cards .race-versus { margin:-4px auto; } .race-review-row { grid-template-columns:28px minmax(0,1fr); } .race-review-row small { grid-column:2; } }
 @media(max-width:410px) { .race-runners { grid-template-columns:1fr; } .race-versus { width:33px; height:33px; } .race-lobby-actions,.race-invite-actions { flex-wrap:wrap; } .race-lobby-actions > button,.race-invite-actions > button { flex:1 1 auto; } }
 @media(prefers-reduced-motion:reduce) { .race-loading-orbit { animation:none; } .race-choice { transition:none; } .race-choice:hover:not(:disabled) { transform:none; } }
+
+.phoneme-spike { max-width:860px; margin:0 auto; padding:32px 16px 70px; display:grid; gap:18px; color:var(--color-text); }
+.phoneme-spike h1 { margin:0; font-size:clamp(2rem,5vw,3.4rem); letter-spacing:-.045em; line-height:1.05; }
+.phoneme-spike p { margin:0; line-height:1.5; color:var(--color-muted); }
+.phoneme-spike-kicker { color:var(--color-accent); font-size:var(--text-11); font-weight:800; letter-spacing:.15em; }
+.phoneme-spike-card { display:grid; gap:14px; padding:24px; border:1px solid var(--color-border); border-radius:18px; background:var(--color-surface); }
+.phoneme-spike-card strong { font-size:var(--text-18); }
+.phoneme-spike-consent { display:flex; align-items:center; gap:10px; font-weight:700; }
+.phoneme-spike-consent input { width:18px; height:18px; accent-color:var(--color-accent); }
+.phoneme-spike-file { display:grid; gap:9px; font-weight:700; }
+.phoneme-spike-file input { width:100%; max-width:100%; font:inherit; }
+.phoneme-spike-or { font-size:var(--text-12); text-transform:uppercase; letter-spacing:.1em; }
+.phoneme-spike button { width:fit-content; min-height:44px; padding:10px 18px; border:1px solid var(--color-border); border-radius:10px; background:var(--color-surface); color:var(--color-text); font:inherit; font-weight:700; cursor:pointer; }
+.phoneme-spike button:disabled { cursor:not-allowed; opacity:.55; }
+.phoneme-spike button:focus-visible, .phoneme-spike input:focus-visible { outline:3px solid var(--color-accent); outline-offset:3px; }
+.phoneme-spike .phoneme-spike-run { width:100%; background:var(--palette-coral); border-color:var(--palette-coral); color:#fff; }
+.phoneme-spike audio, .phoneme-spike progress { width:100%; }
+.phoneme-spike-phones { font-size:var(--text-22); font-weight:750; overflow-wrap:anywhere; }
+.phoneme-spike .phoneme-spike-error { padding:12px 16px; border-radius:10px; background:var(--palette-red-soft); color:var(--palette-red); }
+html:not([data-theme="light"]) .phoneme-spike .phoneme-spike-error { background:var(--palette-gray); color:var(--palette-coral); }
+
