@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { pool, query } from './database.js';
 import { evaluate } from './evaluate.js';
-import { levelOrder, originalChoiceId, publicPuzzleQuestion, puzzleReveal, validPuzzleConfig } from './puzzle-rules.js';
+import { levelOrder, originalChoiceId, publicPuzzleQuestion, puzzleReveal, usesWordBank, validPuzzleConfig } from './puzzle-rules.js';
 import { chooseVerbCard, gradeVerbChoice, publicVerbQuestion, verbCard } from './verb-sprint-deck.js';
 
 export class PuzzleError extends Error {
@@ -130,6 +130,9 @@ export async function answerPuzzle(userId, runId, questionId, response) {
     if (current.item_type === 'word_order' ? !Array.isArray(response) : typeof response !== 'string') throw new PuzzleError(400, 'Answer format does not match this question.');
     const gradedResponse = current.item_type === 'word_order' ? response : originalChoiceId(current, response, run.choice_secret);
     if (gradedResponse === null) throw new PuzzleError(400, 'Choose one of the answers shown.');
+    if (current.item_type === 'word_order' && !usesWordBank(gradedResponse, current.response_json.tokens)) {
+      throw new PuzzleError(400, 'Build your answer using the words shown.');
+    }
     const sourceChoice = current.item_type === 'word_order' ? null
       : current.response_json.choices.find((choice) => String(choice.id ?? choice.key) === gradedResponse);
     const correct = evaluate(current, gradedResponse) || Boolean(sourceChoice && evaluate(current, sourceChoice.text));

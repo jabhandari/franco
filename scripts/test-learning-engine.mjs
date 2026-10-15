@@ -42,6 +42,7 @@ const bankOrderItem = { response_json: { tokens: ['canadien', 'suis', 'Je'], exp
 assert(evaluate(bankOrderItem, ['je', 'suis ', 'CANADIEN']) === true, 'token_order: grades against the stored sentence');
 assert(evaluate(bankOrderItem, ['canadien', 'suis', 'je']) === false, 'token_order: shuffled bank order rejected');
 assert(evaluate(bankOrderItem, ['je', 'canadien', 'suis']) === false, 'token_order: other wrong orders rejected');
+assert(evaluate({ response_json: { tokens: ["L'", 'église', 'est', 'belle'], expected: "L'église est belle." }, evaluation_json: { mode: 'token_order' } }, ["L'", 'église', 'est', 'belle']) === true, 'token_order: apostrophe and punctuation do not change the order');
 
 // --- evaluate(): dataset-authored shapes without a contract mode ---
 assert(evaluate({ response_json: { answer: 'être' }, evaluation_json: {} }, ' ÊTRE ') === true, 'dataset answer shape graded case-insensitively');
