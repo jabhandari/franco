@@ -17,6 +17,6 @@ export async function curriculumConcepts(query, concepts) {
   return curriculum.map(c => {
     const lesson = byTopic.get(c.slug);
     const published = lesson?.review_status === 'published';
-    return { ...c, metadata_json: { ...c.metadata_json, review_status: lesson?.review_status || 'draft', stub: !published, ...(published ? { ...lesson.pack_json, question_items: [...lesson.pack_json.recognition, ...lesson.pack_json.guided_production, ...lesson.pack_json.mastery], correct_answers: [...lesson.pack_json.recognition, ...lesson.pack_json.guided_production, ...lesson.pack_json.mastery].map(q => q.correct_answers), lesson: { ...lesson.pack_json, review_status: 'published' } } : {}) } };
+    return { ...c, metadata_json: { ...c.metadata_json, review_status: lesson?.review_status || 'draft', stub: !published, ...(published ? { ...lesson.pack_json, review_status: 'published', question_items: [...lesson.pack_json.recognition, ...lesson.pack_json.guided_production, ...lesson.pack_json.mastery], correct_answers: [...lesson.pack_json.recognition, ...lesson.pack_json.guided_production, ...lesson.pack_json.mastery].map(q => q.correct_answers), lesson: { ...lesson.pack_json, review_status: 'published' } } : {}) } };
   });
 }

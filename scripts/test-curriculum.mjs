@@ -14,6 +14,8 @@ assert.equal(validateCurriculumTopic({...topics[0],topic_id:'A1-99'}).valid,fals
 const rows=[{slug:'A1-01',metadata_json:{}},{slug:'old',metadata_json:{}}];
 const result=await curriculumConcepts(async()=>[{topic_id:'A1-01',review_status:'generated',pack_json:{explanation:'private'}}],rows);
 assert.equal(result.length,1);assert.equal(result[0].metadata_json.stub,true);assert.equal(result[0].metadata_json.lesson,undefined);
-const published=await curriculumConcepts(async()=>[{topic_id:'A1-01',review_status:'published',pack_json:{explanation:'public',recognition:[],guided_production:[],mastery:[]}}],rows);
+const published=await curriculumConcepts(async()=>[{topic_id:'A1-01',review_status:'published',pack_json:{review_status:'generated',explanation:'public',recognition:[],guided_production:[],mastery:[]}}],rows);
 assert.equal(published[0].metadata_json.lesson.explanation,'public');
 console.log('Curriculum: 90 topics, ordering, prerequisites, published-only lesson projection passed.');
+
+assert.equal(published[0].metadata_json.review_status,'published');
