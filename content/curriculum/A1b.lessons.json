@@ -1,0 +1,1892 @@
+[
+  {
+    "topic_id": "A1-09",
+    "level": "A1",
+    "outcome": "I can describe a person or thing with a correctly matched adjective.",
+    "explanation": "An adjective describes a noun. It usually matches that noun's grammatical gender and number: petit, petite, petits, petites mean small. Many adjectives follow the noun; some common ones, such as petit and grand (big/tall), usually precede it. Colour words normally follow: une porte bleue means a blue door. Nationality adjectives use lower-case letters: française means French, feminine singular. Some colour expressions, such as bleu clair (light blue), do not change form.",
+    "example_items": [
+      {
+        "french": "Lina porte une veste bleue.",
+        "english": "Lina is wearing a blue jacket.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Elle habite une petite maison.",
+        "english": "She lives in a small house.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Ses amies sont françaises.",
+        "english": "Her friends are French. (feminine)",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-09-recognition-1",
+        "prompt": "Choose the meaning in this context: Lina porte une veste bleue.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Lina is wearing a blue jacket."
+          },
+          {
+            "id": "1",
+            "text": "She lives in a small house."
+          },
+          {
+            "id": "2",
+            "text": "Her friends are French. (feminine)"
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "An adjective describes a noun. It usually matches that noun's grammatical gender and number: petit, petite, petits, petites mean small. Many adjectives follow the noun; some common ones, such as petit and grand (big/tall), usually precede it. Colour words normally follow: une porte bleue means a blue door. Nationality adjectives use lower-case letters: française means French, feminine singular. Some colour expressions, such as bleu clair (light blue), do not change form.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-09-recognition-2",
+        "prompt": "Choose the meaning in this context: Elle habite une petite maison.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Lina is wearing a blue jacket."
+          },
+          {
+            "id": "1",
+            "text": "She lives in a small house."
+          },
+          {
+            "id": "2",
+            "text": "Her friends are French. (feminine)"
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "An adjective describes a noun. It usually matches that noun's grammatical gender and number: petit, petite, petits, petites mean small. Many adjectives follow the noun; some common ones, such as petit and grand (big/tall), usually precede it. Colour words normally follow: une porte bleue means a blue door. Nationality adjectives use lower-case letters: française means French, feminine singular. Some colour expressions, such as bleu clair (light blue), do not change form.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-09-recognition-3",
+        "prompt": "Choose the meaning in this context: Ses amies sont françaises.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Lina is wearing a blue jacket."
+          },
+          {
+            "id": "1",
+            "text": "She lives in a small house."
+          },
+          {
+            "id": "2",
+            "text": "Her friends are French. (feminine)"
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "An adjective describes a noun. It usually matches that noun's grammatical gender and number: petit, petite, petits, petites mean small. Many adjectives follow the noun; some common ones, such as petit and grand (big/tall), usually precede it. Colour words normally follow: une porte bleue means a blue door. Nationality adjectives use lower-case letters: française means French, feminine singular. Some colour expressions, such as bleu clair (light blue), do not change form.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-09-guided-1",
+        "prompt": "Write the French sentence for: Lina is wearing a blue jacket. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Lina porte une veste bleue."
+        ],
+        "feedback": {
+          "rule": "An adjective describes a noun. It usually matches that noun's grammatical gender and number: petit, petite, petits, petites mean small. Many adjectives follow the noun; some common ones, such as petit and grand (big/tall), usually precede it. Colour words normally follow: une porte bleue means a blue door. Nationality adjectives use lower-case letters: française means French, feminine singular. Some colour expressions, such as bleu clair (light blue), do not change form.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-09-guided-2",
+        "prompt": "Write the French sentence for: She lives in a small house. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Elle habite une petite maison."
+        ],
+        "feedback": {
+          "rule": "An adjective describes a noun. It usually matches that noun's grammatical gender and number: petit, petite, petits, petites mean small. Many adjectives follow the noun; some common ones, such as petit and grand (big/tall), usually precede it. Colour words normally follow: une porte bleue means a blue door. Nationality adjectives use lower-case letters: française means French, feminine singular. Some colour expressions, such as bleu clair (light blue), do not change form.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-09-guided-3",
+        "prompt": "Write the French sentence for: Her friends are French. (feminine) Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Ses amies sont françaises."
+        ],
+        "feedback": {
+          "rule": "An adjective describes a noun. It usually matches that noun's grammatical gender and number: petit, petite, petits, petites mean small. Many adjectives follow the noun; some common ones, such as petit and grand (big/tall), usually precede it. Colour words normally follow: une porte bleue means a blue door. Nationality adjectives use lower-case letters: française means French, feminine singular. Some colour expressions, such as bleu clair (light blue), do not change form.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Lina porte une veste bleue. Elle habite une petite maison. Ses amies sont françaises.",
+      "english": "Lina is wearing a blue jacket. She lives in a small house. Her friends are French. (feminine)",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Describe two people and their clothes for a friend meeting them at a station. Match adjectives to the nouns and check their position.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Sami porte un manteau bleu.",
+      "model_translation": "Sami is wearing a blue coat."
+    },
+    "feedback": {
+      "rule": "An adjective describes a noun. It usually matches that noun's grammatical gender and number: petit, petite, petits, petites mean small. Many adjectives follow the noun; some common ones, such as petit and grand (big/tall), usually precede it. Colour words normally follow: une porte bleue means a blue door. Nationality adjectives use lower-case letters: française means French, feminine singular. Some colour expressions, such as bleu clair (light blue), do not change form.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-09-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: Sami is wearing a blue coat. Word bank: bleu. / manteau / un / porte / Sami",
+        "correct_answers": [
+          "Sami porte un manteau bleu."
+        ],
+        "feedback": {
+          "rule": "An adjective describes a noun. It usually matches that noun's grammatical gender and number: petit, petite, petits, petites mean small. Many adjectives follow the noun; some common ones, such as petit and grand (big/tall), usually precede it. Colour words normally follow: une porte bleue means a blue door. Nationality adjectives use lower-case letters: française means French, feminine singular. Some colour expressions, such as bleu clair (light blue), do not change form.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-10",
+    "level": "A1",
+    "outcome": "I can say that an action does not happen, never happens or no longer happens.",
+    "explanation": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+    "example_items": [
+      {
+        "french": "Je ne mange pas ici.",
+        "english": "I do not eat here.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Je ne mange jamais seul.",
+        "english": "I never eat alone.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Je ne mange plus de viande.",
+        "english": "I no longer eat meat.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-10-recognition-1",
+        "prompt": "Choose the meaning in this context: Je ne mange pas ici.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I do not eat here."
+          },
+          {
+            "id": "1",
+            "text": "I never eat alone."
+          },
+          {
+            "id": "2",
+            "text": "I no longer eat meat."
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-10-recognition-2",
+        "prompt": "Choose the meaning in this context: Je ne mange jamais seul.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I do not eat here."
+          },
+          {
+            "id": "1",
+            "text": "I never eat alone."
+          },
+          {
+            "id": "2",
+            "text": "I no longer eat meat."
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-10-recognition-3",
+        "prompt": "Choose the meaning in this context: Je ne mange plus de viande.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I do not eat here."
+          },
+          {
+            "id": "1",
+            "text": "I never eat alone."
+          },
+          {
+            "id": "2",
+            "text": "I no longer eat meat."
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-10-guided-1",
+        "prompt": "Write the French sentence for: I do not eat here. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Je ne mange pas ici."
+        ],
+        "feedback": {
+          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-10-guided-2",
+        "prompt": "Write the French sentence for: I never eat alone. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Je ne mange jamais seul."
+        ],
+        "feedback": {
+          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-10-guided-3",
+        "prompt": "Write the French sentence for: I no longer eat meat. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Je ne mange plus de viande."
+        ],
+        "feedback": {
+          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Je ne mange pas ici. Je ne mange jamais seul. Je ne mange plus de viande.",
+      "english": "I do not eat here. I never eat alone. I no longer eat meat.",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Reply to an invitation by explaining one thing you do not do, one thing you never do and one habit you have stopped. Keep the meaning of pas, jamais and plus distinct.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Je ne travaille pas demain.",
+      "model_translation": "I am not working tomorrow."
+    },
+    "feedback": {
+      "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-10-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: I am not working tomorrow. Word bank: demain. / pas / travaille / ne / Je",
+        "correct_answers": [
+          "Je ne travaille pas demain."
+        ],
+        "feedback": {
+          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-11",
+    "level": "A1",
+    "outcome": "I can ask a simple yes/no question and request basic information.",
+    "explanation": "A statement can become a spoken question when your voice rises at the end: tu viens ? means are you coming? Est-ce que also introduces a yes/no question without changing normal subject order. Question words ask for missing information: où (where), quand (when), comment (how), pourquoi (why), combien (how much/many). Inversion means placing a verb before its subject word, joined by a hyphen: venez-vous ? is a more formal are you coming? An inserted t in parle-t-il ? helps pronunciation.",
+    "example_items": [
+      {
+        "french": "Tu viens demain ?",
+        "english": "Are you coming tomorrow? (familiar)",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Est-ce que vous venez demain ?",
+        "english": "Are you coming tomorrow? (polite or plural)",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Où habitez-vous ?",
+        "english": "Where do you live? (polite or plural)",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-11-recognition-1",
+        "prompt": "Choose the meaning in this context: Tu viens demain ?",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Are you coming tomorrow? (familiar)"
+          },
+          {
+            "id": "1",
+            "text": "Are you coming tomorrow? (polite or plural)"
+          },
+          {
+            "id": "2",
+            "text": "Where do you live? (polite or plural)"
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "A statement can become a spoken question when your voice rises at the end: tu viens ? means are you coming? Est-ce que also introduces a yes/no question without changing normal subject order. Question words ask for missing information: où (where), quand (when), comment (how), pourquoi (why), combien (how much/many). Inversion means placing a verb before its subject word, joined by a hyphen: venez-vous ? is a more formal are you coming? An inserted t in parle-t-il ? helps pronunciation.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-11-recognition-2",
+        "prompt": "Choose the meaning in this context: Est-ce que vous venez demain ?",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Are you coming tomorrow? (familiar)"
+          },
+          {
+            "id": "1",
+            "text": "Are you coming tomorrow? (polite or plural)"
+          },
+          {
+            "id": "2",
+            "text": "Where do you live? (polite or plural)"
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "A statement can become a spoken question when your voice rises at the end: tu viens ? means are you coming? Est-ce que also introduces a yes/no question without changing normal subject order. Question words ask for missing information: où (where), quand (when), comment (how), pourquoi (why), combien (how much/many). Inversion means placing a verb before its subject word, joined by a hyphen: venez-vous ? is a more formal are you coming? An inserted t in parle-t-il ? helps pronunciation.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-11-recognition-3",
+        "prompt": "Choose the meaning in this context: Où habitez-vous ?",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Are you coming tomorrow? (familiar)"
+          },
+          {
+            "id": "1",
+            "text": "Are you coming tomorrow? (polite or plural)"
+          },
+          {
+            "id": "2",
+            "text": "Where do you live? (polite or plural)"
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "A statement can become a spoken question when your voice rises at the end: tu viens ? means are you coming? Est-ce que also introduces a yes/no question without changing normal subject order. Question words ask for missing information: où (where), quand (when), comment (how), pourquoi (why), combien (how much/many). Inversion means placing a verb before its subject word, joined by a hyphen: venez-vous ? is a more formal are you coming? An inserted t in parle-t-il ? helps pronunciation.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-11-guided-1",
+        "prompt": "Write the French sentence for: Are you coming tomorrow? (familiar) Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Tu viens demain ?"
+        ],
+        "feedback": {
+          "rule": "A statement can become a spoken question when your voice rises at the end: tu viens ? means are you coming? Est-ce que also introduces a yes/no question without changing normal subject order. Question words ask for missing information: où (where), quand (when), comment (how), pourquoi (why), combien (how much/many). Inversion means placing a verb before its subject word, joined by a hyphen: venez-vous ? is a more formal are you coming? An inserted t in parle-t-il ? helps pronunciation.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-11-guided-2",
+        "prompt": "Write the French sentence for: Are you coming tomorrow? (polite or plural) Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Est-ce que vous venez demain ?"
+        ],
+        "feedback": {
+          "rule": "A statement can become a spoken question when your voice rises at the end: tu viens ? means are you coming? Est-ce que also introduces a yes/no question without changing normal subject order. Question words ask for missing information: où (where), quand (when), comment (how), pourquoi (why), combien (how much/many). Inversion means placing a verb before its subject word, joined by a hyphen: venez-vous ? is a more formal are you coming? An inserted t in parle-t-il ? helps pronunciation.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-11-guided-3",
+        "prompt": "Write the French sentence for: Where do you live? (polite or plural) Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Où habitez-vous ?"
+        ],
+        "feedback": {
+          "rule": "A statement can become a spoken question when your voice rises at the end: tu viens ? means are you coming? Est-ce que also introduces a yes/no question without changing normal subject order. Question words ask for missing information: où (where), quand (when), comment (how), pourquoi (why), combien (how much/many). Inversion means placing a verb before its subject word, joined by a hyphen: venez-vous ? is a more formal are you coming? An inserted t in parle-t-il ? helps pronunciation.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Tu viens demain ? Est-ce que vous venez demain ? Où habitez-vous ?",
+      "english": "Are you coming tomorrow? (familiar) Are you coming tomorrow? (polite or plural) Where do you live? (polite or plural)",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Arrange a meeting with a new classmate. Ask whether they are coming, where they live and when they can arrive; compare a familiar spoken form with a polite one.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Quand est-ce que vous arrivez ?",
+      "model_translation": "When are you arriving? (polite or plural)"
+    },
+    "feedback": {
+      "rule": "A statement can become a spoken question when your voice rises at the end: tu viens ? means are you coming? Est-ce que also introduces a yes/no question without changing normal subject order. Question words ask for missing information: où (where), quand (when), comment (how), pourquoi (why), combien (how much/many). Inversion means placing a verb before its subject word, joined by a hyphen: venez-vous ? is a more formal are you coming? An inserted t in parle-t-il ? helps pronunciation.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-11-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: When are you arriving? (polite or plural) Word bank: ? / arrivez / vous / que / est-ce / Quand",
+        "correct_answers": [
+          "Quand est-ce que vous arrivez ?"
+        ],
+        "feedback": {
+          "rule": "A statement can become a spoken question when your voice rises at the end: tu viens ? means are you coming? Est-ce que also introduces a yes/no question without changing normal subject order. Question words ask for missing information: où (where), quand (when), comment (how), pourquoi (why), combien (how much/many). Inversion means placing a verb before its subject word, joined by a hyphen: venez-vous ? is a more formal are you coming? An inserted t in parle-t-il ? helps pronunciation.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-12",
+    "level": "A1",
+    "outcome": "I can read and give basic time, weather and everyday information.",
+    "explanation": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+    "example_items": [
+      {
+        "french": "Ma sœur travaille au magasin.",
+        "english": "My sister works at the shop.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Elle achète du pain à neuf heures.",
+        "english": "She buys some bread at nine o'clock.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Aujourd'hui, il fait froid.",
+        "english": "Today, it is cold.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-12-recognition-1",
+        "prompt": "Choose the meaning in this context: Ma sœur travaille au magasin.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "My sister works at the shop."
+          },
+          {
+            "id": "1",
+            "text": "She buys some bread at nine o'clock."
+          },
+          {
+            "id": "2",
+            "text": "Today, it is cold."
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-12-recognition-2",
+        "prompt": "Choose the meaning in this context: Elle achète du pain à neuf heures.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "My sister works at the shop."
+          },
+          {
+            "id": "1",
+            "text": "She buys some bread at nine o'clock."
+          },
+          {
+            "id": "2",
+            "text": "Today, it is cold."
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-12-recognition-3",
+        "prompt": "Choose the meaning in this context: Aujourd'hui, il fait froid.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "My sister works at the shop."
+          },
+          {
+            "id": "1",
+            "text": "She buys some bread at nine o'clock."
+          },
+          {
+            "id": "2",
+            "text": "Today, it is cold."
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-12-guided-1",
+        "prompt": "Write the French sentence for: My sister works at the shop. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Ma sœur travaille au magasin."
+        ],
+        "feedback": {
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-12-guided-2",
+        "prompt": "Write the French sentence for: She buys some bread at nine o'clock. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Elle achète du pain à neuf heures."
+        ],
+        "feedback": {
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-12-guided-3",
+        "prompt": "Write the French sentence for: Today, it is cold. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Aujourd'hui, il fait froid."
+        ],
+        "feedback": {
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Ma sœur travaille au magasin. Elle achète du pain à neuf heures. Aujourd'hui, il fait froid.",
+      "english": "My sister works at the shop. She buys some bread at nine o'clock. Today, it is cold.",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Leave a short message giving an appointment date, time, place and the weather. Read a small shopping list aloud with prices and quantities.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Le rendez-vous est le deux mai.",
+      "model_translation": "The appointment is on May second."
+    },
+    "feedback": {
+      "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-12-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: The appointment is on May second. Word bank: mai. / deux / le / est / rendez-vous / Le",
+        "correct_answers": [
+          "Le rendez-vous est le deux mai."
+        ],
+        "feedback": {
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-13",
+    "level": "A1",
+    "outcome": "I can describe a daily routine and say how often I do an activity.",
+    "explanation": "A routine describes repeated actions. A reflexive verb uses a small word pointing back to the person acting: je me lève means I get up; nous nous levons means we get up. The extra word changes with the person: me, te, se, nous, vous, se. Before a vowel, me becomes m'. Souvent means often, toujours means always and parfois means sometimes. Use aimer plus an unchanged verb for preferences: j'aime lire means I like reading.",
+    "example_items": [
+      {
+        "french": "Je me lève à sept heures.",
+        "english": "I get up at seven o'clock.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Je prends souvent le bus.",
+        "english": "I often take the bus.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Le soir, j'aime lire.",
+        "english": "In the evening, I like reading.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-13-recognition-1",
+        "prompt": "Choose the meaning in this context: Je me lève à sept heures.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I get up at seven o'clock."
+          },
+          {
+            "id": "1",
+            "text": "I often take the bus."
+          },
+          {
+            "id": "2",
+            "text": "In the evening, I like reading."
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "A routine describes repeated actions. A reflexive verb uses a small word pointing back to the person acting: je me lève means I get up; nous nous levons means we get up. The extra word changes with the person: me, te, se, nous, vous, se. Before a vowel, me becomes m'. Souvent means often, toujours means always and parfois means sometimes. Use aimer plus an unchanged verb for preferences: j'aime lire means I like reading.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-13-recognition-2",
+        "prompt": "Choose the meaning in this context: Je prends souvent le bus.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I get up at seven o'clock."
+          },
+          {
+            "id": "1",
+            "text": "I often take the bus."
+          },
+          {
+            "id": "2",
+            "text": "In the evening, I like reading."
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "A routine describes repeated actions. A reflexive verb uses a small word pointing back to the person acting: je me lève means I get up; nous nous levons means we get up. The extra word changes with the person: me, te, se, nous, vous, se. Before a vowel, me becomes m'. Souvent means often, toujours means always and parfois means sometimes. Use aimer plus an unchanged verb for preferences: j'aime lire means I like reading.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-13-recognition-3",
+        "prompt": "Choose the meaning in this context: Le soir, j'aime lire.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I get up at seven o'clock."
+          },
+          {
+            "id": "1",
+            "text": "I often take the bus."
+          },
+          {
+            "id": "2",
+            "text": "In the evening, I like reading."
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "A routine describes repeated actions. A reflexive verb uses a small word pointing back to the person acting: je me lève means I get up; nous nous levons means we get up. The extra word changes with the person: me, te, se, nous, vous, se. Before a vowel, me becomes m'. Souvent means often, toujours means always and parfois means sometimes. Use aimer plus an unchanged verb for preferences: j'aime lire means I like reading.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-13-guided-1",
+        "prompt": "Write the French sentence for: I get up at seven o'clock. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Je me lève à sept heures."
+        ],
+        "feedback": {
+          "rule": "A routine describes repeated actions. A reflexive verb uses a small word pointing back to the person acting: je me lève means I get up; nous nous levons means we get up. The extra word changes with the person: me, te, se, nous, vous, se. Before a vowel, me becomes m'. Souvent means often, toujours means always and parfois means sometimes. Use aimer plus an unchanged verb for preferences: j'aime lire means I like reading.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-13-guided-2",
+        "prompt": "Write the French sentence for: I often take the bus. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Je prends souvent le bus."
+        ],
+        "feedback": {
+          "rule": "A routine describes repeated actions. A reflexive verb uses a small word pointing back to the person acting: je me lève means I get up; nous nous levons means we get up. The extra word changes with the person: me, te, se, nous, vous, se. Before a vowel, me becomes m'. Souvent means often, toujours means always and parfois means sometimes. Use aimer plus an unchanged verb for preferences: j'aime lire means I like reading.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-13-guided-3",
+        "prompt": "Write the French sentence for: In the evening, I like reading. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Le soir, j'aime lire."
+        ],
+        "feedback": {
+          "rule": "A routine describes repeated actions. A reflexive verb uses a small word pointing back to the person acting: je me lève means I get up; nous nous levons means we get up. The extra word changes with the person: me, te, se, nous, vous, se. Before a vowel, me becomes m'. Souvent means often, toujours means always and parfois means sometimes. Use aimer plus an unchanged verb for preferences: j'aime lire means I like reading.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Je me lève à sept heures. Je prends souvent le bus. Le soir, j'aime lire.",
+      "english": "I get up at seven o'clock. I often take the bus. In the evening, I like reading.",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Tell a classmate about your morning and an evening hobby. Include a reflexive verb, a frequency word and a preference; then ask about their routine.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Nous nous levons à huit heures.",
+      "model_translation": "We get up at eight o'clock."
+    },
+    "feedback": {
+      "rule": "A routine describes repeated actions. A reflexive verb uses a small word pointing back to the person acting: je me lève means I get up; nous nous levons means we get up. The extra word changes with the person: me, te, se, nous, vous, se. Before a vowel, me becomes m'. Souvent means often, toujours means always and parfois means sometimes. Use aimer plus an unchanged verb for preferences: j'aime lire means I like reading.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-13-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: We get up at eight o'clock. Word bank: heures. / huit / à / levons / nous / Nous",
+        "correct_answers": [
+          "Nous nous levons à huit heures."
+        ],
+        "feedback": {
+          "rule": "A routine describes repeated actions. A reflexive verb uses a small word pointing back to the person acting: je me lève means I get up; nous nous levons means we get up. The extra word changes with the person: me, te, se, nous, vous, se. Before a vowel, me becomes m'. Souvent means often, toujours means always and parfois means sometimes. Use aimer plus an unchanged verb for preferences: j'aime lire means I like reading.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-14",
+    "level": "A1",
+    "outcome": "I can locate a person or thing and connect two simple ideas.",
+    "explanation": "A preposition is a small linking word that shows a relationship. À often locates someone in a city; de can show origin or possession; chez means at someone's home or workplace. En is used with many feminine country names, such as en France. Il y a means there is or there are. The words à gauche and à droite mean on the left and on the right. Et (and), mais (but) and parce que (because) connect short ideas. Learn the whole phrase because English and French prepositions do not always match.",
+    "example_items": [
+      {
+        "french": "Lina est chez Sami.",
+        "english": "Lina is at Sami's home.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Il y a un café à droite.",
+        "english": "There is a café on the right.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Le livre de Lina est ici.",
+        "english": "Lina's book is here.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-14-recognition-1",
+        "prompt": "Choose the meaning in this context: Lina est chez Sami.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Lina is at Sami's home."
+          },
+          {
+            "id": "1",
+            "text": "There is a café on the right."
+          },
+          {
+            "id": "2",
+            "text": "Lina's book is here."
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "A preposition is a small linking word that shows a relationship. À often locates someone in a city; de can show origin or possession; chez means at someone's home or workplace. En is used with many feminine country names, such as en France. Il y a means there is or there are. The words à gauche and à droite mean on the left and on the right. Et (and), mais (but) and parce que (because) connect short ideas. Learn the whole phrase because English and French prepositions do not always match.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-14-recognition-2",
+        "prompt": "Choose the meaning in this context: Il y a un café à droite.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Lina is at Sami's home."
+          },
+          {
+            "id": "1",
+            "text": "There is a café on the right."
+          },
+          {
+            "id": "2",
+            "text": "Lina's book is here."
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "A preposition is a small linking word that shows a relationship. À often locates someone in a city; de can show origin or possession; chez means at someone's home or workplace. En is used with many feminine country names, such as en France. Il y a means there is or there are. The words à gauche and à droite mean on the left and on the right. Et (and), mais (but) and parce que (because) connect short ideas. Learn the whole phrase because English and French prepositions do not always match.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-14-recognition-3",
+        "prompt": "Choose the meaning in this context: Le livre de Lina est ici.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Lina is at Sami's home."
+          },
+          {
+            "id": "1",
+            "text": "There is a café on the right."
+          },
+          {
+            "id": "2",
+            "text": "Lina's book is here."
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "A preposition is a small linking word that shows a relationship. À often locates someone in a city; de can show origin or possession; chez means at someone's home or workplace. En is used with many feminine country names, such as en France. Il y a means there is or there are. The words à gauche and à droite mean on the left and on the right. Et (and), mais (but) and parce que (because) connect short ideas. Learn the whole phrase because English and French prepositions do not always match.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-14-guided-1",
+        "prompt": "Write the French sentence for: Lina is at Sami's home. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Lina est chez Sami."
+        ],
+        "feedback": {
+          "rule": "A preposition is a small linking word that shows a relationship. À often locates someone in a city; de can show origin or possession; chez means at someone's home or workplace. En is used with many feminine country names, such as en France. Il y a means there is or there are. The words à gauche and à droite mean on the left and on the right. Et (and), mais (but) and parce que (because) connect short ideas. Learn the whole phrase because English and French prepositions do not always match.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-14-guided-2",
+        "prompt": "Write the French sentence for: There is a café on the right. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Il y a un café à droite."
+        ],
+        "feedback": {
+          "rule": "A preposition is a small linking word that shows a relationship. À often locates someone in a city; de can show origin or possession; chez means at someone's home or workplace. En is used with many feminine country names, such as en France. Il y a means there is or there are. The words à gauche and à droite mean on the left and on the right. Et (and), mais (but) and parce que (because) connect short ideas. Learn the whole phrase because English and French prepositions do not always match.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-14-guided-3",
+        "prompt": "Write the French sentence for: Lina's book is here. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Le livre de Lina est ici."
+        ],
+        "feedback": {
+          "rule": "A preposition is a small linking word that shows a relationship. À often locates someone in a city; de can show origin or possession; chez means at someone's home or workplace. En is used with many feminine country names, such as en France. Il y a means there is or there are. The words à gauche and à droite mean on the left and on the right. Et (and), mais (but) and parce que (because) connect short ideas. Learn the whole phrase because English and French prepositions do not always match.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Lina est chez Sami. Il y a un café à droite. Le livre de Lina est ici.",
+      "english": "Lina is at Sami's home. There is a café on the right. Lina's book is here.",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Give a visitor directions from a café to a friend's home. Locate two things, identify who owns one object and connect your directions using et or mais.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Je vais à Paris et Sami reste ici.",
+      "model_translation": "I am going to Paris and Sami is staying here."
+    },
+    "feedback": {
+      "rule": "A preposition is a small linking word that shows a relationship. À often locates someone in a city; de can show origin or possession; chez means at someone's home or workplace. En is used with many feminine country names, such as en France. Il y a means there is or there are. The words à gauche and à droite mean on the left and on the right. Et (and), mais (but) and parce que (because) connect short ideas. Learn the whole phrase because English and French prepositions do not always match.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-14-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: I am going to Paris and Sami is staying here. Word bank: ici. / reste / Sami / et / Paris / à / vais / Je",
+        "correct_answers": [
+          "Je vais à Paris et Sami reste ici."
+        ],
+        "feedback": {
+          "rule": "A preposition is a small linking word that shows a relationship. À often locates someone in a city; de can show origin or possession; chez means at someone's home or workplace. En is used with many feminine country names, such as en France. Il y a means there is or there are. The words à gauche and à droite mean on the left and on the right. Et (and), mais (but) and parce que (because) connect short ideas. Learn the whole phrase because English and French prepositions do not always match.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-15",
+    "level": "A1",
+    "outcome": "I can introduce myself and handle a short shop or restaurant exchange.",
+    "explanation": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+    "example_items": [
+      {
+        "french": "Bonjour, je voudrais un café.",
+        "english": "Hello, I would like a coffee.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Combien ça coûte ?",
+        "english": "How much does it cost?",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Je vais payer par carte.",
+        "english": "I am going to pay by card.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-15-recognition-1",
+        "prompt": "Choose the meaning in this context: Bonjour, je voudrais un café.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Hello, I would like a coffee."
+          },
+          {
+            "id": "1",
+            "text": "How much does it cost?"
+          },
+          {
+            "id": "2",
+            "text": "I am going to pay by card."
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-15-recognition-2",
+        "prompt": "Choose the meaning in this context: Combien ça coûte ?",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Hello, I would like a coffee."
+          },
+          {
+            "id": "1",
+            "text": "How much does it cost?"
+          },
+          {
+            "id": "2",
+            "text": "I am going to pay by card."
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-15-recognition-3",
+        "prompt": "Choose the meaning in this context: Je vais payer par carte.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Hello, I would like a coffee."
+          },
+          {
+            "id": "1",
+            "text": "How much does it cost?"
+          },
+          {
+            "id": "2",
+            "text": "I am going to pay by card."
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-15-guided-1",
+        "prompt": "Write the French sentence for: Hello, I would like a coffee. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Bonjour, je voudrais un café."
+        ],
+        "feedback": {
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-15-guided-2",
+        "prompt": "Write the French sentence for: How much does it cost? Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Combien ça coûte ?"
+        ],
+        "feedback": {
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-15-guided-3",
+        "prompt": "Write the French sentence for: I am going to pay by card. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Je vais payer par carte."
+        ],
+        "feedback": {
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Bonjour, je voudrais un café. Combien ça coûte ? Je vais payer par carte.",
+      "english": "Hello, I would like a coffee. How much does it cost? I am going to pay by card.",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Role-play arriving at a restaurant: greet the server, ask for a table, order politely, ask the price and explain how you will pay. Record yourself if possible and check clarity against the model.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Je voudrais une table pour deux.",
+      "model_translation": "I would like a table for two."
+    },
+    "feedback": {
+      "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-15-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: I would like a table for two. Word bank: deux. / pour / table / une / voudrais / Je",
+        "correct_answers": [
+          "Je voudrais une table pour deux."
+        ],
+        "feedback": {
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  }
+]
