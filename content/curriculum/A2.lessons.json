@@ -62,8 +62,8 @@
         ],
         "feedback": {
           "rule": "Present forms describe current actions and habits. Regular -er verbs use -e, -es, -e, -ons, -ez, -ent with je, tu, il/elle/on, nous, vous, ils/elles. Finir (to finish) uses nous finissons, while vendre (to sell) uses nous vendons. Spelling can preserve a sound: nous mangeons (we eat) keeps e; nous commençons (we begin) adds ç. Irregular forms need separate learning: je prends (I take), nous prenons (we take), ils prennent (they take). Do not extend one pattern to every verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Nous commençons le cours à neuf heures.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We begin the class at nine o'clock."
         },
         "provenance": {
           "kind": "original",
@@ -95,8 +95,8 @@
         ],
         "feedback": {
           "rule": "Present forms describe current actions and habits. Regular -er verbs use -e, -es, -e, -ons, -ez, -ent with je, tu, il/elle/on, nous, vous, ils/elles. Finir (to finish) uses nous finissons, while vendre (to sell) uses nous vendons. Spelling can preserve a sound: nous mangeons (we eat) keeps e; nous commençons (we begin) adds ç. Irregular forms need separate learning: je prends (I take), nous prenons (we take), ils prennent (they take). Do not extend one pattern to every verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Nous finissons à midi.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We finish at noon."
         },
         "provenance": {
           "kind": "original",
@@ -128,8 +128,8 @@
         ],
         "feedback": {
           "rule": "Present forms describe current actions and habits. Regular -er verbs use -e, -es, -e, -ons, -ez, -ent with je, tu, il/elle/on, nous, vous, ils/elles. Finir (to finish) uses nous finissons, while vendre (to sell) uses nous vendons. Spelling can preserve a sound: nous mangeons (we eat) keeps e; nous commençons (we begin) adds ç. Irregular forms need separate learning: je prends (I take), nous prenons (we take), ils prennent (they take). Do not extend one pattern to every verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Ils prennent le bus ensuite.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: They take the bus afterwards."
         },
         "provenance": {
           "kind": "original",
@@ -149,8 +149,8 @@
         ],
         "feedback": {
           "rule": "Present forms describe current actions and habits. Regular -er verbs use -e, -es, -e, -ons, -ez, -ent with je, tu, il/elle/on, nous, vous, ils/elles. Finir (to finish) uses nous finissons, while vendre (to sell) uses nous vendons. Spelling can preserve a sound: nous mangeons (we eat) keeps e; nous commençons (we begin) adds ç. Irregular forms need separate learning: je prends (I take), nous prenons (we take), ils prennent (they take). Do not extend one pattern to every verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: We begin the class at nine o'clock.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous commençons le cours à neuf heures."
         },
         "provenance": {
           "kind": "original",
@@ -168,8 +168,8 @@
         ],
         "feedback": {
           "rule": "Present forms describe current actions and habits. Regular -er verbs use -e, -es, -e, -ons, -ez, -ent with je, tu, il/elle/on, nous, vous, ils/elles. Finir (to finish) uses nous finissons, while vendre (to sell) uses nous vendons. Spelling can preserve a sound: nous mangeons (we eat) keeps e; nous commençons (we begin) adds ç. Irregular forms need separate learning: je prends (I take), nous prenons (we take), ils prennent (they take). Do not extend one pattern to every verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: We finish at noon.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous finissons à midi."
         },
         "provenance": {
           "kind": "original",
@@ -187,8 +187,8 @@
         ],
         "feedback": {
           "rule": "Present forms describe current actions and habits. Regular -er verbs use -e, -es, -e, -ons, -ez, -ent with je, tu, il/elle/on, nous, vous, ils/elles. Finir (to finish) uses nous finissons, while vendre (to sell) uses nous vendons. Spelling can preserve a sound: nous mangeons (we eat) keeps e; nous commençons (we begin) adds ç. Irregular forms need separate learning: je prends (I take), nous prenons (we take), ils prennent (they take). Do not extend one pattern to every verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: They take the bus afterwards.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Ils prennent le bus ensuite."
         },
         "provenance": {
           "kind": "original",
@@ -332,8 +332,8 @@
         ],
         "feedback": {
           "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Lina a acheté un billet.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Lina bought a ticket."
         },
         "provenance": {
           "kind": "original",
@@ -365,8 +365,8 @@
         ],
         "feedback": {
           "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Elle est arrivée à Lyon.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: She arrived in Lyon."
         },
         "provenance": {
           "kind": "original",
@@ -398,8 +398,8 @@
         ],
         "feedback": {
           "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Elle n'a pas perdu son billet.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: She did not lose her ticket."
         },
         "provenance": {
           "kind": "original",
@@ -419,8 +419,8 @@
         ],
         "feedback": {
           "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Lina bought a ticket.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Lina a acheté un billet."
         },
         "provenance": {
           "kind": "original",
@@ -438,8 +438,8 @@
         ],
         "feedback": {
           "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: She arrived in Lyon.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Elle est arrivée à Lyon."
         },
         "provenance": {
           "kind": "original",
@@ -457,8 +457,8 @@
         ],
         "feedback": {
           "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: She did not lose her ticket.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Elle n'a pas perdu son billet."
         },
         "provenance": {
           "kind": "original",
@@ -602,8 +602,8 @@
         ],
         "feedback": {
           "rule": "Imparfait describes a past habit, an ongoing situation or background. Take the present nous form, remove -ons and add -ais, -ais, -ait, -ions, -iez, -aient. Être is exceptional: j'étais means I was. Passé composé marks a bounded event that moves a story forward. Compare il pleuvait (it was raining: background) with le bus est arrivé (the bus arrived: event). The choice depends on how you present the situation, not simply whether English uses was.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Il pleuvait ce matin-là.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It was raining that morning."
         },
         "provenance": {
           "kind": "original",
@@ -635,8 +635,8 @@
         ],
         "feedback": {
           "rule": "Imparfait describes a past habit, an ongoing situation or background. Take the present nous form, remove -ons and add -ais, -ais, -ait, -ions, -iez, -aient. Être is exceptional: j'étais means I was. Passé composé marks a bounded event that moves a story forward. Compare il pleuvait (it was raining: background) with le bus est arrivé (the bus arrived: event). The choice depends on how you present the situation, not simply whether English uses was.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: J'attendais le bus.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I was waiting for the bus."
         },
         "provenance": {
           "kind": "original",
@@ -668,8 +668,8 @@
         ],
         "feedback": {
           "rule": "Imparfait describes a past habit, an ongoing situation or background. Take the present nous form, remove -ons and add -ais, -ais, -ait, -ions, -iez, -aient. Être is exceptional: j'étais means I was. Passé composé marks a bounded event that moves a story forward. Compare il pleuvait (it was raining: background) with le bus est arrivé (the bus arrived: event). The choice depends on how you present the situation, not simply whether English uses was.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Le bus est arrivé à huit heures.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The bus arrived at eight o'clock."
         },
         "provenance": {
           "kind": "original",
@@ -689,8 +689,8 @@
         ],
         "feedback": {
           "rule": "Imparfait describes a past habit, an ongoing situation or background. Take the present nous form, remove -ons and add -ais, -ais, -ait, -ions, -iez, -aient. Être is exceptional: j'étais means I was. Passé composé marks a bounded event that moves a story forward. Compare il pleuvait (it was raining: background) with le bus est arrivé (the bus arrived: event). The choice depends on how you present the situation, not simply whether English uses was.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: It was raining that morning.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Il pleuvait ce matin-là."
         },
         "provenance": {
           "kind": "original",
@@ -708,8 +708,8 @@
         ],
         "feedback": {
           "rule": "Imparfait describes a past habit, an ongoing situation or background. Take the present nous form, remove -ons and add -ais, -ais, -ait, -ions, -iez, -aient. Être is exceptional: j'étais means I was. Passé composé marks a bounded event that moves a story forward. Compare il pleuvait (it was raining: background) with le bus est arrivé (the bus arrived: event). The choice depends on how you present the situation, not simply whether English uses was.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I was waiting for the bus.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: J'attendais le bus."
         },
         "provenance": {
           "kind": "original",
@@ -727,8 +727,8 @@
         ],
         "feedback": {
           "rule": "Imparfait describes a past habit, an ongoing situation or background. Take the present nous form, remove -ons and add -ais, -ais, -ait, -ions, -iez, -aient. Être is exceptional: j'étais means I was. Passé composé marks a bounded event that moves a story forward. Compare il pleuvait (it was raining: background) with le bus est arrivé (the bus arrived: event). The choice depends on how you present the situation, not simply whether English uses was.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The bus arrived at eight o'clock.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Le bus est arrivé à huit heures."
         },
         "provenance": {
           "kind": "original",
@@ -872,8 +872,8 @@
         ],
         "feedback": {
           "rule": "Aller plus an unchanged verb often presents a plan or near future: je vais partir means I am going to leave. Futur simple is a single changed form used for predictions and future commitments: je partirai means I will leave. Regular endings are -ai, -as, -a, -ons, -ez, -ont; add them to the unchanged -er/-ir verb, or remove final e from an -re verb. Common irregular stems include ser- (être), aur- (avoir), ir- (aller) and fer- (faire). Time words provide context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je vais préparer mon voyage.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am going to prepare my trip."
         },
         "provenance": {
           "kind": "original",
@@ -905,8 +905,8 @@
         ],
         "feedback": {
           "rule": "Aller plus an unchanged verb often presents a plan or near future: je vais partir means I am going to leave. Futur simple is a single changed form used for predictions and future commitments: je partirai means I will leave. Regular endings are -ai, -as, -a, -ons, -ez, -ont; add them to the unchanged -er/-ir verb, or remove final e from an -re verb. Common irregular stems include ser- (être), aur- (avoir), ir- (aller) and fer- (faire). Time words provide context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je partirai lundi.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I will leave on Monday."
         },
         "provenance": {
           "kind": "original",
@@ -938,8 +938,8 @@
         ],
         "feedback": {
           "rule": "Aller plus an unchanged verb often presents a plan or near future: je vais partir means I am going to leave. Futur simple is a single changed form used for predictions and future commitments: je partirai means I will leave. Regular endings are -ai, -as, -a, -ons, -ez, -ont; add them to the unchanged -er/-ir verb, or remove final e from an -re verb. Common irregular stems include ser- (être), aur- (avoir), ir- (aller) and fer- (faire). Time words provide context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Il fera beau demain.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The weather will be fine tomorrow."
         },
         "provenance": {
           "kind": "original",
@@ -959,8 +959,8 @@
         ],
         "feedback": {
           "rule": "Aller plus an unchanged verb often presents a plan or near future: je vais partir means I am going to leave. Futur simple is a single changed form used for predictions and future commitments: je partirai means I will leave. Regular endings are -ai, -as, -a, -ons, -ez, -ont; add them to the unchanged -er/-ir verb, or remove final e from an -re verb. Common irregular stems include ser- (être), aur- (avoir), ir- (aller) and fer- (faire). Time words provide context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I am going to prepare my trip.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je vais préparer mon voyage."
         },
         "provenance": {
           "kind": "original",
@@ -978,8 +978,8 @@
         ],
         "feedback": {
           "rule": "Aller plus an unchanged verb often presents a plan or near future: je vais partir means I am going to leave. Futur simple is a single changed form used for predictions and future commitments: je partirai means I will leave. Regular endings are -ai, -as, -a, -ons, -ez, -ont; add them to the unchanged -er/-ir verb, or remove final e from an -re verb. Common irregular stems include ser- (être), aur- (avoir), ir- (aller) and fer- (faire). Time words provide context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I will leave on Monday.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je partirai lundi."
         },
         "provenance": {
           "kind": "original",
@@ -997,8 +997,8 @@
         ],
         "feedback": {
           "rule": "Aller plus an unchanged verb often presents a plan or near future: je vais partir means I am going to leave. Futur simple is a single changed form used for predictions and future commitments: je partirai means I will leave. Regular endings are -ai, -as, -a, -ons, -ez, -ont; add them to the unchanged -er/-ir verb, or remove final e from an -re verb. Common irregular stems include ser- (être), aur- (avoir), ir- (aller) and fer- (faire). Time words provide context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The weather will be fine tomorrow.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Il fera beau demain."
         },
         "provenance": {
           "kind": "original",
@@ -1142,8 +1142,8 @@
         ],
         "feedback": {
           "rule": "Reflexive verbs use me, te, se, nous, vous or se before the verb to connect the action to the subject: elle se lave means she washes herself. A plural form can also be reciprocal, meaning people act toward each other: nous nous parlons means we speak to each other. In passé composé, these verbs use être, but agreement depends on the object: elle s'est lavée (she washed herself), elle s'est lavé les mains (she washed her hands), ils se sont parlé (they spoke to each other). Do not add agreement automatically to every reflexive verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Lina se prépare pour le cours.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Lina gets ready for class."
         },
         "provenance": {
           "kind": "original",
@@ -1175,8 +1175,8 @@
         ],
         "feedback": {
           "rule": "Reflexive verbs use me, te, se, nous, vous or se before the verb to connect the action to the subject: elle se lave means she washes herself. A plural form can also be reciprocal, meaning people act toward each other: nous nous parlons means we speak to each other. In passé composé, these verbs use être, but agreement depends on the object: elle s'est lavée (she washed herself), elle s'est lavé les mains (she washed her hands), ils se sont parlé (they spoke to each other). Do not add agreement automatically to every reflexive verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Elle s'est lavé les mains.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: She washed her hands."
         },
         "provenance": {
           "kind": "original",
@@ -1208,8 +1208,8 @@
         ],
         "feedback": {
           "rule": "Reflexive verbs use me, te, se, nous, vous or se before the verb to connect the action to the subject: elle se lave means she washes herself. A plural form can also be reciprocal, meaning people act toward each other: nous nous parlons means we speak to each other. In passé composé, these verbs use être, but agreement depends on the object: elle s'est lavée (she washed herself), elle s'est lavé les mains (she washed her hands), ils se sont parlé (they spoke to each other). Do not add agreement automatically to every reflexive verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Nous nous sommes parlé hier.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We spoke to each other yesterday."
         },
         "provenance": {
           "kind": "original",
@@ -1229,8 +1229,8 @@
         ],
         "feedback": {
           "rule": "Reflexive verbs use me, te, se, nous, vous or se before the verb to connect the action to the subject: elle se lave means she washes herself. A plural form can also be reciprocal, meaning people act toward each other: nous nous parlons means we speak to each other. In passé composé, these verbs use être, but agreement depends on the object: elle s'est lavée (she washed herself), elle s'est lavé les mains (she washed her hands), ils se sont parlé (they spoke to each other). Do not add agreement automatically to every reflexive verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Lina gets ready for class.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Lina se prépare pour le cours."
         },
         "provenance": {
           "kind": "original",
@@ -1248,8 +1248,8 @@
         ],
         "feedback": {
           "rule": "Reflexive verbs use me, te, se, nous, vous or se before the verb to connect the action to the subject: elle se lave means she washes herself. A plural form can also be reciprocal, meaning people act toward each other: nous nous parlons means we speak to each other. In passé composé, these verbs use être, but agreement depends on the object: elle s'est lavée (she washed herself), elle s'est lavé les mains (she washed her hands), ils se sont parlé (they spoke to each other). Do not add agreement automatically to every reflexive verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: She washed her hands.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Elle s'est lavé les mains."
         },
         "provenance": {
           "kind": "original",
@@ -1267,8 +1267,8 @@
         ],
         "feedback": {
           "rule": "Reflexive verbs use me, te, se, nous, vous or se before the verb to connect the action to the subject: elle se lave means she washes herself. A plural form can also be reciprocal, meaning people act toward each other: nous nous parlons means we speak to each other. In passé composé, these verbs use être, but agreement depends on the object: elle s'est lavée (she washed herself), elle s'est lavé les mains (she washed her hands), ils se sont parlé (they spoke to each other). Do not add agreement automatically to every reflexive verb.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: We spoke to each other yesterday.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous nous sommes parlé hier."
         },
         "provenance": {
           "kind": "original",
@@ -1412,8 +1412,8 @@
         ],
         "feedback": {
           "rule": "An object receives or is affected by an action. A direct object follows the verb without à: je vois Lina means I see Lina; je la vois means I see her. Le, la and les replace direct objects. An indirect object in a pattern such as parler à quelqu'un (speak to someone) becomes lui (to him/her) or leur (to them). These short words normally go before the changed verb; with an unchanged second verb, put them before that verb. Choose according to the French verb's pattern.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je vois Lina et je la salue.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I see Lina and I greet her."
         },
         "provenance": {
           "kind": "original",
@@ -1445,8 +1445,8 @@
         ],
         "feedback": {
           "rule": "An object receives or is affected by an action. A direct object follows the verb without à: je vois Lina means I see Lina; je la vois means I see her. Le, la and les replace direct objects. An indirect object in a pattern such as parler à quelqu'un (speak to someone) becomes lui (to him/her) or leur (to them). These short words normally go before the changed verb; with an unchanged second verb, put them before that verb. Choose according to the French verb's pattern.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je lui parle du cours.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I speak to her about the class."
         },
         "provenance": {
           "kind": "original",
@@ -1478,8 +1478,8 @@
         ],
         "feedback": {
           "rule": "An object receives or is affected by an action. A direct object follows the verb without à: je vois Lina means I see Lina; je la vois means I see her. Le, la and les replace direct objects. An indirect object in a pattern such as parler à quelqu'un (speak to someone) becomes lui (to him/her) or leur (to them). These short words normally go before the changed verb; with an unchanged second verb, put them before that verb. Choose according to the French verb's pattern.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je vais leur envoyer un message.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am going to send them a message."
         },
         "provenance": {
           "kind": "original",
@@ -1499,8 +1499,8 @@
         ],
         "feedback": {
           "rule": "An object receives or is affected by an action. A direct object follows the verb without à: je vois Lina means I see Lina; je la vois means I see her. Le, la and les replace direct objects. An indirect object in a pattern such as parler à quelqu'un (speak to someone) becomes lui (to him/her) or leur (to them). These short words normally go before the changed verb; with an unchanged second verb, put them before that verb. Choose according to the French verb's pattern.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I see Lina and I greet her.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je vois Lina et je la salue."
         },
         "provenance": {
           "kind": "original",
@@ -1518,8 +1518,8 @@
         ],
         "feedback": {
           "rule": "An object receives or is affected by an action. A direct object follows the verb without à: je vois Lina means I see Lina; je la vois means I see her. Le, la and les replace direct objects. An indirect object in a pattern such as parler à quelqu'un (speak to someone) becomes lui (to him/her) or leur (to them). These short words normally go before the changed verb; with an unchanged second verb, put them before that verb. Choose according to the French verb's pattern.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I speak to her about the class.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je lui parle du cours."
         },
         "provenance": {
           "kind": "original",
@@ -1537,8 +1537,8 @@
         ],
         "feedback": {
           "rule": "An object receives or is affected by an action. A direct object follows the verb without à: je vois Lina means I see Lina; je la vois means I see her. Le, la and les replace direct objects. An indirect object in a pattern such as parler à quelqu'un (speak to someone) becomes lui (to him/her) or leur (to them). These short words normally go before the changed verb; with an unchanged second verb, put them before that verb. Choose according to the French verb's pattern.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I am going to send them a message.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je vais leur envoyer un message."
         },
         "provenance": {
           "kind": "original",
@@ -1682,8 +1682,8 @@
         ],
         "feedback": {
           "rule": "Use plus...que (more...than), moins...que (less...than) or aussi...que (as...as) around an adjective. For an action, aussi usually becomes autant: je travaille autant que toi means I work as much as you. A superlative identifies an extreme: le plus rapide means the fastest. Bon (good) compares as meilleur; bien (well) compares as mieux. Meilleur describes a noun and changes for gender/number; mieux describes how an action is performed and does not change.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Ce train est plus rapide que le bus.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: This train is faster than the bus."
         },
         "provenance": {
           "kind": "original",
@@ -1715,8 +1715,8 @@
         ],
         "feedback": {
           "rule": "Use plus...que (more...than), moins...que (less...than) or aussi...que (as...as) around an adjective. For an action, aussi usually becomes autant: je travaille autant que toi means I work as much as you. A superlative identifies an extreme: le plus rapide means the fastest. Bon (good) compares as meilleur; bien (well) compares as mieux. Meilleur describes a noun and changes for gender/number; mieux describes how an action is performed and does not change.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: C'est le trajet le moins cher.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It is the cheapest journey."
         },
         "provenance": {
           "kind": "original",
@@ -1748,8 +1748,8 @@
         ],
         "feedback": {
           "rule": "Use plus...que (more...than), moins...que (less...than) or aussi...que (as...as) around an adjective. For an action, aussi usually becomes autant: je travaille autant que toi means I work as much as you. A superlative identifies an extreme: le plus rapide means the fastest. Bon (good) compares as meilleur; bien (well) compares as mieux. Meilleur describes a noun and changes for gender/number; mieux describes how an action is performed and does not change.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Lina parle mieux français maintenant.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Lina speaks French better now."
         },
         "provenance": {
           "kind": "original",
@@ -1769,8 +1769,8 @@
         ],
         "feedback": {
           "rule": "Use plus...que (more...than), moins...que (less...than) or aussi...que (as...as) around an adjective. For an action, aussi usually becomes autant: je travaille autant que toi means I work as much as you. A superlative identifies an extreme: le plus rapide means the fastest. Bon (good) compares as meilleur; bien (well) compares as mieux. Meilleur describes a noun and changes for gender/number; mieux describes how an action is performed and does not change.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: This train is faster than the bus.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Ce train est plus rapide que le bus."
         },
         "provenance": {
           "kind": "original",
@@ -1788,8 +1788,8 @@
         ],
         "feedback": {
           "rule": "Use plus...que (more...than), moins...que (less...than) or aussi...que (as...as) around an adjective. For an action, aussi usually becomes autant: je travaille autant que toi means I work as much as you. A superlative identifies an extreme: le plus rapide means the fastest. Bon (good) compares as meilleur; bien (well) compares as mieux. Meilleur describes a noun and changes for gender/number; mieux describes how an action is performed and does not change.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: It is the cheapest journey.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: C'est le trajet le moins cher."
         },
         "provenance": {
           "kind": "original",
@@ -1807,8 +1807,8 @@
         ],
         "feedback": {
           "rule": "Use plus...que (more...than), moins...que (less...than) or aussi...que (as...as) around an adjective. For an action, aussi usually becomes autant: je travaille autant que toi means I work as much as you. A superlative identifies an extreme: le plus rapide means the fastest. Bon (good) compares as meilleur; bien (well) compares as mieux. Meilleur describes a noun and changes for gender/number; mieux describes how an action is performed and does not change.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Lina speaks French better now.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Lina parle mieux français maintenant."
         },
         "provenance": {
           "kind": "original",
@@ -1952,8 +1952,8 @@
         ],
         "feedback": {
           "rule": "An adverb adds information to an action or description. Many are formed from a feminine adjective plus -ment: lent/lente gives lentement (slowly). Some forms differ, such as bien (well). Short common adverbs often follow the changed verb: je comprends bien (I understand well); in a compound past, they often go after the helping verb: j'ai bien compris (I understood well). Très means very; assez means fairly or enough. Frequency words include souvent (often), rarement (rarely) and parfois (sometimes). Placement can change emphasis.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Lina parle lentement.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Lina speaks slowly."
         },
         "provenance": {
           "kind": "original",
@@ -1985,8 +1985,8 @@
         ],
         "feedback": {
           "rule": "An adverb adds information to an action or description. Many are formed from a feminine adjective plus -ment: lent/lente gives lentement (slowly). Some forms differ, such as bien (well). Short common adverbs often follow the changed verb: je comprends bien (I understand well); in a compound past, they often go after the helping verb: j'ai bien compris (I understood well). Très means very; assez means fairly or enough. Frequency words include souvent (often), rarement (rarely) and parfois (sometimes). Placement can change emphasis.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je comprends assez bien.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I understand fairly well."
         },
         "provenance": {
           "kind": "original",
@@ -2018,8 +2018,8 @@
         ],
         "feedback": {
           "rule": "An adverb adds information to an action or description. Many are formed from a feminine adjective plus -ment: lent/lente gives lentement (slowly). Some forms differ, such as bien (well). Short common adverbs often follow the changed verb: je comprends bien (I understand well); in a compound past, they often go after the helping verb: j'ai bien compris (I understood well). Très means very; assez means fairly or enough. Frequency words include souvent (often), rarement (rarely) and parfois (sometimes). Placement can change emphasis.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Nous révisons souvent ensemble.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We often revise together."
         },
         "provenance": {
           "kind": "original",
@@ -2039,8 +2039,8 @@
         ],
         "feedback": {
           "rule": "An adverb adds information to an action or description. Many are formed from a feminine adjective plus -ment: lent/lente gives lentement (slowly). Some forms differ, such as bien (well). Short common adverbs often follow the changed verb: je comprends bien (I understand well); in a compound past, they often go after the helping verb: j'ai bien compris (I understood well). Très means very; assez means fairly or enough. Frequency words include souvent (often), rarement (rarely) and parfois (sometimes). Placement can change emphasis.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Lina speaks slowly.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Lina parle lentement."
         },
         "provenance": {
           "kind": "original",
@@ -2058,8 +2058,8 @@
         ],
         "feedback": {
           "rule": "An adverb adds information to an action or description. Many are formed from a feminine adjective plus -ment: lent/lente gives lentement (slowly). Some forms differ, such as bien (well). Short common adverbs often follow the changed verb: je comprends bien (I understand well); in a compound past, they often go after the helping verb: j'ai bien compris (I understood well). Très means very; assez means fairly or enough. Frequency words include souvent (often), rarement (rarely) and parfois (sometimes). Placement can change emphasis.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I understand fairly well.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je comprends assez bien."
         },
         "provenance": {
           "kind": "original",
@@ -2077,8 +2077,8 @@
         ],
         "feedback": {
           "rule": "An adverb adds information to an action or description. Many are formed from a feminine adjective plus -ment: lent/lente gives lentement (slowly). Some forms differ, such as bien (well). Short common adverbs often follow the changed verb: je comprends bien (I understand well); in a compound past, they often go after the helping verb: j'ai bien compris (I understood well). Très means very; assez means fairly or enough. Frequency words include souvent (often), rarement (rarely) and parfois (sometimes). Placement can change emphasis.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: We often revise together.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous révisons souvent ensemble."
         },
         "provenance": {
           "kind": "original",
@@ -2222,8 +2222,8 @@
         ],
         "feedback": {
           "rule": "Possessive words match the possessed noun: mon livre (my book), ma table (my table), mes livres (my books). Demonstratives point: ce livre (this book), cette table (this table), ces livres (these books); use cet before a masculine vowel sound. Stressed pronouns, such as moi and toi (me/you), appear after prepositions or for emphasis. Y often replaces à plus a place; en often replaces de plus something or a quantity. Keep the number with en: j'en ai deux means I have two of them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Ce livre est à moi.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: This book is mine."
         },
         "provenance": {
           "kind": "original",
@@ -2255,8 +2255,8 @@
         ],
         "feedback": {
           "rule": "Possessive words match the possessed noun: mon livre (my book), ma table (my table), mes livres (my books). Demonstratives point: ce livre (this book), cette table (this table), ces livres (these books); use cet before a masculine vowel sound. Stressed pronouns, such as moi and toi (me/you), appear after prepositions or for emphasis. Y often replaces à plus a place; en often replaces de plus something or a quantity. Keep the number with en: j'en ai deux means I have two of them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je vais à la bibliothèque et j'y travaille.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I go to the library and work there."
         },
         "provenance": {
           "kind": "original",
@@ -2288,8 +2288,8 @@
         ],
         "feedback": {
           "rule": "Possessive words match the possessed noun: mon livre (my book), ma table (my table), mes livres (my books). Demonstratives point: ce livre (this book), cette table (this table), ces livres (these books); use cet before a masculine vowel sound. Stressed pronouns, such as moi and toi (me/you), appear after prepositions or for emphasis. Y often replaces à plus a place; en often replaces de plus something or a quantity. Keep the number with en: j'en ai deux means I have two of them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Tu as des stylos ? J'en ai deux.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Do you have pens? I have two."
         },
         "provenance": {
           "kind": "original",
@@ -2309,8 +2309,8 @@
         ],
         "feedback": {
           "rule": "Possessive words match the possessed noun: mon livre (my book), ma table (my table), mes livres (my books). Demonstratives point: ce livre (this book), cette table (this table), ces livres (these books); use cet before a masculine vowel sound. Stressed pronouns, such as moi and toi (me/you), appear after prepositions or for emphasis. Y often replaces à plus a place; en often replaces de plus something or a quantity. Keep the number with en: j'en ai deux means I have two of them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: This book is mine.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Ce livre est à moi."
         },
         "provenance": {
           "kind": "original",
@@ -2328,8 +2328,8 @@
         ],
         "feedback": {
           "rule": "Possessive words match the possessed noun: mon livre (my book), ma table (my table), mes livres (my books). Demonstratives point: ce livre (this book), cette table (this table), ces livres (these books); use cet before a masculine vowel sound. Stressed pronouns, such as moi and toi (me/you), appear after prepositions or for emphasis. Y often replaces à plus a place; en often replaces de plus something or a quantity. Keep the number with en: j'en ai deux means I have two of them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I go to the library and work there.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je vais à la bibliothèque et j'y travaille."
         },
         "provenance": {
           "kind": "original",
@@ -2347,8 +2347,8 @@
         ],
         "feedback": {
           "rule": "Possessive words match the possessed noun: mon livre (my book), ma table (my table), mes livres (my books). Demonstratives point: ce livre (this book), cette table (this table), ces livres (these books); use cet before a masculine vowel sound. Stressed pronouns, such as moi and toi (me/you), appear after prepositions or for emphasis. Y often replaces à plus a place; en often replaces de plus something or a quantity. Keep the number with en: j'en ai deux means I have two of them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Do you have pens? I have two.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Tu as des stylos ? J'en ai deux."
         },
         "provenance": {
           "kind": "original",
@@ -2492,8 +2492,8 @@
         ],
         "feedback": {
           "rule": "French chooses place expressions according to the destination: à Paris (in/to Paris), en France (in/to France), au Canada (in/to Canada), aux États-Unis (in/to the United States). Origin uses de, du or des: je viens du Canada means I come from Canada. Movement phrases include tourner à gauche (turn left), traverser la rue (cross the street) and aller tout droit (go straight ahead). Chez is for a person's home or workplace: chez le médecin (at/to the doctor's). Confirm the reference point when giving directions.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Allez tout droit jusqu'à la gare.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Go straight ahead as far as the station."
         },
         "provenance": {
           "kind": "original",
@@ -2525,8 +2525,8 @@
         ],
         "feedback": {
           "rule": "French chooses place expressions according to the destination: à Paris (in/to Paris), en France (in/to France), au Canada (in/to Canada), aux États-Unis (in/to the United States). Origin uses de, du or des: je viens du Canada means I come from Canada. Movement phrases include tourner à gauche (turn left), traverser la rue (cross the street) and aller tout droit (go straight ahead). Chez is for a person's home or workplace: chez le médecin (at/to the doctor's). Confirm the reference point when giving directions.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Tournez à gauche après le café.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Turn left after the café."
         },
         "provenance": {
           "kind": "original",
@@ -2558,8 +2558,8 @@
         ],
         "feedback": {
           "rule": "French chooses place expressions according to the destination: à Paris (in/to Paris), en France (in/to France), au Canada (in/to Canada), aux États-Unis (in/to the United States). Origin uses de, du or des: je viens du Canada means I come from Canada. Movement phrases include tourner à gauche (turn left), traverser la rue (cross the street) and aller tout droit (go straight ahead). Chez is for a person's home or workplace: chez le médecin (at/to the doctor's). Confirm the reference point when giving directions.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Le bus va au Canada.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The bus goes to Canada."
         },
         "provenance": {
           "kind": "original",
@@ -2579,8 +2579,8 @@
         ],
         "feedback": {
           "rule": "French chooses place expressions according to the destination: à Paris (in/to Paris), en France (in/to France), au Canada (in/to Canada), aux États-Unis (in/to the United States). Origin uses de, du or des: je viens du Canada means I come from Canada. Movement phrases include tourner à gauche (turn left), traverser la rue (cross the street) and aller tout droit (go straight ahead). Chez is for a person's home or workplace: chez le médecin (at/to the doctor's). Confirm the reference point when giving directions.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Go straight ahead as far as the station.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Allez tout droit jusqu'à la gare."
         },
         "provenance": {
           "kind": "original",
@@ -2598,8 +2598,8 @@
         ],
         "feedback": {
           "rule": "French chooses place expressions according to the destination: à Paris (in/to Paris), en France (in/to France), au Canada (in/to Canada), aux États-Unis (in/to the United States). Origin uses de, du or des: je viens du Canada means I come from Canada. Movement phrases include tourner à gauche (turn left), traverser la rue (cross the street) and aller tout droit (go straight ahead). Chez is for a person's home or workplace: chez le médecin (at/to the doctor's). Confirm the reference point when giving directions.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Turn left after the café.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Tournez à gauche après le café."
         },
         "provenance": {
           "kind": "original",
@@ -2617,8 +2617,8 @@
         ],
         "feedback": {
           "rule": "French chooses place expressions according to the destination: à Paris (in/to Paris), en France (in/to France), au Canada (in/to Canada), aux États-Unis (in/to the United States). Origin uses de, du or des: je viens du Canada means I come from Canada. Movement phrases include tourner à gauche (turn left), traverser la rue (cross the street) and aller tout droit (go straight ahead). Chez is for a person's home or workplace: chez le médecin (at/to the doctor's). Confirm the reference point when giving directions.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The bus goes to Canada.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Le bus va au Canada."
         },
         "provenance": {
           "kind": "original",
@@ -2762,8 +2762,8 @@
         ],
         "feedback": {
           "rule": "Use est-ce que, spoken rising intonation or inversion to ask questions. Qu'est-ce que asks what as an object; qui asks who. Negative words specify what is absent: ne...rien (nothing), ne...personne (nobody), ne...jamais (never), ne...plus (no longer). Rien and personne can be subjects: personne ne vient means nobody is coming. In a compound past, rien usually follows the helping verb, while personne often follows the past form: je n'ai rien vu (I saw nothing), je n'ai vu personne (I saw nobody).",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Qu'est-ce que tu cherches ?",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: What are you looking for?"
         },
         "provenance": {
           "kind": "original",
@@ -2795,8 +2795,8 @@
         ],
         "feedback": {
           "rule": "Use est-ce que, spoken rising intonation or inversion to ask questions. Qu'est-ce que asks what as an object; qui asks who. Negative words specify what is absent: ne...rien (nothing), ne...personne (nobody), ne...jamais (never), ne...plus (no longer). Rien and personne can be subjects: personne ne vient means nobody is coming. In a compound past, rien usually follows the helping verb, while personne often follows the past form: je n'ai rien vu (I saw nothing), je n'ai vu personne (I saw nobody).",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je ne trouve rien.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I cannot find anything."
         },
         "provenance": {
           "kind": "original",
@@ -2828,8 +2828,8 @@
         ],
         "feedback": {
           "rule": "Use est-ce que, spoken rising intonation or inversion to ask questions. Qu'est-ce que asks what as an object; qui asks who. Negative words specify what is absent: ne...rien (nothing), ne...personne (nobody), ne...jamais (never), ne...plus (no longer). Rien and personne can be subjects: personne ne vient means nobody is coming. In a compound past, rien usually follows the helping verb, while personne often follows the past form: je n'ai rien vu (I saw nothing), je n'ai vu personne (I saw nobody).",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Personne ne répond.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Nobody answers."
         },
         "provenance": {
           "kind": "original",
@@ -2849,8 +2849,8 @@
         ],
         "feedback": {
           "rule": "Use est-ce que, spoken rising intonation or inversion to ask questions. Qu'est-ce que asks what as an object; qui asks who. Negative words specify what is absent: ne...rien (nothing), ne...personne (nobody), ne...jamais (never), ne...plus (no longer). Rien and personne can be subjects: personne ne vient means nobody is coming. In a compound past, rien usually follows the helping verb, while personne often follows the past form: je n'ai rien vu (I saw nothing), je n'ai vu personne (I saw nobody).",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: What are you looking for?",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Qu'est-ce que tu cherches ?"
         },
         "provenance": {
           "kind": "original",
@@ -2868,8 +2868,8 @@
         ],
         "feedback": {
           "rule": "Use est-ce que, spoken rising intonation or inversion to ask questions. Qu'est-ce que asks what as an object; qui asks who. Negative words specify what is absent: ne...rien (nothing), ne...personne (nobody), ne...jamais (never), ne...plus (no longer). Rien and personne can be subjects: personne ne vient means nobody is coming. In a compound past, rien usually follows the helping verb, while personne often follows the past form: je n'ai rien vu (I saw nothing), je n'ai vu personne (I saw nobody).",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I cannot find anything.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je ne trouve rien."
         },
         "provenance": {
           "kind": "original",
@@ -2887,8 +2887,8 @@
         ],
         "feedback": {
           "rule": "Use est-ce que, spoken rising intonation or inversion to ask questions. Qu'est-ce que asks what as an object; qui asks who. Negative words specify what is absent: ne...rien (nothing), ne...personne (nobody), ne...jamais (never), ne...plus (no longer). Rien and personne can be subjects: personne ne vient means nobody is coming. In a compound past, rien usually follows the helping verb, while personne often follows the past form: je n'ai rien vu (I saw nothing), je n'ai vu personne (I saw nobody).",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Nobody answers.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Personne ne répond."
         },
         "provenance": {
           "kind": "original",
@@ -3032,8 +3032,8 @@
         ],
         "feedback": {
           "rule": "For routine exchanges, state your need and add a clear detail. Je voudrais means I would like; est-ce que je peux...? means may/can I...? Pourriez-vous...? (could you...?) is a polite request. An appointment is un rendez-vous; une réservation is a booking. Repeat dates, times and quantities to check understanding. If you do not understand, say pouvez-vous répéter ? (can you repeat?) rather than pretending agreement. Polite language does not require complicated sentences.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je voudrais prendre rendez-vous.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I would like to make an appointment."
         },
         "provenance": {
           "kind": "original",
@@ -3065,8 +3065,8 @@
         ],
         "feedback": {
           "rule": "For routine exchanges, state your need and add a clear detail. Je voudrais means I would like; est-ce que je peux...? means may/can I...? Pourriez-vous...? (could you...?) is a polite request. An appointment is un rendez-vous; une réservation is a booking. Repeat dates, times and quantities to check understanding. If you do not understand, say pouvez-vous répéter ? (can you repeat?) rather than pretending agreement. Polite language does not require complicated sentences.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Est-ce que je peux venir mardi ?",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Can I come on Tuesday?"
         },
         "provenance": {
           "kind": "original",
@@ -3098,8 +3098,8 @@
         ],
         "feedback": {
           "rule": "For routine exchanges, state your need and add a clear detail. Je voudrais means I would like; est-ce que je peux...? means may/can I...? Pourriez-vous...? (could you...?) is a polite request. An appointment is un rendez-vous; une réservation is a booking. Repeat dates, times and quantities to check understanding. If you do not understand, say pouvez-vous répéter ? (can you repeat?) rather than pretending agreement. Polite language does not require complicated sentences.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Pourriez-vous répéter l'heure ?",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Could you repeat the time?"
         },
         "provenance": {
           "kind": "original",
@@ -3119,8 +3119,8 @@
         ],
         "feedback": {
           "rule": "For routine exchanges, state your need and add a clear detail. Je voudrais means I would like; est-ce que je peux...? means may/can I...? Pourriez-vous...? (could you...?) is a polite request. An appointment is un rendez-vous; une réservation is a booking. Repeat dates, times and quantities to check understanding. If you do not understand, say pouvez-vous répéter ? (can you repeat?) rather than pretending agreement. Polite language does not require complicated sentences.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I would like to make an appointment.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je voudrais prendre rendez-vous."
         },
         "provenance": {
           "kind": "original",
@@ -3138,8 +3138,8 @@
         ],
         "feedback": {
           "rule": "For routine exchanges, state your need and add a clear detail. Je voudrais means I would like; est-ce que je peux...? means may/can I...? Pourriez-vous...? (could you...?) is a polite request. An appointment is un rendez-vous; une réservation is a booking. Repeat dates, times and quantities to check understanding. If you do not understand, say pouvez-vous répéter ? (can you repeat?) rather than pretending agreement. Polite language does not require complicated sentences.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Can I come on Tuesday?",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Est-ce que je peux venir mardi ?"
         },
         "provenance": {
           "kind": "original",
@@ -3157,8 +3157,8 @@
         ],
         "feedback": {
           "rule": "For routine exchanges, state your need and add a clear detail. Je voudrais means I would like; est-ce que je peux...? means may/can I...? Pourriez-vous...? (could you...?) is a polite request. An appointment is un rendez-vous; une réservation is a booking. Repeat dates, times and quantities to check understanding. If you do not understand, say pouvez-vous répéter ? (can you repeat?) rather than pretending agreement. Polite language does not require complicated sentences.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Could you repeat the time?",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Pourriez-vous répéter l'heure ?"
         },
         "provenance": {
           "kind": "original",
@@ -3302,8 +3302,8 @@
         ],
         "feedback": {
           "rule": "A short past narrative combines completed events with background. Use passé composé to move through events and imparfait for a situation, habit or feeling. D'abord (first), puis (then) and enfin (finally) make the sequence clear. J'étais content means I was happy; j'ai eu peur means I became frightened or had a fright in a bounded situation. Choose a small number of concrete details and keep who did what clear rather than translating each English past form mechanically.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: D'abord, nous avons visité le musée.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: First, we visited the museum."
         },
         "provenance": {
           "kind": "original",
@@ -3335,8 +3335,8 @@
         ],
         "feedback": {
           "rule": "A short past narrative combines completed events with background. Use passé composé to move through events and imparfait for a situation, habit or feeling. D'abord (first), puis (then) and enfin (finally) make the sequence clear. J'étais content means I was happy; j'ai eu peur means I became frightened or had a fright in a bounded situation. Choose a small number of concrete details and keep who did what clear rather than translating each English past form mechanically.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Il faisait chaud et nous étions fatigués.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It was hot and we were tired."
         },
         "provenance": {
           "kind": "original",
@@ -3368,8 +3368,8 @@
         ],
         "feedback": {
           "rule": "A short past narrative combines completed events with background. Use passé composé to move through events and imparfait for a situation, habit or feeling. D'abord (first), puis (then) and enfin (finally) make the sequence clear. J'étais content means I was happy; j'ai eu peur means I became frightened or had a fright in a bounded situation. Choose a small number of concrete details and keep who did what clear rather than translating each English past form mechanically.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Enfin, nous avons trouvé un café.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Finally, we found a café."
         },
         "provenance": {
           "kind": "original",
@@ -3389,8 +3389,8 @@
         ],
         "feedback": {
           "rule": "A short past narrative combines completed events with background. Use passé composé to move through events and imparfait for a situation, habit or feeling. D'abord (first), puis (then) and enfin (finally) make the sequence clear. J'étais content means I was happy; j'ai eu peur means I became frightened or had a fright in a bounded situation. Choose a small number of concrete details and keep who did what clear rather than translating each English past form mechanically.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: First, we visited the museum.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: D'abord, nous avons visité le musée."
         },
         "provenance": {
           "kind": "original",
@@ -3408,8 +3408,8 @@
         ],
         "feedback": {
           "rule": "A short past narrative combines completed events with background. Use passé composé to move through events and imparfait for a situation, habit or feeling. D'abord (first), puis (then) and enfin (finally) make the sequence clear. J'étais content means I was happy; j'ai eu peur means I became frightened or had a fright in a bounded situation. Choose a small number of concrete details and keep who did what clear rather than translating each English past form mechanically.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: It was hot and we were tired.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Il faisait chaud et nous étions fatigués."
         },
         "provenance": {
           "kind": "original",
@@ -3427,8 +3427,8 @@
         ],
         "feedback": {
           "rule": "A short past narrative combines completed events with background. Use passé composé to move through events and imparfait for a situation, habit or feeling. D'abord (first), puis (then) and enfin (finally) make the sequence clear. J'étais content means I was happy; j'ai eu peur means I became frightened or had a fright in a bounded situation. Choose a small number of concrete details and keep who did what clear rather than translating each English past form mechanically.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Finally, we found a café.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Enfin, nous avons trouvé un café."
         },
         "provenance": {
           "kind": "original",
@@ -3572,8 +3572,8 @@
         ],
         "feedback": {
           "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je préfère marcher.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I prefer walking."
         },
         "provenance": {
           "kind": "original",
@@ -3605,8 +3605,8 @@
         ],
         "feedback": {
           "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: C'est moins cher que le bus.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It is cheaper than the bus."
         },
         "provenance": {
           "kind": "original",
@@ -3638,8 +3638,8 @@
         ],
         "feedback": {
           "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: On pourrait partir plus tôt.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We could leave earlier."
         },
         "provenance": {
           "kind": "original",
@@ -3659,8 +3659,8 @@
         ],
         "feedback": {
           "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I prefer walking.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je préfère marcher."
         },
         "provenance": {
           "kind": "original",
@@ -3678,8 +3678,8 @@
         ],
         "feedback": {
           "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: It is cheaper than the bus.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: C'est moins cher que le bus."
         },
         "provenance": {
           "kind": "original",
@@ -3697,8 +3697,8 @@
         ],
         "feedback": {
           "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: We could leave earlier.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: On pourrait partir plus tôt."
         },
         "provenance": {
           "kind": "original",
@@ -3842,8 +3842,8 @@
         ],
         "feedback": {
           "rule": "A connected message needs a purpose, relevant details and an ending. Et adds information, mais introduces a contrast, parce que gives a reason and donc gives a consequence. Start a friendly email with bonjour plus a name; use à bientôt (see you soon) if you expect further contact. Keep the person and time references consistent. Reading a dialogue aloud practises speaking; to practise listening, have a partner read it while you identify the date, problem and solution without looking.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Bonjour Lina, je viens samedi.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Hello Lina, I am coming on Saturday."
         },
         "provenance": {
           "kind": "original",
@@ -3875,8 +3875,8 @@
         ],
         "feedback": {
           "rule": "A connected message needs a purpose, relevant details and an ending. Et adds information, mais introduces a contrast, parce que gives a reason and donc gives a consequence. Start a friendly email with bonjour plus a name; use à bientôt (see you soon) if you expect further contact. Keep the person and time references consistent. Reading a dialogue aloud practises speaking; to practise listening, have a partner read it while you identify the date, problem and solution without looking.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je prends le train parce que ma voiture est en panne.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am taking the train because my car has broken down."
         },
         "provenance": {
           "kind": "original",
@@ -3908,8 +3908,8 @@
         ],
         "feedback": {
           "rule": "A connected message needs a purpose, relevant details and an ending. Et adds information, mais introduces a contrast, parce que gives a reason and donc gives a consequence. Start a friendly email with bonjour plus a name; use à bientôt (see you soon) if you expect further contact. Keep the person and time references consistent. Reading a dialogue aloud practises speaking; to practise listening, have a partner read it while you identify the date, problem and solution without looking.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: J'arrive à midi, donc nous pouvons déjeuner ensemble.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I arrive at noon, so we can have lunch together."
         },
         "provenance": {
           "kind": "original",
@@ -3929,8 +3929,8 @@
         ],
         "feedback": {
           "rule": "A connected message needs a purpose, relevant details and an ending. Et adds information, mais introduces a contrast, parce que gives a reason and donc gives a consequence. Start a friendly email with bonjour plus a name; use à bientôt (see you soon) if you expect further contact. Keep the person and time references consistent. Reading a dialogue aloud practises speaking; to practise listening, have a partner read it while you identify the date, problem and solution without looking.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Hello Lina, I am coming on Saturday.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Bonjour Lina, je viens samedi."
         },
         "provenance": {
           "kind": "original",
@@ -3948,8 +3948,8 @@
         ],
         "feedback": {
           "rule": "A connected message needs a purpose, relevant details and an ending. Et adds information, mais introduces a contrast, parce que gives a reason and donc gives a consequence. Start a friendly email with bonjour plus a name; use à bientôt (see you soon) if you expect further contact. Keep the person and time references consistent. Reading a dialogue aloud practises speaking; to practise listening, have a partner read it while you identify the date, problem and solution without looking.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I am taking the train because my car has broken down.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je prends le train parce que ma voiture est en panne."
         },
         "provenance": {
           "kind": "original",
@@ -3967,8 +3967,8 @@
         ],
         "feedback": {
           "rule": "A connected message needs a purpose, relevant details and an ending. Et adds information, mais introduces a contrast, parce que gives a reason and donc gives a consequence. Start a friendly email with bonjour plus a name; use à bientôt (see you soon) if you expect further contact. Keep the person and time references consistent. Reading a dialogue aloud practises speaking; to practise listening, have a partner read it while you identify the date, problem and solution without looking.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I arrive at noon, so we can have lunch together.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: J'arrive à midi, donc nous pouvons déjeuner ensemble."
         },
         "provenance": {
           "kind": "original",
