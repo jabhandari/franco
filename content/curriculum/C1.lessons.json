@@ -62,8 +62,8 @@
         ],
         "feedback": {
           "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: La réforme paraît prometteuse ; encore faut-il que les moyens suivent.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The reform seems promising; however, adequate resources must also follow."
         },
         "provenance": {
           "kind": "original",
@@ -95,8 +95,8 @@
         ],
         "feedback": {
           "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Cela étant, l'absence de certitude ne justifie pas l'inaction.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: That being said, the lack of certainty does not justify inaction."
         },
         "provenance": {
           "kind": "original",
@@ -128,8 +128,8 @@
         ],
         "feedback": {
           "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Dès lors, une expérimentation encadrée semble préférable à une décision définitive.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Therefore, a supervised trial seems preferable to a definitive decision."
         },
         "provenance": {
           "kind": "original",
@@ -149,8 +149,8 @@
         ],
         "feedback": {
           "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The reform seems promising; however, adequate resources must also follow.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: La réforme paraît prometteuse ; encore faut-il que les moyens suivent."
         },
         "provenance": {
           "kind": "original",
@@ -168,8 +168,8 @@
         ],
         "feedback": {
           "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: That being said, the lack of certainty does not justify inaction.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Cela étant, l'absence de certitude ne justifie pas l'inaction."
         },
         "provenance": {
           "kind": "original",
@@ -187,8 +187,8 @@
         ],
         "feedback": {
           "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Therefore, a supervised trial seems preferable to a definitive decision.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Dès lors, une expérimentation encadrée semble préférable à une décision définitive."
         },
         "provenance": {
           "kind": "original",
@@ -332,8 +332,8 @@
         ],
         "feedback": {
           "rule": "Reporting a message requires tracking who asserts it, when it applies and how certain it is. Selon (according to) and d'après (on the basis of/according to) attribute a claim; aurait plus a participle can distance the reporter from unconfirmed information. Do not turn an allegation into a fact by dropping those markers. Past reporting can place an earlier action in plus-que-parfait and a later action in conditional; indirect questions retain statement order. A tense can remain unchanged when the current narrator explicitly endorses a still-valid fact, so explain the viewpoint rather than applying a mechanical shift.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Selon le porte-parole, les experts auraient sous-estimé le coût du projet.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: According to the spokesperson, the experts reportedly underestimated the project's cost."
         },
         "provenance": {
           "kind": "original",
@@ -365,8 +365,8 @@
         ],
         "feedback": {
           "rule": "Reporting a message requires tracking who asserts it, when it applies and how certain it is. Selon (according to) and d'après (on the basis of/according to) attribute a claim; aurait plus a participle can distance the reporter from unconfirmed information. Do not turn an allegation into a fact by dropping those markers. Past reporting can place an earlier action in plus-que-parfait and a later action in conditional; indirect questions retain statement order. A tense can remain unchanged when the current narrator explicitly endorses a still-valid fact, so explain the viewpoint rather than applying a mechanical shift.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Il a précisé qu'une estimation avait été remise avant la réunion.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: He specified that an estimate had been submitted before the meeting."
         },
         "provenance": {
           "kind": "original",
@@ -398,8 +398,8 @@
         ],
         "feedback": {
           "rule": "Reporting a message requires tracking who asserts it, when it applies and how certain it is. Selon (according to) and d'après (on the basis of/according to) attribute a claim; aurait plus a participle can distance the reporter from unconfirmed information. Do not turn an allegation into a fact by dropping those markers. Past reporting can place an earlier action in plus-que-parfait and a later action in conditional; indirect questions retain statement order. A tense can remain unchanged when the current narrator explicitly endorses a still-valid fact, so explain the viewpoint rather than applying a mechanical shift.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Il a demandé si les conclusions seraient rendues publiques le lendemain.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: He asked whether the conclusions would be made public the following day."
         },
         "provenance": {
           "kind": "original",
@@ -419,8 +419,8 @@
         ],
         "feedback": {
           "rule": "Reporting a message requires tracking who asserts it, when it applies and how certain it is. Selon (according to) and d'après (on the basis of/according to) attribute a claim; aurait plus a participle can distance the reporter from unconfirmed information. Do not turn an allegation into a fact by dropping those markers. Past reporting can place an earlier action in plus-que-parfait and a later action in conditional; indirect questions retain statement order. A tense can remain unchanged when the current narrator explicitly endorses a still-valid fact, so explain the viewpoint rather than applying a mechanical shift.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: According to the spokesperson, the experts reportedly underestimated the project's cost.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Selon le porte-parole, les experts auraient sous-estimé le coût du projet."
         },
         "provenance": {
           "kind": "original",
@@ -438,8 +438,8 @@
         ],
         "feedback": {
           "rule": "Reporting a message requires tracking who asserts it, when it applies and how certain it is. Selon (according to) and d'après (on the basis of/according to) attribute a claim; aurait plus a participle can distance the reporter from unconfirmed information. Do not turn an allegation into a fact by dropping those markers. Past reporting can place an earlier action in plus-que-parfait and a later action in conditional; indirect questions retain statement order. A tense can remain unchanged when the current narrator explicitly endorses a still-valid fact, so explain the viewpoint rather than applying a mechanical shift.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: He specified that an estimate had been submitted before the meeting.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Il a précisé qu'une estimation avait été remise avant la réunion."
         },
         "provenance": {
           "kind": "original",
@@ -457,8 +457,8 @@
         ],
         "feedback": {
           "rule": "Reporting a message requires tracking who asserts it, when it applies and how certain it is. Selon (according to) and d'après (on the basis of/according to) attribute a claim; aurait plus a participle can distance the reporter from unconfirmed information. Do not turn an allegation into a fact by dropping those markers. Past reporting can place an earlier action in plus-que-parfait and a later action in conditional; indirect questions retain statement order. A tense can remain unchanged when the current narrator explicitly endorses a still-valid fact, so explain the viewpoint rather than applying a mechanical shift.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: He asked whether the conclusions would be made public the following day.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Il a demandé si les conclusions seraient rendues publiques le lendemain."
         },
         "provenance": {
           "kind": "original",
@@ -602,8 +602,8 @@
         ],
         "feedback": {
           "rule": "Register concerns audience, relationship and setting, not simply difficult vocabulary. Colloquial speech may use ça (that/it), shortened negatives and familiar requests; neutral language works across many contexts; formal or academic language tends toward explicit relationships and careful qualification. Rewriting should preserve the requested action and interpersonal stance, not add unnecessary abstraction. A contraction appropriate in conversation can be distracting in a report, while a ceremonial formula may sound distant among close colleagues. Regional and organizational norms also matter.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Tu peux me filer un coup de main ?",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Can you give me a hand? (familiar)"
         },
         "provenance": {
           "kind": "original",
@@ -635,8 +635,8 @@
         ],
         "feedback": {
           "rule": "Register concerns audience, relationship and setting, not simply difficult vocabulary. Colloquial speech may use ça (that/it), shortened negatives and familiar requests; neutral language works across many contexts; formal or academic language tends toward explicit relationships and careful qualification. Rewriting should preserve the requested action and interpersonal stance, not add unnecessary abstraction. A contraction appropriate in conversation can be distracting in a report, while a ceremonial formula may sound distant among close colleagues. Regional and organizational norms also matter.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Peux-tu m'aider à relire ce dossier ?",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Can you help me reread this file? (neutral, familiar address)"
         },
         "provenance": {
           "kind": "original",
@@ -668,8 +668,8 @@
         ],
         "feedback": {
           "rule": "Register concerns audience, relationship and setting, not simply difficult vocabulary. Colloquial speech may use ça (that/it), shortened negatives and familiar requests; neutral language works across many contexts; formal or academic language tends toward explicit relationships and careful qualification. Rewriting should preserve the requested action and interpersonal stance, not add unnecessary abstraction. A contraction appropriate in conversation can be distracting in a report, while a ceremonial formula may sound distant among close colleagues. Regional and organizational norms also matter.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Pourriez-vous examiner ce dossier avant sa transmission ?",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Could you examine this file before it is forwarded? (formal)"
         },
         "provenance": {
           "kind": "original",
@@ -689,8 +689,8 @@
         ],
         "feedback": {
           "rule": "Register concerns audience, relationship and setting, not simply difficult vocabulary. Colloquial speech may use ça (that/it), shortened negatives and familiar requests; neutral language works across many contexts; formal or academic language tends toward explicit relationships and careful qualification. Rewriting should preserve the requested action and interpersonal stance, not add unnecessary abstraction. A contraction appropriate in conversation can be distracting in a report, while a ceremonial formula may sound distant among close colleagues. Regional and organizational norms also matter.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Can you give me a hand? (familiar)",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Tu peux me filer un coup de main ?"
         },
         "provenance": {
           "kind": "original",
@@ -708,8 +708,8 @@
         ],
         "feedback": {
           "rule": "Register concerns audience, relationship and setting, not simply difficult vocabulary. Colloquial speech may use ça (that/it), shortened negatives and familiar requests; neutral language works across many contexts; formal or academic language tends toward explicit relationships and careful qualification. Rewriting should preserve the requested action and interpersonal stance, not add unnecessary abstraction. A contraction appropriate in conversation can be distracting in a report, while a ceremonial formula may sound distant among close colleagues. Regional and organizational norms also matter.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Can you help me reread this file? (neutral, familiar address)",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Peux-tu m'aider à relire ce dossier ?"
         },
         "provenance": {
           "kind": "original",
@@ -727,8 +727,8 @@
         ],
         "feedback": {
           "rule": "Register concerns audience, relationship and setting, not simply difficult vocabulary. Colloquial speech may use ça (that/it), shortened negatives and familiar requests; neutral language works across many contexts; formal or academic language tends toward explicit relationships and careful qualification. Rewriting should preserve the requested action and interpersonal stance, not add unnecessary abstraction. A contraction appropriate in conversation can be distracting in a report, while a ceremonial formula may sound distant among close colleagues. Regional and organizational norms also matter.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Could you examine this file before it is forwarded? (formal)",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Pourriez-vous examiner ce dossier avant sa transmission ?"
         },
         "provenance": {
           "kind": "original",
@@ -872,8 +872,8 @@
         ],
         "feedback": {
           "rule": "Near-synonyms overlap in meaning but differ in tone, intensity and typical combinations. A connotation is an association beyond a word's basic meaning; a collocation is a combination speakers commonly use. Une dépense is an expense, while un investissement frames spending in terms of expected return. Prétendre can mean to claim and may imply doubt, so it is not always a neutral substitute for affirmer (state/assert). Choose a term by its role in the sentence and the evidence available, then check whether the surrounding words form an ordinary French combination.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: La mairie présente cette dépense comme un investissement à long terme.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The council presents this expense as a long-term investment."
         },
         "provenance": {
           "kind": "original",
@@ -905,8 +905,8 @@
         ],
         "feedback": {
           "rule": "Near-synonyms overlap in meaning but differ in tone, intensity and typical combinations. A connotation is an association beyond a word's basic meaning; a collocation is a combination speakers commonly use. Une dépense is an expense, while un investissement frames spending in terms of expected return. Prétendre can mean to claim and may imply doubt, so it is not always a neutral substitute for affirmer (state/assert). Choose a term by its role in the sentence and the evidence available, then check whether the surrounding words form an ordinary French combination.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Le rapport souligne un risque sans annoncer une catastrophe.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The report highlights a risk without announcing a catastrophe."
         },
         "provenance": {
           "kind": "original",
@@ -938,8 +938,8 @@
         ],
         "feedback": {
           "rule": "Near-synonyms overlap in meaning but differ in tone, intensity and typical combinations. A connotation is an association beyond a word's basic meaning; a collocation is a combination speakers commonly use. Une dépense is an expense, while un investissement frames spending in terms of expected return. Prétendre can mean to claim and may imply doubt, so it is not always a neutral substitute for affirmer (state/assert). Choose a term by its role in the sentence and the evidence available, then check whether the surrounding words form an ordinary French combination.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: L'entreprise affirme avoir respecté ses engagements.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The company states that it has met its commitments."
         },
         "provenance": {
           "kind": "original",
@@ -959,8 +959,8 @@
         ],
         "feedback": {
           "rule": "Near-synonyms overlap in meaning but differ in tone, intensity and typical combinations. A connotation is an association beyond a word's basic meaning; a collocation is a combination speakers commonly use. Une dépense is an expense, while un investissement frames spending in terms of expected return. Prétendre can mean to claim and may imply doubt, so it is not always a neutral substitute for affirmer (state/assert). Choose a term by its role in the sentence and the evidence available, then check whether the surrounding words form an ordinary French combination.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The council presents this expense as a long-term investment.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: La mairie présente cette dépense comme un investissement à long terme."
         },
         "provenance": {
           "kind": "original",
@@ -978,8 +978,8 @@
         ],
         "feedback": {
           "rule": "Near-synonyms overlap in meaning but differ in tone, intensity and typical combinations. A connotation is an association beyond a word's basic meaning; a collocation is a combination speakers commonly use. Une dépense is an expense, while un investissement frames spending in terms of expected return. Prétendre can mean to claim and may imply doubt, so it is not always a neutral substitute for affirmer (state/assert). Choose a term by its role in the sentence and the evidence available, then check whether the surrounding words form an ordinary French combination.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The report highlights a risk without announcing a catastrophe.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Le rapport souligne un risque sans annoncer une catastrophe."
         },
         "provenance": {
           "kind": "original",
@@ -997,8 +997,8 @@
         ],
         "feedback": {
           "rule": "Near-synonyms overlap in meaning but differ in tone, intensity and typical combinations. A connotation is an association beyond a word's basic meaning; a collocation is a combination speakers commonly use. Une dépense is an expense, while un investissement frames spending in terms of expected return. Prétendre can mean to claim and may imply doubt, so it is not always a neutral substitute for affirmer (state/assert). Choose a term by its role in the sentence and the evidence available, then check whether the surrounding words form an ordinary French combination.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The company states that it has met its commitments.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: L'entreprise affirme avoir respecté ses engagements."
         },
         "provenance": {
           "kind": "original",
@@ -1142,8 +1142,8 @@
         ],
         "feedback": {
           "rule": "Embedding places one clause inside another: le rapport que la commission a publié (the report that the commission published). Several layers can express precise relationships but also burden the reader. Keep the main subject and verb recoverable; make the referent of chaque pronom (each pronoun) unambiguous. Nominalization turns an action into a noun, such as décider (decide) into décision (decision); it can summarize a process but may hide who acts. Restructuring a sentence into two can improve precision without reducing the complexity of the idea.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Le rapport que la commission a publié confirme que les délais avaient été sous-estimés.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The report that the commission published confirms that the deadlines had been underestimated."
         },
         "provenance": {
           "kind": "original",
@@ -1175,8 +1175,8 @@
         ],
         "feedback": {
           "rule": "Embedding places one clause inside another: le rapport que la commission a publié (the report that the commission published). Several layers can express precise relationships but also burden the reader. Keep the main subject and verb recoverable; make the referent of chaque pronom (each pronoun) unambiguous. Nominalization turns an action into a noun, such as décider (decide) into décision (decision); it can summarize a process but may hide who acts. Restructuring a sentence into two can improve precision without reducing the complexity of the idea.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Ce qui reste incertain, c'est la manière dont ces délais seront révisés.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: What remains uncertain is how these deadlines will be revised."
         },
         "provenance": {
           "kind": "original",
@@ -1208,8 +1208,8 @@
         ],
         "feedback": {
           "rule": "Embedding places one clause inside another: le rapport que la commission a publié (the report that the commission published). Several layers can express precise relationships but also burden the reader. Keep the main subject and verb recoverable; make the referent of chaque pronom (each pronoun) unambiguous. Nominalization turns an action into a noun, such as décider (decide) into décision (decision); it can summarize a process but may hide who acts. Restructuring a sentence into two can improve precision without reducing the complexity of the idea.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: La décision de reporter le vote permettra aux élus d'examiner les nouvelles données.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The decision to postpone the vote will allow elected representatives to examine the new data."
         },
         "provenance": {
           "kind": "original",
@@ -1229,8 +1229,8 @@
         ],
         "feedback": {
           "rule": "Embedding places one clause inside another: le rapport que la commission a publié (the report that the commission published). Several layers can express precise relationships but also burden the reader. Keep the main subject and verb recoverable; make the referent of chaque pronom (each pronoun) unambiguous. Nominalization turns an action into a noun, such as décider (decide) into décision (decision); it can summarize a process but may hide who acts. Restructuring a sentence into two can improve precision without reducing the complexity of the idea.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The report that the commission published confirms that the deadlines had been underestimated.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Le rapport que la commission a publié confirme que les délais avaient été sous-estimés."
         },
         "provenance": {
           "kind": "original",
@@ -1248,8 +1248,8 @@
         ],
         "feedback": {
           "rule": "Embedding places one clause inside another: le rapport que la commission a publié (the report that the commission published). Several layers can express precise relationships but also burden the reader. Keep the main subject and verb recoverable; make the referent of chaque pronom (each pronoun) unambiguous. Nominalization turns an action into a noun, such as décider (decide) into décision (decision); it can summarize a process but may hide who acts. Restructuring a sentence into two can improve precision without reducing the complexity of the idea.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: What remains uncertain is how these deadlines will be revised.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Ce qui reste incertain, c'est la manière dont ces délais seront révisés."
         },
         "provenance": {
           "kind": "original",
@@ -1267,8 +1267,8 @@
         ],
         "feedback": {
           "rule": "Embedding places one clause inside another: le rapport que la commission a publié (the report that the commission published). Several layers can express precise relationships but also burden the reader. Keep the main subject and verb recoverable; make the referent of chaque pronom (each pronoun) unambiguous. Nominalization turns an action into a noun, such as décider (decide) into décision (decision); it can summarize a process but may hide who acts. Restructuring a sentence into two can improve precision without reducing the complexity of the idea.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The decision to postpone the vote will allow elected representatives to examine the new data.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: La décision de reporter le vote permettra aux élus d'examiner les nouvelles données."
         },
         "provenance": {
           "kind": "original",
@@ -1412,8 +1412,8 @@
         ],
         "feedback": {
           "rule": "Modality is how language expresses possibility, obligation or a speaker's stance. Il se peut que (it may be that), à condition que (provided that) and pourvu que (provided/let us hope that) commonly take subjunctive. Past subjunctive marks completion relative to the main viewpoint: qu'elle ait terminé means that she has finished. Some formal patterns invert the main verb, such as encore faut-il que (it remains necessary that). A grammatical form alone does not establish certainty; compare the construction, surrounding evidence and speaker intent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Il se peut que les conclusions aient été mal interprétées.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The conclusions may have been misinterpreted."
         },
         "provenance": {
           "kind": "original",
@@ -1445,8 +1445,8 @@
         ],
         "feedback": {
           "rule": "Modality is how language expresses possibility, obligation or a speaker's stance. Il se peut que (it may be that), à condition que (provided that) and pourvu que (provided/let us hope that) commonly take subjunctive. Past subjunctive marks completion relative to the main viewpoint: qu'elle ait terminé means that she has finished. Some formal patterns invert the main verb, such as encore faut-il que (it remains necessary that). A grammatical form alone does not establish certainty; compare the construction, surrounding evidence and speaker intent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Nous accepterons ce compromis à condition que les garanties soient maintenues.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We will accept this compromise provided that the safeguards are maintained."
         },
         "provenance": {
           "kind": "original",
@@ -1478,8 +1478,8 @@
         ],
         "feedback": {
           "rule": "Modality is how language expresses possibility, obligation or a speaker's stance. Il se peut que (it may be that), à condition que (provided that) and pourvu que (provided/let us hope that) commonly take subjunctive. Past subjunctive marks completion relative to the main viewpoint: qu'elle ait terminé means that she has finished. Some formal patterns invert the main verb, such as encore faut-il que (it remains necessary that). A grammatical form alone does not establish certainty; compare the construction, surrounding evidence and speaker intent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Encore faut-il que chacun puisse accéder aux données.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It remains necessary that everyone be able to access the data."
         },
         "provenance": {
           "kind": "original",
@@ -1499,8 +1499,8 @@
         ],
         "feedback": {
           "rule": "Modality is how language expresses possibility, obligation or a speaker's stance. Il se peut que (it may be that), à condition que (provided that) and pourvu que (provided/let us hope that) commonly take subjunctive. Past subjunctive marks completion relative to the main viewpoint: qu'elle ait terminé means that she has finished. Some formal patterns invert the main verb, such as encore faut-il que (it remains necessary that). A grammatical form alone does not establish certainty; compare the construction, surrounding evidence and speaker intent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The conclusions may have been misinterpreted.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Il se peut que les conclusions aient été mal interprétées."
         },
         "provenance": {
           "kind": "original",
@@ -1518,8 +1518,8 @@
         ],
         "feedback": {
           "rule": "Modality is how language expresses possibility, obligation or a speaker's stance. Il se peut que (it may be that), à condition que (provided that) and pourvu que (provided/let us hope that) commonly take subjunctive. Past subjunctive marks completion relative to the main viewpoint: qu'elle ait terminé means that she has finished. Some formal patterns invert the main verb, such as encore faut-il que (it remains necessary that). A grammatical form alone does not establish certainty; compare the construction, surrounding evidence and speaker intent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: We will accept this compromise provided that the safeguards are maintained.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous accepterons ce compromis à condition que les garanties soient maintenues."
         },
         "provenance": {
           "kind": "original",
@@ -1537,8 +1537,8 @@
         ],
         "feedback": {
           "rule": "Modality is how language expresses possibility, obligation or a speaker's stance. Il se peut que (it may be that), à condition que (provided that) and pourvu que (provided/let us hope that) commonly take subjunctive. Past subjunctive marks completion relative to the main viewpoint: qu'elle ait terminé means that she has finished. Some formal patterns invert the main verb, such as encore faut-il que (it remains necessary that). A grammatical form alone does not establish certainty; compare the construction, surrounding evidence and speaker intent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: It remains necessary that everyone be able to access the data.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Encore faut-il que chacun puisse accéder aux données."
         },
         "provenance": {
           "kind": "original",
@@ -1682,8 +1682,8 @@
         ],
         "feedback": {
           "rule": "Advanced persuasion combines credible support, explicit reasoning and an understanding of the audience's priorities. A concession can strengthen a position by identifying its real limits. A rebuttal explains why an objection does not overturn the claim; it should not caricature the objection. Distinguish correlation (two things occurring together) from causation (one producing the other). Rhetorical questions may guide attention, but they do not replace evidence. End with an action or conclusion proportionate to what your reasoning establishes.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Que gagnerions-nous à reporter encore une décision dont le coût augmente chaque année ?",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: What would we gain by again postponing a decision whose cost increases each year?"
         },
         "provenance": {
           "kind": "original",
@@ -1715,8 +1715,8 @@
         ],
         "feedback": {
           "rule": "Advanced persuasion combines credible support, explicit reasoning and an understanding of the audience's priorities. A concession can strengthen a position by identifying its real limits. A rebuttal explains why an objection does not overturn the claim; it should not caricature the objection. Distinguish correlation (two things occurring together) from causation (one producing the other). Rhetorical questions may guide attention, but they do not replace evidence. End with an action or conclusion proportionate to what your reasoning establishes.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: L'objection budgétaire est sérieuse, mais elle doit être comparée au coût de l'inaction.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The budget objection is serious, but it must be compared with the cost of inaction."
         },
         "provenance": {
           "kind": "original",
@@ -1748,8 +1748,8 @@
         ],
         "feedback": {
           "rule": "Advanced persuasion combines credible support, explicit reasoning and an understanding of the audience's priorities. A concession can strengthen a position by identifying its real limits. A rebuttal explains why an objection does not overturn the claim; it should not caricature the objection. Distinguish correlation (two things occurring together) from causation (one producing the other). Rhetorical questions may guide attention, but they do not replace evidence. End with an action or conclusion proportionate to what your reasoning establishes.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Une hausse simultanée ne suffit pas à établir un lien de causalité.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: A simultaneous increase is not enough to establish a causal link."
         },
         "provenance": {
           "kind": "original",
@@ -1769,8 +1769,8 @@
         ],
         "feedback": {
           "rule": "Advanced persuasion combines credible support, explicit reasoning and an understanding of the audience's priorities. A concession can strengthen a position by identifying its real limits. A rebuttal explains why an objection does not overturn the claim; it should not caricature the objection. Distinguish correlation (two things occurring together) from causation (one producing the other). Rhetorical questions may guide attention, but they do not replace evidence. End with an action or conclusion proportionate to what your reasoning establishes.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: What would we gain by again postponing a decision whose cost increases each year?",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Que gagnerions-nous à reporter encore une décision dont le coût augmente chaque année ?"
         },
         "provenance": {
           "kind": "original",
@@ -1788,8 +1788,8 @@
         ],
         "feedback": {
           "rule": "Advanced persuasion combines credible support, explicit reasoning and an understanding of the audience's priorities. A concession can strengthen a position by identifying its real limits. A rebuttal explains why an objection does not overturn the claim; it should not caricature the objection. Distinguish correlation (two things occurring together) from causation (one producing the other). Rhetorical questions may guide attention, but they do not replace evidence. End with an action or conclusion proportionate to what your reasoning establishes.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The budget objection is serious, but it must be compared with the cost of inaction.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: L'objection budgétaire est sérieuse, mais elle doit être comparée au coût de l'inaction."
         },
         "provenance": {
           "kind": "original",
@@ -1807,8 +1807,8 @@
         ],
         "feedback": {
           "rule": "Advanced persuasion combines credible support, explicit reasoning and an understanding of the audience's priorities. A concession can strengthen a position by identifying its real limits. A rebuttal explains why an objection does not overturn the claim; it should not caricature the objection. Distinguish correlation (two things occurring together) from causation (one producing the other). Rhetorical questions may guide attention, but they do not replace evidence. End with an action or conclusion proportionate to what your reasoning establishes.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: A simultaneous increase is not enough to establish a causal link.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Une hausse simultanée ne suffit pas à établir un lien de causalité."
         },
         "provenance": {
           "kind": "original",
@@ -1952,8 +1952,8 @@
         ],
         "feedback": {
           "rule": "An inference is an interpretation supported by clues rather than directly stated. Presuppositions are ideas treated as already given: encore in il est encore en retard (he is late again) implies an earlier occurrence. Irony can make literal praise convey criticism, but context and tone are essential; words alone may leave several plausible readings. Identify the explicit message first, cite a specific clue for the implied stance, and preserve uncertainty where evidence is weak. Have a partner read the mini-text twice with different intonation to test how tone changes interpretation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Le dossier est enfin arrivé, deux heures après la fin de la réunion.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The file finally arrived, two hours after the meeting ended."
         },
         "provenance": {
           "kind": "original",
@@ -1985,8 +1985,8 @@
         ],
         "feedback": {
           "rule": "An inference is an interpretation supported by clues rather than directly stated. Presuppositions are ideas treated as already given: encore in il est encore en retard (he is late again) implies an earlier occurrence. Irony can make literal praise convey criticism, but context and tone are essential; words alone may leave several plausible readings. Identify the explicit message first, cite a specific clue for the implied stance, and preserve uncertainty where evidence is weak. Have a partner read the mini-text twice with different intonation to test how tone changes interpretation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Voilà une ponctualité remarquable !",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Now that is remarkable punctuality!"
         },
         "provenance": {
           "kind": "original",
@@ -2018,8 +2018,8 @@
         ],
         "feedback": {
           "rule": "An inference is an interpretation supported by clues rather than directly stated. Presuppositions are ideas treated as already given: encore in il est encore en retard (he is late again) implies an earlier occurrence. Irony can make literal praise convey criticism, but context and tone are essential; words alone may leave several plausible readings. Identify the explicit message first, cite a specific clue for the implied stance, and preserve uncertainty where evidence is weak. Have a partner read the mini-text twice with different intonation to test how tone changes interpretation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Il semble que nos priorités ne soient pas tout à fait les mêmes.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It seems that our priorities are not quite the same."
         },
         "provenance": {
           "kind": "original",
@@ -2039,8 +2039,8 @@
         ],
         "feedback": {
           "rule": "An inference is an interpretation supported by clues rather than directly stated. Presuppositions are ideas treated as already given: encore in il est encore en retard (he is late again) implies an earlier occurrence. Irony can make literal praise convey criticism, but context and tone are essential; words alone may leave several plausible readings. Identify the explicit message first, cite a specific clue for the implied stance, and preserve uncertainty where evidence is weak. Have a partner read the mini-text twice with different intonation to test how tone changes interpretation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The file finally arrived, two hours after the meeting ended.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Le dossier est enfin arrivé, deux heures après la fin de la réunion."
         },
         "provenance": {
           "kind": "original",
@@ -2058,8 +2058,8 @@
         ],
         "feedback": {
           "rule": "An inference is an interpretation supported by clues rather than directly stated. Presuppositions are ideas treated as already given: encore in il est encore en retard (he is late again) implies an earlier occurrence. Irony can make literal praise convey criticism, but context and tone are essential; words alone may leave several plausible readings. Identify the explicit message first, cite a specific clue for the implied stance, and preserve uncertainty where evidence is weak. Have a partner read the mini-text twice with different intonation to test how tone changes interpretation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Now that is remarkable punctuality!",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Voilà une ponctualité remarquable !"
         },
         "provenance": {
           "kind": "original",
@@ -2077,8 +2077,8 @@
         ],
         "feedback": {
           "rule": "An inference is an interpretation supported by clues rather than directly stated. Presuppositions are ideas treated as already given: encore in il est encore en retard (he is late again) implies an earlier occurrence. Irony can make literal praise convey criticism, but context and tone are essential; words alone may leave several plausible readings. Identify the explicit message first, cite a specific clue for the implied stance, and preserve uncertainty where evidence is weak. Have a partner read the mini-text twice with different intonation to test how tone changes interpretation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: It seems that our priorities are not quite the same.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Il semble que nos priorités ne soient pas tout à fait les mêmes."
         },
         "provenance": {
           "kind": "original",
@@ -2222,8 +2222,8 @@
         ],
         "feedback": {
           "rule": "An idiom is a conventional expression whose overall meaning may differ from the literal words. Mettre de l'eau dans son vin literally means put water in one's wine, but means moderate one's demands. Jeter l'éponge (throw in the towel) means give up. Avoir le vent en poupe (have the wind at one's stern) means enjoy favourable momentum. Figurative language can create familiarity or vividness but may confuse an unfamiliar audience. Avoid assuming an expression is equally common or appropriate across regions and professional settings.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Après plusieurs échanges, chacun a mis de l'eau dans son vin.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: After several exchanges, everyone moderated their demands."
         },
         "provenance": {
           "kind": "original",
@@ -2255,8 +2255,8 @@
         ],
         "feedback": {
           "rule": "An idiom is a conventional expression whose overall meaning may differ from the literal words. Mettre de l'eau dans son vin literally means put water in one's wine, but means moderate one's demands. Jeter l'éponge (throw in the towel) means give up. Avoir le vent en poupe (have the wind at one's stern) means enjoy favourable momentum. Figurative language can create familiarity or vividness but may confuse an unfamiliar audience. Avoid assuming an expression is equally common or appropriate across regions and professional settings.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: L'équipe refuse de jeter l'éponge malgré les difficultés.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The team refuses to give up despite the difficulties."
         },
         "provenance": {
           "kind": "original",
@@ -2288,8 +2288,8 @@
         ],
         "feedback": {
           "rule": "An idiom is a conventional expression whose overall meaning may differ from the literal words. Mettre de l'eau dans son vin literally means put water in one's wine, but means moderate one's demands. Jeter l'éponge (throw in the towel) means give up. Avoir le vent en poupe (have the wind at one's stern) means enjoy favourable momentum. Figurative language can create familiarity or vividness but may confuse an unfamiliar audience. Avoid assuming an expression is equally common or appropriate across regions and professional settings.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Ce projet a le vent en poupe depuis la publication des résultats.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: This project has enjoyed favourable momentum since the results were published."
         },
         "provenance": {
           "kind": "original",
@@ -2309,8 +2309,8 @@
         ],
         "feedback": {
           "rule": "An idiom is a conventional expression whose overall meaning may differ from the literal words. Mettre de l'eau dans son vin literally means put water in one's wine, but means moderate one's demands. Jeter l'éponge (throw in the towel) means give up. Avoir le vent en poupe (have the wind at one's stern) means enjoy favourable momentum. Figurative language can create familiarity or vividness but may confuse an unfamiliar audience. Avoid assuming an expression is equally common or appropriate across regions and professional settings.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: After several exchanges, everyone moderated their demands.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Après plusieurs échanges, chacun a mis de l'eau dans son vin."
         },
         "provenance": {
           "kind": "original",
@@ -2328,8 +2328,8 @@
         ],
         "feedback": {
           "rule": "An idiom is a conventional expression whose overall meaning may differ from the literal words. Mettre de l'eau dans son vin literally means put water in one's wine, but means moderate one's demands. Jeter l'éponge (throw in the towel) means give up. Avoir le vent en poupe (have the wind at one's stern) means enjoy favourable momentum. Figurative language can create familiarity or vividness but may confuse an unfamiliar audience. Avoid assuming an expression is equally common or appropriate across regions and professional settings.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The team refuses to give up despite the difficulties.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: L'équipe refuse de jeter l'éponge malgré les difficultés."
         },
         "provenance": {
           "kind": "original",
@@ -2347,8 +2347,8 @@
         ],
         "feedback": {
           "rule": "An idiom is a conventional expression whose overall meaning may differ from the literal words. Mettre de l'eau dans son vin literally means put water in one's wine, but means moderate one's demands. Jeter l'éponge (throw in the towel) means give up. Avoir le vent en poupe (have the wind at one's stern) means enjoy favourable momentum. Figurative language can create familiarity or vividness but may confuse an unfamiliar audience. Avoid assuming an expression is equally common or appropriate across regions and professional settings.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: This project has enjoyed favourable momentum since the results were published.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Ce projet a le vent en poupe depuis la publication des résultats."
         },
         "provenance": {
           "kind": "original",
@@ -2492,8 +2492,8 @@
         ],
         "feedback": {
           "rule": "Discourse organization is the progression of ideas across a text or speech. Begin a paragraph from information the reader already knows, then introduce a manageable new point. A recurring term can keep the topic stable; a pronoun must have a clear referent. Announce distinctions that matter, such as immediate versus long-term effects, and use transitions to show how a section changes the analysis. A summary should gather the argument's implications, not repeat every sentence. Check the outline by reading only the first sentence of each paragraph.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: À court terme, cette mesure simplifierait les démarches ; à long terme, ses effets restent à préciser.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: In the short term, this measure would simplify procedures; in the long term, its effects remain to be specified."
         },
         "provenance": {
           "kind": "original",
@@ -2525,8 +2525,8 @@
         ],
         "feedback": {
           "rule": "Discourse organization is the progression of ideas across a text or speech. Begin a paragraph from information the reader already knows, then introduce a manageable new point. A recurring term can keep the topic stable; a pronoun must have a clear referent. Announce distinctions that matter, such as immediate versus long-term effects, and use transitions to show how a section changes the analysis. A summary should gather the argument's implications, not repeat every sentence. Check the outline by reading only the first sentence of each paragraph.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Cette distinction conduit à examiner séparément les coûts et les bénéfices.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: This distinction leads us to examine costs and benefits separately."
         },
         "provenance": {
           "kind": "original",
@@ -2558,8 +2558,8 @@
         ],
         "feedback": {
           "rule": "Discourse organization is the progression of ideas across a text or speech. Begin a paragraph from information the reader already knows, then introduce a manageable new point. A recurring term can keep the topic stable; a pronoun must have a clear referent. Announce distinctions that matter, such as immediate versus long-term effects, and use transitions to show how a section changes the analysis. A summary should gather the argument's implications, not repeat every sentence. Check the outline by reading only the first sentence of each paragraph.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Reste alors à déterminer qui assumera le financement de la transition.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It then remains to determine who will fund the transition."
         },
         "provenance": {
           "kind": "original",
@@ -2579,8 +2579,8 @@
         ],
         "feedback": {
           "rule": "Discourse organization is the progression of ideas across a text or speech. Begin a paragraph from information the reader already knows, then introduce a manageable new point. A recurring term can keep the topic stable; a pronoun must have a clear referent. Announce distinctions that matter, such as immediate versus long-term effects, and use transitions to show how a section changes the analysis. A summary should gather the argument's implications, not repeat every sentence. Check the outline by reading only the first sentence of each paragraph.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: In the short term, this measure would simplify procedures; in the long term, its effects remain to be specified.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: À court terme, cette mesure simplifierait les démarches ; à long terme, ses effets restent à préciser."
         },
         "provenance": {
           "kind": "original",
@@ -2598,8 +2598,8 @@
         ],
         "feedback": {
           "rule": "Discourse organization is the progression of ideas across a text or speech. Begin a paragraph from information the reader already knows, then introduce a manageable new point. A recurring term can keep the topic stable; a pronoun must have a clear referent. Announce distinctions that matter, such as immediate versus long-term effects, and use transitions to show how a section changes the analysis. A summary should gather the argument's implications, not repeat every sentence. Check the outline by reading only the first sentence of each paragraph.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: This distinction leads us to examine costs and benefits separately.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Cette distinction conduit à examiner séparément les coûts et les bénéfices."
         },
         "provenance": {
           "kind": "original",
@@ -2617,8 +2617,8 @@
         ],
         "feedback": {
           "rule": "Discourse organization is the progression of ideas across a text or speech. Begin a paragraph from information the reader already knows, then introduce a manageable new point. A recurring term can keep the topic stable; a pronoun must have a clear referent. Announce distinctions that matter, such as immediate versus long-term effects, and use transitions to show how a section changes the analysis. A summary should gather the argument's implications, not repeat every sentence. Check the outline by reading only the first sentence of each paragraph.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: It then remains to determine who will fund the transition.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Reste alors à déterminer qui assumera le financement de la transition."
         },
         "provenance": {
           "kind": "original",
@@ -2762,8 +2762,8 @@
         ],
         "feedback": {
           "rule": "Professional and academic communication should make the question, method, finding and limitation recoverable. A meeting contribution can summarize a result before requesting a decision. A report distinguishes an observation from an interpretation; a presentation should define specialist terms before relying on them. Les données suggèrent (the data suggest) is weaker than les données démontrent (the data demonstrate). Choose the strength your method supports and state what would change your recommendation rather than filling the message with ungrounded certainty.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Les données recueillies suggèrent une amélioration, sans permettre d'en isoler la cause.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The collected data suggest an improvement without allowing its cause to be isolated."
         },
         "provenance": {
           "kind": "original",
@@ -2795,8 +2795,8 @@
         ],
         "feedback": {
           "rule": "Professional and academic communication should make the question, method, finding and limitation recoverable. A meeting contribution can summarize a result before requesting a decision. A report distinguishes an observation from an interpretation; a presentation should define specialist terms before relying on them. Les données suggèrent (the data suggest) is weaker than les données démontrent (the data demonstrate). Choose the strength your method supports and state what would change your recommendation rather than filling the message with ungrounded certainty.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Notre recommandation reste donc subordonnée à une évaluation complémentaire.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Our recommendation therefore remains conditional on an additional evaluation."
         },
         "provenance": {
           "kind": "original",
@@ -2828,8 +2828,8 @@
         ],
         "feedback": {
           "rule": "Professional and academic communication should make the question, method, finding and limitation recoverable. A meeting contribution can summarize a result before requesting a decision. A report distinguishes an observation from an interpretation; a presentation should define specialist terms before relying on them. Les données suggèrent (the data suggest) is weaker than les données démontrent (the data demonstrate). Choose the strength your method supports and state what would change your recommendation rather than filling the message with ungrounded certainty.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je propose de consacrer la prochaine réunion à la méthode de suivi.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I propose devoting the next meeting to the monitoring method."
         },
         "provenance": {
           "kind": "original",
@@ -2849,8 +2849,8 @@
         ],
         "feedback": {
           "rule": "Professional and academic communication should make the question, method, finding and limitation recoverable. A meeting contribution can summarize a result before requesting a decision. A report distinguishes an observation from an interpretation; a presentation should define specialist terms before relying on them. Les données suggèrent (the data suggest) is weaker than les données démontrent (the data demonstrate). Choose the strength your method supports and state what would change your recommendation rather than filling the message with ungrounded certainty.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The collected data suggest an improvement without allowing its cause to be isolated.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Les données recueillies suggèrent une amélioration, sans permettre d'en isoler la cause."
         },
         "provenance": {
           "kind": "original",
@@ -2868,8 +2868,8 @@
         ],
         "feedback": {
           "rule": "Professional and academic communication should make the question, method, finding and limitation recoverable. A meeting contribution can summarize a result before requesting a decision. A report distinguishes an observation from an interpretation; a presentation should define specialist terms before relying on them. Les données suggèrent (the data suggest) is weaker than les données démontrent (the data demonstrate). Choose the strength your method supports and state what would change your recommendation rather than filling the message with ungrounded certainty.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Our recommendation therefore remains conditional on an additional evaluation.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Notre recommandation reste donc subordonnée à une évaluation complémentaire."
         },
         "provenance": {
           "kind": "original",
@@ -2887,8 +2887,8 @@
         ],
         "feedback": {
           "rule": "Professional and academic communication should make the question, method, finding and limitation recoverable. A meeting contribution can summarize a result before requesting a decision. A report distinguishes an observation from an interpretation; a presentation should define specialist terms before relying on them. Les données suggèrent (the data suggest) is weaker than les données démontrent (the data demonstrate). Choose the strength your method supports and state what would change your recommendation rather than filling the message with ungrounded certainty.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I propose devoting the next meeting to the monitoring method.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je propose de consacrer la prochaine réunion à la méthode de suivi."
         },
         "provenance": {
           "kind": "original",
@@ -3032,8 +3032,8 @@
         ],
         "feedback": {
           "rule": "Critical reading examines not only what a text claims but how it guides interpretation. Framing selects which aspect becomes central; charged words can present a judgement as a description. Distinguish an author's direct claim from a quoted source and check whether the evidence actually supports the conclusion. Bias is a pattern in selection or presentation, not simply a view you dislike. In your analysis, cite a specific language choice and explain its effect; do not infer hidden motives without evidence. The mini-text is an original invented editorial example, not an authentic news quotation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Présenter la réforme comme un simple ajustement minimise l'ampleur des changements annoncés.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Presenting the reform as a mere adjustment minimizes the scale of the announced changes."
         },
         "provenance": {
           "kind": "original",
@@ -3065,8 +3065,8 @@
         ],
         "feedback": {
           "rule": "Critical reading examines not only what a text claims but how it guides interpretation. Framing selects which aspect becomes central; charged words can present a judgement as a description. Distinguish an author's direct claim from a quoted source and check whether the evidence actually supports the conclusion. Bias is a pattern in selection or presentation, not simply a view you dislike. In your analysis, cite a specific language choice and explain its effect; do not infer hidden motives without evidence. The mini-text is an original invented editorial example, not an authentic news quotation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: L'auteur cite les économies attendues, mais ne précise pas qui supportera les coûts.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The author cites the expected savings but does not specify who will bear the costs."
         },
         "provenance": {
           "kind": "original",
@@ -3098,8 +3098,8 @@
         ],
         "feedback": {
           "rule": "Critical reading examines not only what a text claims but how it guides interpretation. Framing selects which aspect becomes central; charged words can present a judgement as a description. Distinguish an author's direct claim from a quoted source and check whether the evidence actually supports the conclusion. Bias is a pattern in selection or presentation, not simply a view you dislike. In your analysis, cite a specific language choice and explain its effect; do not infer hidden motives without evidence. The mini-text is an original invented editorial example, not an authentic news quotation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Ce déséquilibre fragilise l'argument sans suffire à prouver une intention de tromper.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: This imbalance weakens the argument without being enough to prove an intention to deceive."
         },
         "provenance": {
           "kind": "original",
@@ -3119,8 +3119,8 @@
         ],
         "feedback": {
           "rule": "Critical reading examines not only what a text claims but how it guides interpretation. Framing selects which aspect becomes central; charged words can present a judgement as a description. Distinguish an author's direct claim from a quoted source and check whether the evidence actually supports the conclusion. Bias is a pattern in selection or presentation, not simply a view you dislike. In your analysis, cite a specific language choice and explain its effect; do not infer hidden motives without evidence. The mini-text is an original invented editorial example, not an authentic news quotation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Presenting the reform as a mere adjustment minimizes the scale of the announced changes.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Présenter la réforme comme un simple ajustement minimise l'ampleur des changements annoncés."
         },
         "provenance": {
           "kind": "original",
@@ -3138,8 +3138,8 @@
         ],
         "feedback": {
           "rule": "Critical reading examines not only what a text claims but how it guides interpretation. Framing selects which aspect becomes central; charged words can present a judgement as a description. Distinguish an author's direct claim from a quoted source and check whether the evidence actually supports the conclusion. Bias is a pattern in selection or presentation, not simply a view you dislike. In your analysis, cite a specific language choice and explain its effect; do not infer hidden motives without evidence. The mini-text is an original invented editorial example, not an authentic news quotation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The author cites the expected savings but does not specify who will bear the costs.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: L'auteur cite les économies attendues, mais ne précise pas qui supportera les coûts."
         },
         "provenance": {
           "kind": "original",
@@ -3157,8 +3157,8 @@
         ],
         "feedback": {
           "rule": "Critical reading examines not only what a text claims but how it guides interpretation. Framing selects which aspect becomes central; charged words can present a judgement as a description. Distinguish an author's direct claim from a quoted source and check whether the evidence actually supports the conclusion. Bias is a pattern in selection or presentation, not simply a view you dislike. In your analysis, cite a specific language choice and explain its effect; do not infer hidden motives without evidence. The mini-text is an original invented editorial example, not an authentic news quotation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: This imbalance weakens the argument without being enough to prove an intention to deceive.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Ce déséquilibre fragilise l'argument sans suffire à prouver une intention de tromper."
         },
         "provenance": {
           "kind": "original",
@@ -3302,8 +3302,8 @@
         ],
         "feedback": {
           "rule": "Advanced listening combines structure, stance and precise detail. First identify the main question and speakers; on a second pass note a concession, evidence and a qualification. Fast delivery can compress word boundaries, while intonation can emphasize a reservation that the transcript alone underplays. Ask two partners, or use available French device voices, to read the original mini-text at different natural speeds; label this as a simulated listening exercise, not an authentic multi-accent recording. Never treat unfamiliar pronunciation as a lack of language competence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Intervenante A : Je soutiens le principe de la réforme, à condition que les garanties annoncées soient effectivement appliquées.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Speaker A: I support the principle of the reform, provided that the announced safeguards are actually applied."
         },
         "provenance": {
           "kind": "original",
@@ -3335,8 +3335,8 @@
         ],
         "feedback": {
           "rule": "Advanced listening combines structure, stance and precise detail. First identify the main question and speakers; on a second pass note a concession, evidence and a qualification. Fast delivery can compress word boundaries, while intonation can emphasize a reservation that the transcript alone underplays. Ask two partners, or use available French device voices, to read the original mini-text at different natural speeds; label this as a simulated listening exercise, not an authentic multi-accent recording. Never treat unfamiliar pronunciation as a lack of language competence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Intervenant B : C'est précisément sur leur application, et non sur leur formulation, que porte notre désaccord.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Speaker B: It is precisely their application, rather than their wording, that our disagreement concerns."
         },
         "provenance": {
           "kind": "original",
@@ -3368,8 +3368,8 @@
         ],
         "feedback": {
           "rule": "Advanced listening combines structure, stance and precise detail. First identify the main question and speakers; on a second pass note a concession, evidence and a qualification. Fast delivery can compress word boundaries, while intonation can emphasize a reservation that the transcript alone underplays. Ask two partners, or use available French device voices, to read the original mini-text at different natural speeds; label this as a simulated listening exercise, not an authentic multi-accent recording. Never treat unfamiliar pronunciation as a lack of language competence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Intervenante A : Nous pourrions donc commencer par définir les critères d'évaluation.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Speaker A: We could therefore begin by defining the evaluation criteria."
         },
         "provenance": {
           "kind": "original",
@@ -3389,8 +3389,8 @@
         ],
         "feedback": {
           "rule": "Advanced listening combines structure, stance and precise detail. First identify the main question and speakers; on a second pass note a concession, evidence and a qualification. Fast delivery can compress word boundaries, while intonation can emphasize a reservation that the transcript alone underplays. Ask two partners, or use available French device voices, to read the original mini-text at different natural speeds; label this as a simulated listening exercise, not an authentic multi-accent recording. Never treat unfamiliar pronunciation as a lack of language competence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Speaker A: I support the principle of the reform, provided that the announced safeguards are actually applied.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Intervenante A : Je soutiens le principe de la réforme, à condition que les garanties annoncées soient effectivement appliquées."
         },
         "provenance": {
           "kind": "original",
@@ -3408,8 +3408,8 @@
         ],
         "feedback": {
           "rule": "Advanced listening combines structure, stance and precise detail. First identify the main question and speakers; on a second pass note a concession, evidence and a qualification. Fast delivery can compress word boundaries, while intonation can emphasize a reservation that the transcript alone underplays. Ask two partners, or use available French device voices, to read the original mini-text at different natural speeds; label this as a simulated listening exercise, not an authentic multi-accent recording. Never treat unfamiliar pronunciation as a lack of language competence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Speaker B: It is precisely their application, rather than their wording, that our disagreement concerns.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Intervenant B : C'est précisément sur leur application, et non sur leur formulation, que porte notre désaccord."
         },
         "provenance": {
           "kind": "original",
@@ -3427,8 +3427,8 @@
         ],
         "feedback": {
           "rule": "Advanced listening combines structure, stance and precise detail. First identify the main question and speakers; on a second pass note a concession, evidence and a qualification. Fast delivery can compress word boundaries, while intonation can emphasize a reservation that the transcript alone underplays. Ask two partners, or use available French device voices, to read the original mini-text at different natural speeds; label this as a simulated listening exercise, not an authentic multi-accent recording. Never treat unfamiliar pronunciation as a lack of language competence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Speaker A: We could therefore begin by defining the evaluation criteria.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Intervenante A : Nous pourrions donc commencer par définir les critères d'évaluation."
         },
         "provenance": {
           "kind": "original",
@@ -3572,8 +3572,8 @@
         ],
         "feedback": {
           "rule": "Advanced speaking requires responding to what was just said while keeping a coherent position. Reformulation restates a point in new words to clarify it: si je vous suis bien (if I follow you correctly). A negotiation distinguishes shared objectives from competing constraints and tests a proposal against both. Use a pause or a brief framing phrase to organize a response, rather than filling time with unsupported assertions. Precision includes correcting your own wording when it overstates your position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Si je vous suis bien, vous acceptez le principe mais contestez le calendrier.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: If I follow you correctly, you accept the principle but challenge the timetable."
         },
         "provenance": {
           "kind": "original",
@@ -3605,8 +3605,8 @@
         ],
         "feedback": {
           "rule": "Advanced speaking requires responding to what was just said while keeping a coherent position. Reformulation restates a point in new words to clarify it: si je vous suis bien (if I follow you correctly). A negotiation distinguishes shared objectives from competing constraints and tests a proposal against both. Use a pause or a brief framing phrase to organize a response, rather than filling time with unsupported assertions. Precision includes correcting your own wording when it overstates your position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je reformule : je ne demande pas un abandon, mais une mise en œuvre progressive.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Let me rephrase: I am not asking for abandonment, but for gradual implementation."
         },
         "provenance": {
           "kind": "original",
@@ -3638,8 +3638,8 @@
         ],
         "feedback": {
           "rule": "Advanced speaking requires responding to what was just said while keeping a coherent position. Reformulation restates a point in new words to clarify it: si je vous suis bien (if I follow you correctly). A negotiation distinguishes shared objectives from competing constraints and tests a proposal against both. Use a pause or a brief framing phrase to organize a response, rather than filling time with unsupported assertions. Precision includes correcting your own wording when it overstates your position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Quel compromis permettrait de respecter à la fois le délai et les garanties prévues ?",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: What compromise would allow both the deadline and the planned safeguards to be respected?"
         },
         "provenance": {
           "kind": "original",
@@ -3659,8 +3659,8 @@
         ],
         "feedback": {
           "rule": "Advanced speaking requires responding to what was just said while keeping a coherent position. Reformulation restates a point in new words to clarify it: si je vous suis bien (if I follow you correctly). A negotiation distinguishes shared objectives from competing constraints and tests a proposal against both. Use a pause or a brief framing phrase to organize a response, rather than filling time with unsupported assertions. Precision includes correcting your own wording when it overstates your position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: If I follow you correctly, you accept the principle but challenge the timetable.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Si je vous suis bien, vous acceptez le principe mais contestez le calendrier."
         },
         "provenance": {
           "kind": "original",
@@ -3678,8 +3678,8 @@
         ],
         "feedback": {
           "rule": "Advanced speaking requires responding to what was just said while keeping a coherent position. Reformulation restates a point in new words to clarify it: si je vous suis bien (if I follow you correctly). A negotiation distinguishes shared objectives from competing constraints and tests a proposal against both. Use a pause or a brief framing phrase to organize a response, rather than filling time with unsupported assertions. Precision includes correcting your own wording when it overstates your position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Let me rephrase: I am not asking for abandonment, but for gradual implementation.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je reformule : je ne demande pas un abandon, mais une mise en œuvre progressive."
         },
         "provenance": {
           "kind": "original",
@@ -3697,8 +3697,8 @@
         ],
         "feedback": {
           "rule": "Advanced speaking requires responding to what was just said while keeping a coherent position. Reformulation restates a point in new words to clarify it: si je vous suis bien (if I follow you correctly). A negotiation distinguishes shared objectives from competing constraints and tests a proposal against both. Use a pause or a brief framing phrase to organize a response, rather than filling time with unsupported assertions. Precision includes correcting your own wording when it overstates your position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: What compromise would allow both the deadline and the planned safeguards to be respected?",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Quel compromis permettrait de respecter à la fois le délai et les garanties prévues ?"
         },
         "provenance": {
           "kind": "original",
@@ -3842,8 +3842,8 @@
         ],
         "feedback": {
           "rule": "A synthesis reorganizes relevant information from several texts around a question, rather than summarizing each source separately. Keep agreements, differences and degrees of certainty visible; do not invent a consensus. An analytical report explains the basis of a judgement and its limits. During editing, verify attribution, paragraph progression, recurring terminology and the scope of each conclusion. The original mini-text models how to compare invented source positions; it does not reproduce official exam material or third-party articles.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Les deux analyses reconnaissent l'urgence, mais divergent sur les moyens à privilégier.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The two analyses acknowledge the urgency but differ on which means to prioritize."
         },
         "provenance": {
           "kind": "original",
@@ -3875,8 +3875,8 @@
         ],
         "feedback": {
           "rule": "A synthesis reorganizes relevant information from several texts around a question, rather than summarizing each source separately. Keep agreements, differences and degrees of certainty visible; do not invent a consensus. An analytical report explains the basis of a judgement and its limits. During editing, verify attribution, paragraph progression, recurring terminology and the scope of each conclusion. The original mini-text models how to compare invented source positions; it does not reproduce official exam material or third-party articles.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: La première insiste sur le financement, tandis que la seconde met l'accent sur la gouvernance.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The first emphasizes funding, whereas the second stresses governance."
         },
         "provenance": {
           "kind": "original",
@@ -3908,8 +3908,8 @@
         ],
         "feedback": {
           "rule": "A synthesis reorganizes relevant information from several texts around a question, rather than summarizing each source separately. Keep agreements, differences and degrees of certainty visible; do not invent a consensus. An analytical report explains the basis of a judgement and its limits. During editing, verify attribution, paragraph progression, recurring terminology and the scope of each conclusion. The original mini-text models how to compare invented source positions; it does not reproduce official exam material or third-party articles.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Leur rapprochement fait apparaître une condition commune : un suivi indépendant.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Comparing them reveals a shared condition: independent monitoring."
         },
         "provenance": {
           "kind": "original",
@@ -3929,8 +3929,8 @@
         ],
         "feedback": {
           "rule": "A synthesis reorganizes relevant information from several texts around a question, rather than summarizing each source separately. Keep agreements, differences and degrees of certainty visible; do not invent a consensus. An analytical report explains the basis of a judgement and its limits. During editing, verify attribution, paragraph progression, recurring terminology and the scope of each conclusion. The original mini-text models how to compare invented source positions; it does not reproduce official exam material or third-party articles.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The two analyses acknowledge the urgency but differ on which means to prioritize.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Les deux analyses reconnaissent l'urgence, mais divergent sur les moyens à privilégier."
         },
         "provenance": {
           "kind": "original",
@@ -3948,8 +3948,8 @@
         ],
         "feedback": {
           "rule": "A synthesis reorganizes relevant information from several texts around a question, rather than summarizing each source separately. Keep agreements, differences and degrees of certainty visible; do not invent a consensus. An analytical report explains the basis of a judgement and its limits. During editing, verify attribution, paragraph progression, recurring terminology and the scope of each conclusion. The original mini-text models how to compare invented source positions; it does not reproduce official exam material or third-party articles.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The first emphasizes funding, whereas the second stresses governance.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: La première insiste sur le financement, tandis que la seconde met l'accent sur la gouvernance."
         },
         "provenance": {
           "kind": "original",
@@ -3967,8 +3967,8 @@
         ],
         "feedback": {
           "rule": "A synthesis reorganizes relevant information from several texts around a question, rather than summarizing each source separately. Keep agreements, differences and degrees of certainty visible; do not invent a consensus. An analytical report explains the basis of a judgement and its limits. During editing, verify attribution, paragraph progression, recurring terminology and the scope of each conclusion. The original mini-text models how to compare invented source positions; it does not reproduce official exam material or third-party articles.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Comparing them reveals a shared condition: independent monitoring.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Leur rapprochement fait apparaître une condition commune : un suivi indépendant."
         },
         "provenance": {
           "kind": "original",
