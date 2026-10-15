@@ -1670,6 +1670,9 @@ html[data-theme="light"] .learn-view .report-button { border-color:transparent; 
 .answer-mode-picker button:hover:not(:disabled) { color:var(--color-text); }
 .answer-mode-picker button[aria-pressed="true"] { background:var(--color-accent); color:var(--palette-white); }
 .answer-mode-picker button:disabled { cursor:default; opacity:.65; }
+.answer-recording-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.answer-recording-row > .answer-recording { flex:1 1 360px; min-width:0; }
+.answer-recording-row > .primary-button { flex:0 0 auto; margin:0; }
 .answer-recording { display:grid; justify-items:start; gap:12px; width:100%; max-width:600px; padding:18px; border:1px solid var(--color-border); border-radius:12px; background:color-mix(in srgb,var(--color-text) 3%,var(--color-surface)); }
 .answer-recording > strong { font-size:var(--text-13); color:var(--color-text); }
 .answer-recording .audio-player { width:100%; margin:0; padding:0; border:0; background:transparent; }
@@ -1687,7 +1690,7 @@ html[data-theme="light"] .learn-view .report-button { border-color:transparent; 
 .answer-word-signal { display:grid; gap:3px; min-width:150px; padding:10px 12px; border:1px solid var(--color-border); border-radius:8px; }
 .answer-word-signal > strong { color:var(--color-text); }
 .answer-word-signal > p { margin:0; color:var(--color-muted); font-size:var(--text-12); }
-@media(max-width:600px) { .answer-comparison { grid-template-columns:1fr; } .answer-mode-row { flex-direction:column; } .answer-mode-row > .primary-button { width:100%; min-height:44px; } .answer-mode-picker button { padding-inline:7px; font-size:var(--text-12); } }
+@media(max-width:600px) { .answer-comparison { grid-template-columns:1fr; } .answer-mode-row { flex-direction:column; } .answer-mode-row > .primary-button { width:100%; min-height:44px; } .answer-mode-picker button { padding-inline:7px; font-size:var(--text-12); } .answer-recording-row > .primary-button { order:-1; width:100%; min-height:44px; } }
 .freeform-exercise,.read-aloud-exercise { display:grid; gap:16px; }
 .freeform-exercise .free-text-input { min-height:180px; }
 .read-aloud-phrase { font-size:clamp(1.4rem,3vw,2rem); line-height:1.45; font-weight:650; }

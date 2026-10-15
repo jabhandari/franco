@@ -100,7 +100,6 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
           <AnswerModePicker value={mode} onChange={choose} onSpokenAction={useSpokenInput} disabled={busy || audio.phase === 'requesting'}
             spokenLabel={simulateSubmit ? 'Use sample recording' : audio.phase === 'recording' || audio.phase === 'ready' ? 'Record yourself' : 'Start recording'} />
           {mode === 'spoken' && audio.phase === 'recording' && <Button variant="primary" onClick={audio.stopRecording}>Finish recording</Button>}
-          {mode === 'spoken' && audio.phase === 'ready' && <Button variant="primary" onClick={recordAgain}>Record again</Button>}
         </Box>
         {mode === 'typed'
           ? <Textarea rows={3} value={typed} onChange={(event) => setTyped(event.target.value)} placeholder="Type what you heard…" />
@@ -108,7 +107,7 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
             {!available && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable. You can type your answer instead.</Text>}
             {audio.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
             {audio.phase === 'recording' && <Text role="status">Recording · {audio.elapsed}s</Text>}
-            {audio.phase === 'ready' && <Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={audio.previewUrl} /></Box>}
+            {audio.phase === 'ready' && <Box className="answer-recording-row"><Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={audio.previewUrl} /></Box><Button variant="primary" onClick={recordAgain}>Record again</Button></Box>}
           </>}
         {ready && <Box className="answer-submit"><Button variant="primary" wide disabled={busy} onClick={compare}>{busy ? 'Comparing…' : 'Show answer & compare'}</Button></Box>}
       </>}

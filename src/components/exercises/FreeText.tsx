@@ -106,14 +106,13 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
           <AnswerModePicker value={mode} onChange={choose} onSpokenAction={useSpokenInput} disabled={busy || recorder.phase === 'requesting'}
             spokenLabel={simulateSubmit ? 'Use sample recording' : recorder.phase === 'recording' || recorder.phase === 'ready' ? 'Record yourself' : 'Start recording'} />
           {mode === 'spoken' && recorder.phase === 'recording' && <Button variant="primary" onClick={recorder.stopRecording}>Finish recording</Button>}
-          {mode === 'spoken' && recorder.phase === 'ready' && <Button variant="primary" onClick={recordAgain}>Record again</Button>}
         </Box>
         {mode === 'typed' ? <Textarea rows={7} value={value} onChange={(event) => setValue(event.target.value)} placeholder="Write your answer in French…" />
           : <>
             {!available && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable. You can type your answer instead.</Text>}
             {recorder.phase === 'recording' && <Text role="status">Recording · {recorder.elapsed}s / 60s</Text>}
             {recorder.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
-            {recorder.phase === 'ready' && <Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={recorder.previewUrl} /></Box>}
+            {recorder.phase === 'ready' && <Box className="answer-recording-row"><Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={recorder.previewUrl} /></Box><Button variant="primary" onClick={recordAgain}>Record again</Button></Box>}
             {heard && !recorder.previewUrl && <Text className="speaking-task-note">Sample answer ready for feedback.</Text>}
           </>}
         {(mode === 'typed' ? Boolean(value.trim()) : Boolean(heard || recorder.blob)) && <Box className="answer-submit"><Button variant="primary" wide disabled={busy} onClick={submit}>{busy ? 'Getting feedback…' : 'Get feedback'}</Button></Box>}
