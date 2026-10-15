@@ -2927,3 +2927,27 @@ html:not([data-theme="light"]) .welcome-section-kicker,
 html:not([data-theme="light"]) .welcome-highlight-learn .welcome-highlight-label,
 html:not([data-theme="light"]) .auth-landing .product-tour-eyebrow { color:#79ddd3; }
 html:not([data-theme="light"]) .welcome-highlight-play .welcome-highlight-label { color:#c7a6fc; }
+
+/* Stories: identical geometry in both themes; shared paint tokens adapt. */
+.story-path { list-style: none; display: flex; flex-direction: column; align-items: center; gap: 42px; max-width: 760px; margin: 36px auto; padding: 0 88px; }
+.story-stop { position: relative; width: 100%; max-width: 340px; }
+.story-stop:nth-child(4n+2) { transform: translateX(68px); }
+.story-stop:nth-child(4n) { transform: translateX(-68px); }
+.story-stop:not(:last-child)::after { content: ''; position: absolute; height: 38px; left: 50%; top: calc(100% + 2px); border-left: 2px dashed var(--color-border); }
+.story-stop-button { display: flex; align-items: center; gap: 16px; width: 100%; padding: 20px; text-align: left; border: 1px solid var(--color-border); border-radius: 22px; background: var(--color-surface); color: var(--color-text); font: inherit; cursor: pointer; }
+.story-stop.current .story-stop-button { border: 2px solid var(--color-accent); }
+.story-stop-button:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 4px; }
+.story-stop-button:disabled { cursor: default; opacity: .65; }
+.story-stop-marker { display: grid; place-items: center; flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; background: var(--color-background); color: var(--color-accent); }
+.story-stop-copy { display: flex; flex-direction: column; gap: 5px; overflow-wrap: anywhere; }
+.story-stop-copy small { color: var(--color-muted); }
+.story-reader { display: flex; flex-direction: column; gap: 20px; max-width: 860px; margin: 0 auto; }
+.story-reading-text { font-size: 1.15rem; line-height: 1.9; white-space: pre-wrap; overflow-wrap: anywhere; }
+.story-options { display: flex; flex-direction: column; align-items: stretch; gap: 8px; margin: 16px 0; }
+@media (max-width: 640px) {
+  .story-path { padding: 0 20px; gap: 36px; }
+  .story-stop { max-width: 300px; }
+  .story-stop:nth-child(4n+2) { transform: translateX(14px); }
+  .story-stop:nth-child(4n) { transform: translateX(-14px); }
+  .story-stop-button { padding: 16px; gap: 12px; }
+}

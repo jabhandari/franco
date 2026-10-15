@@ -157,3 +157,9 @@ export type ContentItemSummary = {
 
 export type TranslationResult = { text:string;translation:string;source:'fr'|'en';target:'fr'|'en' };
 export type DiaryEntry = TranslationResult & { id:string;saved_at:string };
+
+export type StoryState = 'current' | 'completed' | 'skipped' | 'locked';
+export type StoryStop = {id:string;title:string;title_en:string;level:CefrLevel;order_index:number;state:StoryState;answered:number};
+export type StoryQuestion = {id:string;prompt:string;options:{id:string;text:string}[]};
+export type ReadingStory = {id:string;title:string;title_en:string;level:CefrLevel;text:string;glossary:{french:string;english:string}[];version:number;questions:StoryQuestion[];answered_question_ids:string[]};
+export type StoryActionResult = {story_id:string;state:StoryState;correct:boolean|null;explanation:string|null;answered_question_ids:string[]};

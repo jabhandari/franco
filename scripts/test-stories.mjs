@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {storyPath,createStoryService} from '../server/stories.js';
+const catalog=Array.from({length:3},(_,i)=>({id:`story-0${i+1}`,title:'Test',title_en:'Test',level:'A1',order_index:i+1,version:1,text:'Bonjour.',glossary:[],questions:Array.from({length:6},(_,j)=>({id:`q${j}`,prompt:`Question ${j}`,options:[{id:'a',text:'Oui'},{id:'b',text:'Non'}],correct_option_id:'a',explanation:'Oui.'}))}));
+assert.deepEqual(storyPath(catalog,[]).map(s=>s.state),['current','locked','locked']);
+const progress=[{story_id:'story-01',version:1,state:'skipped',answered_question_ids:[]}];
+assert.deepEqual(storyPath(catalog,progress).map(s=>s.state),['skipped','current','locked']);
+assert.deepEqual(storyPath(catalog,[{...progress[0],state:'completed',answered_question_ids:['q0','q1','q2','q3','q4','q5']}]).map(s=>s.state),['completed','current','locked']);
+assert.deepEqual(storyPath([...catalog].reverse(),[]).map(s=>s.id),catalog.map(s=>s.id));
+const pool={query:async()=>({rows:progress})};
+const service=createStoryService(pool,async()=>catalog);
+const detail=await service.detail('user','story-01');assert.equal(detail.status,200);
+assert.equal(JSON.stringify(detail.body).includes('correct_option_id'),false);assert.equal(JSON.stringify(detail.body).includes('explanation'),false);
+assert.equal((await service.detail('user','story-03')).status,403);
+assert.equal((await service.detail('user','missing')).status,404);
+assert.equal((await service.act('user','story-01','skip',{})).status,400);
+console.log('Stories ordering, one-stop frontier, skip/completion unlocks, private keys, access control and version input passed.');
