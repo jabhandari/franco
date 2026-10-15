@@ -57,6 +57,7 @@ export function PronunciationSpikePanel() {
       // The first download can be slow. Only the device test decides if its
       // steady-state inference is usable on iPhone Safari.
       timer.current = setTimeout(() => {
+        timer.current = null;
         worker.current?.terminate(); worker.current = null; setPhase('ready');
         setError('The local model timed out. The normal speaking exercise still uses transcription.');
       }, 300_000);
@@ -74,7 +75,7 @@ export function PronunciationSpikePanel() {
     <div className="phoneme-spike-card">
       <strong>Before you begin</strong>
       <p>The first run downloads about 241 MB. Your browser may evict the cached model later. Use Wi-Fi if you want to avoid mobile data charges.</p>
-      <label className="phoneme-spike-consent"><input type="checkbox" checked={consented} onChange={(event) => setConsented(event.target.checked)} /> Download the model on this device</label>
+      <label className="phoneme-spike-consent"><input type="checkbox" checked={consented} disabled={busy} onChange={(event) => setConsented(event.target.checked)} /> Download the model on this device</label>
     </div>
     <div className="phoneme-spike-card">
       <strong>Choose a French recording</strong>
