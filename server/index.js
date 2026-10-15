@@ -17,6 +17,7 @@ import { getPort, getHost, corsOrigin } from './config.js';
 import { displayName, isNonEmptyName } from './user-names.js';
 import { getLearnerProgress } from './learner-progress.js';
 import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
+import { PuzzleError, puzzleSummary, startPuzzle, getPuzzle, answerPuzzle, endPuzzle } from './puzzles.js';
 import { allowAuthEmail, authClientIp, genericEmailResponse, hashEmailToken, sendAuthEmail, validEmailToken } from './auth-email.js';
 import { emailConfigured } from './email.js';
 
@@ -439,6 +440,27 @@ async function main() {
             }
             if (req.method === 'GET' && u.pathname === '/api/me/progress') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { items: await query('SELECT * FROM learner_item_state WHERE user_id=? ORDER BY due_at', [x.id]), concepts: await query('SELECT * FROM learner_concept_mastery WHERE user_id=? ORDER BY mastery', [x.id]), attempts: await query('SELECT * FROM learning_attempts WHERE user_id=? ORDER BY created_at DESC LIMIT 100', [x.id]) }); }
             if (req.method === 'GET' && u.pathname === '/api/me/streak') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const timeZone = normalizeTimeZone(u.searchParams.get('tz')); const today = localDateString(new Date(), timeZone); const rows = await query('SELECT activity_date, attempts_count FROM learner_activity_days WHERE user_id=? ORDER BY activity_date', [x.id]); const summary = summarizeActivity(rows, today); const windowStart = shiftDate(today, -370); return json(res, 200, { currentStreak: summary.currentStreak, longestStreak: summary.longestStreak, studiedToday: summary.studiedToday, activeDays: summary.activeDays, totalAttempts: summary.totalAttempts, today, days: summary.days.filter((day) => day.date >= windowStart) }); }
+            if (u.pathname === '/api/me/puzzles' || u.pathname === '/api/me/puzzles/runs' || u.pathname.startsWith('/api/me/puzzles/runs/')) {
+              const x = await user(req);
+              if (!x) return json(res, 401, { error: 'Authentication required.' });
+              try {
+                if (req.method === 'GET' && u.pathname === '/api/me/puzzles') return json(res, 200, await puzzleSummary(x.id));
+                if (req.method === 'POST' && u.pathname === '/api/me/puzzles/runs') {
+                  const config = await body(req);
+                  return json(res, 201, await startPuzzle(x.id, config.lives, config.minutes));
+                }
+                const match = u.pathname.match(/^\/api\/me\/puzzles\/runs\/([a-f0-9-]{36})(?:\/(answer|end))?$/);
+                if (match && req.method === 'GET' && !match[2]) return json(res, 200, await getPuzzle(x.id, match[1]));
+                if (match && req.method === 'POST' && match[2] === 'answer') {
+                  const submission = await body(req);
+                  return json(res, 200, await answerPuzzle(x.id, match[1], submission.question_id, submission.response));
+                }
+                if (match && req.method === 'POST' && match[2] === 'end') return json(res, 200, await endPuzzle(x.id, match[1]));
+              } catch (error) {
+                if (error instanceof PuzzleError) return json(res, error.status, { error: error.message });
+                throw error;
+              }
+            }
             if (req.method === 'GET' && u.pathname === '/api/me/review-due') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { items: await query("SELECT i.*,r.prompt,r.response_json,r.evaluation_json,s.due_at FROM learner_item_state s JOIN content_items i ON i.id=s.item_id JOIN content_revisions r ON r.item_id=i.id AND r.revision=i.current_revision WHERE s.user_id=? AND i.status='published' AND s.due_at<=NOW() ORDER BY s.due_at LIMIT 50", [x.id]) }); }
             if (req.method === 'POST' && u.pathname === '/api/me/attempts') {
               const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const b = await body(req); if (b.response === undefined) return json(res, 400, { error: 'response is required.' });

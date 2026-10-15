@@ -50,6 +50,44 @@ export type SkillProgress = {
   percent: number;
 };
 
+export type PuzzleRun = {
+  id: string;
+  lives: 1 | 3 | 5;
+  lives_left: number;
+  minutes: 3 | 5 | null;
+  score: number;
+  answered: number;
+  started_at: string;
+  server_now: string;
+  expires_at: string | null;
+  ended_at: string | null;
+  status: 'active' | 'finished' | 'abandoned';
+  end_reason: 'time' | 'lives' | 'questions_exhausted' | 'left' | 'restarted' | null;
+};
+
+export type PuzzleQuestionBase = {
+  id: string;
+  level: string;
+  type: string;
+  prompt: string;
+  context: string | null;
+  instructions: string | null;
+  audio_url: string | null;
+};
+
+export type PuzzleQuestion = PuzzleQuestionBase & (
+  { kind: 'choice'; choices: { id: string; text: string }[] } |
+  { kind: 'word_order'; tokens: { id: string; text: string }[] }
+);
+
+export type PuzzleState = { run: PuzzleRun; question: PuzzleQuestion | null };
+export type PuzzleAnswer = PuzzleState & { correct?: boolean; reveal?: string; timed_out?: boolean };
+export type PuzzleSummary = {
+  best: number;
+  active: PuzzleRun | null;
+  records: { lives: number; minutes: number | null; best: number }[];
+};
+
 /** Content item types. Matches `CONTENT_TYPES` in server/content-contract.js. */
 export type ContentItemType =
   | 'multiple_choice'
