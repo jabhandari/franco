@@ -1,11 +1,12 @@
 import React from 'react';
-import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, Heart, RotateCcw, Sparkles, Trophy, X, Zap } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, Flame, Heart, RotateCcw, Sparkles, Trophy, X, Zap } from 'lucide-react';
 import { apiGet, apiPost } from '../api/client.js';
 import { getErrorMessage } from '../presenters/format.presenter.js';
 import type { PuzzleAnswer, PuzzleQuestion, PuzzleRun, PuzzleState, PuzzleSummary } from '../types';
 import { AudioPlayer, Box, Button, ErrorMessage, Text } from '../components/ui';
+import { VerbSprint } from './VerbSprint';
 
-type Stage = 'gallery' | 'setup' | 'playing' | 'over';
+type Stage = 'gallery' | 'setup' | 'playing' | 'over' | 'verb';
 type Feedback = { correct: boolean; reveal: string; next: PuzzleQuestion | null; selected: string | null };
 type Props = { token: string | null };
 
@@ -137,19 +138,19 @@ export function Puzzles({ token }: Props) {
           <Text>Quick French puzzles, rising difficulty, and just enough pressure to keep you sharp.</Text>
           <Box className="puzzles-hero-facts"><Text as="span">One question at a time</Text><Text as="span">Your pace, your rules</Text></Box>
         </Box>
-        <Box className="puzzles-best" aria-label={`Your best score is ${summary?.best ?? 0}`}>
+        <Box className="puzzles-best" aria-label={`Your best French Rush score is ${summary?.best ?? 0}`}>
           <Trophy size={26} aria-hidden="true" />
-          <Text as="span">YOUR BEST RUN</Text>
+          <Text as="span">BEST FRENCH RUSH</Text>
           <Text as="strong">{summary?.best ?? '—'}</Text>
           <Text as="small">correct answers</Text>
         </Box>
       </Box>
 
-      <Box className="puzzles-section-heading"><Box><Text className="puzzles-kicker">CHOOSE A PUZZLE</Text><Text as="h2">Ready when you are</Text></Box><Text>1 game available</Text></Box>
+      <Box className="puzzles-section-heading"><Box><Text className="puzzles-kicker">CHOOSE A PUZZLE</Text><Text as="h2">Ready when you are</Text></Box><Text>2 games available</Text></Box>
       <Box className="puzzles-game-card">
         <Box className="puzzles-game-art" aria-hidden="true"><Box className="puzzles-art-ring"><Zap size={46} /></Box><Text as="span">A1 → C2</Text></Box>
         <Box className="puzzles-game-copy">
-          <Text className="puzzles-kicker">THE DAILY CHALLENGE</Text>
+          <Text className="puzzles-kicker">THE ENDURANCE GAME</Text>
           <Text as="h3">French Rush</Text>
           <Text>Build a streak of correct answers. Miss a question, lose a life. How far can you climb?</Text>
           <Box className="puzzles-pills"><Text as="span"><Heart size={15} /> 1, 3 or 5 lives</Text><Text as="span"><Clock3 size={15} /> Timed or unlimited</Text><Text as="span"><Zap size={15} /> Gets harder</Text></Box>
@@ -159,7 +160,19 @@ export function Puzzles({ token }: Props) {
           </Box>
         </Box>
       </Box>
+      <Box className="puzzles-game-card puzzles-verb-card">
+        <Box className="puzzles-game-art puzzles-verb-art" aria-hidden="true"><Box className="puzzles-art-ring"><Flame size={46} /></Box><Text as="span">60 SECONDS</Text></Box>
+        <Box className="puzzles-game-copy">
+          <Text className="puzzles-kicker">THE SPEED GAME</Text>
+          <Text as="h3">Verb Sprint</Text>
+          <Text>Race through present-tense conjugations. Correct answers build your streak; a miss resets it, but the clock keeps running.</Text>
+          <Box className="puzzles-pills"><Text as="span"><Clock3 size={15} /> One minute</Text><Text as="span"><Flame size={15} /> Streaks</Text><Text as="span"><Trophy size={15} /> Best {summary?.verb_best ?? '—'}</Text></Box>
+          <Box className="puzzles-card-actions"><Button variant="primary" onClick={() => { setError(''); setStage('verb'); }} icon={ChevronRight} iconPosition="after">{summary?.verb_active ? 'Resume or restart' : 'Play Verb Sprint'}</Button></Box>
+        </Box>
+      </Box>
     </>}
+
+    {stage === 'verb' && <VerbSprint token={token} summary={summary} onBack={() => { setStage('gallery'); void refreshSummary(); }} onUpdated={refreshSummary} />}
 
     {stage === 'setup' && <>
       <Button variant="text" icon={ArrowLeft} onClick={() => { setStage('gallery'); setError(''); }}>All puzzles</Button>
