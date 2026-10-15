@@ -24,13 +24,23 @@ assert.equal(evaluate(choice, 'a'), true);
 assert.equal(evaluate(choice, 'b'), false);
 assert.equal(puzzleReveal(choice), 'Bonjour');
 
+// Published word-order items store a shuffled word bank in response_json.tokens
+// alongside the correct sentence (answer/expected): the puzzle and Practice
+// must both resolve the sentence, never join the bank.
 const order = { id: 'order-1', item_type: 'word_order', cefr_level: 'A2', prompt: 'Build the sentence',
-  response_json: { tokens: ['Je', 'suis', 'ici'] }, evaluation_json: { mode: 'token_order' } };
+  response_json: { tokens: ['suis', 'ici', 'Je'], expected: 'Je suis ici' }, evaluation_json: { mode: 'token_order' } };
 const publicOrder = publicPuzzleQuestion(order, 'test-secret');
 assert.equal(publicOrder.kind, 'word_order');
 assert.equal(publicOrder.tokens.every((token) => typeof token.id === 'string' && token.id.length === 24), true, 'word order must not expose original indices');
-assert.notDeepEqual(publicOrder.tokens.map((token) => token.text), order.response_json.tokens, 'word order must not expose the answer order');
-assert.equal(evaluate(order, ['Je', 'suis', 'ici']), true);
-assert.equal(evaluate(order, ['Je', 'ici', 'suis']), false);
-assert.equal(puzzleReveal(order), 'Je suis ici');
+assert.deepEqual(publicOrder.tokens.map((token) => token.text).sort(), ['Je', 'ici', 'suis'].sort(), 'word order bank must carry every word of the sentence');
+assert.notEqual(publicOrder.tokens.map((token) => token.text).join(' '), puzzleReveal(order), 'word order bank must not expose the answer order');
+assert.equal(evaluate(order, ['Je', 'suis', 'ici']), true, 'token_order grades against the stored sentence');
+assert.equal(evaluate(order, ['suis', 'ici', 'Je']), false, 'token_order rejects the shuffled bank order');
+assert.equal(evaluate(order, ['Je', 'ici', 'suis']), false, 'token_order rejects other wrong orders');
+assert.equal(puzzleReveal(order), 'Je suis ici', 'puzzle reveal must show the stored sentence, not the joined bank');
+// Legacy shape without a stored sentence still grades against the ordered bank.
+const legacyOrder = { id: 'order-2', item_type: 'word_order', cefr_level: 'A2', prompt: 'Build the sentence',
+  response_json: { tokens: ['Je', 'suis', 'ici'] }, evaluation_json: { mode: 'token_order' } };
+assert.equal(evaluate(legacyOrder, ['Je', 'suis', 'ici']), true, 'token_order without a stored sentence falls back to the token order');
+assert.equal(puzzleReveal(legacyOrder), 'Je suis ici');
 console.log('puzzle rules checks passed');
