@@ -1,0 +1,26 @@
+import assert from 'node:assert/strict';
+import { EXPEDITION_LENGTH, expeditionAnswer, expeditionChoice, expeditionLevelOrder } from '../server/expedition-rules.js';
+
+const fresh = { step: 0, phase: 'question', route: 'start', reward: 1, trail: [] };
+assert.deepEqual(expeditionLevelOrder(0, 'start')[0], 'A1');
+assert.deepEqual(expeditionLevelOrder(5, 'easy')[0], 'A2');
+assert.deepEqual(expeditionLevelOrder(5, 'hard')[0], 'B2');
+assert.equal(expeditionChoice(fresh, 'hard', 2, 3), null);
+assert.equal(expeditionChoice({ ...fresh, phase: 'fork' }, 'invalid', 2, 3), null);
+const fork = { ...fresh, step: 1, phase: 'fork' };
+const hard = expeditionChoice(fork, 'hard', 2, 3);
+assert.equal(hard.reward, 3);
+assert.equal(hard.livesLeft, 2);
+assert.equal(expeditionAnswer(hard, true, 'A2', 2).points, 3);
+const camp = expeditionChoice(fork, 'camp', 2, 3);
+assert.equal(camp.livesLeft, 3);
+assert.equal(camp.reward, 1);
+assert.equal(expeditionChoice(fork, 'camp', 3, 3).livesLeft, 3);
+const miss = expeditionAnswer(hard, false, 'B1', 1);
+assert.equal(miss.livesLeft, 0);
+assert.equal(miss.done, 'lives');
+assert.equal(miss.points, 0);
+const summit = expeditionAnswer({ ...hard, step: EXPEDITION_LENGTH - 1 }, true, 'C2', 3);
+assert.equal(summit.done, 'summit');
+assert.equal(summit.state.step, EXPEDITION_LENGTH);
+console.log('Expedition rules passed');

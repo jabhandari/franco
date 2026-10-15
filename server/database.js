@@ -63,7 +63,16 @@ export async function migrate() {
     ALTER TABLE puzzle_runs ADD COLUMN IF NOT EXISTS combo INTEGER NOT NULL DEFAULT 0;
     ALTER TABLE puzzle_runs ADD COLUMN IF NOT EXISTS best_combo INTEGER NOT NULL DEFAULT 0;
     ALTER TABLE puzzle_runs ADD COLUMN IF NOT EXISTS current_verb_id TEXT;
-    DO $$ BEGIN ALTER TABLE puzzle_runs ADD CONSTRAINT puzzle_runs_game_check CHECK (game IN ('french_rush','verb_sprint')); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+    ALTER TABLE puzzle_runs ADD COLUMN IF NOT EXISTS expedition_state JSONB NOT NULL DEFAULT '{}'::jsonb;
+    DO $$ BEGIN
+      IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname='puzzle_runs_game_check' AND conrelid='puzzle_runs'::regclass
+        AND pg_get_constraintdef(oid) NOT LIKE '%french_expedition%') THEN
+        ALTER TABLE puzzle_runs DROP CONSTRAINT puzzle_runs_game_check;
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname='puzzle_runs_game_check' AND conrelid='puzzle_runs'::regclass) THEN
+        ALTER TABLE puzzle_runs ADD CONSTRAINT puzzle_runs_game_check CHECK (game IN ('french_rush','verb_sprint','french_expedition'));
+      END IF;
+    END $$;
     CREATE INDEX IF NOT EXISTS puzzle_runs_user_recent_idx ON puzzle_runs(user_id,started_at DESC);
     CREATE INDEX IF NOT EXISTS puzzle_runs_user_best_idx ON puzzle_runs(user_id,lives_total,minutes,score DESC);
     CREATE INDEX IF NOT EXISTS puzzle_runs_game_best_idx ON puzzle_runs(user_id,game,score DESC);

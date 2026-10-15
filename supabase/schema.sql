@@ -461,7 +461,8 @@ ALTER TABLE public.learner_lesson_positions ENABLE ROW LEVEL SECURITY;
 CREATE TABLE IF NOT EXISTS public.puzzle_runs (
   id TEXT PRIMARY KEY,
   user_id TEXT NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
-  game TEXT NOT NULL DEFAULT 'french_rush' CHECK (game IN ('french_rush','verb_sprint')),
+
+  game TEXT NOT NULL DEFAULT 'french_rush' CHECK (game IN ('french_rush','verb_sprint','french_expedition')),
   lives_total SMALLINT NOT NULL CHECK (lives_total IN (1,3,5)),
   lives_left SMALLINT NOT NULL CHECK (lives_left BETWEEN 0 AND 5),
   minutes SMALLINT CHECK (minutes IN (3,5)),
@@ -477,6 +478,8 @@ CREATE TABLE IF NOT EXISTS public.puzzle_runs (
   current_item_id TEXT REFERENCES public.content_items(id) ON DELETE SET NULL,
   current_item_revision INTEGER,
   current_verb_id TEXT,
+
+  expedition_state JSONB NOT NULL DEFAULT '{}'::jsonb,
   seen_item_ids TEXT[] NOT NULL DEFAULT '{}',
   choice_secret TEXT NOT NULL
 );

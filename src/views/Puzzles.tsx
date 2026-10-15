@@ -1,12 +1,13 @@
 import React from 'react';
-import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, Flame, Heart, RotateCcw, Sparkles, Swords, Trophy, X, Zap } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, Flame, Heart, Map, RotateCcw, Sparkles, Swords, Trophy, X, Zap } from 'lucide-react';
 import { apiGet, apiPost } from '../api/client.js';
 import { getErrorMessage } from '../presenters/format.presenter.js';
 import type { PuzzleAnswer, PuzzleQuestion, PuzzleRun, PuzzleState, PuzzleSummary } from '../types';
 import { AudioPlayer, Box, Button, ErrorMessage, GameArtImage, Text } from '../components/ui';
 import { VerbSprint } from './VerbSprint';
+import { FrenchExpedition } from './FrenchExpedition';
 
-type Stage = 'gallery' | 'setup' | 'playing' | 'over' | 'verb';
+type Stage = 'gallery' | 'setup' | 'playing' | 'over' | 'verb' | 'expedition';
 type Feedback = { correct: boolean; reveal: string; next: PuzzleQuestion | null; selected: string | null };
 type Props = { token: string | null; onRace: () => void };
 
@@ -183,8 +184,20 @@ export function Puzzles({ token, onRace }: Props) {
           <Box className="puzzles-card-actions"><Button variant="primary" onClick={onRace} icon={ChevronRight} iconPosition="after">Invite a friend</Button></Box>
         </Box>
       </Box>
+      <Box className="puzzles-game-card puzzles-expedition-card">
+        <Box className="puzzles-game-art puzzles-expedition-art" aria-hidden="true"><Box className="puzzles-art-ring"><Map size={46} /></Box><Text as="span">10 ENCOUNTERS</Text></Box>
+        <Box className="puzzles-game-copy">
+          <Text className="puzzles-kicker">THE CHOOSE-YOUR-PATH GAME</Text>
+          <Text as="h3">French Expedition</Text>
+          <Text>Cross a changing trail of French challenges. Take the safe path, risk a harder climb for more points, or rest at camp to regain a life.</Text>
+          <Box className="puzzles-pills"><Text as="span"><Heart size={15} /> 3 lives</Text><Text as="span"><Map size={15} /> Your route, your run</Text><Text as="span"><Trophy size={15} /> Best {summary?.expedition_best ?? '—'}</Text></Box>
+          <Box className="puzzles-card-actions"><Button variant="primary" onClick={() => { setError(''); setStage('expedition'); }} icon={ChevronRight} iconPosition="after">{summary?.expedition_active ? 'Resume or restart' : 'Explore the trail'}</Button></Box>
+        </Box>
+      </Box>
       </Box>
     </>}
+
+    {stage === 'expedition' && <FrenchExpedition token={token} summary={summary} onBack={() => { setStage('gallery'); void refreshSummary(); }} onUpdated={refreshSummary} />}
 
     {stage === 'verb' && <VerbSprint token={token} summary={summary} onBack={() => { setStage('gallery'); void refreshSummary(); }} onUpdated={refreshSummary} />}
 

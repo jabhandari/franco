@@ -22,7 +22,7 @@ import { getPort, getHost, corsOrigin, getEnforceEmailVerification } from './con
 import { displayName, isNonEmptyName } from './user-names.js';
 import { getLearnerProgress } from './learner-progress.js';
 import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
-import { PuzzleError, puzzleSummary, startPuzzle, getPuzzle, answerPuzzle, endPuzzle, startVerbSprint, getVerbSprint, answerVerbSprint, endVerbSprint } from './puzzles.js';
+import { PuzzleError, puzzleSummary, startPuzzle, getPuzzle, answerPuzzle, endPuzzle, startVerbSprint, getVerbSprint, answerVerbSprint, endVerbSprint, startExpedition, getExpedition, answerExpedition, chooseExpeditionRoute, endExpedition } from './puzzles.js';
 import { RaceError, createRoom, getRoom, joinRoom, configureRoom, startRoom, answerRoom, finishRoom, closeRoom, listHostedRooms, pruneRaceRooms } from './races.js';
 import { allowAuthEmail, authClientIp, genericEmailResponse, hashEmailToken, sendAuthEmail, validEmailToken } from './auth-email.js';
 import { emailConfigured } from './email.js';
@@ -512,11 +512,23 @@ async function main() {
             }
             if (req.method === 'GET' && u.pathname === '/api/me/progress') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); return json(res, 200, { items: await query('SELECT * FROM learner_item_state WHERE user_id=? ORDER BY due_at', [x.id]), concepts: await query('SELECT * FROM learner_concept_mastery WHERE user_id=? ORDER BY mastery', [x.id]), attempts: await query('SELECT * FROM learning_attempts WHERE user_id=? ORDER BY created_at DESC LIMIT 100', [x.id]) }); }
             if (req.method === 'GET' && u.pathname === '/api/me/streak') { const x = await user(req); if (!x) return json(res, 401, { error: 'Authentication required.' }); const timeZone = normalizeTimeZone(u.searchParams.get('tz')); const today = localDateString(new Date(), timeZone); const rows = await query('SELECT activity_date, attempts_count FROM learner_activity_days WHERE user_id=? ORDER BY activity_date', [x.id]); const summary = summarizeActivity(rows, today); const windowStart = shiftDate(today, -370); return json(res, 200, { currentStreak: summary.currentStreak, longestStreak: summary.longestStreak, studiedToday: summary.studiedToday, activeDays: summary.activeDays, totalAttempts: summary.totalAttempts, today, days: summary.days.filter((day) => day.date >= windowStart) }); }
-            if (u.pathname === '/api/me/puzzles' || u.pathname === '/api/me/puzzles/runs' || u.pathname.startsWith('/api/me/puzzles/runs/') || u.pathname.startsWith('/api/me/puzzles/verb-sprint/runs')) {
+            if (u.pathname === '/api/me/puzzles' || u.pathname === '/api/me/puzzles/runs' || u.pathname.startsWith('/api/me/puzzles/runs/') || u.pathname.startsWith('/api/me/puzzles/verb-sprint/runs') || u.pathname.startsWith('/api/me/puzzles/expedition/runs')) {
               const x = await user(req);
               if (!x) return json(res, 401, { error: 'Authentication required.' });
               try {
                 if (req.method === 'GET' && u.pathname === '/api/me/puzzles') return json(res, 200, await puzzleSummary(x.id));
+                if (req.method === 'POST' && u.pathname === '/api/me/puzzles/expedition/runs') return json(res, 201, await startExpedition(x.id));
+                const expeditionMatch = u.pathname.match(/^\/api\/me\/puzzles\/expedition\/runs\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})(?:\/(answer|route|end))?$/);
+                if (expeditionMatch && req.method === 'GET' && !expeditionMatch[2]) return json(res, 200, await getExpedition(x.id, expeditionMatch[1]));
+                if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'answer') {
+                  const submission = await body(req);
+                  return json(res, 200, await answerExpedition(x.id, expeditionMatch[1], submission.question_id, submission.response));
+                }
+                if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'route') {
+                  const selection = await body(req);
+                  return json(res, 200, await chooseExpeditionRoute(x.id, expeditionMatch[1], selection.route));
+                }
+                if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'end') return json(res, 200, await endExpedition(x.id, expeditionMatch[1]));
                 if (req.method === 'POST' && u.pathname === '/api/me/puzzles/verb-sprint/runs') return json(res, 201, await startVerbSprint(x.id));
                 const sprintMatch = u.pathname.match(/^\/api\/me\/puzzles\/verb-sprint\/runs\/([A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12})(?:\/(answer|end))?$/);
                 const sprintRunId = sprintMatch?.[1].toLowerCase();

@@ -59,9 +59,10 @@ export type SkillProgress = {
 
 export type PuzzleRun = {
   id: string;
-  game: 'french_rush' | 'verb_sprint';
+  game: 'french_rush' | 'verb_sprint' | 'french_expedition';
   combo: number;
   best_combo: number;
+  expedition: ExpeditionProgress | null;
   lives: 1 | 3 | 5;
   lives_left: number;
   minutes: 3 | 5 | null;
@@ -72,8 +73,10 @@ export type PuzzleRun = {
   expires_at: string | null;
   ended_at: string | null;
   status: 'active' | 'finished' | 'abandoned';
-  end_reason: 'time' | 'lives' | 'questions_exhausted' | 'left' | 'restarted' | null;
+  end_reason: 'time' | 'lives' | 'questions_exhausted' | 'summit' | 'left' | 'restarted' | null;
 };
+
+export type ExpeditionProgress = { step: number; phase: 'question' | 'fork'; route: 'start' | 'easy' | 'hard' | 'camp'; reward: number; trail: { kind: 'easy' | 'hard' | 'camp' | 'success' | 'miss'; step: number; level?: string; points?: number }[] };
 
 export type PuzzleQuestionBase = {
   id: string;
@@ -98,6 +101,8 @@ export type PuzzleSummary = {
   records: { lives: number; minutes: number | null; best: number }[];
   verb_best: number;
   verb_active: PuzzleRun | null;
+  expedition_best: number;
+  expedition_active: PuzzleRun | null;
 };
 
 /** Content item types. Matches `CONTENT_TYPES` in server/content-contract.js. */
