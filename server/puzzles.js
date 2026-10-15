@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { pool, query } from './database.js';
 import { evaluate } from './evaluate.js';
 import { levelOrder, originalChoiceId, publicPuzzleQuestion, puzzleReveal, usesWordBank, validPuzzleConfig } from './puzzle-rules.js';
+import { expeditionAnswer, expeditionChoice, expeditionLevelOrder } from './expedition-rules.js';
 import { chooseVerbCard, gradeVerbChoice, publicVerbQuestion, verbCard } from './verb-sprint-deck.js';
 
 export class PuzzleError extends Error {
@@ -14,7 +15,7 @@ function publicRun(row) {
     minutes: row.minutes, score: row.score, answered: row.answered_count,
     started_at: row.started_at, expires_at: row.expires_at, ended_at: row.ended_at,
     server_now: new Date().toISOString(),
-    status: row.status, end_reason: row.end_reason };
+    status: row.status, end_reason: row.end_reason, expedition: row.game === 'french_expedition' ? row.expedition_state : null };
 }
 
 async function inTransaction(work) {
@@ -50,8 +51,8 @@ const QUESTION_SELECT = `SELECT i.id,i.item_type,i.cefr_level,i.current_revision
   (SELECT m.url FROM media_assets m WHERE m.item_id=i.id AND m.kind='audio' LIMIT 1) AS audio_url
   FROM content_items i JOIN content_revisions r ON r.item_id=i.id`;
 
-async function nextQuestion(client, score, seen) {
-  for (const level of levelOrder(score)) {
+async function nextQuestion(client, score, seen, levels = levelOrder(score)) {
+  for (const level of levels) {
     const result = await client.query(`${QUESTION_SELECT} WHERE r.revision=i.current_revision AND ${ELIGIBLE}
       AND i.cefr_level=$1 AND NOT (i.id=ANY($2::text[])) ORDER BY random() LIMIT 1`, [level, seen]);
     if (result.rows[0]) return result.rows[0];
@@ -84,7 +85,10 @@ export async function puzzleSummary(userId) {
   const active = (await query("SELECT * FROM puzzle_runs WHERE user_id=? AND game='french_rush' AND status='active' ORDER BY started_at DESC LIMIT 1", [userId]))[0];
   const verbBest = (await query("SELECT COALESCE(MAX(score),0)::int AS best FROM puzzle_runs WHERE user_id=? AND game='verb_sprint'", [userId]))[0].best;
   const verbActive = (await query("SELECT * FROM puzzle_runs WHERE user_id=? AND game='verb_sprint' AND status='active' ORDER BY started_at DESC LIMIT 1", [userId]))[0];
-  return { records, best: records.reduce((max, record) => Math.max(max, record.best), 0), active: active ? publicRun(active) : null,
+  const expeditionBest = (await query("SELECT COALESCE(MAX(score),0)::int AS best FROM puzzle_runs WHERE user_id=? AND game='french_expedition'", [userId]))[0].best;
+  const expeditionActive = (await query("SELECT * FROM puzzle_runs WHERE user_id=? AND game='french_expedition' AND status='active' ORDER BY started_at DESC LIMIT 1", [userId]))[0];
+  return { expedition_best: expeditionBest, expedition_active: expeditionActive ? publicRun(expeditionActive) : null,
+    records, best: records.reduce((max, record) => Math.max(max, record.best), 0), active: active ? publicRun(active) : null,
     verb_best: verbBest, verb_active: verbActive ? publicRun(verbActive) : null };
 }
 
@@ -214,6 +218,92 @@ export async function endVerbSprint(userId, runId) {
     const run = await lockedRun(client, userId, runId, 'verb_sprint');
     if (run.status !== 'active') return { run: publicRun(run), question: null };
     const result = await client.query("UPDATE puzzle_runs SET status='abandoned',end_reason='left',ended_at=NOW(),current_verb_id=NULL WHERE id=$1 RETURNING *", [run.id]);
+    return { run: publicRun(result.rows[0]), question: null };
+  });
+}
+
+const expeditionStart = () => ({ step: 0, phase: 'question', route: 'start', reward: 1, trail: [] });
+
+export async function startExpedition(userId) {
+  return inTransaction(async (client) => {
+    await client.query('SELECT id FROM users WHERE id=$1 FOR UPDATE', [userId]);
+    const question = await nextQuestion(client, 0, [], expeditionLevelOrder(0, 'start'));
+    if (!question) throw new PuzzleError(409, 'No published expedition questions are available yet.');
+    await client.query("UPDATE puzzle_runs SET status='abandoned',end_reason='restarted',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL WHERE user_id=$1 AND game='french_expedition' AND status='active'", [userId]);
+    const secret = randomUUID();
+    const result = await client.query(`INSERT INTO puzzle_runs
+      (id,user_id,game,lives_total,lives_left,minutes,current_item_id,current_item_revision,seen_item_ids,choice_secret,expedition_state)
+      VALUES($1,$2,'french_expedition',3,3,NULL,$3,$4,ARRAY[$3]::text[],$5,$6::jsonb) RETURNING *`,
+      [randomUUID(), userId, question.id, question.current_revision, secret, JSON.stringify(expeditionStart())]);
+    return { run: publicRun(result.rows[0]), question: publicPuzzleQuestion(question, secret) };
+  });
+}
+
+export async function getExpedition(userId, runId) {
+  return inTransaction(async (client) => {
+    let run = await lockedRun(client, userId, runId, 'french_expedition');
+    const question = run.status === 'active' && run.expedition_state.phase === 'question' ? await currentQuestion(client, run) : null;
+    if (run.status === 'active' && run.expedition_state.phase === 'question' && !question) {
+      const result = await client.query("UPDATE puzzle_runs SET status='finished',end_reason='questions_exhausted',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL WHERE id=$1 RETURNING *", [run.id]);
+      run = result.rows[0];
+    }
+    return { run: publicRun(run), question: publicPuzzleQuestion(question, run.choice_secret) };
+  });
+}
+
+export async function answerExpedition(userId, runId, questionId, response) {
+  if (typeof questionId !== 'string' || !(typeof response === 'string' && response.length <= 500 ||
+    Array.isArray(response) && response.length <= 100 && response.every((token) => typeof token === 'string' && token.length <= 100))) {
+    throw new PuzzleError(400, 'A valid question and answer are required.');
+  }
+  return inTransaction(async (client) => {
+    const run = await lockedRun(client, userId, runId, 'french_expedition');
+    if (run.status !== 'active' || run.expedition_state.phase !== 'question' || run.current_item_id !== questionId) {
+      throw new PuzzleError(409, 'This encounter is no longer active. Refresh your run.');
+    }
+    const current = await currentQuestion(client, run);
+    if (!current) throw new PuzzleError(409, 'This question is no longer available.');
+    if (current.item_type === 'word_order' ? !Array.isArray(response) : typeof response !== 'string') throw new PuzzleError(400, 'Answer format does not match this question.');
+    const graded = current.item_type === 'word_order' ? response : originalChoiceId(current, response, run.choice_secret);
+    if (graded === null) throw new PuzzleError(400, 'Choose one of the answers shown.');
+    if (current.item_type === 'word_order' && !usesWordBank(graded, current.response_json.tokens)) throw new PuzzleError(400, 'Build your answer using the words shown.');
+    const sourceChoice = current.item_type === 'word_order' ? null : current.response_json.choices.find((choice) => String(choice.id ?? choice.key) === graded);
+    const correct = evaluate(current, graded) || Boolean(sourceChoice && evaluate(current, sourceChoice.text));
+    const outcome = expeditionAnswer(run.expedition_state, correct, current.cefr_level, run.lives_left);
+    const next = !outcome.done && !correct ? await nextQuestion(client, 0, run.seen_item_ids, expeditionLevelOrder(outcome.state.step, 'easy')) : null;
+    const endReason = outcome.done || (!correct && !next ? 'questions_exhausted' : null);
+    const result = await client.query(`UPDATE puzzle_runs SET score=score+$2,lives_left=$3,answered_count=answered_count+1,
+      expedition_state=$4::jsonb,current_item_id=$5,current_item_revision=$6,
+      seen_item_ids=CASE WHEN $5::text IS NULL THEN seen_item_ids ELSE array_append(seen_item_ids,$5::text) END,
+      status=CASE WHEN $7::text IS NULL THEN 'active' ELSE 'finished' END,end_reason=$7,
+      ended_at=CASE WHEN $7::text IS NULL THEN NULL ELSE NOW() END WHERE id=$1 RETURNING *`,
+      [run.id, outcome.points, outcome.livesLeft, JSON.stringify(outcome.state), next?.id ?? null, next?.current_revision ?? null, endReason]);
+    return { correct, reveal: puzzleReveal(current), points: outcome.points, run: publicRun(result.rows[0]), question: publicPuzzleQuestion(next, run.choice_secret) };
+  });
+}
+
+export async function chooseExpeditionRoute(userId, runId, route) {
+  return inTransaction(async (client) => {
+    const run = await lockedRun(client, userId, runId, 'french_expedition');
+    if (run.status !== 'active') throw new PuzzleError(409, 'This expedition has ended.');
+    const choice = expeditionChoice(run.expedition_state, route, run.lives_left, run.lives_total);
+    if (!choice) throw new PuzzleError(409, 'Choose a route after a correct answer.');
+    const next = await nextQuestion(client, 0, run.seen_item_ids, expeditionLevelOrder(choice.step, route));
+    const endReason = next ? null : 'questions_exhausted';
+    const result = await client.query(`UPDATE puzzle_runs SET expedition_state=$2::jsonb,lives_left=$3,current_item_id=$4,current_item_revision=$5,
+      seen_item_ids=CASE WHEN $4::text IS NULL THEN seen_item_ids ELSE array_append(seen_item_ids,$4::text) END,
+      status=CASE WHEN $6::text IS NULL THEN 'active' ELSE 'finished' END,end_reason=$6,
+      ended_at=CASE WHEN $6::text IS NULL THEN NULL ELSE NOW() END WHERE id=$1 RETURNING *`,
+      [run.id, JSON.stringify({ ...choice, livesLeft: undefined }), choice.livesLeft, next?.id ?? null, next?.current_revision ?? null, endReason]);
+    return { run: publicRun(result.rows[0]), question: publicPuzzleQuestion(next, run.choice_secret) };
+  });
+}
+
+export async function endExpedition(userId, runId) {
+  return inTransaction(async (client) => {
+    const run = await lockedRun(client, userId, runId, 'french_expedition');
+    if (run.status !== 'active') return { run: publicRun(run), question: null };
+    const result = await client.query("UPDATE puzzle_runs SET status='abandoned',end_reason='left',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL WHERE id=$1 RETURNING *", [run.id]);
     return { run: publicRun(result.rows[0]), question: null };
   });
 }

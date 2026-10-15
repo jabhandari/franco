@@ -336,6 +336,13 @@ paths:
       responses:
         '201': { description: Server-timed run and first conjugation choice question }
         '401': { description: Missing or expired session }
+  /api/me/puzzles/verb-sprint/runs:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Start a 60-second Verb Sprint. Replaces only the learner's previous active Verb Sprint; French Rush remains separate.
+      responses:
+        '201': { description: Server-timed run and first conjugation choice question }
+        '401': { description: Missing or expired session }
   /api/me/puzzles/verb-sprint/runs/{runId}:
     get:
       security: [{ LearnerSession: [] }]
@@ -367,7 +374,9 @@ paths:
               required: [question_id, response]
               properties:
                 question_id: { type: string }
+
                 response: { type: string, maxLength: 100, description: Opaque choice token from the current question }
+
       responses:
         '200': { description: Correctness, revealed answer, updated run and next question; timed_out when the server timer has expired }
         '400': { description: Invalid choice }
@@ -387,6 +396,82 @@ paths:
         '200': { description: Final run state }
         '401': { description: Missing or expired session }
         '404': { description: Run not found for this learner and game }
+
+  /api/me/puzzles/expedition/runs:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Start a ten-encounter French Expedition using published objectively graded content. Replaces only the learner's previous active Expedition.
+      responses:
+        '201': { description: New run, route state and first question }
+        '401': { description: Missing or expired session }
+        '409': { description: No eligible published questions }
+  /api/me/puzzles/expedition/runs/{runId}:
+    get:
+      security: [{ LearnerSession: [] }]
+      description: Resume the learner-owned run, including its server-owned route history and current question or fork.
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Run and current question (null at a fork or after completion) }
+        '404': { description: Run not found for learner }
+  /api/me/puzzles/expedition/runs/{runId}/answer:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Grade the current encounter once using the same server rules as French Rush. A correct answer opens a fork; a miss costs one life and advances automatically.
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [question_id, response]
+              properties:
+                question_id: { type: string }
+                response: { oneOf: [{ type: string }, { type: array, items: { type: string } }] }
+      responses:
+        '200': { description: Grading result, updated run, revealed answer and optional next question }
+        '409': { description: Stale question or run not in encounter phase }
+  /api/me/puzzles/expedition/runs/{runId}/route:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Choose easy (+1 on correct), hard (+3 on correct), or camp (restore one life, next correct +1). Only accepted after a correct answer.
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [route]
+              properties:
+                route: { type: string, enum: [easy, hard, camp] }
+      responses:
+        '200': { description: Updated run and next encounter }
+        '409': { description: No route can be chosen in current state }
+  /api/me/puzzles/expedition/runs/{runId}/end:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: End the learner-owned Expedition early.
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: Abandoned run }
+
   /api/content/v1/curriculum/{topic_id}/review:
     post:
       description: Complete the next editorial stage. Approvals bind to exact content hash and version; publication validates all lesson sections and licensing. Revision invalidates earlier approvals.
