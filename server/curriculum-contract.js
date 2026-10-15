@@ -1,4 +1,3 @@
-export const CURRICULUM_STATES = ['draft', 'generated', 'factual_review', 'language_review', 'license_check', 'approved', 'published', 'revision_needed'];
 export function validateCurriculumTopic(topic) {
   const errors = [];
   const need = (condition, message) => { if (!condition) errors.push(message); };
@@ -18,6 +17,6 @@ export async function curriculumConcepts(query, concepts) {
   return curriculum.map(c => {
     const lesson = byTopic.get(c.slug);
     const published = lesson?.review_status === 'published';
-    return { ...c, metadata_json: { ...c.metadata_json, review_status: lesson?.review_status || 'draft', stub: !published, ...(published ? { lesson: { ...lesson.pack_json, review_status: 'published' } } : {}) } };
+    return { ...c, metadata_json: { ...c.metadata_json, review_status: lesson?.review_status || 'draft', stub: !published, ...(published ? { ...lesson.pack_json, question_items: [...lesson.pack_json.recognition, ...lesson.pack_json.guided_production, ...lesson.pack_json.mastery], correct_answers: [...lesson.pack_json.recognition, ...lesson.pack_json.guided_production, ...lesson.pack_json.mastery].map(q => q.correct_answers), lesson: { ...lesson.pack_json, review_status: 'published' } } : {}) } };
   });
 }

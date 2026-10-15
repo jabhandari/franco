@@ -108,7 +108,7 @@ npm run import:tv5
 - One renderer per item type lives in `src/components/exercises/`: multiple choice (reading/grammar), tap-to-order word order, typed spelling/dictation, pronunciation drills with audio + self-marking, writing prompts with rubrics, and speaking prompts with follow-ups.
 - The Content view has Roadmap, Writing, Speaking, and Vocabulary tabs for levels A1–C2. Speaking lessons provide task-specific model phrases, word comparison, and a separate open-answer prompt within the existing Speaking tab. Roadmap concepts, writing/speaking items, and vocabulary topics come from the canonical track (`/api/content/v1/concepts`, `/api/content/v1/items`, `/api/content/topics?section=...`).
 - A 10-question placement quiz (`/placement`) sets the learner's CEFR level via `POST /api/me/placement`; the profile refreshes immediately after.
-- Concept data is seeded from `scripts/concept-data.mjs` (rich authored A1 lessons; A2–C2 stubs clearly marked) via `npm run seed:concepts`; prerequisite edges drive the roadmap connectors.
+- The 90-topic roadmap is seeded from `content/curriculum/topics.json` via `npm run seed:concepts`. Authored `*.lessons.json` files enter separate lesson and question tables as generated drafts; use the scoped editorial queue to review and publish. Old concepts are retired, preserving historical attempts. Prerequisites recommend sequence and never lock access.
 - Past questions show all skills (reading, listening, language structures) with section tabs A1–C2.
 - No fake user progress or mistakes are rendered.
 

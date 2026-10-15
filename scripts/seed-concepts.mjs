@@ -31,6 +31,7 @@ try {
   for (const name of (await readdir(directory)).filter(n => n.endsWith('.lessons.json')).sort()) {
     for (const pack of JSON.parse(await readFile(new URL(name, directory), 'utf8'))) {
       if (!topics.some(t => t.topic_id === pack.topic_id)) throw new Error(`Unknown topic ${pack.topic_id}`);
+      if (!pack.outcome?.startsWith('I can ') || !pack.explanation || !['example_items','recognition','guided_production'].every(k => Array.isArray(pack[k]) && pack[k].length >= 3 && pack[k].length <= 5) || !pack.mastery?.length || !pack.reading?.english || !pack.realistic_use?.rubric?.length || !Number.isInteger(pack.version)) throw new Error(`Incomplete lesson pack: ${pack.topic_id}`);
       const inserted = await client.query(`INSERT INTO curriculum_lessons(topic_id,review_status,version,pack_json) VALUES($1,'generated',$2,$3) ON CONFLICT(topic_id) DO NOTHING RETURNING topic_id`, [pack.topic_id,pack.version,JSON.stringify(pack)]);
       if (!inserted.rowCount) continue;
       for (const section of ['recognition','guided_production','mastery']) for (const [position,question] of (pack[section] || []).entries()) await client.query('INSERT INTO curriculum_questions(id,topic_id,section,position,question_json) VALUES($1,$2,$3,$4,$5)', [`${pack.topic_id}:${section}:${position}`,pack.topic_id,section,position,JSON.stringify(question)]);
