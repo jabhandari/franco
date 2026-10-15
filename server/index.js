@@ -1,5 +1,5 @@
-import { reviewCurriculum } from './curriculum-editorial.js';
 import { createHash, pbkdf2Sync, randomBytes, randomUUID } from 'node:crypto';
+import { reviewCurriculum } from './curriculum-editorial.js';
 import { createServer } from 'node:http';
 import { query, pool, migrate, createProfileForUser } from './database.js';
 import { CONTENT_SCHEMA_VERSION, normalizeItem, schemaDocument, validateBatch } from './content-contract.js';

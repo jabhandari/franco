@@ -1,3 +1,13 @@
+CREATE TABLE IF NOT EXISTS public.curriculum_editorial_reviews (
+  id TEXT PRIMARY KEY, topic_id TEXT NOT NULL, version INTEGER NOT NULL,
+  pack_hash TEXT NOT NULL, state TEXT NOT NULL,
+  reviewer TEXT NOT NULL, key_id TEXT NOT NULL, note TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS curriculum_review_version_idx
+  ON public.curriculum_editorial_reviews(topic_id,version,pack_hash,created_at);
+ALTER TABLE public.curriculum_editorial_reviews ENABLE ROW LEVEL SECURITY;
+
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
 
@@ -474,13 +484,3 @@ CREATE INDEX IF NOT EXISTS puzzle_runs_user_recent_idx ON public.puzzle_runs(use
 CREATE INDEX IF NOT EXISTS puzzle_runs_user_best_idx ON public.puzzle_runs(user_id,lives_total,minutes,score DESC);
 CREATE INDEX IF NOT EXISTS puzzle_runs_game_best_idx ON public.puzzle_runs(user_id,game,score DESC);
 ALTER TABLE public.puzzle_runs ENABLE ROW LEVEL SECURITY;
-
-CREATE TABLE IF NOT EXISTS public.curriculum_editorial_reviews (
-  id TEXT PRIMARY KEY, topic_id TEXT NOT NULL, version INTEGER NOT NULL,
-  pack_hash TEXT NOT NULL, state TEXT NOT NULL,
-  reviewer TEXT NOT NULL, key_id TEXT NOT NULL, note TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS curriculum_review_version_idx
-  ON public.curriculum_editorial_reviews(topic_id,version,pack_hash,created_at);
-ALTER TABLE public.curriculum_editorial_reviews ENABLE ROW LEVEL SECURITY;

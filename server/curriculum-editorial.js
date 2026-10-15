@@ -35,7 +35,7 @@ export function lessonErrors(pack) {
   if (!['french','english','prompt'].every(key=>nonempty(pack.reading?.[key]))) errors.push('Missing bilingual reading activity');
   if (!nonempty(pack.realistic_use?.prompt) || !pack.realistic_use?.rubric?.length || !nonempty(pack.realistic_use?.model) || !nonempty(pack.realistic_use?.model_translation)) errors.push('Missing realistic task or model');
   if (!['rule','error','remediation'].every(key=>nonempty(pack.feedback?.[key]))) errors.push('Missing repair feedback');
-  if (!(pack.review_due_policy?.initial_days>0) || !pack.review_due_policy?.subsequent_days?.every(n=>Number.isFinite(n)&&n>0)) errors.push('Missing review scheduling policy');
+  if (!(pack.review_due_policy?.initial_days>0) || !pack.review_due_policy?.subsequent_days?.length || !pack.review_due_policy?.subsequent_days?.every(n=>Number.isFinite(n)&&n>0)) errors.push('Missing review scheduling policy');
   return [...errors,...provenanceErrors(pack)];
 }
 export function transitionErrors(current,next,pack,evidence,history=[]) {
@@ -59,7 +59,7 @@ export async function reviewCurriculum(pool,topicId,input,keyId) {
     const hash=createHash('sha256').update(JSON.stringify(row.pack_json)).digest('hex');
     const history=(await client.query('SELECT state FROM curriculum_editorial_reviews WHERE topic_id=$1 AND version=$2 AND pack_hash=$3 AND created_at>COALESCE((SELECT MAX(created_at) FROM curriculum_editorial_reviews WHERE topic_id=$1 AND state=\'revision_needed\'),\'epoch\'::timestamptz)',[topicId,row.version,hash])).rows.map(r=>r.state);
     const errors=transitionErrors(row.review_status,input.state,row.pack_json,input,history);
-    if (errors.length) {await client.query('ROLLBACK');return {status:422,body:{errors}};}
+    if (errors.length) {await client.query('ROLLBACK');return {status:422,body:{error:errors.join('; '),errors}};}
     await client.query('INSERT INTO curriculum_editorial_reviews(id,topic_id,version,pack_hash,state,reviewer,key_id,note) VALUES($1,$2,$3,$4,$5,$6,$7,$8)',[randomUUID(),topicId,row.version,hash,input.state,input.reviewer,keyId,input.note]);
     await client.query('UPDATE curriculum_lessons SET review_status=$1,updated_at=NOW() WHERE topic_id=$2',[input.state,topicId]);
     await client.query('COMMIT');return {status:200,body:{topic_id:topicId,review_status:input.state}};
