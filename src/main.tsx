@@ -21,7 +21,7 @@ import { ApiError, apiGet, apiPost, getErrorMessage } from './api/client.js';
 import type { AuthResponse, MeResponse, StreakResponse } from './api/client.js';
 import type { AuthMode, UserPayload } from './types';
 import { ThemeProvider, useTheme } from 'next-themes';
-import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput, UserMenu } from './components/ui';
+import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text, TextInput, UserMenu, PronunciationSpikePanel } from './components/ui';
 import { streakPath } from './presenters/streak.presenter.js';
 import { Home } from './views/Home.js';
 import { Session } from './views/Session.js';
@@ -59,7 +59,7 @@ declare module 'next-themes' {
 // FRA-67: app-shell types. ViewId is the sidebar's view vocabulary — the
 // auth gate, router, and nav all speak it, so a bad view id is a type
 // error, not a silent blank page.
-type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types' | 'puzzles' | 'stories' | 'race';
+type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types' | 'puzzles' | 'stories' | 'race' | 'pronunciation-spike';
 const authViewFromPath = (): AuthMode => window.location.pathname === '/reset-password' ? 'reset' : window.location.pathname === '/verify-email' ? 'verify' : window.location.pathname === '/forgot-password' ? 'forgot' : 'login';
 
 type NavItem = {
@@ -108,9 +108,9 @@ const viewPaths: Record<ViewId, string> = {
   puzzles: '/puzzles',
   stories: '/stories',
   race: '/race',
+  'pronunciation-spike': '/pronunciation-spike',
 };
-
-const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types', 'puzzles', 'stories', 'race'];
+const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types', 'puzzles', 'stories', 'race', 'pronunciation-spike'];
 
 function viewFromPath(pathname: string): ViewId {
   for (const id of VIEW_IDS) {
@@ -389,6 +389,8 @@ function App(): React.JSX.Element {
         {view === 'question-types' && <QuestionTypes token={authToken} />}
         {view === 'puzzles' && <Puzzles token={authToken} onRace={() => navigate('race')} />}
         {view === 'stories' && <StoriesPage token={authToken} />}
+        {view === 'pronunciation-spike' && <PronunciationSpikePanel />}
+
       </Box>
     </Box>
   );
