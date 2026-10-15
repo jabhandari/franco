@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import { transitionErrors, provenanceErrors, lessonErrors } from '../server/curriculum-editorial.js';
+const evidence={reviewer:'Test reviewer',note:'Checked all examples and keys'};
+assert.deepEqual(transitionErrors('generated','factual_review',{},evidence),[]);
+assert.ok(transitionErrors('generated','published',{},evidence).length);
+assert.ok(transitionErrors('factual_review','language_review',{},{}).length);
+assert.deepEqual(transitionErrors('published','revision_needed',{},evidence),[]);
+assert.deepEqual(transitionErrors('revision_needed','generated',{},evidence),[]);
+assert.ok(transitionErrors('license_check','approved',{},evidence,[]).some(e=>e.includes('language_review')));
+assert.ok(lessonErrors({}).length);
+const adapted={kind:'adapted',source_url:'https://tatoeba.org/en/sentences/show/1',source_author:'Author',license_id:'CC-BY-2.0-FR',attribution_text:'Author via Tatoeba',reviewer_approval:'Reviewer',republication_permission:'CC-BY-2.0-FR'};
+assert.ok(provenanceErrors({example_items:[{provenance:adapted}]}).some(e=>e.includes('individual')));
+assert.deepEqual(provenanceErrors({example_items:[{provenance:{...adapted,record_license_verified:true}}]}),[]);
+assert.ok(provenanceErrors({reading:{provenance:{kind:'link_only'}}}).length);
+assert.ok(provenanceErrors({example_items:[{provenance:{...adapted,source_url:'https://fr.wiktionary.org/wiki/test',license_id:'CC-BY'}}]}).some(e=>e.includes('share-alike')));
+assert.ok(provenanceErrors({mastery:[{provenance:{...adapted,source_url:'javascript:alert(1)'}}]}).some(e=>e.includes('invalid')));
+console.log('Editorial transitions, evidence, publication gates and source licensing passed.');

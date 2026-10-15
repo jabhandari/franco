@@ -2732,3 +2732,4 @@ html[data-theme] .verb-sprint-intro h1 { max-width:565px; color:white; font-fami
   .verb-sprint-over { padding:32px 20px; }
 }
 @media(prefers-reduced-motion:reduce) { .verb-sprint-choice { transition:none; } }
+.curriculum-review-json { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 36rem; overflow: auto; }
