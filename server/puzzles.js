@@ -2,13 +2,15 @@ import { randomUUID } from 'node:crypto';
 import { pool, query } from './database.js';
 import { evaluate } from './evaluate.js';
 import { levelOrder, originalChoiceId, publicPuzzleQuestion, puzzleReveal, validPuzzleConfig } from './puzzle-rules.js';
+import { chooseVerbCard, gradeVerbChoice, publicVerbQuestion, verbCard } from './verb-sprint-deck.js';
 
 export class PuzzleError extends Error {
   constructor(status, message) { super(message); this.status = status; }
 }
 
 function publicRun(row) {
-  return { id: row.id, lives: row.lives_total, lives_left: row.lives_left,
+  return { id: row.id, game: row.game, combo: row.combo, best_combo: row.best_combo,
+    lives: row.lives_total, lives_left: row.lives_left,
     minutes: row.minutes, score: row.score, answered: row.answered_count,
     started_at: row.started_at, expires_at: row.expires_at, ended_at: row.ended_at,
     server_now: new Date().toISOString(),
@@ -64,23 +66,26 @@ async function currentQuestion(client, run) {
   return result.rows[0] || null;
 }
 
-async function lockedRun(client, userId, runId) {
+async function lockedRun(client, userId, runId, game = 'french_rush') {
   const result = await client.query('SELECT * FROM puzzle_runs WHERE id=$1 AND user_id=$2 FOR UPDATE', [runId, userId]);
-  if (!result.rows[0]) throw new PuzzleError(404, 'Puzzle run not found.');
+  if (!result.rows[0] || result.rows[0].game !== game) throw new PuzzleError(404, 'Puzzle run not found.');
   return result.rows[0];
 }
 
 async function finishIfExpired(client, run) {
   if (run.status !== 'active' || !run.expires_at || new Date(run.expires_at).getTime() > Date.now()) return run;
-  const result = await client.query("UPDATE puzzle_runs SET status='finished',end_reason='time',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL WHERE id=$1 RETURNING *", [run.id]);
+  const result = await client.query("UPDATE puzzle_runs SET status='finished',end_reason='time',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL,current_verb_id=NULL WHERE id=$1 RETURNING *", [run.id]);
   return result.rows[0];
 }
 
 export async function puzzleSummary(userId) {
-  await query("UPDATE puzzle_runs SET status='finished',end_reason='time',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL WHERE user_id=? AND status='active' AND expires_at<=NOW()", [userId]);
-  const records = await query('SELECT lives_total AS lives,minutes,MAX(score)::int AS best FROM puzzle_runs WHERE user_id=? GROUP BY lives_total,minutes ORDER BY lives_total,minutes NULLS LAST', [userId]);
-  const active = (await query("SELECT * FROM puzzle_runs WHERE user_id=? AND status='active' ORDER BY started_at DESC LIMIT 1", [userId]))[0];
-  return { records, best: records.reduce((max, record) => Math.max(max, record.best), 0), active: active ? publicRun(active) : null };
+  await query("UPDATE puzzle_runs SET status='finished',end_reason='time',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL,current_verb_id=NULL WHERE user_id=? AND status='active' AND expires_at<=NOW()", [userId]);
+  const records = await query("SELECT lives_total AS lives,minutes,MAX(score)::int AS best FROM puzzle_runs WHERE user_id=? AND game='french_rush' GROUP BY lives_total,minutes ORDER BY lives_total,minutes NULLS LAST", [userId]);
+  const active = (await query("SELECT * FROM puzzle_runs WHERE user_id=? AND game='french_rush' AND status='active' ORDER BY started_at DESC LIMIT 1", [userId]))[0];
+  const verbBest = (await query("SELECT COALESCE(MAX(score),0)::int AS best FROM puzzle_runs WHERE user_id=? AND game='verb_sprint'", [userId]))[0].best;
+  const verbActive = (await query("SELECT * FROM puzzle_runs WHERE user_id=? AND game='verb_sprint' AND status='active' ORDER BY started_at DESC LIMIT 1", [userId]))[0];
+  return { records, best: records.reduce((max, record) => Math.max(max, record.best), 0), active: active ? publicRun(active) : null,
+    verb_best: verbBest, verb_active: verbActive ? publicRun(verbActive) : null };
 }
 
 export async function startPuzzle(userId, lives, minutes) {
@@ -89,11 +94,11 @@ export async function startPuzzle(userId, lives, minutes) {
     await client.query('SELECT id FROM users WHERE id=$1 FOR UPDATE', [userId]);
     const question = await nextQuestion(client, 0, []);
     if (!question) throw new PuzzleError(409, 'No published puzzle questions are available yet.');
-    await client.query("UPDATE puzzle_runs SET status='abandoned',end_reason='restarted',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL WHERE user_id=$1 AND status='active'", [userId]);
+    await client.query("UPDATE puzzle_runs SET status='abandoned',end_reason='restarted',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL WHERE user_id=$1 AND game='french_rush' AND status='active'", [userId]);
     const secret = randomUUID();
     const result = await client.query(`INSERT INTO puzzle_runs
-      (id,user_id,lives_total,lives_left,minutes,expires_at,current_item_id,current_item_revision,seen_item_ids,choice_secret)
-      VALUES($1,$2,$3,$3,$4::smallint,CASE WHEN $4::int IS NULL THEN NULL ELSE NOW()+($4::int*INTERVAL '1 minute') END,$5,$6,ARRAY[$5]::text[],$7)
+      (id,user_id,game,lives_total,lives_left,minutes,expires_at,current_item_id,current_item_revision,seen_item_ids,choice_secret)
+      VALUES($1,$2,'french_rush',$3,$3,$4::smallint,CASE WHEN $4::int IS NULL THEN NULL ELSE NOW()+($4::int*INTERVAL '1 minute') END,$5,$6,ARRAY[$5]::text[],$7)
       RETURNING *`, [randomUUID(), userId, lives, minutes, question.id, question.current_revision, secret]);
     return { run: publicRun(result.rows[0]), question: publicPuzzleQuestion(question, secret) };
   });
@@ -145,6 +150,67 @@ export async function endPuzzle(userId, runId) {
     const run = await lockedRun(client, userId, runId);
     if (run.status !== 'active') return { run: publicRun(run), question: null };
     const result = await client.query("UPDATE puzzle_runs SET status='abandoned',end_reason='left',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL WHERE id=$1 RETURNING *", [run.id]);
+    return { run: publicRun(result.rows[0]), question: null };
+  });
+}
+
+export async function startVerbSprint(userId) {
+  return inTransaction(async (client) => {
+    await client.query('SELECT id FROM users WHERE id=$1 FOR UPDATE', [userId]);
+    await client.query("UPDATE puzzle_runs SET status='abandoned',end_reason='restarted',ended_at=NOW(),current_verb_id=NULL WHERE user_id=$1 AND game='verb_sprint' AND status='active'", [userId]);
+    const first = chooseVerbCard(0, []);
+    const secret = randomUUID();
+    const result = await client.query(`INSERT INTO puzzle_runs
+      (id,user_id,game,lives_total,lives_left,minutes,expires_at,current_verb_id,seen_item_ids,choice_secret)
+      VALUES($1,$2,'verb_sprint',3,3,NULL,NOW()+INTERVAL '1 minute',$3,ARRAY[$3]::text[],$4)
+      RETURNING *`, [randomUUID(), userId, first.id, secret]);
+    return { run: publicRun(result.rows[0]), question: publicVerbQuestion(first, secret) };
+  });
+}
+
+export async function getVerbSprint(userId, runId) {
+  return inTransaction(async (client) => {
+    let run = await finishIfExpired(client, await lockedRun(client, userId, runId, 'verb_sprint'));
+    const question = run.status === 'active' ? verbCard(run.current_verb_id) : null;
+    if (run.status === 'active' && !question) {
+      const result = await client.query("UPDATE puzzle_runs SET status='finished',end_reason='questions_exhausted',ended_at=NOW(),current_verb_id=NULL WHERE id=$1 RETURNING *", [run.id]);
+      run = result.rows[0];
+    }
+    return { run: publicRun(run), question: publicVerbQuestion(question, run.choice_secret) };
+  });
+}
+
+export async function answerVerbSprint(userId, runId, questionId, response) {
+  if (typeof questionId !== 'string' || typeof response !== 'string' || response.length > 100) {
+    throw new PuzzleError(400, 'A valid question and answer are required.');
+  }
+  return inTransaction(async (client) => {
+    const run = await finishIfExpired(client, await lockedRun(client, userId, runId, 'verb_sprint'));
+    if (run.status !== 'active') return { run: publicRun(run), question: null, timed_out: run.end_reason === 'time' };
+    if (run.current_verb_id !== questionId) throw new PuzzleError(409, 'This question is no longer active. Refresh your run.');
+    const current = verbCard(questionId);
+    if (!current) throw new PuzzleError(409, 'This question is no longer available. Refresh your run.');
+    const correct = gradeVerbChoice(current, response, run.choice_secret);
+    if (correct === null) throw new PuzzleError(400, 'Choose one of the answers shown.');
+    const score = run.score + Number(correct);
+    const combo = correct ? run.combo + 1 : 0;
+    const next = chooseVerbCard(score, run.seen_item_ids);
+    const endReason = next ? null : 'questions_exhausted';
+    const result = await client.query(`UPDATE puzzle_runs SET score=$2,combo=$3,best_combo=GREATEST(best_combo,$3),
+      answered_count=answered_count+1,current_verb_id=$4,
+      seen_item_ids=CASE WHEN $4::text IS NULL THEN seen_item_ids ELSE array_append(seen_item_ids,$4::text) END,
+      status=CASE WHEN $5::text IS NULL THEN 'active' ELSE 'finished' END,end_reason=$5,
+      ended_at=CASE WHEN $5::text IS NULL THEN NULL ELSE NOW() END WHERE id=$1 RETURNING *`,
+      [run.id, score, combo, next?.id ?? null, endReason]);
+    return { correct, reveal: current.answer, run: publicRun(result.rows[0]), question: publicVerbQuestion(next, run.choice_secret) };
+  });
+}
+
+export async function endVerbSprint(userId, runId) {
+  return inTransaction(async (client) => {
+    const run = await lockedRun(client, userId, runId, 'verb_sprint');
+    if (run.status !== 'active') return { run: publicRun(run), question: null };
+    const result = await client.query("UPDATE puzzle_runs SET status='abandoned',end_reason='left',ended_at=NOW(),current_verb_id=NULL WHERE id=$1 RETURNING *", [run.id]);
     return { run: publicRun(result.rows[0]), question: null };
   });
 }
