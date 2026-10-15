@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { evaluate } from '../server/evaluate.js';
-import { levelOrder, originalChoiceId, publicPuzzleQuestion, puzzleReveal, validPuzzleConfig } from '../server/puzzle-rules.js';
+import { levelOrder, originalChoiceId, publicPuzzleQuestion, puzzleReveal, usesWordBank, validPuzzleConfig } from '../server/puzzle-rules.js';
 
 for (const lives of [1, 3, 5]) for (const minutes of [3, 5, null]) assert.equal(validPuzzleConfig(lives, minutes), true);
 for (const config of [[0, 3], [2, 5], [3, 0], [3, 4], [3, undefined], ['3', 5]]) assert.equal(validPuzzleConfig(...config), false);
@@ -38,6 +38,13 @@ assert.equal(evaluate(order, ['Je', 'suis', 'ici']), true, 'token_order grades a
 assert.equal(evaluate(order, ['suis', 'ici', 'Je']), false, 'token_order rejects the shuffled bank order');
 assert.equal(evaluate(order, ['Je', 'ici', 'suis']), false, 'token_order rejects other wrong orders');
 assert.equal(puzzleReveal(order), 'Je suis ici', 'puzzle reveal must show the stored sentence, not the joined bank');
+assert.equal(usesWordBank(['Je', 'suis', 'ici'], order.response_json.tokens), true);
+assert.equal(usesWordBank(['Je', 'suis', 'demain'], order.response_json.tokens), false);
+const importedOrder = { ...order, context: "L'église Notre-Dame possède un mobilier remarquable.",
+  response_json: { tokens: ['église', "L'", 'mobilier', 'Notre-Dame', 'possède', 'remarquable', 'un'],
+    expected: "L'église Notre-Dame possède un mobilier remarquable." } };
+assert.equal(publicPuzzleQuestion(importedOrder, 'test-secret').context, null, 'source sentence must not leak the answer');
+assert.equal(evaluate(importedOrder, ["L'", 'église', 'Notre-Dame', 'possède', 'un', 'mobilier', 'remarquable']), true);
 // Legacy shape without a stored sentence still grades against the ordered bank.
 const legacyOrder = { id: 'order-2', item_type: 'word_order', cefr_level: 'A2', prompt: 'Build the sentence',
   response_json: { tokens: ['Je', 'suis', 'ici'] }, evaluation_json: { mode: 'token_order' } };

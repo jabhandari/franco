@@ -1,5 +1,5 @@
 import { createHmac } from 'node:crypto';
-import { normalizeTokens, wordOrderReference } from './evaluate.js';
+import { normalizeWordOrderSentence, wordOrderReference } from './evaluate.js';
 
 const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -31,7 +31,8 @@ export function publicPuzzleQuestion(row, secret) {
   if (!row) return null;
   const data = row.response_json || {};
   const base = { id: row.id, level: row.cefr_level, type: row.item_type,
-    prompt: row.prompt, context: row.context || null, instructions: row.instructions || null,
+    prompt: row.prompt, context: row.item_type === 'word_order' ? null : row.context || null,
+    instructions: row.instructions || null,
     audio_url: row.audio_url || null };
   if (row.item_type === 'word_order') {
     const tokens = Array.isArray(data.tokens) ? data.tokens : [];
@@ -39,8 +40,8 @@ export function publicPuzzleQuestion(row, secret) {
       .sort((a, b) => a.id.localeCompare(b.id));
     // Never present the bank in answer order — the stored bank is shuffled,
     // so guarding against the stored order no longer protects the sentence.
-    const answerOrder = normalizeTokens(wordOrderReference(row)).join(' ');
-    if (shuffled.length > 1 && normalizeTokens(shuffled.map((item) => item.text)).join(' ') === answerOrder) {
+    const answerOrder = normalizeWordOrderSentence(wordOrderReference(row));
+    if (shuffled.length > 1 && normalizeWordOrderSentence(shuffled.map((item) => item.text).join(' ')) === answerOrder) {
       shuffled = [...shuffled.slice(1), shuffled[0]];
     }
     return { ...base, kind: 'word_order', tokens: shuffled };
@@ -49,6 +50,12 @@ export function publicPuzzleQuestion(row, secret) {
   return { ...base, kind: 'choice', choices: choices.map((choice) => ({
     id: token(secret, row.id, `choice:${choice.id ?? choice.key}`), text: String(choice.text ?? ''),
   })).sort((a, b) => a.id.localeCompare(b.id)) };
+}
+
+export function usesWordBank(response, tokens) {
+  if (!Array.isArray(response) || !Array.isArray(tokens) || response.length !== tokens.length) return false;
+  const sortedBank = [...tokens].sort();
+  return [...response].sort().every((word, index) => word === sortedBank[index]);
 }
 
 export function puzzleReveal(row) {

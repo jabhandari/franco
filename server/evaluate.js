@@ -20,6 +20,10 @@ export function normalizeTokens(tokens) {
   return list.map(normalizeText).filter(Boolean);
 }
 
+export function normalizeWordOrderSentence(value) {
+  return normalizeText(value).replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+}
+
 // Word-order items store the word bank (shuffled) in response_json.tokens
 // alongside the correct sentence in answer/expected. Grading and reveals must
 // resolve through this chain — the same one the attempts endpoint uses for
@@ -49,8 +53,8 @@ export function evaluate(item, response) {
     case 'token_order': {
       const given = normalizeTokens(response);
       // Grade against the stored sentence, not the shuffled word bank.
-      const expected = normalizeTokens(wordOrderReference(item));
-      return given.length > 0 && given.length === expected.length && given.every((token, i) => token === expected[i]);
+      return given.length > 0 &&
+        normalizeWordOrderSentence(given.join(' ')) === normalizeWordOrderSentence(wordOrderReference(item));
     }
     case 'normalized_text':
       return normalizeText(response) === normalizeText(refAnswer ?? refExpected);
