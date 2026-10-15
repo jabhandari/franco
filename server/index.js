@@ -1,3 +1,4 @@
+import { curriculumConcepts } from './curriculum-contract.js';
 import { createHash, pbkdf2Sync, randomBytes, randomUUID } from 'node:crypto';
 import { createServer } from 'node:http';
 import { query, pool, migrate, createProfileForUser } from './database.js';
@@ -425,7 +426,7 @@ async function main() {
                 return json(res, 200, { counts });
             }
             if (req.method === 'GET' && u.pathname === '/api/content/v1/concepts') {
-                const concepts = await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status,metadata_json,list_order FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST, list_order NULLS LAST, title");
+                const concepts = await curriculumConcepts(query, await query("SELECT id,slug,title,description,concept_type,level_code,parent_id,status,metadata_json,list_order FROM concepts WHERE status='active' ORDER BY level_code NULLS LAST, list_order NULLS LAST, title"));
                 const prereqs = await query('SELECT concept_id,prerequisite_concept_id FROM concept_prerequisites');
                 const slugById = new Map(concepts.map((c) => [c.id, c.slug]));
                 return json(res, 200, { concepts: concepts.map((c) => ({ id: c.id, slug: c.slug, title: c.title, description: c.description, concept_type: c.concept_type, level_code: c.level_code, parent_id: c.parent_id, status: c.status, list_order:c.list_order, metadata: c.metadata_json || {}, prerequisites: prereqs.filter((p) => p.concept_id === c.id).map((p) => slugById.get(p.prerequisite_concept_id)).filter(Boolean) })) });

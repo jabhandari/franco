@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { Pool } from 'pg';
 import { createHash } from 'node:crypto';
 
@@ -188,5 +189,6 @@ ALTER TABLE public.learner_lesson_positions ENABLE ROW LEVEL SECURITY;
     const hash = createHash('sha256').update(process.env.CONTENT_API_KEY).digest('hex');
     await query("INSERT INTO content_api_keys(id,key_hash,name,scopes) VALUES(?,?,?,?) ON CONFLICT(key_hash) DO NOTHING", [createHash('sha256').update(`id:${hash}`).digest('hex'), hash, 'environment-content-key', ['content:write', 'content:review']]);
   }
+  await pool.query(await readFile(new URL('../supabase/migrations/202610150001_curriculum.sql', import.meta.url), 'utf8'));
 }
 export async function createProfileForUser(userId) { await query('INSERT INTO learner_profiles (user_id) VALUES (?) ON CONFLICT (user_id) DO NOTHING', [userId]); }
