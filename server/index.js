@@ -17,7 +17,7 @@ import { getPort, getHost, corsOrigin } from './config.js';
 import { displayName, isNonEmptyName } from './user-names.js';
 import { getLearnerProgress } from './learner-progress.js';
 import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
-import { PuzzleError, puzzleSummary, startPuzzle, getPuzzle, answerPuzzle, endPuzzle } from './puzzles.js';
+import { PuzzleError, puzzleSummary, startPuzzle, getPuzzle, answerPuzzle, endPuzzle, startVerbSprint, getVerbSprint, answerVerbSprint, endVerbSprint } from './puzzles.js';
 import { allowAuthEmail, authClientIp, genericEmailResponse, hashEmailToken, sendAuthEmail, validEmailToken } from './auth-email.js';
 import { emailConfigured } from './email.js';
 
@@ -445,6 +445,14 @@ async function main() {
               if (!x) return json(res, 401, { error: 'Authentication required.' });
               try {
                 if (req.method === 'GET' && u.pathname === '/api/me/puzzles') return json(res, 200, await puzzleSummary(x.id));
+                if (req.method === 'POST' && u.pathname === '/api/me/puzzles/verb-sprint/runs') return json(res, 201, await startVerbSprint(x.id));
+                const sprintMatch = u.pathname.match(/^\/api\/me\/puzzles\/verb-sprint\/runs\/([a-f0-9-]{36})(?:\/(answer|end))?$/);
+                if (sprintMatch && req.method === 'GET' && !sprintMatch[2]) return json(res, 200, await getVerbSprint(x.id, sprintMatch[1]));
+                if (sprintMatch && req.method === 'POST' && sprintMatch[2] === 'answer') {
+                  const submission = await body(req);
+                  return json(res, 200, await answerVerbSprint(x.id, sprintMatch[1], submission.question_id, submission.response));
+                }
+                if (sprintMatch && req.method === 'POST' && sprintMatch[2] === 'end') return json(res, 200, await endVerbSprint(x.id, sprintMatch[1]));
                 if (req.method === 'POST' && u.pathname === '/api/me/puzzles/runs') {
                   const config = await body(req);
                   return json(res, 201, await startPuzzle(x.id, config.lives, config.minutes));

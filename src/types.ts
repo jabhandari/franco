@@ -52,6 +52,9 @@ export type SkillProgress = {
 
 export type PuzzleRun = {
   id: string;
+  game: 'french_rush' | 'verb_sprint';
+  combo: number;
+  best_combo: number;
   lives: 1 | 3 | 5;
   lives_left: number;
   minutes: 3 | 5 | null;
@@ -86,6 +89,8 @@ export type PuzzleSummary = {
   best: number;
   active: PuzzleRun | null;
   records: { lives: number; minutes: number | null; best: number }[];
+  verb_best: number;
+  verb_active: PuzzleRun | null;
 };
 
 /** Content item types. Matches `CONTENT_TYPES` in server/content-contract.js. */
