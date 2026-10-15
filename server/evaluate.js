@@ -20,6 +20,17 @@ export function normalizeTokens(tokens) {
   return list.map(normalizeText).filter(Boolean);
 }
 
+// Word-order items store the word bank (shuffled) in response_json.tokens
+// alongside the correct sentence in answer/expected. Grading and reveals must
+// resolve through this chain — the same one the attempts endpoint uses for
+// reveals — so Practice and puzzles always agree on the sentence.
+export function wordOrderReference(item) {
+  const resp = item.response_json || {};
+  const ev = item.evaluation_json || {};
+  return String(resp.answer ?? resp.expected ?? ev.answer ?? ev.expected ??
+    (Array.isArray(resp.tokens) ? resp.tokens.join(' ') : '')).trim();
+}
+
 // `item` carries response_json / evaluation_json (content_items) and `response`
 // is the learner's raw answer (string, string[] for token_order, or object).
 // Reference answers may live in response_json (contract batches) or
@@ -37,7 +48,8 @@ export function evaluate(item, response) {
       return normalizeText(response) === normalizeText(refAnswer);
     case 'token_order': {
       const given = normalizeTokens(response);
-      const expected = normalizeTokens(resp.tokens);
+      // Grade against the stored sentence, not the shuffled word bank.
+      const expected = normalizeTokens(wordOrderReference(item));
       return given.length > 0 && given.length === expected.length && given.every((token, i) => token === expected[i]);
     }
     case 'normalized_text':

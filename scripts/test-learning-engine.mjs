@@ -36,6 +36,12 @@ const orderItem = { response_json: { tokens: ['Je', 'suis', 'canadien'] }, evalu
 assert(evaluate(orderItem, ['je', 'suis ', 'CANADIEN']) === true, 'token_order: normalized tokens match');
 assert(evaluate(orderItem, ['suis', 'je', 'canadien']) === false, 'token_order: wrong order rejected');
 assert(evaluate(orderItem, ['je', 'suis']) === false, 'token_order: missing token rejected');
+// Published word-order items store a shuffled bank plus the sentence: the
+// shared grading rule resolves the sentence, not the bank order.
+const bankOrderItem = { response_json: { tokens: ['canadien', 'suis', 'Je'], expected: 'Je suis canadien' }, evaluation_json: { mode: 'token_order' } };
+assert(evaluate(bankOrderItem, ['je', 'suis ', 'CANADIEN']) === true, 'token_order: grades against the stored sentence');
+assert(evaluate(bankOrderItem, ['canadien', 'suis', 'je']) === false, 'token_order: shuffled bank order rejected');
+assert(evaluate(bankOrderItem, ['je', 'canadien', 'suis']) === false, 'token_order: other wrong orders rejected');
 
 // --- evaluate(): dataset-authored shapes without a contract mode ---
 assert(evaluate({ response_json: { answer: 'être' }, evaluation_json: {} }, ' ÊTRE ') === true, 'dataset answer shape graded case-insensitively');

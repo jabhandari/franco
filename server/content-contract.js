@@ -61,7 +61,7 @@ function validateItem(item, index, errors) {
     if (Array.isArray(item.response.choices) && typeof item.response.answer === 'string' && !item.response.choices.some(choice => choice.id === item.response.answer)) errors.push(issue(`${p}.response.answer`, 'must match a choice id'));
   }
   if (item.type === 'word_order') {
-    if (!Array.isArray(item.response.tokens) || item.response.tokens.length < 2) errors.push(issue(`${p}.response.tokens`, 'word_order requires ordered tokens'));
+    if (!Array.isArray(item.response.tokens) || item.response.tokens.length < 2) errors.push(issue(`${p}.response.tokens`, 'word_order requires a word bank of at least two tokens'));
     if (item.evaluation.mode !== 'token_order') errors.push(issue(`${p}.evaluation.mode`, 'word_order requires the token_order evaluator'));
   }
   if (item.type === 'listen_repeat') {

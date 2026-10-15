@@ -1,4 +1,5 @@
 import { createHmac } from 'node:crypto';
+import { normalizeTokens, wordOrderReference } from './evaluate.js';
 
 const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -36,7 +37,12 @@ export function publicPuzzleQuestion(row, secret) {
     const tokens = Array.isArray(data.tokens) ? data.tokens : [];
     let shuffled = tokens.map((text, index) => ({ id: token(secret, row.id, `word:${index}`), text }))
       .sort((a, b) => a.id.localeCompare(b.id));
-    if (shuffled.length > 1 && shuffled.every((item, index) => item.text === tokens[index])) shuffled = [...shuffled.slice(1), shuffled[0]];
+    // Never present the bank in answer order — the stored bank is shuffled,
+    // so guarding against the stored order no longer protects the sentence.
+    const answerOrder = normalizeTokens(wordOrderReference(row)).join(' ');
+    if (shuffled.length > 1 && normalizeTokens(shuffled.map((item) => item.text)).join(' ') === answerOrder) {
+      shuffled = [...shuffled.slice(1), shuffled[0]];
+    }
     return { ...base, kind: 'word_order', tokens: shuffled };
   }
   const choices = Array.isArray(data.choices) ? data.choices : [];
@@ -48,7 +54,9 @@ export function publicPuzzleQuestion(row, secret) {
 export function puzzleReveal(row) {
   const data = row.response_json || {};
   const evaluation = row.evaluation_json || {};
-  if (row.item_type === 'word_order') return Array.isArray(data.tokens) ? data.tokens.join(' ') : '';
+  // Word-order reveals the stored sentence — the same source Practice shows —
+  // never the raw word bank, which is stored shuffled.
+  if (row.item_type === 'word_order') return wordOrderReference(row);
   const answer = String(data.answer ?? evaluation.answer ?? '');
   const choice = data.choices?.find((option) => String(option.id ?? option.key) === answer);
   return choice?.text || answer;
