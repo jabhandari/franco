@@ -1,6 +1,7 @@
 import React from 'react';
 import type { CurriculumLesson as Lesson, CurriculumQuestion, CurriculumProvenance } from '../types';
 import { curriculumAnswer, curriculumReviewDays } from '../presenters/curriculum.presenter';
+import { shuffle } from '../presenters/collections.presenter';
 import { Box, Button, Card, Text, TextInput } from './ui';
 
 function Attribution({ provenance }: { provenance: CurriculumProvenance }) {
@@ -9,11 +10,15 @@ function Attribution({ provenance }: { provenance: CurriculumProvenance }) {
 }
 function Question({ question, onResult }: { key?: React.Key; question: CurriculumQuestion; onResult?: (id: string, correct: boolean | null) => void }) {
   const [answer, setAnswer] = React.useState('');
+  // Shuffle display order once per question: authored content keeps the
+  // correct choice at a fixed position, so static rendering would make
+  // answers position-predictable. Grading stays id-based, unaffected.
+  const [options] = React.useState(() => shuffle(question.choices ?? []));
   const [result, setResult] = React.useState<{ correct: boolean; message: string } | null>(null);
   function check() { const next = curriculumAnswer(question, answer); setResult(next); onResult?.(question.id, next.correct); }
   return <Card>
     <Text>{question.prompt}</Text>
-    {question.choices ? <Box display="flex" gap="sm" wrap>{question.choices.map(choice => <Button key={choice.id} variant={answer === choice.id ? 'primary' : 'text'} onClick={() => { setAnswer(choice.id); setResult(null); onResult?.(question.id, null); }}>{choice.text}</Button>)}</Box> : <TextInput value={answer} aria-label={question.prompt} onChange={event => { setAnswer(event.target.value); setResult(null); onResult?.(question.id, null); }} />}
+    {question.choices ? <Box display="flex" gap="sm" wrap>{options.map(choice => <Button key={choice.id} variant={answer === choice.id ? 'primary' : 'text'} onClick={() => { setAnswer(choice.id); setResult(null); onResult?.(question.id, null); }}>{choice.text}</Button>)}</Box> : <TextInput value={answer} aria-label={question.prompt} onChange={event => { setAnswer(event.target.value); setResult(null); onResult?.(question.id, null); }} />}
     <Button variant="text" disabled={!answer.trim()} onClick={check}>Check answer</Button>
     {result && <Box role="status"><Text>{result.message}</Text>{!result.correct && <Text>Answer: {question.correct_answers.map(value => question.choices?.find(c => c.id === value)?.text ?? value).join(' / ')}</Text>}</Box>}
     <Attribution provenance={question.provenance} />
