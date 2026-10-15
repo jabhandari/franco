@@ -42,7 +42,10 @@ export function VerbSprint({ token, summary, onBack, onUpdated }: Props) {
     apiGet<PuzzleState>(`${ROOT}/${run.id}`, token)
       .then((state) => {
         setRun(state.run); setClockOffset(Date.parse(state.run.server_now) - Date.now());
-        if (state.run.status !== 'active') { setStage('over'); setFeedback(null); onUpdated(); }
+        if (state.run.status !== 'active') {
+          if (advanceTimer.current) clearTimeout(advanceTimer.current);
+          setStage('over'); setFeedback(null); onUpdated();
+        } else nextTimerCheck.current = Date.now() + 500;
       })
       .catch((caught) => { nextTimerCheck.current = Date.now() + 3000; setError(getErrorMessage(caught)); })
       .finally(() => { settlingTimer.current = false; });
