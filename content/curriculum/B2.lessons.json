@@ -62,8 +62,8 @@
         ],
         "feedback": {
           "rule": "Plus-que-parfait places an event before a past reference point. Combine imparfait of avoir or être with a past participle: j'avais terminé means I had finished; elle était partie means she had left. Keep the agreement rules of the compound tense, including être subject agreement and preceding direct objects with avoir. Use imparfait for background and passé composé for the foreground event, then plus-que-parfait for earlier causes. Déjà (already) and avant (before) can clarify timing, but the tense relationship must remain coherent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Quand la réunion a commencé, Lina avait déjà envoyé le rapport.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: When the meeting began, Lina had already sent the report."
         },
         "provenance": {
           "kind": "original",
@@ -95,8 +95,8 @@
         ],
         "feedback": {
           "rule": "Plus-que-parfait places an event before a past reference point. Combine imparfait of avoir or être with a past participle: j'avais terminé means I had finished; elle était partie means she had left. Keep the agreement rules of the compound tense, including être subject agreement and preceding direct objects with avoir. Use imparfait for background and passé composé for the foreground event, then plus-que-parfait for earlier causes. Déjà (already) and avant (before) can clarify timing, but the tense relationship must remain coherent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Elle était partie avant que nous arrivions.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: She had left before we arrived."
         },
         "provenance": {
           "kind": "original",
@@ -128,8 +128,8 @@
         ],
         "feedback": {
           "rule": "Plus-que-parfait places an event before a past reference point. Combine imparfait of avoir or être with a past participle: j'avais terminé means I had finished; elle était partie means she had left. Keep the agreement rules of the compound tense, including être subject agreement and preceding direct objects with avoir. Use imparfait for background and passé composé for the foreground event, then plus-que-parfait for earlier causes. Déjà (already) and avant (before) can clarify timing, but the tense relationship must remain coherent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Nous étions déçus parce que nous avions préparé une présentation.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We were disappointed because we had prepared a presentation."
         },
         "provenance": {
           "kind": "original",
@@ -149,8 +149,8 @@
         ],
         "feedback": {
           "rule": "Plus-que-parfait places an event before a past reference point. Combine imparfait of avoir or être with a past participle: j'avais terminé means I had finished; elle était partie means she had left. Keep the agreement rules of the compound tense, including être subject agreement and preceding direct objects with avoir. Use imparfait for background and passé composé for the foreground event, then plus-que-parfait for earlier causes. Déjà (already) and avant (before) can clarify timing, but the tense relationship must remain coherent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: When the meeting began, Lina had already sent the report.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Quand la réunion a commencé, Lina avait déjà envoyé le rapport."
         },
         "provenance": {
           "kind": "original",
@@ -168,8 +168,8 @@
         ],
         "feedback": {
           "rule": "Plus-que-parfait places an event before a past reference point. Combine imparfait of avoir or être with a past participle: j'avais terminé means I had finished; elle était partie means she had left. Keep the agreement rules of the compound tense, including être subject agreement and preceding direct objects with avoir. Use imparfait for background and passé composé for the foreground event, then plus-que-parfait for earlier causes. Déjà (already) and avant (before) can clarify timing, but the tense relationship must remain coherent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: She had left before we arrived.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Elle était partie avant que nous arrivions."
         },
         "provenance": {
           "kind": "original",
@@ -187,8 +187,8 @@
         ],
         "feedback": {
           "rule": "Plus-que-parfait places an event before a past reference point. Combine imparfait of avoir or être with a past participle: j'avais terminé means I had finished; elle était partie means she had left. Keep the agreement rules of the compound tense, including être subject agreement and preceding direct objects with avoir. Use imparfait for background and passé composé for the foreground event, then plus-que-parfait for earlier causes. Déjà (already) and avant (before) can clarify timing, but the tense relationship must remain coherent.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: We were disappointed because we had prepared a presentation.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous étions déçus parce que nous avions préparé une présentation."
         },
         "provenance": {
           "kind": "original",
@@ -332,8 +332,8 @@
         ],
         "feedback": {
           "rule": "Lequel and its forms refer back to a noun after many prepositions: lequel (masculine singular), laquelle (feminine singular), lesquels and lesquelles (plural). À combines into auquel, auxquels and auxquelles; de combines into duquel, desquels and desquelles, while à laquelle and de laquelle stay separate. For people, preposition plus qui is often possible. Dont replaces a simple de relationship, but a compound phrase such as à côté de (beside) often requires a form of duquel. Match the relative to the noun, not a nearby word.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Voici le projet auquel je participe.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Here is the project in which I am participating."
         },
         "provenance": {
           "kind": "original",
@@ -365,8 +365,8 @@
         ],
         "feedback": {
           "rule": "Lequel and its forms refer back to a noun after many prepositions: lequel (masculine singular), laquelle (feminine singular), lesquels and lesquelles (plural). À combines into auquel, auxquels and auxquelles; de combines into duquel, desquels and desquelles, while à laquelle and de laquelle stay separate. For people, preposition plus qui is often possible. Dont replaces a simple de relationship, but a compound phrase such as à côté de (beside) often requires a form of duquel. Match the relative to the noun, not a nearby word.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: C'est la collègue avec qui je travaille.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: She is the colleague with whom I work."
         },
         "provenance": {
           "kind": "original",
@@ -398,8 +398,8 @@
         ],
         "feedback": {
           "rule": "Lequel and its forms refer back to a noun after many prepositions: lequel (masculine singular), laquelle (feminine singular), lesquels and lesquelles (plural). À combines into auquel, auxquels and auxquelles; de combines into duquel, desquels and desquelles, while à laquelle and de laquelle stay separate. For people, preposition plus qui is often possible. Dont replaces a simple de relationship, but a compound phrase such as à côté de (beside) often requires a form of duquel. Match the relative to the noun, not a nearby word.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Voici le bâtiment à côté duquel nous attendons.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Here is the building beside which we are waiting."
         },
         "provenance": {
           "kind": "original",
@@ -419,8 +419,8 @@
         ],
         "feedback": {
           "rule": "Lequel and its forms refer back to a noun after many prepositions: lequel (masculine singular), laquelle (feminine singular), lesquels and lesquelles (plural). À combines into auquel, auxquels and auxquelles; de combines into duquel, desquels and desquelles, while à laquelle and de laquelle stay separate. For people, preposition plus qui is often possible. Dont replaces a simple de relationship, but a compound phrase such as à côté de (beside) often requires a form of duquel. Match the relative to the noun, not a nearby word.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Here is the project in which I am participating.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Voici le projet auquel je participe."
         },
         "provenance": {
           "kind": "original",
@@ -438,8 +438,8 @@
         ],
         "feedback": {
           "rule": "Lequel and its forms refer back to a noun after many prepositions: lequel (masculine singular), laquelle (feminine singular), lesquels and lesquelles (plural). À combines into auquel, auxquels and auxquelles; de combines into duquel, desquels and desquelles, while à laquelle and de laquelle stay separate. For people, preposition plus qui is often possible. Dont replaces a simple de relationship, but a compound phrase such as à côté de (beside) often requires a form of duquel. Match the relative to the noun, not a nearby word.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: She is the colleague with whom I work.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: C'est la collègue avec qui je travaille."
         },
         "provenance": {
           "kind": "original",
@@ -457,8 +457,8 @@
         ],
         "feedback": {
           "rule": "Lequel and its forms refer back to a noun after many prepositions: lequel (masculine singular), laquelle (feminine singular), lesquels and lesquelles (plural). À combines into auquel, auxquels and auxquelles; de combines into duquel, desquels and desquelles, while à laquelle and de laquelle stay separate. For people, preposition plus qui is often possible. Dont replaces a simple de relationship, but a compound phrase such as à côté de (beside) often requires a form of duquel. Match the relative to the noun, not a nearby word.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Here is the building beside which we are waiting.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Voici le bâtiment à côté duquel nous attendons."
         },
         "provenance": {
           "kind": "original",
@@ -602,8 +602,8 @@
         ],
         "feedback": {
           "rule": "Indicative forms generally present information as asserted; subjunctive forms occur in constructions expressing desire, evaluation, doubt or necessity. Je doute qu'il vienne means I doubt he will come, while je sais qu'il vient asserts that he is coming. Present subjunctive can refer to now or later. Past subjunctive combines subjunctive avoir/être with a past participle to mark prior completion: je suis content qu'elle soit venue means I am glad she came. Certain constructions, such as bien que (although), require subjunctive even for a factual event, so meaning alone is not a complete rule.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je doute que le rapport soit complet.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I doubt that the report is complete."
         },
         "provenance": {
           "kind": "original",
@@ -635,8 +635,8 @@
         ],
         "feedback": {
           "rule": "Indicative forms generally present information as asserted; subjunctive forms occur in constructions expressing desire, evaluation, doubt or necessity. Je doute qu'il vienne means I doubt he will come, while je sais qu'il vient asserts that he is coming. Present subjunctive can refer to now or later. Past subjunctive combines subjunctive avoir/être with a past participle to mark prior completion: je suis content qu'elle soit venue means I am glad she came. Certain constructions, such as bien que (although), require subjunctive even for a factual event, so meaning alone is not a complete rule.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je sais que Lina a vérifié les chiffres.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I know that Lina checked the figures."
         },
         "provenance": {
           "kind": "original",
@@ -668,8 +668,8 @@
         ],
         "feedback": {
           "rule": "Indicative forms generally present information as asserted; subjunctive forms occur in constructions expressing desire, evaluation, doubt or necessity. Je doute qu'il vienne means I doubt he will come, while je sais qu'il vient asserts that he is coming. Present subjunctive can refer to now or later. Past subjunctive combines subjunctive avoir/être with a past participle to mark prior completion: je suis content qu'elle soit venue means I am glad she came. Certain constructions, such as bien que (although), require subjunctive even for a factual event, so meaning alone is not a complete rule.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je suis heureux qu'elle ait trouvé cette erreur.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am happy that she found this error. (masculine)"
         },
         "provenance": {
           "kind": "original",
@@ -689,8 +689,8 @@
         ],
         "feedback": {
           "rule": "Indicative forms generally present information as asserted; subjunctive forms occur in constructions expressing desire, evaluation, doubt or necessity. Je doute qu'il vienne means I doubt he will come, while je sais qu'il vient asserts that he is coming. Present subjunctive can refer to now or later. Past subjunctive combines subjunctive avoir/être with a past participle to mark prior completion: je suis content qu'elle soit venue means I am glad she came. Certain constructions, such as bien que (although), require subjunctive even for a factual event, so meaning alone is not a complete rule.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I doubt that the report is complete.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je doute que le rapport soit complet."
         },
         "provenance": {
           "kind": "original",
@@ -708,8 +708,8 @@
         ],
         "feedback": {
           "rule": "Indicative forms generally present information as asserted; subjunctive forms occur in constructions expressing desire, evaluation, doubt or necessity. Je doute qu'il vienne means I doubt he will come, while je sais qu'il vient asserts that he is coming. Present subjunctive can refer to now or later. Past subjunctive combines subjunctive avoir/être with a past participle to mark prior completion: je suis content qu'elle soit venue means I am glad she came. Certain constructions, such as bien que (although), require subjunctive even for a factual event, so meaning alone is not a complete rule.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I know that Lina checked the figures.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je sais que Lina a vérifié les chiffres."
         },
         "provenance": {
           "kind": "original",
@@ -727,8 +727,8 @@
         ],
         "feedback": {
           "rule": "Indicative forms generally present information as asserted; subjunctive forms occur in constructions expressing desire, evaluation, doubt or necessity. Je doute qu'il vienne means I doubt he will come, while je sais qu'il vient asserts that he is coming. Present subjunctive can refer to now or later. Past subjunctive combines subjunctive avoir/être with a past participle to mark prior completion: je suis content qu'elle soit venue means I am glad she came. Certain constructions, such as bien que (although), require subjunctive even for a factual event, so meaning alone is not a complete rule.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I am happy that she found this error. (masculine)",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je suis heureux qu'elle ait trouvé cette erreur."
         },
         "provenance": {
           "kind": "original",
@@ -872,8 +872,8 @@
         ],
         "feedback": {
           "rule": "Conditional past combines conditional avoir or être with a past participle: j'aurais accepté means I would have accepted; elle serait venue means she would have come. It can express an unreal past result, regret, reproach or cautiously reported information, depending on context. For a counterfactual past condition, use si plus plus-que-parfait, then conditional past: si j'avais su, je serais venu means if I had known, I would have come (masculine). Do not use conditional directly after si in this condition pattern. Distinguish regret from an accusation through tone and context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: J'aurais voulu participer à la réunion.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I would have liked to take part in the meeting."
         },
         "provenance": {
           "kind": "original",
@@ -905,8 +905,8 @@
         ],
         "feedback": {
           "rule": "Conditional past combines conditional avoir or être with a past participle: j'aurais accepté means I would have accepted; elle serait venue means she would have come. It can express an unreal past result, regret, reproach or cautiously reported information, depending on context. For a counterfactual past condition, use si plus plus-que-parfait, then conditional past: si j'avais su, je serais venu means if I had known, I would have come (masculine). Do not use conditional directly after si in this condition pattern. Distinguish regret from an accusation through tone and context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Si j'avais reçu le message, je serais venue.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: If I had received the message, I would have come. (feminine)"
         },
         "provenance": {
           "kind": "original",
@@ -938,8 +938,8 @@
         ],
         "feedback": {
           "rule": "Conditional past combines conditional avoir or être with a past participle: j'aurais accepté means I would have accepted; elle serait venue means she would have come. It can express an unreal past result, regret, reproach or cautiously reported information, depending on context. For a counterfactual past condition, use si plus plus-que-parfait, then conditional past: si j'avais su, je serais venu means if I had known, I would have come (masculine). Do not use conditional directly after si in this condition pattern. Distinguish regret from an accusation through tone and context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Nous aurions pu éviter ce malentendu.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We could have avoided this misunderstanding."
         },
         "provenance": {
           "kind": "original",
@@ -959,8 +959,8 @@
         ],
         "feedback": {
           "rule": "Conditional past combines conditional avoir or être with a past participle: j'aurais accepté means I would have accepted; elle serait venue means she would have come. It can express an unreal past result, regret, reproach or cautiously reported information, depending on context. For a counterfactual past condition, use si plus plus-que-parfait, then conditional past: si j'avais su, je serais venu means if I had known, I would have come (masculine). Do not use conditional directly after si in this condition pattern. Distinguish regret from an accusation through tone and context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I would have liked to take part in the meeting.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: J'aurais voulu participer à la réunion."
         },
         "provenance": {
           "kind": "original",
@@ -978,8 +978,8 @@
         ],
         "feedback": {
           "rule": "Conditional past combines conditional avoir or être with a past participle: j'aurais accepté means I would have accepted; elle serait venue means she would have come. It can express an unreal past result, regret, reproach or cautiously reported information, depending on context. For a counterfactual past condition, use si plus plus-que-parfait, then conditional past: si j'avais su, je serais venu means if I had known, I would have come (masculine). Do not use conditional directly after si in this condition pattern. Distinguish regret from an accusation through tone and context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: If I had received the message, I would have come. (feminine)",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Si j'avais reçu le message, je serais venue."
         },
         "provenance": {
           "kind": "original",
@@ -997,8 +997,8 @@
         ],
         "feedback": {
           "rule": "Conditional past combines conditional avoir or être with a past participle: j'aurais accepté means I would have accepted; elle serait venue means she would have come. It can express an unreal past result, regret, reproach or cautiously reported information, depending on context. For a counterfactual past condition, use si plus plus-que-parfait, then conditional past: si j'avais su, je serais venu means if I had known, I would have come (masculine). Do not use conditional directly after si in this condition pattern. Distinguish regret from an accusation through tone and context.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: We could have avoided this misunderstanding.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous aurions pu éviter ce malentendu."
         },
         "provenance": {
           "kind": "original",
@@ -1142,8 +1142,8 @@
         ],
         "feedback": {
           "rule": "Conditional patterns can connect different times. Si plus plus-que-parfait with conditional past imagines a different past result. The same past condition with conditional present can describe a present consequence: si j'avais accepté, je travaillerais ici means if I had accepted, I would be working here now. For a real future possibility, si takes present rather than future. Peut-être (perhaps), il est probable que (it is likely that) and il est possible que (it is possible that) express different certainty; the last normally introduces subjunctive, while probable affirmative normally takes indicative.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Si j'avais accepté ce poste, j'habiterais ici aujourd'hui.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: If I had accepted that job, I would be living here today."
         },
         "provenance": {
           "kind": "original",
@@ -1175,8 +1175,8 @@
         ],
         "feedback": {
           "rule": "Conditional patterns can connect different times. Si plus plus-que-parfait with conditional past imagines a different past result. The same past condition with conditional present can describe a present consequence: si j'avais accepté, je travaillerais ici means if I had accepted, I would be working here now. For a real future possibility, si takes present rather than future. Peut-être (perhaps), il est probable que (it is likely that) and il est possible que (it is possible that) express different certainty; the last normally introduces subjunctive, while probable affirmative normally takes indicative.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Si le budget augmente, nous recruterons.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: If the budget increases, we will recruit."
         },
         "provenance": {
           "kind": "original",
@@ -1208,8 +1208,8 @@
         ],
         "feedback": {
           "rule": "Conditional patterns can connect different times. Si plus plus-que-parfait with conditional past imagines a different past result. The same past condition with conditional present can describe a present consequence: si j'avais accepté, je travaillerais ici means if I had accepted, I would be working here now. For a real future possibility, si takes present rather than future. Peut-être (perhaps), il est probable que (it is likely that) and il est possible que (it is possible that) express different certainty; the last normally introduces subjunctive, while probable affirmative normally takes indicative.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Il est possible que le calendrier change.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It is possible that the schedule will change."
         },
         "provenance": {
           "kind": "original",
@@ -1229,8 +1229,8 @@
         ],
         "feedback": {
           "rule": "Conditional patterns can connect different times. Si plus plus-que-parfait with conditional past imagines a different past result. The same past condition with conditional present can describe a present consequence: si j'avais accepté, je travaillerais ici means if I had accepted, I would be working here now. For a real future possibility, si takes present rather than future. Peut-être (perhaps), il est probable que (it is likely that) and il est possible que (it is possible that) express different certainty; the last normally introduces subjunctive, while probable affirmative normally takes indicative.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: If I had accepted that job, I would be living here today.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Si j'avais accepté ce poste, j'habiterais ici aujourd'hui."
         },
         "provenance": {
           "kind": "original",
@@ -1248,8 +1248,8 @@
         ],
         "feedback": {
           "rule": "Conditional patterns can connect different times. Si plus plus-que-parfait with conditional past imagines a different past result. The same past condition with conditional present can describe a present consequence: si j'avais accepté, je travaillerais ici means if I had accepted, I would be working here now. For a real future possibility, si takes present rather than future. Peut-être (perhaps), il est probable que (it is likely that) and il est possible que (it is possible that) express different certainty; the last normally introduces subjunctive, while probable affirmative normally takes indicative.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: If the budget increases, we will recruit.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Si le budget augmente, nous recruterons."
         },
         "provenance": {
           "kind": "original",
@@ -1267,8 +1267,8 @@
         ],
         "feedback": {
           "rule": "Conditional patterns can connect different times. Si plus plus-que-parfait with conditional past imagines a different past result. The same past condition with conditional present can describe a present consequence: si j'avais accepté, je travaillerais ici means if I had accepted, I would be working here now. For a real future possibility, si takes present rather than future. Peut-être (perhaps), il est probable que (it is likely that) and il est possible que (it is possible that) express different certainty; the last normally introduces subjunctive, while probable affirmative normally takes indicative.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: It is possible that the schedule will change.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Il est possible que le calendrier change."
         },
         "provenance": {
           "kind": "original",
@@ -1412,8 +1412,8 @@
         ],
         "feedback": {
           "rule": "Argumentation connects a claim, relevant support and a reason why that support matters. A concession accepts a limitation without abandoning the main position. Certes (admittedly) often introduces an accepted point; toutefois (however) limits its implication. Distinguish an example from general evidence and avoid claiming that one experience proves a universal conclusion. A rebuttal should address the other side's strongest relevant point, then lead to a conclusion proportional to the evidence rather than an absolute slogan.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: La gratuité du bus pourrait réduire certains déplacements en voiture.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Free bus travel could reduce some car journeys."
         },
         "provenance": {
           "kind": "original",
@@ -1445,8 +1445,8 @@
         ],
         "feedback": {
           "rule": "Argumentation connects a claim, relevant support and a reason why that support matters. A concession accepts a limitation without abandoning the main position. Certes (admittedly) often introduces an accepted point; toutefois (however) limits its implication. Distinguish an example from general evidence and avoid claiming that one experience proves a universal conclusion. A rebuttal should address the other side's strongest relevant point, then lead to a conclusion proportional to the evidence rather than an absolute slogan.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Certes, cette mesure aurait un coût pour la collectivité.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Admittedly, this measure would have a cost for the community."
         },
         "provenance": {
           "kind": "original",
@@ -1478,8 +1478,8 @@
         ],
         "feedback": {
           "rule": "Argumentation connects a claim, relevant support and a reason why that support matters. A concession accepts a limitation without abandoning the main position. Certes (admittedly) often introduces an accepted point; toutefois (however) limits its implication. Distinguish an example from general evidence and avoid claiming that one experience proves a universal conclusion. A rebuttal should address the other side's strongest relevant point, then lead to a conclusion proportional to the evidence rather than an absolute slogan.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Toutefois, un essai limité permettrait d'en mesurer les effets.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: However, a limited trial would allow its effects to be measured."
         },
         "provenance": {
           "kind": "original",
@@ -1499,8 +1499,8 @@
         ],
         "feedback": {
           "rule": "Argumentation connects a claim, relevant support and a reason why that support matters. A concession accepts a limitation without abandoning the main position. Certes (admittedly) often introduces an accepted point; toutefois (however) limits its implication. Distinguish an example from general evidence and avoid claiming that one experience proves a universal conclusion. A rebuttal should address the other side's strongest relevant point, then lead to a conclusion proportional to the evidence rather than an absolute slogan.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Free bus travel could reduce some car journeys.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: La gratuité du bus pourrait réduire certains déplacements en voiture."
         },
         "provenance": {
           "kind": "original",
@@ -1518,8 +1518,8 @@
         ],
         "feedback": {
           "rule": "Argumentation connects a claim, relevant support and a reason why that support matters. A concession accepts a limitation without abandoning the main position. Certes (admittedly) often introduces an accepted point; toutefois (however) limits its implication. Distinguish an example from general evidence and avoid claiming that one experience proves a universal conclusion. A rebuttal should address the other side's strongest relevant point, then lead to a conclusion proportional to the evidence rather than an absolute slogan.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Admittedly, this measure would have a cost for the community.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Certes, cette mesure aurait un coût pour la collectivité."
         },
         "provenance": {
           "kind": "original",
@@ -1537,8 +1537,8 @@
         ],
         "feedback": {
           "rule": "Argumentation connects a claim, relevant support and a reason why that support matters. A concession accepts a limitation without abandoning the main position. Certes (admittedly) often introduces an accepted point; toutefois (however) limits its implication. Distinguish an example from general evidence and avoid claiming that one experience proves a universal conclusion. A rebuttal should address the other side's strongest relevant point, then lead to a conclusion proportional to the evidence rather than an absolute slogan.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: However, a limited trial would allow its effects to be measured.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Toutefois, un essai limité permettrait d'en mesurer les effets."
         },
         "provenance": {
           "kind": "original",
@@ -1682,8 +1682,8 @@
         ],
         "feedback": {
           "rule": "Discourse connectors show the relationship between ideas rather than decorating a paragraph. En outre adds support; toutefois and néanmoins introduce a limitation; en revanche contrasts a different aspect; par conséquent marks an inference or result. A cause must justify the stated consequence. En revanche does not simply mean any English however: it usually balances one aspect against another. Avoid stacking connectors whose roles conflict. Test the argument by removing the connector and explaining the logical relationship in plain English.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Le trajet est long ; en revanche, il est peu coûteux.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The journey is long; on the other hand, it is inexpensive."
         },
         "provenance": {
           "kind": "original",
@@ -1715,8 +1715,8 @@
         ],
         "feedback": {
           "rule": "Discourse connectors show the relationship between ideas rather than decorating a paragraph. En outre adds support; toutefois and néanmoins introduce a limitation; en revanche contrasts a different aspect; par conséquent marks an inference or result. A cause must justify the stated consequence. En revanche does not simply mean any English however: it usually balances one aspect against another. Avoid stacking connectors whose roles conflict. Test the argument by removing the connector and explaining the logical relationship in plain English.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Le service est fiable ; en outre, il fonctionne le dimanche.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The service is reliable; moreover, it operates on Sundays."
         },
         "provenance": {
           "kind": "original",
@@ -1748,8 +1748,8 @@
         ],
         "feedback": {
           "rule": "Discourse connectors show the relationship between ideas rather than decorating a paragraph. En outre adds support; toutefois and néanmoins introduce a limitation; en revanche contrasts a different aspect; par conséquent marks an inference or result. A cause must justify the stated consequence. En revanche does not simply mean any English however: it usually balances one aspect against another. Avoid stacking connectors whose roles conflict. Test the argument by removing the connector and explaining the logical relationship in plain English.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: La route est fermée ; par conséquent, le bus est dévié.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The road is closed; consequently, the bus is diverted."
         },
         "provenance": {
           "kind": "original",
@@ -1769,8 +1769,8 @@
         ],
         "feedback": {
           "rule": "Discourse connectors show the relationship between ideas rather than decorating a paragraph. En outre adds support; toutefois and néanmoins introduce a limitation; en revanche contrasts a different aspect; par conséquent marks an inference or result. A cause must justify the stated consequence. En revanche does not simply mean any English however: it usually balances one aspect against another. Avoid stacking connectors whose roles conflict. Test the argument by removing the connector and explaining the logical relationship in plain English.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The journey is long; on the other hand, it is inexpensive.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Le trajet est long ; en revanche, il est peu coûteux."
         },
         "provenance": {
           "kind": "original",
@@ -1788,8 +1788,8 @@
         ],
         "feedback": {
           "rule": "Discourse connectors show the relationship between ideas rather than decorating a paragraph. En outre adds support; toutefois and néanmoins introduce a limitation; en revanche contrasts a different aspect; par conséquent marks an inference or result. A cause must justify the stated consequence. En revanche does not simply mean any English however: it usually balances one aspect against another. Avoid stacking connectors whose roles conflict. Test the argument by removing the connector and explaining the logical relationship in plain English.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The service is reliable; moreover, it operates on Sundays.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Le service est fiable ; en outre, il fonctionne le dimanche."
         },
         "provenance": {
           "kind": "original",
@@ -1807,8 +1807,8 @@
         ],
         "feedback": {
           "rule": "Discourse connectors show the relationship between ideas rather than decorating a paragraph. En outre adds support; toutefois and néanmoins introduce a limitation; en revanche contrasts a different aspect; par conséquent marks an inference or result. A cause must justify the stated consequence. En revanche does not simply mean any English however: it usually balances one aspect against another. Avoid stacking connectors whose roles conflict. Test the argument by removing the connector and explaining the logical relationship in plain English.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The road is closed; consequently, the bus is diverted.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: La route est fermée ; par conséquent, le bus est dévié."
         },
         "provenance": {
           "kind": "original",
@@ -1952,8 +1952,8 @@
         ],
         "feedback": {
           "rule": "With a past reporting verb, French often shifts present to imparfait, passé composé to plus-que-parfait and future to conditional. These relationships place the reported message relative to the original speaking time, rather than imposing a blind word substitution. Indirect questions use statement order and si for yes/no questions; ce que or ce qui can replace what according to its object or subject role. Time words may shift: demain (tomorrow) can become le lendemain (the following day). If a fact remains true, retaining its tense can be appropriate.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Lina a annoncé qu'elle présenterait le projet le lendemain.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Lina announced that she would present the project the following day."
         },
         "provenance": {
           "kind": "original",
@@ -1985,8 +1985,8 @@
         ],
         "feedback": {
           "rule": "With a past reporting verb, French often shifts present to imparfait, passé composé to plus-que-parfait and future to conditional. These relationships place the reported message relative to the original speaking time, rather than imposing a blind word substitution. Indirect questions use statement order and si for yes/no questions; ce que or ce qui can replace what according to its object or subject role. Time words may shift: demain (tomorrow) can become le lendemain (the following day). If a fact remains true, retaining its tense can be appropriate.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Elle a expliqué qu'elle avait déjà consulté l'équipe.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: She explained that she had already consulted the team."
         },
         "provenance": {
           "kind": "original",
@@ -2018,8 +2018,8 @@
         ],
         "feedback": {
           "rule": "With a past reporting verb, French often shifts present to imparfait, passé composé to plus-que-parfait and future to conditional. These relationships place the reported message relative to the original speaking time, rather than imposing a blind word substitution. Indirect questions use statement order and si for yes/no questions; ce que or ce qui can replace what according to its object or subject role. Time words may shift: demain (tomorrow) can become le lendemain (the following day). If a fact remains true, retaining its tense can be appropriate.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Sami a demandé ce que nous proposions.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Sami asked what we were proposing."
         },
         "provenance": {
           "kind": "original",
@@ -2039,8 +2039,8 @@
         ],
         "feedback": {
           "rule": "With a past reporting verb, French often shifts present to imparfait, passé composé to plus-que-parfait and future to conditional. These relationships place the reported message relative to the original speaking time, rather than imposing a blind word substitution. Indirect questions use statement order and si for yes/no questions; ce que or ce qui can replace what according to its object or subject role. Time words may shift: demain (tomorrow) can become le lendemain (the following day). If a fact remains true, retaining its tense can be appropriate.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Lina announced that she would present the project the following day.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Lina a annoncé qu'elle présenterait le projet le lendemain."
         },
         "provenance": {
           "kind": "original",
@@ -2058,8 +2058,8 @@
         ],
         "feedback": {
           "rule": "With a past reporting verb, French often shifts present to imparfait, passé composé to plus-que-parfait and future to conditional. These relationships place the reported message relative to the original speaking time, rather than imposing a blind word substitution. Indirect questions use statement order and si for yes/no questions; ce que or ce qui can replace what according to its object or subject role. Time words may shift: demain (tomorrow) can become le lendemain (the following day). If a fact remains true, retaining its tense can be appropriate.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: She explained that she had already consulted the team.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Elle a expliqué qu'elle avait déjà consulté l'équipe."
         },
         "provenance": {
           "kind": "original",
@@ -2077,8 +2077,8 @@
         ],
         "feedback": {
           "rule": "With a past reporting verb, French often shifts present to imparfait, passé composé to plus-que-parfait and future to conditional. These relationships place the reported message relative to the original speaking time, rather than imposing a blind word substitution. Indirect questions use statement order and si for yes/no questions; ce que or ce qui can replace what according to its object or subject role. Time words may shift: demain (tomorrow) can become le lendemain (the following day). If a fact remains true, retaining its tense can be appropriate.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Sami asked what we were proposing.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Sami a demandé ce que nous proposions."
         },
         "provenance": {
           "kind": "original",
@@ -2222,8 +2222,8 @@
         ],
         "feedback": {
           "rule": "Register is the level of formality and social distance in language. A professional email usually states its purpose, necessary context and the requested action, then closes politely. Pourriez-vous (could you) softens a request; je vous serais reconnaissant/reconnaissante de (I would be grateful if you would) is more formal. Avoid making the message so indirect that the deadline disappears. Choose tu or vous consistently and distinguish a courteous request from a demand disguised as politeness.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je vous écris au sujet de notre rendez-vous.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am writing to you about our appointment."
         },
         "provenance": {
           "kind": "original",
@@ -2255,8 +2255,8 @@
         ],
         "feedback": {
           "rule": "Register is the level of formality and social distance in language. A professional email usually states its purpose, necessary context and the requested action, then closes politely. Pourriez-vous (could you) softens a request; je vous serais reconnaissant/reconnaissante de (I would be grateful if you would) is more formal. Avoid making the message so indirect that the deadline disappears. Choose tu or vous consistently and distinguish a courteous request from a demand disguised as politeness.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Pourriez-vous confirmer votre disponibilité avant vendredi ?",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Could you confirm your availability before Friday?"
         },
         "provenance": {
           "kind": "original",
@@ -2288,8 +2288,8 @@
         ],
         "feedback": {
           "rule": "Register is the level of formality and social distance in language. A professional email usually states its purpose, necessary context and the requested action, then closes politely. Pourriez-vous (could you) softens a request; je vous serais reconnaissant/reconnaissante de (I would be grateful if you would) is more formal. Avoid making the message so indirect that the deadline disappears. Choose tu or vous consistently and distinguish a courteous request from a demand disguised as politeness.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je vous remercie pour votre réponse.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Thank you for your reply."
         },
         "provenance": {
           "kind": "original",
@@ -2309,8 +2309,8 @@
         ],
         "feedback": {
           "rule": "Register is the level of formality and social distance in language. A professional email usually states its purpose, necessary context and the requested action, then closes politely. Pourriez-vous (could you) softens a request; je vous serais reconnaissant/reconnaissante de (I would be grateful if you would) is more formal. Avoid making the message so indirect that the deadline disappears. Choose tu or vous consistently and distinguish a courteous request from a demand disguised as politeness.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I am writing to you about our appointment.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je vous écris au sujet de notre rendez-vous."
         },
         "provenance": {
           "kind": "original",
@@ -2328,8 +2328,8 @@
         ],
         "feedback": {
           "rule": "Register is the level of formality and social distance in language. A professional email usually states its purpose, necessary context and the requested action, then closes politely. Pourriez-vous (could you) softens a request; je vous serais reconnaissant/reconnaissante de (I would be grateful if you would) is more formal. Avoid making the message so indirect that the deadline disappears. Choose tu or vous consistently and distinguish a courteous request from a demand disguised as politeness.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Could you confirm your availability before Friday?",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Pourriez-vous confirmer votre disponibilité avant vendredi ?"
         },
         "provenance": {
           "kind": "original",
@@ -2347,8 +2347,8 @@
         ],
         "feedback": {
           "rule": "Register is the level of formality and social distance in language. A professional email usually states its purpose, necessary context and the requested action, then closes politely. Pourriez-vous (could you) softens a request; je vous serais reconnaissant/reconnaissante de (I would be grateful if you would) is more formal. Avoid making the message so indirect that the deadline disappears. Choose tu or vous consistently and distinguish a courteous request from a demand disguised as politeness.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Thank you for your reply.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je vous remercie pour votre réponse."
         },
         "provenance": {
           "kind": "original",
@@ -2492,8 +2492,8 @@
         ],
         "feedback": {
           "rule": "Passive voice foregrounds the receiver of an action: le rapport est rédigé par Lina means the report is written by Lina. Form it with être and a past participle that matches the passive subject. The agent can be omitted when unknown or irrelevant, but omission can hide responsibility. C'est...qui emphasizes a subject; c'est...que emphasizes another element: c'est Lina qui écrit (it is Lina who writes), c'est le rapport qu'elle écrit (it is the report she is writing). Preserve meaning and tense during a transformation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Le rapport a été rédigé par Lina.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The report was written by Lina."
         },
         "provenance": {
           "kind": "original",
@@ -2525,8 +2525,8 @@
         ],
         "feedback": {
           "rule": "Passive voice foregrounds the receiver of an action: le rapport est rédigé par Lina means the report is written by Lina. Form it with être and a past participle that matches the passive subject. The agent can be omitted when unknown or irrelevant, but omission can hide responsibility. C'est...qui emphasizes a subject; c'est...que emphasizes another element: c'est Lina qui écrit (it is Lina who writes), c'est le rapport qu'elle écrit (it is the report she is writing). Preserve meaning and tense during a transformation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: C'est Lina qui a vérifié les chiffres.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It was Lina who checked the figures."
         },
         "provenance": {
           "kind": "original",
@@ -2558,8 +2558,8 @@
         ],
         "feedback": {
           "rule": "Passive voice foregrounds the receiver of an action: le rapport est rédigé par Lina means the report is written by Lina. Form it with être and a past participle that matches the passive subject. The agent can be omitted when unknown or irrelevant, but omission can hide responsibility. C'est...qui emphasizes a subject; c'est...que emphasizes another element: c'est Lina qui écrit (it is Lina who writes), c'est le rapport qu'elle écrit (it is the report she is writing). Preserve meaning and tense during a transformation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: C'est ce rapport que nous présenterons.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It is this report that we will present."
         },
         "provenance": {
           "kind": "original",
@@ -2579,8 +2579,8 @@
         ],
         "feedback": {
           "rule": "Passive voice foregrounds the receiver of an action: le rapport est rédigé par Lina means the report is written by Lina. Form it with être and a past participle that matches the passive subject. The agent can be omitted when unknown or irrelevant, but omission can hide responsibility. C'est...qui emphasizes a subject; c'est...que emphasizes another element: c'est Lina qui écrit (it is Lina who writes), c'est le rapport qu'elle écrit (it is the report she is writing). Preserve meaning and tense during a transformation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The report was written by Lina.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Le rapport a été rédigé par Lina."
         },
         "provenance": {
           "kind": "original",
@@ -2598,8 +2598,8 @@
         ],
         "feedback": {
           "rule": "Passive voice foregrounds the receiver of an action: le rapport est rédigé par Lina means the report is written by Lina. Form it with être and a past participle that matches the passive subject. The agent can be omitted when unknown or irrelevant, but omission can hide responsibility. C'est...qui emphasizes a subject; c'est...que emphasizes another element: c'est Lina qui écrit (it is Lina who writes), c'est le rapport qu'elle écrit (it is the report she is writing). Preserve meaning and tense during a transformation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: It was Lina who checked the figures.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: C'est Lina qui a vérifié les chiffres."
         },
         "provenance": {
           "kind": "original",
@@ -2617,8 +2617,8 @@
         ],
         "feedback": {
           "rule": "Passive voice foregrounds the receiver of an action: le rapport est rédigé par Lina means the report is written by Lina. Form it with être and a past participle that matches the passive subject. The agent can be omitted when unknown or irrelevant, but omission can hide responsibility. C'est...qui emphasizes a subject; c'est...que emphasizes another element: c'est Lina qui écrit (it is Lina who writes), c'est le rapport qu'elle écrit (it is the report she is writing). Preserve meaning and tense during a transformation.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: It is this report that we will present.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: C'est ce rapport que nous présenterons."
         },
         "provenance": {
           "kind": "original",
@@ -2762,8 +2762,8 @@
         ],
         "feedback": {
           "rule": "In ordinary statements, object words precede their verb in the order me/te/se/nous/vous, le/la/les, lui/leur, y, en. With an unchanged second verb, attach them to the verb they belong to: je vais le lui donner (I am going to give it to her/him). Positive commands change the order and use hyphens: donne-le-moi (give it to me); moi/toi shorten before en or y in forms such as donne-m'en (give me some). Negative commands return to ordinary pre-verb order: ne me le donne pas. Identify the underlying noun phrases before replacing them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je vais le lui envoyer.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am going to send it to her or him."
         },
         "provenance": {
           "kind": "original",
@@ -2795,8 +2795,8 @@
         ],
         "feedback": {
           "rule": "In ordinary statements, object words precede their verb in the order me/te/se/nous/vous, le/la/les, lui/leur, y, en. With an unchanged second verb, attach them to the verb they belong to: je vais le lui donner (I am going to give it to her/him). Positive commands change the order and use hyphens: donne-le-moi (give it to me); moi/toi shorten before en or y in forms such as donne-m'en (give me some). Negative commands return to ordinary pre-verb order: ne me le donne pas. Identify the underlying noun phrases before replacing them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Donne-le-moi demain.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Give it to me tomorrow."
         },
         "provenance": {
           "kind": "original",
@@ -2828,8 +2828,8 @@
         ],
         "feedback": {
           "rule": "In ordinary statements, object words precede their verb in the order me/te/se/nous/vous, le/la/les, lui/leur, y, en. With an unchanged second verb, attach them to the verb they belong to: je vais le lui donner (I am going to give it to her/him). Positive commands change the order and use hyphens: donne-le-moi (give it to me); moi/toi shorten before en or y in forms such as donne-m'en (give me some). Negative commands return to ordinary pre-verb order: ne me le donne pas. Identify the underlying noun phrases before replacing them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Ne me le donne pas maintenant.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Do not give it to me now."
         },
         "provenance": {
           "kind": "original",
@@ -2849,8 +2849,8 @@
         ],
         "feedback": {
           "rule": "In ordinary statements, object words precede their verb in the order me/te/se/nous/vous, le/la/les, lui/leur, y, en. With an unchanged second verb, attach them to the verb they belong to: je vais le lui donner (I am going to give it to her/him). Positive commands change the order and use hyphens: donne-le-moi (give it to me); moi/toi shorten before en or y in forms such as donne-m'en (give me some). Negative commands return to ordinary pre-verb order: ne me le donne pas. Identify the underlying noun phrases before replacing them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I am going to send it to her or him.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je vais le lui envoyer."
         },
         "provenance": {
           "kind": "original",
@@ -2868,8 +2868,8 @@
         ],
         "feedback": {
           "rule": "In ordinary statements, object words precede their verb in the order me/te/se/nous/vous, le/la/les, lui/leur, y, en. With an unchanged second verb, attach them to the verb they belong to: je vais le lui donner (I am going to give it to her/him). Positive commands change the order and use hyphens: donne-le-moi (give it to me); moi/toi shorten before en or y in forms such as donne-m'en (give me some). Negative commands return to ordinary pre-verb order: ne me le donne pas. Identify the underlying noun phrases before replacing them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Give it to me tomorrow.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Donne-le-moi demain."
         },
         "provenance": {
           "kind": "original",
@@ -2887,8 +2887,8 @@
         ],
         "feedback": {
           "rule": "In ordinary statements, object words precede their verb in the order me/te/se/nous/vous, le/la/les, lui/leur, y, en. With an unchanged second verb, attach them to the verb they belong to: je vais le lui donner (I am going to give it to her/him). Positive commands change the order and use hyphens: donne-le-moi (give it to me); moi/toi shorten before en or y in forms such as donne-m'en (give me some). Negative commands return to ordinary pre-verb order: ne me le donne pas. Identify the underlying noun phrases before replacing them.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Do not give it to me now.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Ne me le donne pas maintenant."
         },
         "provenance": {
           "kind": "original",
@@ -3032,8 +3032,8 @@
         ],
         "feedback": {
           "rule": "Nuance limits a statement to what you can support. Il semble que (it seems that) often takes subjunctive; il est certain que (it is certain that) normally takes indicative in an affirmative assertion. Bien que (although) introduces a concession with subjunctive. Ne...que means only, not an ordinary negative: il ne reste que deux jours means only two days remain. Hedging expressions such as dans une certaine mesure (to some extent) reduce the scope of a claim, but should not conceal the speaker's actual position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Cette mesure semble utile dans certains cas.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: This measure seems useful in some cases."
         },
         "provenance": {
           "kind": "original",
@@ -3065,8 +3065,8 @@
         ],
         "feedback": {
           "rule": "Nuance limits a statement to what you can support. Il semble que (it seems that) often takes subjunctive; il est certain que (it is certain that) normally takes indicative in an affirmative assertion. Bien que (although) introduces a concession with subjunctive. Ne...que means only, not an ordinary negative: il ne reste que deux jours means only two days remain. Hedging expressions such as dans une certaine mesure (to some extent) reduce the scope of a claim, but should not conceal the speaker's actual position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Bien que le délai soit court, le projet reste possible.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Although the deadline is short, the project remains possible."
         },
         "provenance": {
           "kind": "original",
@@ -3098,8 +3098,8 @@
         ],
         "feedback": {
           "rule": "Nuance limits a statement to what you can support. Il semble que (it seems that) often takes subjunctive; il est certain que (it is certain that) normally takes indicative in an affirmative assertion. Bien que (although) introduces a concession with subjunctive. Ne...que means only, not an ordinary negative: il ne reste que deux jours means only two days remain. Hedging expressions such as dans une certaine mesure (to some extent) reduce the scope of a claim, but should not conceal the speaker's actual position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Il ne reste que deux jours.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Only two days remain."
         },
         "provenance": {
           "kind": "original",
@@ -3119,8 +3119,8 @@
         ],
         "feedback": {
           "rule": "Nuance limits a statement to what you can support. Il semble que (it seems that) often takes subjunctive; il est certain que (it is certain that) normally takes indicative in an affirmative assertion. Bien que (although) introduces a concession with subjunctive. Ne...que means only, not an ordinary negative: il ne reste que deux jours means only two days remain. Hedging expressions such as dans une certaine mesure (to some extent) reduce the scope of a claim, but should not conceal the speaker's actual position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: This measure seems useful in some cases.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Cette mesure semble utile dans certains cas."
         },
         "provenance": {
           "kind": "original",
@@ -3138,8 +3138,8 @@
         ],
         "feedback": {
           "rule": "Nuance limits a statement to what you can support. Il semble que (it seems that) often takes subjunctive; il est certain que (it is certain that) normally takes indicative in an affirmative assertion. Bien que (although) introduces a concession with subjunctive. Ne...que means only, not an ordinary negative: il ne reste que deux jours means only two days remain. Hedging expressions such as dans une certaine mesure (to some extent) reduce the scope of a claim, but should not conceal the speaker's actual position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Although the deadline is short, the project remains possible.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Bien que le délai soit court, le projet reste possible."
         },
         "provenance": {
           "kind": "original",
@@ -3157,8 +3157,8 @@
         ],
         "feedback": {
           "rule": "Nuance limits a statement to what you can support. Il semble que (it seems that) often takes subjunctive; il est certain que (it is certain that) normally takes indicative in an affirmative assertion. Bien que (although) introduces a concession with subjunctive. Ne...que means only, not an ordinary negative: il ne reste que deux jours means only two days remain. Hedging expressions such as dans une certaine mesure (to some extent) reduce the scope of a claim, but should not conceal the speaker's actual position.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: Only two days remain.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Il ne reste que deux jours."
         },
         "provenance": {
           "kind": "original",
@@ -3302,8 +3302,8 @@
         ],
         "feedback": {
           "rule": "A subordinate clause depends on another part of the sentence. Parce que gives a cause; pour que gives a purpose and takes subjunctive; alors que can express simultaneous time or contrast depending on context. Avant que (before) takes subjunctive, while après que (after) takes indicative in standard usage. Keep the subject and time relationship clear when joining clauses. A longer sentence is useful only when the reader can still identify the main assertion and how each added clause supports or limits it.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Nous avons simplifié le texte pour que chacun le comprenne.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We simplified the text so that everyone could understand it."
         },
         "provenance": {
           "kind": "original",
@@ -3335,8 +3335,8 @@
         ],
         "feedback": {
           "rule": "A subordinate clause depends on another part of the sentence. Parce que gives a cause; pour que gives a purpose and takes subjunctive; alors que can express simultaneous time or contrast depending on context. Avant que (before) takes subjunctive, while après que (after) takes indicative in standard usage. Keep the subject and time relationship clear when joining clauses. A longer sentence is useful only when the reader can still identify the main assertion and how each added clause supports or limits it.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Alors que Lina prépare le dossier, Sami vérifie les chiffres.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: While Lina prepares the file, Sami checks the figures."
         },
         "provenance": {
           "kind": "original",
@@ -3368,8 +3368,8 @@
         ],
         "feedback": {
           "rule": "A subordinate clause depends on another part of the sentence. Parce que gives a cause; pour que gives a purpose and takes subjunctive; alors que can express simultaneous time or contrast depending on context. Avant que (before) takes subjunctive, while après que (after) takes indicative in standard usage. Keep the subject and time relationship clear when joining clauses. A longer sentence is useful only when the reader can still identify the main assertion and how each added clause supports or limits it.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Après que l'équipe a voté, la décision a été annoncée.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: After the team voted, the decision was announced."
         },
         "provenance": {
           "kind": "original",
@@ -3389,8 +3389,8 @@
         ],
         "feedback": {
           "rule": "A subordinate clause depends on another part of the sentence. Parce que gives a cause; pour que gives a purpose and takes subjunctive; alors que can express simultaneous time or contrast depending on context. Avant que (before) takes subjunctive, while après que (after) takes indicative in standard usage. Keep the subject and time relationship clear when joining clauses. A longer sentence is useful only when the reader can still identify the main assertion and how each added clause supports or limits it.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: We simplified the text so that everyone could understand it.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous avons simplifié le texte pour que chacun le comprenne."
         },
         "provenance": {
           "kind": "original",
@@ -3408,8 +3408,8 @@
         ],
         "feedback": {
           "rule": "A subordinate clause depends on another part of the sentence. Parce que gives a cause; pour que gives a purpose and takes subjunctive; alors que can express simultaneous time or contrast depending on context. Avant que (before) takes subjunctive, while après que (after) takes indicative in standard usage. Keep the subject and time relationship clear when joining clauses. A longer sentence is useful only when the reader can still identify the main assertion and how each added clause supports or limits it.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: While Lina prepares the file, Sami checks the figures.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Alors que Lina prépare le dossier, Sami vérifie les chiffres."
         },
         "provenance": {
           "kind": "original",
@@ -3427,8 +3427,8 @@
         ],
         "feedback": {
           "rule": "A subordinate clause depends on another part of the sentence. Parce que gives a cause; pour que gives a purpose and takes subjunctive; alors que can express simultaneous time or contrast depending on context. Avant que (before) takes subjunctive, while après que (after) takes indicative in standard usage. Keep the subject and time relationship clear when joining clauses. A longer sentence is useful only when the reader can still identify the main assertion and how each added clause supports or limits it.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: After the team voted, the decision was announced.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Après que l'équipe a voté, la décision a été annoncée."
         },
         "provenance": {
           "kind": "original",
@@ -3572,8 +3572,8 @@
         ],
         "feedback": {
           "rule": "A debate develops through responses, not parallel speeches. State your position, invite clarification and answer the actual objection. Si je comprends bien (if I understand correctly) checks another speaker's view; je reconnais que (I acknowledge that) accepts a point without accepting every conclusion. Distinguish a factual disagreement from different priorities. Summarize common ground before proposing a compromise. Avoid attributing motives that the other person has not expressed.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Si je comprends bien, vous craignez une hausse des coûts.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: If I understand correctly, you fear an increase in costs."
         },
         "provenance": {
           "kind": "original",
@@ -3605,8 +3605,8 @@
         ],
         "feedback": {
           "rule": "A debate develops through responses, not parallel speeches. State your position, invite clarification and answer the actual objection. Si je comprends bien (if I understand correctly) checks another speaker's view; je reconnais que (I acknowledge that) accepts a point without accepting every conclusion. Distinguish a factual disagreement from different priorities. Summarize common ground before proposing a compromise. Avoid attributing motives that the other person has not expressed.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Je reconnais que cette question mérite une étude précise.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I acknowledge that this question deserves a detailed study."
         },
         "provenance": {
           "kind": "original",
@@ -3638,8 +3638,8 @@
         ],
         "feedback": {
           "rule": "A debate develops through responses, not parallel speeches. State your position, invite clarification and answer the actual objection. Si je comprends bien (if I understand correctly) checks another speaker's view; je reconnais que (I acknowledge that) accepts a point without accepting every conclusion. Distinguish a factual disagreement from different priorities. Summarize common ground before proposing a compromise. Avoid attributing motives that the other person has not expressed.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Nous pourrions tester la mesure avant de l'étendre.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We could test the measure before extending it."
         },
         "provenance": {
           "kind": "original",
@@ -3659,8 +3659,8 @@
         ],
         "feedback": {
           "rule": "A debate develops through responses, not parallel speeches. State your position, invite clarification and answer the actual objection. Si je comprends bien (if I understand correctly) checks another speaker's view; je reconnais que (I acknowledge that) accepts a point without accepting every conclusion. Distinguish a factual disagreement from different priorities. Summarize common ground before proposing a compromise. Avoid attributing motives that the other person has not expressed.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: If I understand correctly, you fear an increase in costs.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Si je comprends bien, vous craignez une hausse des coûts."
         },
         "provenance": {
           "kind": "original",
@@ -3678,8 +3678,8 @@
         ],
         "feedback": {
           "rule": "A debate develops through responses, not parallel speeches. State your position, invite clarification and answer the actual objection. Si je comprends bien (if I understand correctly) checks another speaker's view; je reconnais que (I acknowledge that) accepts a point without accepting every conclusion. Distinguish a factual disagreement from different priorities. Summarize common ground before proposing a compromise. Avoid attributing motives that the other person has not expressed.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: I acknowledge that this question deserves a detailed study.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je reconnais que cette question mérite une étude précise."
         },
         "provenance": {
           "kind": "original",
@@ -3697,8 +3697,8 @@
         ],
         "feedback": {
           "rule": "A debate develops through responses, not parallel speeches. State your position, invite clarification and answer the actual objection. Si je comprends bien (if I understand correctly) checks another speaker's view; je reconnais que (I acknowledge that) accepts a point without accepting every conclusion. Distinguish a factual disagreement from different priorities. Summarize common ground before proposing a compromise. Avoid attributing motives that the other person has not expressed.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: We could test the measure before extending it.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous pourrions tester la mesure avant de l'étendre."
         },
         "provenance": {
           "kind": "original",
@@ -3842,8 +3842,8 @@
         ],
         "feedback": {
           "rule": "An argument essay or report needs a clear question, organized evidence and a supported conclusion. In comprehension, identify the source's claim, supporting reasons and limits before judging it. Selon l'auteur (according to the author) marks attribution; pour ma part (for my part) signals your position. A report may prioritize findings and recommendations, while an essay develops a line of reasoning. Revision checks logical links, reliable attribution, paragraph purpose and whether the conclusion goes beyond the evidence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Selon l'auteur, la mesure réduirait les inégalités.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: According to the author, the measure would reduce inequalities."
         },
         "provenance": {
           "kind": "original",
@@ -3875,8 +3875,8 @@
         ],
         "feedback": {
           "rule": "An argument essay or report needs a clear question, organized evidence and a supported conclusion. In comprehension, identify the source's claim, supporting reasons and limits before judging it. Selon l'auteur (according to the author) marks attribution; pour ma part (for my part) signals your position. A report may prioritize findings and recommendations, while an essay develops a line of reasoning. Revision checks logical links, reliable attribution, paragraph purpose and whether the conclusion goes beyond the evidence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Pour ma part, je souhaite connaître ses effets à long terme.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: For my part, I want to know its long-term effects."
         },
         "provenance": {
           "kind": "original",
@@ -3908,8 +3908,8 @@
         ],
         "feedback": {
           "rule": "An argument essay or report needs a clear question, organized evidence and a supported conclusion. In comprehension, identify the source's claim, supporting reasons and limits before judging it. Selon l'auteur (according to the author) marks attribution; pour ma part (for my part) signals your position. A report may prioritize findings and recommendations, while an essay develops a line of reasoning. Revision checks logical links, reliable attribution, paragraph purpose and whether the conclusion goes beyond the evidence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "That English meaning belongs to a different message, rather than: Le rapport recommande donc une évaluation indépendante.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The report therefore recommends an independent evaluation."
         },
         "provenance": {
           "kind": "original",
@@ -3929,8 +3929,8 @@
         ],
         "feedback": {
           "rule": "An argument essay or report needs a clear question, organized evidence and a supported conclusion. In comprehension, identify the source's claim, supporting reasons and limits before judging it. Selon l'auteur (according to the author) marks attribution; pour ma part (for my part) signals your position. A report may prioritize findings and recommendations, while an essay develops a line of reasoning. Revision checks logical links, reliable attribution, paragraph purpose and whether the conclusion goes beyond the evidence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: According to the author, the measure would reduce inequalities.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Selon l'auteur, la mesure réduirait les inégalités."
         },
         "provenance": {
           "kind": "original",
@@ -3948,8 +3948,8 @@
         ],
         "feedback": {
           "rule": "An argument essay or report needs a clear question, organized evidence and a supported conclusion. In comprehension, identify the source's claim, supporting reasons and limits before judging it. Selon l'auteur (according to the author) marks attribution; pour ma part (for my part) signals your position. A report may prioritize findings and recommendations, while an essay develops a line of reasoning. Revision checks logical links, reliable attribution, paragraph purpose and whether the conclusion goes beyond the evidence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: For my part, I want to know its long-term effects.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Pour ma part, je souhaite connaître ses effets à long terme."
         },
         "provenance": {
           "kind": "original",
@@ -3967,8 +3967,8 @@
         ],
         "feedback": {
           "rule": "An argument essay or report needs a clear question, organized evidence and a supported conclusion. In comprehension, identify the source's claim, supporting reasons and limits before judging it. Selon l'auteur (according to the author) marks attribution; pour ma part (for my part) signals your position. A report may prioritize findings and recommendations, while an essay develops a line of reasoning. Revision checks logical links, reliable attribution, paragraph purpose and whether the conclusion goes beyond the evidence.",
-          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
-          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+          "error": "The response does not match the model wording requested for: The report therefore recommends an independent evaluation.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Le rapport recommande donc une évaluation indépendante."
         },
         "provenance": {
           "kind": "original",
