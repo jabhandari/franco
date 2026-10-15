@@ -42,7 +42,7 @@ function StoryReader({id,token,onBack,onProgress}:{key?:React.Key;id:string;toke
         {feedback?.explanation && <Box role="status"><Text>{feedback.explanation}</Text></Box>}
         {question ? <Box>
           <Text as="h3">{question.prompt}</Text>
-          <Box className="story-options">{question.options.map(option=><Button key={option.id} variant={selection===option.id?'primary':'text'} disabled={busy} onClick={()=>setSelection(option.id)}>{option.text}</Button>)}</Box>
+          <Box className="story-options">{question.options.map(option=><Button key={option.id} variant={selection===option.id?'primary':'text'} aria-pressed={selection===option.id} disabled={busy} onClick={()=>setSelection(option.id)}>{option.text}</Button>)}</Box>
           <Button variant="primary" disabled={busy || !selection} onClick={()=>act('answer')}>{busy?'Checking…':'Check answer'}</Button>
         </Box> : <Text as="strong">All six questions answered. Well done!</Text>}
       </Panel>}
