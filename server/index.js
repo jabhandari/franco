@@ -446,7 +446,7 @@ async function main() {
               try {
                 if (req.method === 'GET' && u.pathname === '/api/me/puzzles') return json(res, 200, await puzzleSummary(x.id));
                 if (req.method === 'POST' && u.pathname === '/api/me/puzzles/verb-sprint/runs') return json(res, 201, await startVerbSprint(x.id));
-                const sprintMatch = u.pathname.match(/^\/api\/me\/puzzles\/verb-sprint\/runs\/([a-f0-9-]{36})(?:\/(answer|end))?$/);
+                const sprintMatch = u.pathname.match(/^\/api\/me\/puzzles\/verb-sprint\/runs\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})(?:\/(answer|end))?$/);
                 if (sprintMatch && req.method === 'GET' && !sprintMatch[2]) return json(res, 200, await getVerbSprint(x.id, sprintMatch[1]));
                 if (sprintMatch && req.method === 'POST' && sprintMatch[2] === 'answer') {
                   const submission = await body(req);
@@ -457,7 +457,7 @@ async function main() {
                   const config = await body(req);
                   return json(res, 201, await startPuzzle(x.id, config.lives, config.minutes));
                 }
-                const match = u.pathname.match(/^\/api\/me\/puzzles\/runs\/([a-f0-9-]{36})(?:\/(answer|end))?$/);
+                const match = u.pathname.match(/^\/api\/me\/puzzles\/runs\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})(?:\/(answer|end))?$/);
                 if (match && req.method === 'GET' && !match[2]) return json(res, 200, await getPuzzle(x.id, match[1]));
                 if (match && req.method === 'POST' && match[2] === 'answer') {
                   const submission = await body(req);
