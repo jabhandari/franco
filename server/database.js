@@ -47,6 +47,10 @@ export async function migrate() {
     CREATE TABLE IF NOT EXISTS media_assets (id TEXT PRIMARY KEY, item_id TEXT NOT NULL REFERENCES content_items(id) ON DELETE CASCADE, kind TEXT NOT NULL, url TEXT NOT NULL, duration_seconds REAL, transcript TEXT, checksum TEXT, metadata_json JSONB NOT NULL DEFAULT '{}'::jsonb);
     CREATE TABLE IF NOT EXISTS content_duplicates (id TEXT PRIMARY KEY, item_id TEXT NOT NULL REFERENCES content_items(id) ON DELETE CASCADE, candidate_item_id TEXT NOT NULL REFERENCES content_items(id) ON DELETE CASCADE, similarity REAL NOT NULL, decision TEXT NOT NULL DEFAULT 'pending', UNIQUE(item_id, candidate_item_id));
     CREATE TABLE IF NOT EXISTS content_reviews (id TEXT PRIMARY KEY, item_id TEXT NOT NULL REFERENCES content_items(id) ON DELETE CASCADE, action TEXT NOT NULL, reviewer TEXT, note TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
+    CREATE TABLE IF NOT EXISTS puzzle_runs (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,lives_total SMALLINT NOT NULL CHECK(lives_total IN (1,3,5)),lives_left SMALLINT NOT NULL CHECK(lives_left BETWEEN 0 AND 5),minutes SMALLINT CHECK(minutes IN (3,5)),score INTEGER NOT NULL DEFAULT 0 CHECK(score>=0),answered_count INTEGER NOT NULL DEFAULT 0 CHECK(answered_count>=0),status TEXT NOT NULL DEFAULT 'active' CHECK(status IN ('active','finished','abandoned')),end_reason TEXT,started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),expires_at TIMESTAMPTZ,ended_at TIMESTAMPTZ,current_item_id TEXT REFERENCES content_items(id) ON DELETE SET NULL,current_item_revision INTEGER,seen_item_ids TEXT[] NOT NULL DEFAULT '{}',choice_secret TEXT NOT NULL);
+    ALTER TABLE puzzle_runs ADD COLUMN IF NOT EXISTS ended_at TIMESTAMPTZ;
+    CREATE INDEX IF NOT EXISTS puzzle_runs_user_recent_idx ON puzzle_runs(user_id,started_at DESC);
+    CREATE INDEX IF NOT EXISTS puzzle_runs_user_best_idx ON puzzle_runs(user_id,lives_total,minutes,score DESC);
     CREATE TABLE IF NOT EXISTS content_api_keys (id TEXT PRIMARY KEY, key_hash TEXT NOT NULL UNIQUE, name TEXT NOT NULL, scopes TEXT[] NOT NULL, revoked_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE TABLE IF NOT EXISTS learning_attempts (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, item_id TEXT NOT NULL REFERENCES content_items(id) ON DELETE RESTRICT, revision INTEGER NOT NULL, response_json JSONB NOT NULL, evaluation_json JSONB NOT NULL, score REAL, duration_ms INTEGER, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
     CREATE TABLE IF NOT EXISTS learner_item_state (user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, item_id TEXT NOT NULL REFERENCES content_items(id) ON DELETE CASCADE, due_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), interval_days REAL NOT NULL DEFAULT 0, ease REAL NOT NULL DEFAULT 2.5, repetitions INTEGER NOT NULL DEFAULT 0, lapses INTEGER NOT NULL DEFAULT 0, last_result TEXT, last_attempt_at TIMESTAMPTZ, PRIMARY KEY(user_id, item_id));
@@ -80,6 +84,9 @@ export async function migrate() {
     UPDATE learning_attempts a SET item_type=i.item_type FROM content_items i WHERE a.item_id=i.id AND a.item_type IS NULL;
     -- Keep the historical item type on attempts, then consolidate the live catalog.
     UPDATE content_items SET item_type='listen_repeat' WHERE item_type IN ('dictation','pronunciation_drill');
+    -- The one-time FRA-126 cleanup below clears references to archived items.
+    -- Create this table first so a fresh database can run that cleanup.
+    CREATE TABLE IF NOT EXISTS speech_transcriptions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,item_id TEXT REFERENCES content_items(id) ON DELETE SET NULL,model TEXT NOT NULL,duration_seconds DOUBLE PRECISION NOT NULL CHECK (duration_seconds > 0),status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','succeeded','no_speech','provider_error')),provider_request_id TEXT,error_code TEXT,transcript_hash TEXT,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),completed_at TIMESTAMPTZ);
     -- FRA-126 is a one-time taxonomy change. Old short-answer Free Text has no
     -- live learning flow; old open speaking prompts become freeform content.
     DO $$ BEGIN
@@ -125,7 +132,6 @@ export async function migrate() {
       END IF;
     END $$;
     CREATE INDEX IF NOT EXISTS attempts_legacy_idx ON learning_attempts(user_id, item_kind, legacy_ref);
-    CREATE TABLE IF NOT EXISTS speech_transcriptions (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,item_id TEXT REFERENCES content_items(id) ON DELETE SET NULL,model TEXT NOT NULL,duration_seconds DOUBLE PRECISION NOT NULL CHECK (duration_seconds > 0),status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','succeeded','no_speech','provider_error')),provider_request_id TEXT,error_code TEXT,transcript_hash TEXT,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),completed_at TIMESTAMPTZ);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_user_time_idx ON speech_transcriptions(user_id,created_at DESC);
     CREATE INDEX IF NOT EXISTS speech_transcriptions_time_idx ON speech_transcriptions(created_at DESC);
     CREATE TABLE IF NOT EXISTS content_feedback_requests (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,model TEXT NOT NULL,estimated_tokens INTEGER NOT NULL,used_tokens INTEGER NOT NULL DEFAULT 0,status TEXT NOT NULL DEFAULT 'pending',created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
@@ -155,7 +161,7 @@ ALTER TABLE public.learner_lesson_positions ENABLE ROW LEVEL SECURITY;
 
     -- Match the private-data migrations on fresh or existing databases.
     DO $$ DECLARE table_name TEXT; BEGIN
-      FOREACH table_name IN ARRAY ARRAY['email_tokens','auth_email_requests','users','sessions','learner_profiles','user_skill_estimates','attempts','mistakes','learning_attempts','learner_item_state','learner_concept_mastery','learner_activity_days','speech_transcriptions','content_feedback_requests','content_api_keys','content_reports','content_sources','example_sentences','exercise_items','exam_questions','learning_topics','tv5_exercises','concepts','schema_migrations','cefr_levels','content_batches','content_items','content_concepts','content_revisions','content_tags','tags','media_assets','content_duplicates','content_reviews','concept_prerequisites'] LOOP
+      FOREACH table_name IN ARRAY ARRAY['email_tokens','auth_email_requests','users','sessions','learner_profiles','user_skill_estimates','attempts','mistakes','learning_attempts','learner_item_state','learner_concept_mastery','learner_activity_days','speech_transcriptions','content_feedback_requests','content_api_keys','content_reports','content_sources','example_sentences','exercise_items','exam_questions','learning_topics','tv5_exercises','concepts','schema_migrations','cefr_levels','content_batches','content_items','content_concepts','content_revisions','content_tags','tags','media_assets','content_duplicates','content_reviews','concept_prerequisites','puzzle_runs'] LOOP
         IF to_regclass(format('public.%I',table_name)) IS NOT NULL THEN
           EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY',table_name);
         END IF;

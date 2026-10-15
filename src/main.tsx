@@ -9,6 +9,7 @@ import {
   LogOut,
   Mail,
   Mic,
+  Shapes,
   Sun,
   Moon,
   UserRound,
@@ -35,6 +36,7 @@ import { AuthScreen } from './views/Auth';
 import { LanguageTools } from './components/LanguageTools';
 import { Profile } from './views/Profile.js';
 import { QuestionTypes } from './views/QuestionTypes.js';
+import { Puzzles } from './views/Puzzles.js';
 
 // next-themes ships its own types, but this repo has no @types/react, so
 // `React.PropsWithChildren` in its ThemeProviderProps resolves to nothing
@@ -53,7 +55,7 @@ declare module 'next-themes' {
 // FRA-67: app-shell types. ViewId is the sidebar's view vocabulary — the
 // auth gate, router, and nav all speak it, so a bad view id is a type
 // error, not a silent blank page.
-type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types';
+type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types' | 'puzzles';
 const authViewFromPath = (): AuthMode => window.location.pathname === '/reset-password' ? 'reset' : window.location.pathname === '/verify-email' ? 'verify' : window.location.pathname === '/forgot-password' ? 'forgot' : 'login';
 
 type NavItem = {
@@ -80,6 +82,7 @@ const navItems: NavItem[] = [
   { id: 'learn', label: 'Learn', icon: GraduationCap },
   { id: 'practice', label: 'Practice', icon: BookOpen },
   { id: 'conversation', label: 'Conversation', icon: Mic },
+  { id: 'puzzles', label: 'Puzzles', icon: Shapes },
 ];
 
 const viewPaths: Record<ViewId, string> = {
@@ -95,9 +98,10 @@ const viewPaths: Record<ViewId, string> = {
   review: '/review',
   profile: '/profile',
   'question-types': '/question-types',
+  puzzles: '/puzzles',
 };
 
-const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types'];
+const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types', 'puzzles'];
 
 function viewFromPath(pathname: string): ViewId {
   for (const id of VIEW_IDS) {
@@ -349,6 +353,7 @@ function App(): React.JSX.Element {
         {view === 'review' && <ReviewQueue />}
         {view === 'profile' && <Profile token={authToken} user={session} userData={userData} streak={streak} onSaved={handleProfileSaved} onLogout={logout} onRoadmap={() => navigate('content')} />}
         {view === 'question-types' && <QuestionTypes token={authToken} />}
+        {view === 'puzzles' && <Puzzles token={authToken} />}
       </Box>
     </Box>
   );
