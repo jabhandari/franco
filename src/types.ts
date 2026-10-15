@@ -157,3 +157,36 @@ export type ContentItemSummary = {
 
 export type TranslationResult = { text:string;translation:string;source:'fr'|'en';target:'fr'|'en' };
 export type DiaryEntry = TranslationResult & { id:string;saved_at:string };
+
+export type CurriculumProvenance = {
+  kind: 'original' | 'adapted' | 'source_derived' | 'link_only';
+  source_url: string | null;
+  source_author: string;
+  license_id: string;
+  attribution_text: string;
+  reviewer_approval?: string;
+};
+export type CurriculumQuestion = {
+  id: string;
+  prompt: string;
+  choices?: { id: string; text: string }[];
+  correct_answers: string[];
+  feedback: { rule: string; error: string; remediation: string };
+  provenance: CurriculumProvenance;
+};
+export type CurriculumLesson = {
+  topic_id: string;
+  level: CefrLevel;
+  outcome: string;
+  explanation: string;
+  example_items: { french: string; english: string; provenance: CurriculumProvenance }[];
+  recognition: CurriculumQuestion[];
+  guided_production: CurriculumQuestion[];
+  reading: { french: string; english: string; prompt: string; provenance: CurriculumProvenance };
+  realistic_use: { prompt: string; rubric: string[]; model: string; model_translation: string };
+  feedback: { rule: string; error: string; remediation: string };
+  mastery: CurriculumQuestion[];
+  review_status: string;
+  version: number;
+  review_due_policy: { initial_days: number; subsequent_days: number[] };
+};

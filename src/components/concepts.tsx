@@ -1,3 +1,5 @@
+import { CurriculumLesson } from './CurriculumLesson';
+import type { CurriculumLesson as CurriculumLessonData } from '../types';
 import React from 'react';
 import { Database, Search, X } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
@@ -96,6 +98,9 @@ export type ConceptMetadata = {
   examples?: string[][];
   sources?: string[][];
   stub?: boolean;
+  lesson?: CurriculumLessonData;
+  review_status?: string;
+  subtopics?: { subtopic_id: string; title: string }[];
 };
 
 // Row shape returned by GET /api/content/v1/concepts (server/index.js).
@@ -139,6 +144,9 @@ export type ConceptNode = {
   examples: string[][];
   sources: string[][];
   stub: boolean;
+  lesson?: CurriculumLessonData;
+  review_status?: string;
+  subtopics?: { subtopic_id: string; title: string }[];
 };
 
 // Restored original roadmap display: the interactive concept tree with a
@@ -188,6 +196,9 @@ function toNode(concept: ApiConcept): ConceptNode {
     examples: meta.examples || [],
     sources: meta.sources || [],
     stub: Boolean(meta.stub),
+    lesson: meta.lesson,
+    review_status: meta.review_status,
+    subtopics: meta.subtopics,
   };
 }
 
@@ -392,6 +403,12 @@ export function RoadmapTable({ section, nodes, onSelectSection, activeConceptId,
 
 export function ConceptDetail({ concept }: { concept: ConceptNode | null | undefined }) {
   if (!concept) return null;
+  if (concept.review_status) return <Box as="article" className="concept-detail">
+    <Text as="h2">{concept.title}</Text>
+    {!!concept.subtopics?.length && <Box as="details"><Box as="summary">Explore subtopics</Box>{concept.subtopics.map(subtopic => <Text key={subtopic.subtopic_id}>{subtopic.title}</Text>)}</Box>}
+    {concept.review_status === 'published' && concept.lesson ? <CurriculumLesson key={concept.id} lesson={concept.lesson} /> : <Text>In preparation. This lesson is being reviewed; explore any other topic freely.</Text>}
+  </Box>;
+
   return (
     <Box as="article" className="concept-detail">
       <Box id="lesson-overview">
