@@ -1,7 +1,7 @@
 import React from 'react';
-import { Check, Circle } from 'lucide-react';
+import { ArrowRight, BookOpen, Check, Circle, Gamepad2, Sparkles } from 'lucide-react';
 import { apiGet, apiPost, getErrorMessage, startGoogleSignIn } from '../api/client';
-import { Box, Text, Field, TextInput, Button, ErrorMessage, SuccessMessage, ProductTour } from '../components/ui';
+import { Box, Text, Field, TextInput, Button, ErrorMessage, SuccessMessage, ProductTour, WelcomeHighlights } from '../components/ui';
 import type { AuthMode } from '../types';
 
 type AuthScreenProps = {mode:AuthMode;onModeChange:(mode:AuthMode)=>void;onSubmit:(event:React.FormEvent<HTMLFormElement>)=>void;loading:boolean;error:string;onPasswordReset:()=>void};
@@ -10,6 +10,7 @@ if (linkToken && ['/verify-email','/reset-password'].includes(window.location.pa
 
 export function AuthScreen({mode,onModeChange,onSubmit,loading,error,onPasswordReset}:AuthScreenProps) {
   const signup=mode==='signup';
+  const marketing=mode==='login'||signup;
   const [email,setEmail]=React.useState('');
   const [password,setPassword]=React.useState('');
   const [confirm,setConfirm]=React.useState('');
@@ -62,13 +63,23 @@ export function AuthScreen({mode,onModeChange,onSubmit,loading,error,onPasswordR
     finally {setGoogleLoading(false);}
   }
   const title:Record<AuthMode,string>={login:'Welcome back',signup:'Create your account',forgot:'Reset your password',reset:'Choose a new password',verify:'Verify your email','check-email':'Check your email',unverified:'Verify your email to continue'};
-  return <Box as="main" className="auth-direction-b">
+  return <Box as="main" className={marketing ? 'auth-direction-b auth-landing' : 'auth-direction-b'}>
+    {marketing && <Box as="header" className="auth-landing-header">
+      <Box className="auth-b-brand"><Text as="span">fr</Text><Box><Text as="strong">Franco</Text><Text as="small">French, made a little brighter</Text></Box></Box>
+      <Box as="nav" className="auth-landing-nav" aria-label="Welcome page"><Box as="a" href="#discover">Explore Franco</Box><Box as="a" href="#how-it-works">How it works</Box></Box>
+      <Box as="button" type="button" className="auth-landing-header-cta" onClick={()=>{switchMode(signup ? 'login' : 'signup');document.getElementById('auth-form')?.scrollIntoView();}}>{signup ? 'Log in' : 'Get started'} <ArrowRight size={16} aria-hidden="true" /></Box>
+    </Box>}
     <Box className="auth-b-card">
       <Box as="aside" className="auth-b-rail">
-        <Box className="auth-b-brand"><Text as="span">fr</Text><Box><Text as="strong">Franco</Text><Text as="small">French learning platform</Text></Box></Box>
-        {(mode==='login' || signup) ? <ProductTour /> : <Box className="auth-b-simple"><Text as="h1">Your French, kept in one place.</Text><Text>One step closer to your next lesson.</Text></Box>}
+        {marketing ? <>
+          <Text className="auth-hero-kicker">FRENCH THAT GOES PLACES <Text as="span">✳</Text></Text>
+          <Text as="h1" className="auth-hero-title">A little French can take you <Text as="span">a long way.</Text></Text>
+          <Text className="auth-hero-lede">A lively place to learn, practice and play — one small win at a time.</Text>
+          <Box className="auth-hero-pills" aria-label="Ways to learn"><Text as="span"><BookOpen size={15} aria-hidden="true"/> Learn</Text><Text as="span"><Sparkles size={15} aria-hidden="true"/> Practice</Text><Text as="span"><Gamepad2 size={15} aria-hidden="true"/> Play</Text></Box>
+          <ProductTour />
+        </> : <><Box className="auth-b-brand"><Text as="span">fr</Text><Box><Text as="strong">Franco</Text><Text as="small">French learning platform</Text></Box></Box><Box className="auth-b-simple"><Text as="h1">Your French, kept in one place.</Text><Text>One step closer to your next lesson.</Text></Box></>}
       </Box>
-      <Box as="section" className="auth-b-form">
+      <Box as="section" className="auth-b-form" id="auth-form">
         {(mode==='login'||signup) && <Box className="auth-b-segments" role="group" aria-label="Account mode"><Box as="button" type="button" disabled={loading} aria-pressed={!signup} onClick={()=>switchMode('login')}>Log in</Box><Box as="button" type="button" disabled={loading} aria-pressed={signup} onClick={()=>switchMode('signup')}>Create account</Box></Box>}
         <Text as="h2">{mode==='verify' && notice ? 'Email verified' : title[mode]}</Text>
         <Text className="auth-b-subtitle">{signup?'Save your level, your lessons and your progress.':mode==='login'?'Pick up where you left off.':mode==='verify' ? notice ? 'Your address is confirmed. You can now log in.' : working ? 'Confirming your email address.' : localError ? 'We could not confirm your email address.' : 'Confirming your email address.':mode==='reset'?'Enter a new password for your account.':'We will email you a secure link if the address is eligible.'}</Text>
@@ -96,5 +107,12 @@ export function AuthScreen({mode,onModeChange,onSubmit,loading,error,onPasswordR
         {mode!=='login' && <Box as="button" type="button" className="auth-b-back" onClick={()=>switchMode('login')}>Back to login</Box>}
       </Box>
     </Box>
+    {marketing && <><WelcomeHighlights />
+      <Box as="section" className="auth-landing-closer" id="how-it-works">
+        <Box><Text className="welcome-section-kicker">YOUR NEXT CHAPTER STARTS HERE</Text><Text as="h2">Start small. Keep going. Enjoy the journey.</Text><Text>Make room for a little French today. Franco will help you find the next step.</Text></Box>
+        <Box as="button" type="button" onClick={()=>{switchMode('signup');document.getElementById('auth-form')?.scrollIntoView();}}>Create your account <ArrowRight size={18} aria-hidden="true" /></Box>
+      </Box>
+      <Box as="footer" className="auth-landing-footer"><Text>Franco · French learning, one day at a time.</Text></Box>
+    </>}
   </Box>;
 }

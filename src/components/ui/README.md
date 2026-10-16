@@ -82,6 +82,7 @@ Reusable helper logic lives in `src/presenters/` as pure functions (no JSX):
 | `UserMenu` | `name`, `level`, `onClick` | Accessible sidebar/phone profile control |
 | `StreakCard` | `streak` | Real current/best streak and zero state on Home |
 | `ActionTile` | `icon`, `tone`, `eyebrow`, `title`, `description`, `meta`, `onClick` | Colorful action card used for dashboard choices |
+| `WelcomeHighlights` | — | Illustrated overview of the Learn, Practice, and Play paths on the welcome page |
 | `ProductTour` | — | Three manually selectable, accessible HTML previews of Franco's home, lesson, and puzzle experiences for auth |
 | `SkillCard` | `icon` (optional), `title`, `gloss`, `description`, `done`, `total`, `percent`, `loading`, `onStart` | Shared skill box with donut; optional Start disabled for empty inventory |
 | `RecordCount` | `count`, `label` | Big-number stat |
