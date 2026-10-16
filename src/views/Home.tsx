@@ -1,10 +1,10 @@
 import React from 'react';
-import { ArrowRight, BookOpen, ClipboardCheck, Mic, RotateCcw, Sparkles } from 'lucide-react';
+import { ArrowRight, BookOpen, ClipboardCheck, Mic, RotateCcw, Sparkles, Gamepad2, FileText, Headphones, PenLine } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi.js';
 import type { AuthResponse, MeResponse, StreakResponse, SessionPlanResponse, LessonPositionResponse } from '../api/client.js';
 import type { LessonPosition, ConceptProgress, SkillId } from '../types';
 import { skillCompletion } from '../presenters/progress.presenter';
-import { Box, Text, Button, StreakCard, SkillCard, ErrorMessage } from '../components/ui';
+import { Box, Text, Button, StreakCard, SkillCard, ErrorMessage, ActionTile } from '../components/ui';
 
 type HomeProps = {
   token?: string | null;
@@ -16,16 +16,17 @@ type HomeProps = {
   onLesson: (lesson: ConceptProgress) => void;
   onExplore: () => void;
   onConversation: () => void;
+  onPuzzles: () => void;
 };
 
-const SKILLS: {id:SkillId;title:string;gloss:string;description:string}[] = [
-  {id:'lire',title:'Lire',gloss:'Reading',description:'Short texts — notices, emails and stories.'},
-  {id:'ecouter',title:'Écouter',gloss:'Listening',description:'Conversations and announcements at natural speed.'},
-  {id:'ecrire',title:'Écrire',gloss:'Writing',description:'Short messages and paragraphs, corrected as you go.'},
-  {id:'parler',title:'Parler',gloss:'Speaking',description:'Phrases said out loud, with pronunciation checked.'},
+const SKILLS: {id:SkillId;icon:typeof Mic;title:string;gloss:string;description:string}[] = [
+  {id:'lire',icon:FileText,title:'Lire',gloss:'Reading',description:'Short texts — notices, emails and stories.'},
+  {id:'ecouter',icon:Headphones,title:'Écouter',gloss:'Listening',description:'Conversations and announcements at natural speed.'},
+  {id:'ecrire',icon:PenLine,title:'Écrire',gloss:'Writing',description:'Short messages and paragraphs, corrected as you go.'},
+  {id:'parler',icon:Mic,title:'Parler',gloss:'Speaking',description:'Phrases said out loud, with pronunciation checked.'},
 ];
 
-export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLesson,onExplore,onConversation}:HomeProps) {
+export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLesson,onExplore,onConversation,onPuzzles}:HomeProps) {
   const {data:plan,error:planError}=useApiResource<SessionPlanResponse>('/api/me/session-plan',token);
   const {data:resume,error:resumeError}=useApiResource<LessonPositionResponse>('/api/me/lesson-position',token);
   const snapshot=userData && 'skill_progress' in userData ? userData : null;
@@ -39,59 +40,50 @@ export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLes
   return (
     <Box as="section" className="home-page">
       <Box className="home-greeting">
-        <Box>
-          <Text className="home-kicker">TODAY'S FRENCH</Text>
-          <Text as="h1">Bonjour, {firstName}.</Text>
-          <Text className="home-subtitle">Your daily French session starts here.</Text>
-          <Text className="home-intro">Practice with French examples and exercises matched to your level.</Text>
+        <Box className="home-hero-copy">
+          <Text className="home-kicker">YOUR FRENCH STARTS HERE</Text>
+          <Text as="h1">Bonjour, {firstName}<Text as="span" className="home-hero-sparkle" aria-hidden="true">✳</Text></Text>
+          <Text className="home-subtitle">A little practice goes a long way.</Text>
+          <Text className="home-intro">Your next lesson, a quick challenge, and a moment to speak — all in one place.</Text>
+          <Button variant="primary" onClick={onStart} icon={ArrowRight} iconPosition="after">Start a 10-minute session</Button>
         </Box>
         <StreakCard streak={streak} />
       </Box>
 
       <Box className="home-plan">
-        <Box className="home-section-heading"><Text as="h2">Today's plan</Text><Text as="span">About 10 minutes, all in</Text></Box>
-        {userData?.profile?.placement_status === 'not_started' && (
-          <Box as="button" type="button" className="home-plan-row" onClick={onPlacement}>
-            <ClipboardCheck size={18} aria-hidden="true" />
-            <Box as="span"><Text as="strong">Take your placement quiz</Text><Text as="small">Start with a level matched to your French.</Text></Box>
-            <Text as="small" className="home-time">~2 min</Text>
-          </Box>
-        )}
+        <Box className="home-section-heading"><Box><Text className="home-kicker">MADE FOR YOUR MOMENT</Text><Text as="h2">What feels good today?</Text></Box><Text as="span">Choose your own next step</Text></Box>
         {planError && <ErrorMessage message="Couldn't load your session plan. You can still explore your lessons." />}
-        <Box as="button" type="button" className="home-plan-row" onClick={onStart}>
-          <RotateCcw size={18} aria-hidden="true" />
-          <Box as="span"><Text as="strong">{plan ? `Review — ${plan.reviewsDue} card${plan.reviewsDue===1 ? '' : 's'} due` : 'Review — build a practice habit'}</Text><Text as="small">{plan?.reviewsDue ? 'Bring back what you have learned before it fades.' : 'New here? Your first session will start with fresh examples.'}</Text></Box>
-          <Text as="small" className="home-time">~3 min</Text>
+        <Box className="home-action-grid">
+          {userData?.profile?.placement_status === 'not_started' && <ActionTile icon={ClipboardCheck} tone="violet" eyebrow="FIND YOUR LEVEL · ~2 MIN" title="Take your placement quiz" description="Start with a level matched to your French." onClick={onPlacement} />}
+          <ActionTile icon={RotateCcw} tone="amber" eyebrow="KEEP IT FRESH · ~3 MIN" title={plan ? `Review ${plan.reviewsDue} card${plan.reviewsDue===1 ? '' : 's'}` : 'Make it stick'} description={plan?.reviewsDue ? 'Bring back what you have learned before it fades.' : 'Build a practice habit with fresh examples.'} onClick={onStart} />
+          <ActionTile icon={Sparkles} tone="teal" eyebrow={`NEW AT ${level} · ~4 MIN`} title={nextLesson?.title || newItem?.title || 'One step forward'} description="Fresh examples and exercises at your level." onClick={() => nextLesson ? onLesson(nextLesson) : onExplore()} />
+          <ActionTile icon={Mic} tone="coral" eyebrow="SAY IT OUT LOUD · ~3 MIN" title="Speaking practice" description={spoken?.prompt || 'Say one sentence about yourself, out loud.'} onClick={onConversation} />
         </Box>
-        <Box as="button" type="button" className="home-plan-row" onClick={() => nextLesson ? onLesson(nextLesson) : onExplore()}>
-          <Sparkles size={18} aria-hidden="true" />
-          <Box as="span"><Text as="strong">New at {level} — {nextLesson?.title || newItem?.title || 'one step forward'}</Text><Text as="small">Fresh examples and exercises at your level.</Text></Box>
-          <Text as="small" className="home-time">~4 min</Text>
-        </Box>
-        <Box as="button" type="button" className="home-plan-row" onClick={onConversation}>
-          <Mic size={18} aria-hidden="true" />
-          <Box as="span"><Text as="strong">Speaking — one phrase out loud</Text><Text as="small">{spoken?.prompt || 'Say one sentence about yourself, out loud.'}</Text></Box>
-          <Text as="small" className="home-time">~3 min</Text>
-        </Box>
-        <Button variant="primary" wide onClick={onStart} icon={ArrowRight} iconPosition="after">Start a 10-minute session</Button>
       </Box>
 
-      <Box className="home-continue">
-        <Text className="home-kicker">{lesson ? 'CONTINUE YOUR LESSON' : 'YOUR NEXT LESSON'}</Text>
-        {resumeError && <ErrorMessage message="Couldn't load your saved place. You can still open your lessons." />}
-        <Box className="home-continue-row">
-          <BookOpen size={24} aria-hidden="true" />
-          <Box><Text as="h2">{lesson?.title || nextLesson?.title || 'A little French, every day'}</Text>
-            <Text as="small">{lesson ? `${lesson.level_code} roadmap · Lesson ${lesson.position} of ${lesson.total} · You left off at ${lesson.section}.` : 'Start with a lesson matched to your level.'}</Text>
-          </Box>
-          <Button variant="text" icon={ArrowRight} iconPosition="after" onClick={() => lesson ? onContinue(lesson) : nextLesson ? onLesson(nextLesson) : onExplore()}>{lesson ? 'Continue' : 'Explore Learn'}</Button>
+      <Box className="home-bottom-grid">
+        <Box className="home-continue">
+          <Box className="home-continue-art"><BookOpen size={30} aria-hidden="true" /></Box>
+          <Text className="home-kicker">{lesson ? 'CONTINUE YOUR LESSON' : 'YOUR NEXT LESSON'}</Text>
+          {resumeError && <ErrorMessage message="Couldn't load your saved place. You can still open your lessons." />}
+          <Text as="h2">{lesson?.title || nextLesson?.title || 'A little French, every day'}</Text>
+          <Text as="small">{lesson ? `${lesson.level_code} roadmap · Lesson ${lesson.position} of ${lesson.total} · You left off at ${lesson.section}.` : 'Start with a lesson matched to your level.'}</Text>
+          <Button variant="text" icon={ArrowRight} iconPosition="after" onClick={() => lesson ? onContinue(lesson) : nextLesson ? onLesson(nextLesson) : onExplore()}>{lesson ? 'Continue lesson' : 'Explore Learn'}</Button>
+        </Box>
+        <Box className="home-play-card">
+          <Box className="home-play-icon"><Gamepad2 size={27} aria-hidden="true" /></Box>
+          <Text className="home-kicker">LEARN BY PLAYING</Text>
+          <Text as="h2">Ready for a little challenge?</Text>
+          <Text>See how far your French can take you in Puzzles.</Text>
+          <Button variant="text" icon={ArrowRight} iconPosition="after" onClick={onPuzzles}>Explore Puzzles</Button>
         </Box>
       </Box>
 
       <Box className="home-skills">
-        <Text className="home-kicker">LES QUATRE COMPÉTENCES · THE FOUR SKILLS</Text>
+        <Text className="home-kicker">A LITTLE OF EVERYTHING</Text>
+        <Text as="h2" className="home-skills-title">Four ways to grow</Text>
         <Box className="home-skill-grid">
-          {SKILLS.map(skill => <SkillCard key={skill.id} title={skill.title} gloss={skill.gloss} description={skill.description} {...skillCompletion(snapshot?.skill_progress || [],skill.id)} loading={!snapshot} />)}
+          {SKILLS.map(skill => <SkillCard key={skill.id} title={skill.title} icon={skill.icon} gloss={skill.gloss} description={skill.description} {...skillCompletion(snapshot?.skill_progress || [],skill.id)} loading={!snapshot} />)}
         </Box>
       </Box>
     </Box>
