@@ -1,0 +1,26 @@
+name: Chat moderation and retention
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: chat-maintenance
+  cancel-in-progress: false
+jobs:
+  maintain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Score pending messages and sweep 28-day retention
+        env:
+          CHAT_API_BASE_URL: ${{ secrets.CHAT_API_BASE_URL }}
+          CHAT_JOB_API_KEY: ${{ secrets.CHAT_JOB_API_KEY }}
+        run: |
+          if [ -z "$CHAT_API_BASE_URL" ] || [ -z "$CHAT_JOB_API_KEY" ]; then
+            echo "::notice::Chat maintenance is not configured. Keep CHAT_ENABLED=false until deployment setup is complete."
+            exit 0
+          fi
+          curl --fail --silent --show-error --max-time 120 \
+            -X POST -H "x-api-key: $CHAT_JOB_API_KEY" \
+            "${CHAT_API_BASE_URL%/}/api/chat/jobs/run"

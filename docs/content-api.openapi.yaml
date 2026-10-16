@@ -336,6 +336,258 @@ paths:
       responses:
         '201': { description: Server-timed run and first conjugation choice question }
         '401': { description: Missing or expired session }
+  /api/chat/bootstrap:
+    get:
+      security: [{ LearnerSession: [] }]
+      description: Member-only availability, seven guidelines, version and chat profile; no history before acceptance.
+      responses:
+        '200': { description: 'available, guidelines, guidelines_version, guidelines_approved and profile (display_name, is_moderator)' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/chat/profile:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Choose a unique pseudonym distinct from account identity and record explicit versioned acceptance.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [display_name, accept_guidelines, guidelines_version]
+              properties:
+                display_name: { type: string, minLength: 3, maxLength: 24 }
+                accept_guidelines: { const: true }
+                guidelines_version: { type: string }
+      responses:
+        '200': { description: 'Chat response; no account IDs in member responses' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/chat/channels:
+    get:
+      security: [{ LearnerSession: [] }]
+      description: Five fixed channels, descriptions, slow mode and member unread counts.
+      responses:
+        '200': { description: 'channels array including slug, title, description, level_band, slow_mode_seconds, sort_order, unread and last_read_seq' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/chat/channels/{slug}/messages:
+    get:
+      security: [{ LearnerSession: [] }]
+      description: Page newest 50 retained messages in ascending sequence; hidden/deleted bodies are blank.
+      parameters:
+        - { name: slug, in: path, required: true, schema: { type: string, enum: [general, debutants-a1-a2, intermediaire-b1-b2, avances-c1-c2, questions-aide] } }
+        - { name: before, in: query, schema: { type: string, pattern: '^[0-9]+$' }, description: Exclusive message sequence cursor; omit for newest page }
+      responses:
+        '200': { description: 'messages (id, seq string, channel_id, display_name, body, status, own, created_at), has_more, before and last_read_seq' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Authoritative send; validates sanctions on every retry and deduplicates retained user/client IDs.
+      parameters:
+        - { name: slug, in: path, required: true, schema: { type: string, enum: [general, debutants-a1-a2, intermediaire-b1-b2, avances-c1-c2, questions-aide] } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [body, client_msg_id]
+              properties:
+                body: { type: string, minLength: 1, maxLength: 1500 }
+                client_msg_id: { type: string, format: uuid, description: Stable client UUID v4 persisted before send }
+      responses:
+        '200': { description: 'message, french_nudge (author-only) and deduplicated' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/chat/channels/{slug}/read:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Advance the member read marker monotonically to a retained message in this channel.
+      parameters:
+        - { name: slug, in: path, required: true, schema: { type: string, enum: [general, debutants-a1-a2, intermediaire-b1-b2, avances-c1-c2, questions-aide] } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message_id]
+              properties:
+                message_id: { type: string, format: uuid }
+      responses:
+        '200': { description: 'Chat response; no account IDs in member responses' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/chat/messages/{id}/delete:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Soft-delete only the authenticated authors retained message; scoring cannot restore it.
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: 'Chat response; no account IDs in member responses' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/chat/messages/{id}/report:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Reason-coded report, unique per member/message, maximum 20 reports per hour.
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason: { type: string, enum: [harassment, hate, spam, personal_information, sexual_or_graphic, unsafe_link, other] }
+      responses:
+        '200': { description: 'Chat response; no account IDs in member responses' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/chat/realtime-token:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Mint a private Realtime JWT lasting at most 60 seconds and bounded by Franco session expiry.
+      responses:
+        '200': { description: 'token, expires_at, url, publishable_key and opaque presence_key; no account identifiers' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/chat/presence:
+    get:
+      security: [{ LearnerSession: [] }]
+      description: Resolve unexpired opaque presence leases to verified chat pseudonyms; ignores client metadata.
+      parameters:
+        - { name: keys, in: query, schema: { type: string }, description: Up to 100 comma-separated UUID lease keys }
+      responses:
+        '200': { description: 'members array of chat pseudonyms' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/chat/moderation:
+    get:
+      security: [{ ChatModeratorKey: [] }]
+      description: Internal queue of hidden/flagged/reported retained messages with score and report reasons. Requires dedicated chat moderator key.
+      responses:
+        '200': { description: 'Chat response; no account IDs in member responses' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/chat/moderation/actions:
+    post:
+      security: [{ ChatModeratorKey: [] }]
+      description: Audit dismiss/delete/mute/ban; target account is derived on server, actor is key fingerprint.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message_id, action, reason]
+              properties:
+                message_id: { type: string, format: uuid }
+                action: { type: string, enum: [dismiss, delete, mute, ban] }
+                reason: { type: string, enum: [harassment, hate, spam, personal_information, sexual_or_graphic, unsafe_link, other] }
+                duration_seconds: { type: integer, minimum: 60, maximum: 2592000, description: Required for mute; ban is indefinite }
+      responses:
+        '200': { description: 'Chat response; no account IDs in member responses' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/chat/jobs/run:
+    post:
+      security: [{ ChatJobKey: [] }]
+      description: Internal scheduled moderation retry batch (up to five) and 28-day retention sweep; dedicated job key only.
+      responses:
+        '200': { description: 'removed and processed counts; no message bodies' }
+        '400': { description: Invalid request }
+        '401': { description: Missing or expired credential }
+        '403': { description: Guidelines required, muted sender or banned member }
+        '404': { description: Channel or owned message not found }
+        '409': { description: Name taken or reused message ID conflicts }
+        '422': { description: Message or report rejected by policy }
+        '429': { description: Rate or slow mode limit; Retry-After header gives seconds }
+        '503': { description: Chat unavailable or configuration pending }
+  /api/me/puzzles/verb-sprint/runs:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Start a 60-second Verb Sprint. Replaces only the learner's previous active Verb Sprint; French Rush remains separate.
+      responses:
+        '201': { description: Server-timed run and first conjugation choice question }
+        '401': { description: Missing or expired session }
   /api/me/puzzles/verb-sprint/runs/{runId}:
     get:
       security: [{ LearnerSession: [] }]
@@ -367,7 +619,9 @@ paths:
               required: [question_id, response]
               properties:
                 question_id: { type: string }
+
                 response: { type: string, maxLength: 100, description: Opaque choice token from the current question }
+
       responses:
         '200': { description: Correctness, revealed answer, updated run and next question; timed_out when the server timer has expired }
         '400': { description: Invalid choice }

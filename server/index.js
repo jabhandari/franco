@@ -1,6 +1,8 @@
 import { getLearnProgress, saveLearnProgress } from './learn-progress.js';
 import { createStoryService } from './stories.js';
 import { createWordsOfDayService } from './words-of-day.js';
+import { createChatRouter } from './chat-routes.js';
+
 import { curriculumConcepts } from './curriculum-contract.js';
 import { createHash, pbkdf2Sync, randomBytes, randomUUID } from 'node:crypto';
 import { reviewCurriculum, publishCurriculumBatch } from './curriculum-editorial.js';
@@ -262,8 +264,11 @@ async function ingestBatch(batch) {
   await query('UPDATE content_batches SET status=?,completed_at=NOW() WHERE id=?', [itemStatus, batchId]);
   return { status: 202, body: { batch_id: batchId, schema_version: batch.schema_version, status: itemStatus, item_count: batch.items.length, created, duplicates } };
 }
+
 const storyService=createStoryService(pool);
 const wordsOfDayService=createWordsOfDayService(pool);
+const chatRouter=createChatRouter(pool,{authenticate:user,respond:json});
+
 async function main() {
     await migrate();
     const cleanExpiredRaces = () => { void pruneRaceRooms().catch((error) => console.error('Race cleanup failed:', error)); };
@@ -274,6 +279,7 @@ async function main() {
         try {
             res.setHeader('access-control-allow-origin', corsOrigin(req.headers.origin));
             if (req.method === 'OPTIONS') return json(res, 204, {}); const u = new URL(req.url, `http://${req.headers.host}`);
+            if(await chatRouter(req,res,u)) return;
             if (req.method === 'GET' && u.pathname === '/api/auth/google/status') return json(res,200,{available:Boolean(googleConfig())});
             if (req.method === 'GET' && u.pathname === '/api/auth/google') {
               const config=googleConfig();

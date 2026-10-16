@@ -165,6 +165,7 @@ export type ContentItemSummary = {
 export type TranslationResult = { text:string;translation:string;source:'fr'|'en';target:'fr'|'en' };
 export type DiaryEntry = TranslationResult & { id:string;saved_at:string };
 
+
 export type CurriculumProvenance = {
   kind: 'original' | 'adapted' | 'source_derived' | 'link_only';
   source_url: string | null;
@@ -211,3 +212,12 @@ export type LearnSubtopic = { subtopicId:string; title:string; state:LearnStatus
 export type LearnTopicCard = { slug:string; topicId:string; title:string; description:string; subtopicCount:number; doneCount:number; state:LearnStatus; colour:string; icon:string; subtopics:LearnSubtopic[] };
 export type LearnJump = { topicTitle:string; subtopicTitle:string; slug:string; subtopicId:string };
 export type LearnRoute = { level:CefrLevel; topic?:string; subtopic?:string };
+export type ChatProfile = { display_name: string; is_moderator: boolean };
+export type ChatBootstrap = { available: boolean; guidelines: string[]; guidelines_version: string; guidelines_approved: boolean; profile: ChatProfile | null };
+export type ChatChannel = { slug: string; title: string; description: string; slow_mode_seconds: number; unread: number; last_read_seq: string };
+export type ChatMessage = { id: string; seq: string; channel_id: string; display_name: string; body: string; status: 'visible' | 'flagged' | 'hidden' | 'deleted'; own: boolean; created_at: string };
+export type ChatHistory = { messages: ChatMessage[]; has_more: boolean; before: string | null; last_read_seq: string };
+export type ChatSendResult = { message: ChatMessage; french_nudge: boolean; deduplicated: boolean };
+export type ChatRealtimeTicket = { token: string; expires_at: string; url: string; publishable_key: string; presence_key: string };
+export type ChatOutboxEntry = { key: string; user_id: string; client_msg_id: string; channel: string; body: string; created_at: number; status: 'queued' | 'failed'; error: string };
+export type ChatModMessage = { id: string; channel_id: string; display_name: string; body: string; status: string; toxicity_score: number | null; created_at: string; moderation_state: string; reports: number; reasons: { reason: string }[] | null; context: { display_name: string; body: string; created_at: string }[] | null };

@@ -11,6 +11,7 @@ import {
   Mail,
   Mic,
   Shapes,
+  MessageCircle,
   Sun,
   Moon,
   UserRound,
@@ -41,6 +42,8 @@ import { QuestionTypes } from './views/QuestionTypes.js';
 import { Puzzles } from './views/Puzzles.js';
 import { StoriesPage } from './views/StoriesPage';
 import { WordsOfDay } from './views/WordsOfDay.js';
+import { Chat } from './views/Chat';
+import { ChatModeration } from './views/ChatModeration';
 
 const Race = React.lazy(() => import('./views/Race.js').then(({ Race: RaceView }) => ({ default: RaceView })));
 
@@ -61,7 +64,7 @@ declare module 'next-themes' {
 // FRA-67: app-shell types. ViewId is the sidebar's view vocabulary — the
 // auth gate, router, and nav all speak it, so a bad view id is a type
 // error, not a silent blank page.
-type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types' | 'puzzles' | 'stories' | 'race' | 'pronunciation-spike' | 'words';
+type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types' | 'puzzles' | 'stories' | 'race' | 'pronunciation-spike' | 'words' | 'chat' | 'chat-moderation';
 const authViewFromPath = (): AuthMode => window.location.pathname === '/reset-password' ? 'reset' : window.location.pathname === '/verify-email' ? 'verify' : window.location.pathname === '/forgot-password' ? 'forgot' : 'login';
 
 type NavItem = {
@@ -92,6 +95,7 @@ const navItems: NavItem[] = [
   { id: 'conversation', label: 'Conversation', icon: Mic },
   { id: 'puzzles', label: 'Puzzles', icon: Shapes },
   { id: 'stories', label: 'Stories', icon: BookOpenText },
+  { id: 'chat', label: 'Chat', icon: MessageCircle },
 ];
 
 const viewPaths: Record<ViewId, string> = {
@@ -111,8 +115,10 @@ const viewPaths: Record<ViewId, string> = {
   race: '/race',
   'pronunciation-spike': '/pronunciation-spike',
   words: '/words',
+  chat: '/chat',
+  'chat-moderation': '/chat-moderation',
 };
-const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types', 'puzzles', 'stories', 'race', 'pronunciation-spike', 'words'];
+const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types', 'puzzles', 'stories', 'race', 'pronunciation-spike', 'words', 'chat', 'chat-moderation'];
 
 function viewFromPath(pathname: string): ViewId {
   if(pathname==='/content'){window.history.replaceState({},'',legacyLearnUrl(window.location.search));return 'learn';}
@@ -403,6 +409,8 @@ function App(): React.JSX.Element {
         {view === 'stories' && <StoriesPage token={authToken} />}
         {view === 'pronunciation-spike' && <PronunciationSpikePanel />}
         {view === 'words' && <WordsOfDay token={authToken} onHome={() => navigate('home')} />}
+        {view === 'chat' && authToken && session && <Chat key={session.id} token={authToken} userId={session.id} />}
+        {view === 'chat-moderation' && <ChatModeration />}
       </Box>
     </Box>
   );
