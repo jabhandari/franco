@@ -94,3 +94,4 @@ export { CheckRow } from './CheckRow';
 export { ActionTile } from './ActionTile';
 export type { ActionTileProps } from './ActionTile';
 export { ProductTour } from './ProductTour';
+export { WelcomeHighlights } from './WelcomeHighlights';
