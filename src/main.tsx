@@ -362,7 +362,7 @@ function App(): React.JSX.Element {
           onContinue={(lesson) => navigate('content', false, new URLSearchParams({ level:lesson.level_code,concept:lesson.slug,section:lesson.section }))}
           onLesson={(lesson) => navigate('content', false, new URLSearchParams({ level:lesson.level_code || 'A1',concept:lesson.slug }))}
           onExplore={() => navigate('content', false, new URLSearchParams({ level:userData?.profile?.current_level || 'A1' }))}
-          onConversation={() => navigate('conversation')}
+          onConversation={() => navigate('conversation')} onPuzzles={() => navigate('puzzles')}
         />}
         {view === 'learn' && <Content token={authToken} onPractice={(level) => { setSessionLevel(level); navigate('session'); }} />}
         {view === 'placement' && <Placement token={authToken} onPlaced={() => refreshUserData()} />}

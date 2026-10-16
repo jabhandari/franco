@@ -90,3 +90,7 @@ export { LanguageTools } from './LanguageTools';
 
 export { Roadmap } from './Roadmap';
 export { CheckRow } from './CheckRow';
+
+export { ActionTile } from './ActionTile';
+export type { ActionTileProps } from './ActionTile';
+export { ProductTour } from './ProductTour';

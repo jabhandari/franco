@@ -1,7 +1,7 @@
 import React from 'react';
-import { BookOpen, RotateCcw, Flame, Check, Circle } from 'lucide-react';
+import { Check, Circle } from 'lucide-react';
 import { apiGet, apiPost, getErrorMessage, startGoogleSignIn } from '../api/client';
-import { Box, Text, Field, TextInput, Button, ErrorMessage, SuccessMessage } from '../components/ui';
+import { Box, Text, Field, TextInput, Button, ErrorMessage, SuccessMessage, ProductTour } from '../components/ui';
 import type { AuthMode } from '../types';
 
 type AuthScreenProps = {mode:AuthMode;onModeChange:(mode:AuthMode)=>void;onSubmit:(event:React.FormEvent<HTMLFormElement>)=>void;loading:boolean;error:string;onPasswordReset:()=>void};
@@ -66,9 +66,7 @@ export function AuthScreen({mode,onModeChange,onSubmit,loading,error,onPasswordR
     <Box className="auth-b-card">
       <Box as="aside" className="auth-b-rail">
         <Box className="auth-b-brand"><Text as="span">fr</Text><Box><Text as="strong">Franco</Text><Text as="small">French learning platform</Text></Box></Box>
-        <Text as="h1">Your French, kept in one place.</Text>
-        <Box as="ul" className="auth-b-values"><Box as="li"><BookOpen size={18} aria-hidden="true"/><Text>Your progress saved</Text></Box><Box as="li"><RotateCcw size={18} aria-hidden="true"/><Text>Pick up where you left off</Text></Box><Box as="li"><Flame size={18} aria-hidden="true"/><Text>Your streak and scores kept</Text></Box></Box>
-        <Box className="auth-b-saved"><Text as="small">Your learning space</Text><Text as="strong">Lessons · progress · practice</Text><Text>All saved to your account.</Text></Box>
+        {(mode==='login' || signup) ? <ProductTour /> : <Box className="auth-b-simple"><Text as="h1">Your French, kept in one place.</Text><Text>One step closer to your next lesson.</Text></Box>}
       </Box>
       <Box as="section" className="auth-b-form">
         {(mode==='login'||signup) && <Box className="auth-b-segments" role="group" aria-label="Account mode"><Box as="button" type="button" disabled={loading} aria-pressed={!signup} onClick={()=>switchMode('login')}>Log in</Box><Box as="button" type="button" disabled={loading} aria-pressed={signup} onClick={()=>switchMode('signup')}>Create account</Box></Box>}
