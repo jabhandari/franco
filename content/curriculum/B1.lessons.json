@@ -3,7 +3,7 @@
     "topic_id": "B1-01",
     "level": "B1",
     "outcome": "I can tell a past story with background, events and a clear turning point.",
-    "explanation": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. Pendant que means while and often frames simultaneous actions; soudain means suddenly and can introduce a change. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
+    "explanation": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
     "example_items": [
       {
         "french": "Je préparais le dîner quand Lina a téléphoné.",
@@ -61,7 +61,7 @@
           "0"
         ],
         "feedback": {
-          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. Pendant que means while and often frames simultaneous actions; soudain means suddenly and can introduce a change. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
+          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
           "error": "That English meaning belongs to a different message, rather than: Je préparais le dîner quand Lina a téléphoné.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I was preparing dinner when Lina called."
         },
@@ -94,7 +94,7 @@
           "1"
         ],
         "feedback": {
-          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. Pendant que means while and often frames simultaneous actions; soudain means suddenly and can introduce a change. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
+          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
           "error": "That English meaning belongs to a different message, rather than: Elle cherchait ses clés et elle était inquiète.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: She was looking for her keys and she was worried."
         },
@@ -127,7 +127,7 @@
           "2"
         ],
         "feedback": {
-          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. Pendant que means while and often frames simultaneous actions; soudain means suddenly and can introduce a change. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
+          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
           "error": "That English meaning belongs to a different message, rather than: Finalement, elle les a trouvées dans son sac.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: Eventually, she found them in her bag."
         },
@@ -148,7 +148,7 @@
           "Je préparais le dîner quand Lina a téléphoné."
         ],
         "feedback": {
-          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. Pendant que means while and often frames simultaneous actions; soudain means suddenly and can introduce a change. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
+          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
           "error": "The response does not match the model wording requested for: I was preparing dinner when Lina called.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Je préparais le dîner quand Lina a téléphoné."
         },
@@ -167,7 +167,7 @@
           "Elle cherchait ses clés et elle était inquiète."
         ],
         "feedback": {
-          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. Pendant que means while and often frames simultaneous actions; soudain means suddenly and can introduce a change. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
+          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
           "error": "The response does not match the model wording requested for: She was looking for her keys and she was worried.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Elle cherchait ses clés et elle était inquiète."
         },
@@ -186,7 +186,7 @@
           "Finalement, elle les a trouvées dans son sac."
         ],
         "feedback": {
-          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. Pendant que means while and often frames simultaneous actions; soudain means suddenly and can introduce a change. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
+          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
           "error": "The response does not match the model wording requested for: Eventually, she found them in her bag.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Finalement, elle les a trouvées dans son sac."
         },
@@ -222,7 +222,7 @@
       "model_translation": "I was reading when the telephone rang."
     },
     "feedback": {
-      "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. Pendant que means while and often frames simultaneous actions; soudain means suddenly and can introduce a change. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
+      "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
       "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
       "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
     },
@@ -234,7 +234,7 @@
           "Je lisais quand le téléphone a sonné."
         ],
         "feedback": {
-          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. Pendant que means while and often frames simultaneous actions; soudain means suddenly and can introduce a change. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
+          "rule": "Choose past tenses by their role in your story. Imparfait presents a situation from inside it: an ongoing action, habit or background. Passé composé presents an event as a whole and advances the sequence. The same action can take either tense depending on viewpoint: j'habitais ici (I was living here) versus j'ai habité ici pendant deux ans (I lived here for two years as a completed period).",
           "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
           "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
         },
@@ -248,7 +248,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -2163,7 +2163,7 @@
     "topic_id": "B1-09",
     "level": "B1",
     "outcome": "I can express a wish or necessity with a common subjunctive form.",
-    "explanation": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, prefer an unchanged verb: je veux partir means I want to leave.",
+    "explanation": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, use the infinitive instead: je veux partir means I want to leave.",
     "example_items": [
       {
         "french": "Il faut que tu viennes à l'heure.",
@@ -2221,7 +2221,7 @@
           "0"
         ],
         "feedback": {
-          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, prefer an unchanged verb: je veux partir means I want to leave.",
+          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, use the infinitive instead: je veux partir means I want to leave.",
           "error": "That English meaning belongs to a different message, rather than: Il faut que tu viennes à l'heure.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: You need to come on time."
         },
@@ -2254,7 +2254,7 @@
           "1"
         ],
         "feedback": {
-          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, prefer an unchanged verb: je veux partir means I want to leave.",
+          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, use the infinitive instead: je veux partir means I want to leave.",
           "error": "That English meaning belongs to a different message, rather than: Je veux que nous parlions du projet.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I want us to discuss the project."
         },
@@ -2287,7 +2287,7 @@
           "2"
         ],
         "feedback": {
-          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, prefer an unchanged verb: je veux partir means I want to leave.",
+          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, use the infinitive instead: je veux partir means I want to leave.",
           "error": "That English meaning belongs to a different message, rather than: Je suis content que tu sois ici.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am happy that you are here."
         },
@@ -2308,7 +2308,7 @@
           "Il faut que tu viennes à l'heure."
         ],
         "feedback": {
-          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, prefer an unchanged verb: je veux partir means I want to leave.",
+          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, use the infinitive instead: je veux partir means I want to leave.",
           "error": "The response does not match the model wording requested for: You need to come on time.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Il faut que tu viennes à l'heure."
         },
@@ -2327,7 +2327,7 @@
           "Je veux que nous parlions du projet."
         ],
         "feedback": {
-          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, prefer an unchanged verb: je veux partir means I want to leave.",
+          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, use the infinitive instead: je veux partir means I want to leave.",
           "error": "The response does not match the model wording requested for: I want us to discuss the project.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Je veux que nous parlions du projet."
         },
@@ -2346,7 +2346,7 @@
           "Je suis content que tu sois ici."
         ],
         "feedback": {
-          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, prefer an unchanged verb: je veux partir means I want to leave.",
+          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, use the infinitive instead: je veux partir means I want to leave.",
           "error": "The response does not match the model wording requested for: I am happy that you are here.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Je suis content que tu sois ici."
         },
@@ -2382,7 +2382,7 @@
       "model_translation": "We need to take a break."
     },
     "feedback": {
-      "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, prefer an unchanged verb: je veux partir means I want to leave.",
+      "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, use the infinitive instead: je veux partir means I want to leave.",
       "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
       "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
     },
@@ -2394,7 +2394,7 @@
           "Il faut que nous fassions une pause."
         ],
         "feedback": {
-          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, prefer an unchanged verb: je veux partir means I want to leave.",
+          "rule": "The subjunctive is a verb form often used when a clause is wanted, required, felt or uncertain rather than simply asserted. Il faut que (it is necessary that) and je veux que (I want someone to) commonly introduce it. Many present forms use the ils present stem with -e, -es, -e, -ions, -iez, -ent, though nous/vous and irregular verbs need care. Learn useful forms: soit (be), ait (have), fasse (do), aille (go). With the same subject, use the infinitive instead: je veux partir means I want to leave.",
           "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
           "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
         },
@@ -2408,7 +2408,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -2703,7 +2703,7 @@
     "topic_id": "B1-11",
     "level": "B1",
     "outcome": "I can explain a purpose and acknowledge a contrasting fact.",
-    "explanation": "A purpose states an intended result. Pour and afin de plus an unchanged verb mean to/in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
+    "explanation": "A purpose states an intended result. Pour and afin de plus the infinitive mean to / in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
     "example_items": [
       {
         "french": "Je révise pour réussir l'examen.",
@@ -2761,7 +2761,7 @@
           "0"
         ],
         "feedback": {
-          "rule": "A purpose states an intended result. Pour and afin de plus an unchanged verb mean to/in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
+          "rule": "A purpose states an intended result. Pour and afin de plus the infinitive mean to / in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
           "error": "That English meaning belongs to a different message, rather than: Je révise pour réussir l'examen.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I revise in order to pass the exam."
         },
@@ -2794,7 +2794,7 @@
           "1"
         ],
         "feedback": {
-          "rule": "A purpose states an intended result. Pour and afin de plus an unchanged verb mean to/in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
+          "rule": "A purpose states an intended result. Pour and afin de plus the infinitive mean to / in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
           "error": "That English meaning belongs to a different message, rather than: Il est fatigué, pourtant il continue.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: He is tired, yet he continues."
         },
@@ -2827,7 +2827,7 @@
           "2"
         ],
         "feedback": {
-          "rule": "A purpose states an intended result. Pour and afin de plus an unchanged verb mean to/in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
+          "rule": "A purpose states an intended result. Pour and afin de plus the infinitive mean to / in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
           "error": "That English meaning belongs to a different message, rather than: Même s'il pleut, nous sortirons.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: Even if it rains, we will go out."
         },
@@ -2848,7 +2848,7 @@
           "Je révise pour réussir l'examen."
         ],
         "feedback": {
-          "rule": "A purpose states an intended result. Pour and afin de plus an unchanged verb mean to/in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
+          "rule": "A purpose states an intended result. Pour and afin de plus the infinitive mean to / in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
           "error": "The response does not match the model wording requested for: I revise in order to pass the exam.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Je révise pour réussir l'examen."
         },
@@ -2867,7 +2867,7 @@
           "Il est fatigué, pourtant il continue."
         ],
         "feedback": {
-          "rule": "A purpose states an intended result. Pour and afin de plus an unchanged verb mean to/in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
+          "rule": "A purpose states an intended result. Pour and afin de plus the infinitive mean to / in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
           "error": "The response does not match the model wording requested for: He is tired, yet he continues.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Il est fatigué, pourtant il continue."
         },
@@ -2886,7 +2886,7 @@
           "Même s'il pleut, nous sortirons."
         ],
         "feedback": {
-          "rule": "A purpose states an intended result. Pour and afin de plus an unchanged verb mean to/in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
+          "rule": "A purpose states an intended result. Pour and afin de plus the infinitive mean to / in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
           "error": "The response does not match the model wording requested for: Even if it rains, we will go out.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Même s'il pleut, nous sortirons."
         },
@@ -2922,7 +2922,7 @@
       "model_translation": "I speak slowly so that you understand."
     },
     "feedback": {
-      "rule": "A purpose states an intended result. Pour and afin de plus an unchanged verb mean to/in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
+      "rule": "A purpose states an intended result. Pour and afin de plus the infinitive mean to / in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
       "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
       "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
     },
@@ -2934,7 +2934,7 @@
           "Je parle lentement pour que tu comprennes."
         ],
         "feedback": {
-          "rule": "A purpose states an intended result. Pour and afin de plus an unchanged verb mean to/in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
+          "rule": "A purpose states an intended result. Pour and afin de plus the infinitive mean to / in order to when the subject is the same. Pour que plus subjunctive introduces a purpose with its own subject. Cependant and pourtant mean however/yet and connect contrasting ideas. Même si means even if/even though and normally takes indicative forms that present a situation as stated or hypothetical, rather than triggering subjunctive automatically. A concession admits a fact that does not overturn your main point. Choose the connector for its logical role.",
           "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
           "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
         },
@@ -2948,7 +2948,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -3513,7 +3513,7 @@
     "topic_id": "B1-14",
     "level": "B1",
     "outcome": "I can handle a work or travel problem and explain my feelings.",
-    "explanation": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus an unchanged verb means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
+    "explanation": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus the infinitive means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
     "example_items": [
       {
         "french": "Je suis inquiète pour mon entretien.",
@@ -3571,7 +3571,7 @@
           "0"
         ],
         "feedback": {
-          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus an unchanged verb means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
+          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus the infinitive means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
           "error": "That English meaning belongs to a different message, rather than: Je suis inquiète pour mon entretien.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am worried about my interview. (feminine)"
         },
@@ -3604,7 +3604,7 @@
           "1"
         ],
         "feedback": {
-          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus an unchanged verb means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
+          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus the infinitive means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
           "error": "That English meaning belongs to a different message, rather than: J'ai du mal à trouver l'adresse.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am having difficulty finding the address."
         },
@@ -3637,7 +3637,7 @@
           "2"
         ],
         "feedback": {
-          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus an unchanged verb means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
+          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus the infinitive means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
           "error": "That English meaning belongs to a different message, rather than: Pourriez-vous m'envoyer un plan ?",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: Could you send me a map?"
         },
@@ -3658,7 +3658,7 @@
           "Je suis inquiète pour mon entretien."
         ],
         "feedback": {
-          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus an unchanged verb means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
+          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus the infinitive means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
           "error": "The response does not match the model wording requested for: I am worried about my interview. (feminine)",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Je suis inquiète pour mon entretien."
         },
@@ -3677,7 +3677,7 @@
           "J'ai du mal à trouver l'adresse."
         ],
         "feedback": {
-          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus an unchanged verb means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
+          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus the infinitive means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
           "error": "The response does not match the model wording requested for: I am having difficulty finding the address.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: J'ai du mal à trouver l'adresse."
         },
@@ -3696,7 +3696,7 @@
           "Pourriez-vous m'envoyer un plan ?"
         ],
         "feedback": {
-          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus an unchanged verb means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
+          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus the infinitive means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
           "error": "The response does not match the model wording requested for: Could you send me a map?",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Pourriez-vous m'envoyer un plan ?"
         },
@@ -3732,7 +3732,7 @@
       "model_translation": "I am disappointed by this change. (masculine)"
     },
     "feedback": {
-      "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus an unchanged verb means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
+      "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus the infinitive means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
       "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
       "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
     },
@@ -3744,7 +3744,7 @@
           "Je suis déçu de ce changement."
         ],
         "feedback": {
-          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus an unchanged verb means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
+          "rule": "Independent communication combines factual information with a request and, when useful, an explanation of feelings. Je suis inquiet/inquiète means I am worried; je suis déçu/déçue means I am disappointed. J'ai du mal à plus the infinitive means I have difficulty doing something. A clear request identifies the help needed and any deadline. In a work or education setting, use vous with an unfamiliar professional and check that you have understood the proposed solution.",
           "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
           "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
         },
@@ -3758,7 +3758,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
