@@ -59,6 +59,7 @@ export type ApiErrorBody = {
 /** Per-request options: a scoped content API key (x-api-key), never a URL. */
 export type ApiRequestOptions = {
   apiKey?: string | null;
+  racePlayerToken?: string | null;
 };
 
 /** GET /api/health */
@@ -885,7 +886,7 @@ function errorMessageFrom(payload: unknown, status: number): string {
 }
 
 export class ApiError extends Error {
-  constructor(message: string, public status: number, public code: string | null) { super(message); }
+  constructor(message: string, public status: number, public code: string | null, public serverMessage = false) { super(message); }
 }
 
 async function parseApiResponse<T = ApiResponse>(response: Response): Promise<T> {
@@ -896,7 +897,9 @@ async function parseApiResponse<T = ApiResponse>(response: Response): Promise<T>
     throw new Error('The server sent an unreadable response. Please try again.');
   }
   if (!response.ok) {
-    throw new ApiError(errorMessageFrom(payload, response.status), response.status, isJsonObject(payload) ? safeText(payload.code) || null : null);
+    const reported = isJsonObject(payload) ? safeText(payload.error) || safeText(payload.message) : '';
+    throw new ApiError(errorMessageFrom(payload, response.status), response.status,
+      isJsonObject(payload) ? safeText(payload.code) || null : null, Boolean(reported));
   }
   // Justification: T is the caller-declared endpoint response shape (the
   // apiGet/apiPost type argument, defaulting to ApiResponse); the JSON body
@@ -962,6 +965,19 @@ export async function apiPost<T = ApiResponse>(path: string, body?: JsonValue, t
     headers,
     body: JSON.stringify(body),
   });
+  return parseApiResponse(response);
+}
+
+/** Shared JSON transport for feature endpoints with PATCH or guest seat tokens. */
+export async function apiRequest<T = ApiResponse>(path: string, method: 'GET' | 'POST' | 'PATCH', body?: object,
+  token?: string | null, options: ApiRequestOptions = {}): Promise<T> {
+  const headers: Record<string, string> = {};
+  if (body !== undefined) headers['content-type'] = 'application/json';
+  if (token) headers.authorization = `Bearer ${token}`;
+  if (options.apiKey) headers['x-api-key'] = options.apiKey;
+  if (options.racePlayerToken) headers['x-race-player-token'] = options.racePlayerToken;
+  const response = await fetch(apiUrl(path), { method, headers, cache: 'no-store',
+    body: body === undefined ? undefined : JSON.stringify(body) });
   return parseApiResponse(response);
 }
 

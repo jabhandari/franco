@@ -57,6 +57,8 @@ assert.equal(abandonedRacePlayer([{ finished_at: finished, last_seen_at: finishe
   { finished_at: null, last_seen_at: '2026-10-16T10:01:00Z' }], Date.parse('2026-10-16T10:12:00Z'))?.last_seen_at, '2026-10-16T10:01:00Z');
 assert.equal(abandonedRacePlayer([{ finished_at: finished, last_seen_at: finished },
   { finished_at: null, last_seen_at: '2026-10-16T10:08:00Z' }], Date.parse('2026-10-16T10:12:00Z')), null);
+assert.equal(abandonedRacePlayer([{ finished_at: '2026-10-16T10:09:00Z', last_seen_at: finished },
+  { finished_at: null, last_seen_at: finished }], Date.parse('2026-10-16T10:12:00Z')), null);
 assert.equal(abandonedRacePlayer([{ finished_at: null, last_seen_at: finished },
   { finished_at: null, last_seen_at: finished }], Date.parse('2026-10-16T10:12:00Z')), null);
 console.log('race rules checks passed');

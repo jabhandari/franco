@@ -6,9 +6,11 @@ export const RACE_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 export const RACE_ABANDON_GRACE_MS = 10 * 60 * 1000;
 
 export function abandonedRacePlayer(players, now = Date.now()) {
-  if (players.length !== 2 || !players.some((player) => player.finished_at)) return null;
+  if (players.length !== 2) return null;
+  const finisher = players.find((player) => player.finished_at);
+  if (!finisher) return null;
   return players.find((player) => !player.finished_at && player.last_seen_at
-    && now - new Date(player.last_seen_at).getTime() >= RACE_ABANDON_GRACE_MS) ?? null;
+    && now - Math.max(new Date(player.last_seen_at).getTime(), new Date(finisher.finished_at).getTime()) >= RACE_ABANDON_GRACE_MS) ?? null;
 }
 
 export function validRaceConfig(value) {

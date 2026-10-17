@@ -21,7 +21,7 @@ import { displayName, isNonEmptyName } from './user-names.js';
 import { getLearnerProgress } from './learner-progress.js';
 import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
 import { PuzzleError, puzzleSummary, startPuzzle, getPuzzle, answerPuzzle, endPuzzle, startVerbSprint, getVerbSprint, answerVerbSprint, endVerbSprint } from './puzzles.js';
-import { RaceError, createRoom, getRoom, joinRoom, configureRoom, startRoom, answerRoom, finishRoom } from './races.js';
+import { RaceError, createRoom, getRoom, joinRoom, configureRoom, startRoom, answerRoom, finishRoom, pruneRaceRooms } from './races.js';
 import { allowAuthEmail, authClientIp, genericEmailResponse, hashEmailToken, sendAuthEmail, validEmailToken } from './auth-email.js';
 import { emailConfigured } from './email.js';
 
@@ -262,7 +262,12 @@ async function ingestBatch(batch) {
 }
 const storyService=createStoryService(pool);
 async function main() {
-    await migrate(); createServer(async (req, res) => {
+    await migrate();
+    const cleanExpiredRaces = () => { void pruneRaceRooms().catch((error) => console.error('Race cleanup failed:', error)); };
+    cleanExpiredRaces();
+    const raceCleanupTimer = setInterval(cleanExpiredRaces, 60 * 60 * 1000);
+    raceCleanupTimer.unref();
+    createServer(async (req, res) => {
         try {
             res.setHeader('access-control-allow-origin', corsOrigin(req.headers.origin));
             if (req.method === 'OPTIONS') return json(res, 204, {}); const u = new URL(req.url, `http://${req.headers.host}`);

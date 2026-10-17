@@ -3,6 +3,7 @@ import QRCode from 'qrcode';
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, Clock3, Copy, Flag, Heart, Link2, LockKeyhole, QrCode, RotateCcw, Share2, Sparkles, Trophy, Users, X } from 'lucide-react';
 import { AudioPlayer, Box, Button, ErrorMessage, RaceInviteCode, Text, TextInput } from '../components/ui';
 import { useRaceRealtime } from '../hooks/useRaceRealtime';
+import { ApiError, apiRequest } from '../api/client.js';
 
 type RaceConfig = {
   source: 'past_questions' | 'lesson_exercises';
@@ -67,7 +68,6 @@ const LEVELS: RaceConfig['level'][] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const SOURCES: { id: RaceConfig['source']; label: string }[] = [{ id: 'past_questions', label: 'Past questions' }, { id: 'lesson_exercises', label: 'Lesson exercises' }];
 const LIFE_OPTIONS: RaceConfig['lives'][] = [1, 3, 5, null];
 const TIME_OPTIONS: { seconds: number | null; label: string }[] = [{ seconds: 180, label: '3 min' }, { seconds: 300, label: '5 min' }, { seconds: null, label: 'No limit' }];
-const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
 
 function tokenKey(code: string) { return `franco_race_player_${code}`; }
 function timeLabel(ms: number) {
@@ -77,19 +77,18 @@ function timeLabel(ms: number) {
 function errorText(error: string | Error) { return error instanceof Error ? error.message : error; }
 
 async function raceRequest<T>(path: string, method: 'GET' | 'POST' | 'PATCH', session: string | null, player: string | null, body?: object): Promise<T> {
-  const headers: Record<string, string> = { 'content-type': 'application/json' };
-  if (session) headers.authorization = `Bearer ${session}`;
-  if (player) headers['x-race-player-token'] = player;
-  const response = await fetch(`${API_BASE}${path}`, { method, headers, cache: 'no-store', body: body === undefined ? undefined : JSON.stringify(body) });
-  if (!response.ok) {
-    let message = response.status === 404 ? 'This race link was not found.' : response.status === 410 ? 'This race link has expired.' : response.status === 409 ? 'This race is full or has already started.' : 'The race could not be updated. Please try again.';
-    try {
-      const payload: { error?: string; message?: string } = await response.json();
-      message = payload.error || payload.message || message;
-    } catch { /* Keep the useful HTTP fallback. */ }
-    throw new Error(message);
+  try {
+    return await apiRequest<T>(path, method, body, session, { racePlayerToken: player });
+  } catch (error) {
+    if (error instanceof ApiError && !error.serverMessage) {
+      const message = error.status === 404 ? 'This race link was not found.'
+        : error.status === 410 ? 'This race link has expired.'
+        : error.status === 409 ? 'This race is full or has already started.'
+        : 'The race could not be updated. Please try again.';
+      throw new Error(message);
+    }
+    throw error;
   }
-  return response.json();
 }
 
 function roomPlayers(state: RaceState) {
@@ -311,22 +310,22 @@ export function Race({ code, token, onExit }: Props) {
         <Box className="race-invite-panel"><Box className="race-invite-heading"><Box className="race-invite-icon"><Link2 size={22} /></Box><Text as="h2">Invite a friend</Text><Text>Only the person with this link can enter the open seat.</Text></Box><RaceInviteCode image={qrImage} url={inviteUrl} /><Box className="race-invite-link"><Text as="small">PRIVATE INVITE LINK</Text><Text as="span">{inviteUrl}</Text></Box><Box className="race-invite-actions"><Button variant="primary" icon={copied ? Check : Copy} onClick={() => void copyInvite()}>{copied ? 'Copied!' : 'Copy link'}</Button><Button variant="text" icon={Share2} onClick={() => void shareInvite()}>Share</Button></Box><Text className="race-footnote">The link expires if no race begins. Keep it between you and your friend.</Text></Box>
       </Box>}
 
-      {room.status === 'live' && <>
+      {(room.status === 'live' || Boolean(feedback)) && <>
         <Box className="race-scoreboard"><RaceScore player={me} title="YOU" count={maxQuestions} /><Box className="race-scoreboard-clock"><Clock3 size={20} /><Text as="small">TIME LEFT</Text><Text as="strong">{remaining === null ? '∞' : timeLabel(remaining)}</Text></Box><RaceScore player={opponent} title="FRIEND" count={maxQuestions} /></Box>
-        {me && shownQuestion && !me.finished_at && <Box className="race-question"><Box className="race-question-top"><Text className="race-kicker">QUESTION {Math.min(maxQuestions, answered + (feedback ? 0 : 1))} OF {maxQuestions}</Text><Text as="span">{shownQuestion.level || room.config.level}</Text></Box><Text as="h2">{shownQuestion.prompt}</Text>{shownQuestion.context && <Text className="race-context">{shownQuestion.context}</Text>}{shownQuestion.audio_url && <AudioPlayer src={shownQuestion.audio_url} />}
+        {me && shownQuestion && (!me.finished_at || Boolean(feedback)) && <Box className="race-question"><Box className="race-question-top"><Text className="race-kicker">QUESTION {Math.min(maxQuestions, answered + (feedback ? 0 : 1))} OF {maxQuestions}</Text><Text as="span">{shownQuestion.level || room.config.level}</Text></Box><Text as="h2">{shownQuestion.prompt}</Text>{shownQuestion.context && <Text className="race-context">{shownQuestion.context}</Text>}{shownQuestion.audio_url && <AudioPlayer src={shownQuestion.audio_url} />}
           {shownQuestion.kind === 'choice' && <Box className="race-choices">{shownQuestion.choices?.map((choice, index) => <Box as="button" type="button" key={choice.id} disabled={busy || Boolean(feedback)} className={`race-choice${feedback?.selected === choice.id ? feedback.correct ? ' is-correct' : ' is-wrong' : ''}`} onClick={() => void answer(shownQuestion, choice.id, choice.id)}><Text as="span">{String.fromCharCode(65 + index)}</Text><Text as="strong">{choice.text}</Text><ArrowRight size={18} aria-hidden="true" /></Box>)}</Box>}
           {shownQuestion.kind === 'word_order' && <><Box className="race-word-answer">{selectedTokens.length ? selectedTokens.map((id) => { const item = shownQuestion.tokens?.find((tokenItem) => tokenItem.id === id); return <Box as="button" type="button" key={id} disabled={busy || Boolean(feedback)} onClick={() => setSelectedTokens((previous) => previous.filter((candidate) => candidate !== id))}>{item?.text}</Box>; }) : <Text>Tap words to build your answer.</Text>}</Box><Box className="race-word-bank">{shownQuestion.tokens?.filter((item) => !selectedTokens.includes(item.id)).map((item) => <Box as="button" type="button" key={item.id} disabled={busy || Boolean(feedback)} onClick={() => setSelectedTokens((previous) => [...previous, item.id])}>{item.text}</Box>)}</Box>{!feedback && <Button variant="primary" disabled={busy || selectedTokens.length !== shownQuestion.tokens?.length} onClick={() => void answer(shownQuestion, selectedTokens.map((id) => shownQuestion.tokens?.find((item) => item.id === id)?.text || ''), selectedTokens.join(','))}>Check answer</Button>}</>}
           {feedback && <Box className={`race-feedback ${feedback.correct ? 'is-correct' : 'is-wrong'}`} role="status"><Box className="race-feedback-icon">{feedback.correct ? <Check size={22} /> : <X size={22} />}</Box><Box><Text as="strong">{feedback.correct ? 'Nicely done. Keep moving!' : 'Not this time. Keep racing!'}</Text>{feedback.reveal && <Text>Answer: {feedback.reveal}</Text>}</Box><Button variant="primary" onClick={() => setFeedback(null)} icon={ArrowRight} iconPosition="after">Continue</Button></Box>}
         </Box>}
-        {me?.finished_at && <Box className="race-finished-wait"><Trophy size={36} /><Text as="h2">You crossed the finish line.</Text><Text>Your score is in. Waiting for your friend to finish…</Text>{room.config.timer_seconds === null && <Text>If your friend disconnects, the race ends after 10 minutes of inactivity.</Text>}</Box>}
+        {me?.finished_at && !feedback && room.status === 'live' && <Box className="race-finished-wait"><Trophy size={36} /><Text as="h2">You crossed the finish line.</Text><Text>Your score is in. Waiting for your friend to finish…</Text>{room.config.timer_seconds === null && <Text>If your friend disconnects, the race ends after 10 minutes of inactivity.</Text>}</Box>}
         {!me && <Box className="race-finished-wait"><LockKeyhole size={34} /><Text as="h2">This race has started.</Text><Text>Only the two invited players can race. Ask for a new invite if you missed the start.</Text></Box>}
         {me && !shownQuestion && !me.finished_at && <Box className="race-finished-wait"><Clock3 size={28} /><Text as="h2">Loading your next question…</Text></Box>}
-        {me && !me.finished_at && <Box className="race-leave-action"><Button variant="text" onClick={() => void act('/finish')} disabled={busy}>Finish my race early</Button></Box>}
+        {me && !me.finished_at && !feedback && room.status === 'live' && <Box className="race-leave-action"><Button variant="text" onClick={() => void act('/finish')} disabled={busy}>Finish my race early</Button></Box>}
       </>}
 
       {room.status === 'expired' && <Box className="race-not-found"><Clock3 size={42} /><Text as="h2">This invite has expired.</Text><Text>Race links last 24 hours. Start a fresh room to play again.</Text><Button variant="primary" onClick={onExit}>Browse games</Button></Box>}
       {room.status === 'finished' && !me && <Box className="race-not-found"><LockKeyhole size={42} /><Text as="h2">Both seats are taken.</Text><Text>Only the two players can review this race. Ask your friend for a new invite.</Text><Button variant="primary" onClick={onExit}>Browse games</Button></Box>}
-      {room.status === 'finished' && me && <Box className="race-results"><Box className="race-results-hero"><Box className="race-trophy"><Trophy size={43} /></Box><Text className="race-kicker">RACE COMPLETE</Text><Text as="h2">{!opponent ? 'Your race is complete.' : room.winner_seat === 'tie' ? 'It’s a tie!' : room.winner_seat === me.seat ? 'You won the race!' : 'Your friend won this one.'}</Text><Text>Same questions. Two different journeys. Ready for a rematch?</Text></Box><Box className="race-result-cards"><RaceScore player={me} title="YOU" count={maxQuestions} /><Box className="race-versus">VS</Box><RaceScore player={opponent} title="FRIEND" count={maxQuestions} /></Box>{(state?.review ?? me?.review ?? []).length > 0 && <Box className="race-review"><Text as="h3">Your question review</Text>{(state?.review ?? me?.review ?? []).map((item, index) => <Box className="race-review-row" key={`${item.question_id}-${index}`}><Box className={item.correct ? 'is-correct' : 'is-wrong'}>{item.correct ? <Check size={17} /> : <X size={17} />}</Box><Text>{item.prompt}</Text><Text as="small">{item.reveal || item.answer}</Text></Box>)}</Box>}<Button variant="primary" icon={RotateCcw} onClick={onExit}>Play another game</Button></Box>}
+      {room.status === 'finished' && me && !feedback && <Box className="race-results"><Box className="race-results-hero"><Box className="race-trophy"><Trophy size={43} /></Box><Text className="race-kicker">RACE COMPLETE</Text><Text as="h2">{!opponent ? 'Your race is complete.' : room.winner_seat === 'tie' ? 'It’s a tie!' : room.winner_seat === me.seat ? 'You won the race!' : 'Your friend won this one.'}</Text><Text>Same questions. Two different journeys. Ready for a rematch?</Text></Box><Box className="race-result-cards"><RaceScore player={me} title="YOU" count={maxQuestions} /><Box className="race-versus">VS</Box><RaceScore player={opponent} title="FRIEND" count={maxQuestions} /></Box>{(state?.review ?? me?.review ?? []).length > 0 && <Box className="race-review"><Text as="h3">Your question review</Text>{(state?.review ?? me?.review ?? []).map((item, index) => <Box className="race-review-row" key={`${item.question_id}-${index}`}><Box className={item.correct ? 'is-correct' : 'is-wrong'}>{item.correct ? <Check size={17} /> : <X size={17} />}</Box><Text>{item.prompt}</Text><Text as="small">{item.reveal || item.answer}</Text></Box>)}</Box>}<Button variant="primary" icon={RotateCcw} onClick={onExit}>Play another game</Button></Box>}
     </>}
     {room && error && <ErrorMessage message={error} />}
   </Box>;

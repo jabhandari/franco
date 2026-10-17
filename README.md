@@ -32,6 +32,17 @@ Friend Race (`/race`) uses the same `DATABASE_URL`; the API applies its race-tab
 
 ```mermaid
 flowchart LR
+  Host[Signed-in host] -->|room and answers| API[Franco API]
+  Guest[Invite-link guest] -->|room and answers| API
+  API --> DB[(Supabase PostgreSQL)]
+  Host <-->|public anon key: room nudges| RT[Supabase Realtime]
+  Guest <-->|public anon key: room nudges| RT
+  Host -. polling fallback .-> API
+  Guest -. polling fallback .-> API
+```
+
+```mermaid
+flowchart LR
   Browser[Franco web app] -->|signup / resend / forgot| API[Render API]
   API -->|hash and store one-use token| DB[(Supabase PostgreSQL)]
   API -->|RESEND_API_KEY: send link| Resend[Resend]
