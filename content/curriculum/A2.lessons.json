@@ -273,7 +273,7 @@
     "topic_id": "A2-02",
     "level": "A2",
     "outcome": "I can describe a completed past event with the correct helping verb.",
-    "explanation": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
+    "explanation": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb.",
     "example_items": [
       {
         "french": "Lina a acheté un billet.",
@@ -331,7 +331,7 @@
           "0"
         ],
         "feedback": {
-          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
+          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb.",
           "error": "That English meaning belongs to a different message, rather than: Lina a acheté un billet.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: Lina bought a ticket."
         },
@@ -364,7 +364,7 @@
           "1"
         ],
         "feedback": {
-          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
+          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb.",
           "error": "That English meaning belongs to a different message, rather than: Elle est arrivée à Lyon.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: She arrived in Lyon."
         },
@@ -397,7 +397,7 @@
           "2"
         ],
         "feedback": {
-          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
+          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb.",
           "error": "That English meaning belongs to a different message, rather than: Elle n'a pas perdu son billet.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: She did not lose her ticket."
         },
@@ -418,7 +418,7 @@
           "Lina a acheté un billet."
         ],
         "feedback": {
-          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
+          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb.",
           "error": "The response does not match the model wording requested for: Lina bought a ticket.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Lina a acheté un billet."
         },
@@ -437,7 +437,7 @@
           "Elle est arrivée à Lyon."
         ],
         "feedback": {
-          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
+          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb.",
           "error": "The response does not match the model wording requested for: She arrived in Lyon.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Elle est arrivée à Lyon."
         },
@@ -456,7 +456,7 @@
           "Elle n'a pas perdu son billet."
         ],
         "feedback": {
-          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
+          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb.",
           "error": "The response does not match the model wording requested for: She did not lose her ticket.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Elle n'a pas perdu son billet."
         },
@@ -492,7 +492,7 @@
       "model_translation": "Sami arrived in Paris."
     },
     "feedback": {
-      "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
+      "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb.",
       "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
       "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
     },
@@ -504,7 +504,7 @@
           "Sami est arrivé à Paris."
         ],
         "feedback": {
-          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb. A question can begin est-ce que.",
+          "rule": "Passé composé is a common way to describe a completed event. It combines a present helping verb, usually avoir (to have), with a past form called a participle: j'ai parlé means I spoke. Regular endings include parlé (-er), fini (-ir) and vendu (-re). Certain movement verbs and reflexive verbs use être (to be): elle est arrivée means she arrived. With être, the past form normally matches the subject's gender and number. Put ne and pas around the helping verb.",
           "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
           "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
         },
@@ -518,7 +518,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -3513,7 +3513,7 @@
     "topic_id": "A2-14",
     "level": "A2",
     "outcome": "I can state a preference, give a reason and make a suggestion.",
-    "explanation": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
+    "explanation": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas followed by an unchanged verb means why not do something: pourquoi ne pas partir plus tôt ? (why not leave earlier?). Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
     "example_items": [
       {
         "french": "Je préfère marcher.",
@@ -3571,7 +3571,7 @@
           "0"
         ],
         "feedback": {
-          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
+          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas followed by an unchanged verb means why not do something: pourquoi ne pas partir plus tôt ? (why not leave earlier?). Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
           "error": "That English meaning belongs to a different message, rather than: Je préfère marcher.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I prefer walking."
         },
@@ -3604,7 +3604,7 @@
           "1"
         ],
         "feedback": {
-          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
+          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas followed by an unchanged verb means why not do something: pourquoi ne pas partir plus tôt ? (why not leave earlier?). Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
           "error": "That English meaning belongs to a different message, rather than: C'est moins cher que le bus.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: It is cheaper than the bus."
         },
@@ -3637,7 +3637,7 @@
           "2"
         ],
         "feedback": {
-          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
+          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas followed by an unchanged verb means why not do something: pourquoi ne pas partir plus tôt ? (why not leave earlier?). Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
           "error": "That English meaning belongs to a different message, rather than: On pourrait partir plus tôt.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: We could leave earlier."
         },
@@ -3658,7 +3658,7 @@
           "Je préfère marcher."
         ],
         "feedback": {
-          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
+          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas followed by an unchanged verb means why not do something: pourquoi ne pas partir plus tôt ? (why not leave earlier?). Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
           "error": "The response does not match the model wording requested for: I prefer walking.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Je préfère marcher."
         },
@@ -3677,7 +3677,7 @@
           "C'est moins cher que le bus."
         ],
         "feedback": {
-          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
+          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas followed by an unchanged verb means why not do something: pourquoi ne pas partir plus tôt ? (why not leave earlier?). Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
           "error": "The response does not match the model wording requested for: It is cheaper than the bus.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: C'est moins cher que le bus."
         },
@@ -3696,7 +3696,7 @@
           "On pourrait partir plus tôt."
         ],
         "feedback": {
-          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
+          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas followed by an unchanged verb means why not do something: pourquoi ne pas partir plus tôt ? (why not leave earlier?). Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
           "error": "The response does not match the model wording requested for: We could leave earlier.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: On pourrait partir plus tôt."
         },
@@ -3732,7 +3732,7 @@
       "model_translation": "I prefer the train because it is convenient."
     },
     "feedback": {
-      "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
+      "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas followed by an unchanged verb means why not do something: pourquoi ne pas partir plus tôt ? (why not leave earlier?). Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
       "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
       "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
     },
@@ -3744,7 +3744,7 @@
           "Je préfère le train parce que c'est pratique."
         ],
         "feedback": {
-          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas plus an unchanged verb means why not do something. Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
+          "rule": "J'aime means I like; je préfère means I prefer. Follow either with a noun or an unchanged action word. Parce que introduces a reason: je préfère marcher parce que c'est calme means I prefer walking because it is peaceful. On pourrait (we could) offers a suggestion, while pourquoi ne pas followed by an unchanged verb means why not do something: pourquoi ne pas partir plus tôt ? (why not leave earlier?). Compare options with plus...que or moins...que, then explain a personal reason without presenting it as a universal fact.",
           "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
           "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
         },
@@ -3758,7 +3758,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
