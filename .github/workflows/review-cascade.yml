@@ -87,9 +87,21 @@ jobs:
             # comments (github-actions[bot]) count, so a contributor
             # cannot forge a marker to suppress a review. Both checks
             # paginate so records past the first 100 are not missed.
-            if gh api --paginate "repos/$GITHUB_REPOSITORY/issues/$number/comments?per_page=100" \
-                 --jq '.[] | select(.user.login == "github-actions[bot]") | .body' \
-                 | grep -Fq "review-cascade coderabbit-slot: $author @ $sha"; then
+            #
+            # Capture each API result before searching it: piping a
+            # paginated `gh api` straight into `grep -q` fails under
+            # `pipefail` — grep exits on its first match, gh then dies
+            # writing the remaining pages (EPIPE/SIGPIPE, exit 141), the
+            # `if` misreads the PR as not dispatched, and the sweep
+            # posts a duplicate review. A failed API call skips the PR
+            # for this run (the next hourly run retries) instead of
+            # dispatching on unknown state.
+            if ! dispatch_comments=$(gh api --paginate "repos/$GITHUB_REPOSITORY/issues/$number/comments?per_page=100" \
+                 --jq '.[] | select(.user.login == "github-actions[bot]") | .body'); then
+              echo "Warning: could not list comments on PR #$number; skipping it this run."
+              continue
+            fi
+            if grep -Fq "review-cascade coderabbit-slot: $author @ $sha" <<< "$dispatch_comments"; then
               echo "PR #$number already dispatched at $sha; trying $author's next PR."
               continue
             fi
@@ -97,9 +109,12 @@ jobs:
             # CodeRabbit already reviewed this exact head on its own
             # (e.g. its automatic review on PR open)? Never spend a
             # second review on the same head — try the next PR.
-            if gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$number/reviews?per_page=100" \
-                 --jq '.[] | select(.user.login == "coderabbitai[bot]") | .commit_id' \
-               | grep -Fxq "$sha"; then
+            if ! reviewed_heads=$(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$number/reviews?per_page=100" \
+                 --jq '.[] | select(.user.login == "coderabbitai[bot]") | .commit_id'); then
+              echo "Warning: could not list reviews on PR #$number; skipping it this run."
+              continue
+            fi
+            if grep -Fxq "$sha" <<< "$reviewed_heads"; then
               echo "PR #$number already reviewed by CodeRabbit at $sha; trying $author's next PR."
               continue
             fi
