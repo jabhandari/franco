@@ -488,8 +488,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "C'est un livre. Ce sont des histoires.",
-      "model_translation": "It is a book. They are stories."
+      "model": "Lina lit un livre. Sami lit des histoires.",
+      "model_translation": "Lina reads a book. Sami reads some stories."
     },
     "feedback": {
       "rule": "A basic French statement usually names who or what acts, then the action, then what receives it: Lina lit un livre means Lina reads a book. This is called subject–verb–object order. C'est introduces one person or thing; ce sont introduces several. French normally keeps a subject word even when English might leave it out in a short note. An apostrophe joins ce and est into c'est.",
