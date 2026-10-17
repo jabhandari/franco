@@ -314,6 +314,63 @@ instruction; a blocked raw run costs one retry round-trip.
   it — if `rtk` is missing in an environment, work there proceeds with
   `RTK_DISABLED=1`.
 
+## Code Review Rules" section for Franco's AGENTS.md
+# Prepared 2026-10-16. If Juhi approves, this is appended to the repo's
+# AGENTS.md via a PR (Codex cloud review reads this section natively;
+# keep the section order/static-prefix discipline of the file in mind —
+# this goes in as one stable block, edited only when the rules change).
+# It turns Codex's default P0/P1 comments into a verdict protocol.
+
+## Code Review Rules
+
+When reviewing a pull request (Codex cloud review, automatic or
+`@codex review`), follow this protocol. These rules govern the review
+only; the repo's code-review skill checklist still applies in full.
+
+### Verdict (mandatory, first line of the review)
+
+Post exactly one verdict line, computed from the findings:
+
+- `Verdict: BLOCKING` — at least one P0 exists. The author must fix and
+  request a re-review (`@codex review` after pushing) before merge.
+- `Verdict: FIX-THEN-MERGE` — no P0, at least one P1. Merge only after
+  each P1 is fixed or explicitly waived by the author in a reply
+  naming the finding. No re-review required unless a fix touches
+  server/, auth, or the content pipeline.
+- `Verdict: APPROVED` — no P0 or P1 findings. P2s are optional.
+
+This is an advisory rating for the human reviewer, not a merge gate:
+a human still merges every PR on this repo.
+
+### Severity contract
+
+- **P0** — will break production behaviour, lose/corrupt data, bypass
+  auth or the content:review key gate, or violate FRA-21/FRA-16 in a
+  way lint:ui cannot catch. Blocking.
+- **P1** — a real bug or ticket-criterion miss with a concrete failure
+  scenario, missing tests for changed behaviour, or an API-contract
+  break. Must fix or waive.
+- **P2** — everything else worth saying. Never let a P2 change the
+  verdict, and never report style the linters already cover.
+
+### Evidence rule (anti-false-positive)
+
+Every P0/P1 finding must state the concrete failure scenario: inputs
+or state, the wrong outcome, and the file/line. A finding that cannot
+name a failure scenario is a P2 at most. Check the diff against the
+branch point, not against current main — diffing against main has
+already produced false "deleted code" findings on this repo (PR #71).
+
+### Scope notes for this repo
+
+- Verify the PR against its linked FRA ticket's criteria where the PR
+  names one; flag criteria the diff does not address.
+- For UI changes, flag a missing before/after screenshot pair (both
+  themes) as P1 — it is a repo working agreement.
+- If the PR claims checks were run (lint:ui, typecheck, test, build),
+  do not repeat the claim as verified; you are reviewing the diff, not
+  the CI run.
+
 ## Static prefix discipline
 
 This file is loaded into every session's context. Keep it stable: sections
