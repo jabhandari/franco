@@ -2,12 +2,13 @@ import React from 'react';
 import { useApiResource } from '../hooks/useApi.js';
 import type { WordHistoryResponse } from '../api/client.js';
 import { browserTimeZone } from '../presenters/streak.presenter.js';
-import { historyDayLabel, wordsHistoryPath, wordMeta } from '../presenters/daily-words.presenter.js';
+import { historyDayLabel, wordsHistoryPath } from '../presenters/daily-words.presenter.js';
 import { Box, Text } from './ui';
 
-// FRA-155: review strip at the bottom of the words page — the sets from
-// the last 7 days before today, newest first, read-only. Renders nothing
-// for a learner with no past sets yet.
+// FRA-155: review table at the bottom of the words page — the sets from
+// the last 7 days before today as one plain two-column table (French word
+// / English meaning), grouped by day rows, read-only. Renders nothing for
+// a learner with no past sets yet.
 export function WordHistory({ token }: { token?: string | null }) {
   const { data } = useApiResource<WordHistoryResponse>(wordsHistoryPath(), token);
   if (!token || !data || !Array.isArray(data.days) || !data.days.length) return null;
@@ -16,26 +17,28 @@ export function WordHistory({ token }: { token?: string | null }) {
     <Box as="section" className="word-history">
       <Text className="home-kicker">REVIEW</Text>
       <Text as="h2" className="word-history-title">Your last 7 days</Text>
-      <Text className="word-history-sub">The words from the past week — worth another look.</Text>
-      {data.days.map((day) => (
-        <Box key={day.date} className="word-history-day">
-          <Box className="word-history-day-head">
-            <Text as="span" className="word-history-date">{historyDayLabel(day.date, today)}</Text>
-            <Text as="span" className="word-history-level">{day.level}</Text>
+      <Box as="table" className="word-history-table">
+        <Box as="thead">
+          <Box as="tr">
+            <Box as="th" className="wh-head-cell">French</Box>
+            <Box as="th" className="wh-head-cell">English</Box>
           </Box>
-          <Box className="daily-words-grid">
+        </Box>
+        {data.days.map((day) => (
+          <Box as="tbody" key={day.date}>
+            <Box as="tr" className="wh-day-row">
+              <Box as="td" className="wh-day-cell">{historyDayLabel(day.date, today)}</Box>
+              <Box as="td" className="wh-day-cell wh-day-level">{day.level}</Box>
+            </Box>
             {day.words.map((word) => (
-              <Box key={word.id} className="daily-word">
-                <Text as="p" className="daily-word-fr">{word.word}</Text>
-                <Text as="span" className="daily-word-meta">{wordMeta(word)}</Text>
-                <Text as="p" className="daily-word-gloss">{word.gloss}</Text>
-                <Text as="p" className="daily-word-example">{word.example_fr}</Text>
-                <Text as="p" className="daily-word-example-en">{word.example_en}</Text>
+              <Box as="tr" key={word.id}>
+                <Box as="td" className="wh-cell-fr">{word.word}</Box>
+                <Box as="td" className="wh-cell-en">{word.gloss}</Box>
               </Box>
             ))}
           </Box>
-        </Box>
-      ))}
+        ))}
+      </Box>
     </Box>
   );
 }
