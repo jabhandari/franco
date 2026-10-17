@@ -5,6 +5,7 @@ import type { AuthResponse, MeResponse, StreakResponse, SessionPlanResponse, Les
 import type { LessonPosition, ConceptProgress, SkillId } from '../types';
 import { skillCompletion } from '../presenters/progress.presenter';
 import { Box, Text, Button, StreakCard, SkillCard, ErrorMessage, ActionTile } from '../components/ui';
+import { DailyWordsSection } from '../components/DailyWordsSection.js';
 
 type HomeProps = {
   token?: string | null;
@@ -60,6 +61,8 @@ export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLes
           <ActionTile icon={Mic} tone="coral" eyebrow="SAY IT OUT LOUD · ~3 MIN" title="Speaking practice" description={spoken?.prompt || 'Say one sentence about yourself, out loud.'} onClick={onConversation} />
         </Box>
       </Box>
+
+      <DailyWordsSection token={token} />
 
       <Box className="home-bottom-grid">
         <Box className="home-continue">

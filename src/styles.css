@@ -2782,6 +2782,25 @@ html[data-theme] .verb-sprint-intro h1 { max-width:565px; color:white; font-fami
 .home-section-heading h2,.home-skills-title { font-family:var(--font-heading); font-size:29px; font-weight:500; margin:0; }
 .home-action-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
 .home-bottom-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:16px; }
+.daily-words-card { padding:22px; border:1px solid color-mix(in srgb,var(--color-accent) 30%,var(--color-border)); border-radius:22px; background:color-mix(in srgb,var(--color-accent) 6%,var(--color-surface)); }
+.daily-words-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:16px; }
+.daily-words-head h2 { font-family:var(--font-heading); font-size:27px; font-weight:500; margin:0; }
+.daily-words-progress { font-size:13px; font-weight:700; color:var(--color-accent); white-space:nowrap; padding-top:6px; }
+.daily-words-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; }
+.daily-word { display:flex; flex-direction:column; gap:3px; padding:14px; border:1px solid var(--color-border); border-radius:16px; background:var(--color-surface); }
+.daily-word-fr { font-family:var(--font-heading); font-size:21px; font-weight:600; margin:0; }
+.daily-word-meta { color:var(--color-accent); font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+.daily-word-gloss { font-size:14px; font-weight:600; margin:0 0 6px; }
+.daily-word-example { font-style:italic; line-height:1.45; margin:0; }
+.daily-word-example-en { color:var(--color-muted); line-height:1.45; margin:0; }
+.daily-words-practice { margin-top:18px; padding-top:16px; border-top:1px solid var(--color-border); }
+.daily-words-card .mcq-feedback.correct { background:var(--palette-green-soft); color:var(--palette-green); }
+.daily-words-card .mcq-feedback.incorrect { background:var(--palette-red-soft); color:var(--palette-red); }
+.daily-words-prompt { font-size:17px; font-weight:600; margin:4px 0 2px; }
+.daily-words-hint { color:var(--color-muted); }
+.daily-words-feedback { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-top:12px; }
+@media (max-width: 900px) { .daily-words-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width: 560px) { .daily-words-grid { grid-template-columns:minmax(0,1fr); } .daily-words-head { flex-direction:column; gap:4px; } }
 .home-continue,.home-play-card { display:flex; flex-direction:column; min-height:230px; padding:22px; border:1px solid var(--color-border); border-radius:22px; background:var(--color-surface); }
 .home-continue { border-color:color-mix(in srgb,#69b8e7 40%,var(--color-border)); background:color-mix(in srgb,#69b8e7 10%,var(--color-surface)); }
 .home-play-card { border-color:color-mix(in srgb,#a580df 38%,var(--color-border)); background:color-mix(in srgb,#a580df 11%,var(--color-surface)); }

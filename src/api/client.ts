@@ -160,6 +160,56 @@ export type StreakResponse = {
 };
 
 // ---------------------------------------------------------------------------
+// Words of the Day (FRA-153/154)
+// ---------------------------------------------------------------------------
+
+/** One word in the learner's frozen daily set. */
+export type DailyWord = {
+  id: string;
+  word: string;
+  level: string;
+  gloss: string;
+  part_of_speech: string;
+  example_fr: string;
+  example_en: string;
+  is_recycled: boolean;
+};
+
+export type WordQuestionType = 'meaning' | 'word' | 'blank';
+
+/** A practice question; each choice id is the id of the word it belongs to. */
+export type WordQuestion = {
+  id: string;
+  word_id: string;
+  type: WordQuestionType;
+  prompt: string;
+  hint?: string;
+  choices: Array<{ id: string; text: string }>;
+};
+
+/** GET /api/me/words/today. */
+export type DailyWordsResponse = {
+  date: string;
+  level: string;
+  words: DailyWord[];
+  questions: WordQuestion[];
+  answered: Record<string, { correct: boolean }>;
+  answered_count: number;
+  total_questions: number;
+  completed: boolean;
+};
+
+/** POST /api/me/words/answers. */
+export type WordAnswerResponse = {
+  question_id: string;
+  correct: boolean;
+  correct_choice_id: string;
+  answered_count: number;
+  total_questions: number;
+  completed: boolean;
+};
+
+// ---------------------------------------------------------------------------
 // Content items and the session queue
 // ---------------------------------------------------------------------------
 
@@ -837,6 +887,8 @@ export type ApiResponse =
   | UpdateProfileResponse
   | PlacementResponse
   | StreakResponse
+  | DailyWordsResponse
+  | WordAnswerResponse
   | SessionPlanResponse
   | ProgressResponse
   | ReviewDueResponse
