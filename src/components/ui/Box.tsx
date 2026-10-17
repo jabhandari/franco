@@ -32,6 +32,7 @@ export type BoxProps = {
   wrap?: boolean;
   children?: React.ReactNode;
   id?: string;
+  lang?: string;
   role?: string;
   title?: string;
   type?: string;
@@ -60,6 +61,7 @@ export function Box({
   wrap,
   children,
   id,
+  lang,
   role,
   title,
   type,
@@ -99,6 +101,7 @@ export function Box({
     <Tag
       className={className}
       id={id}
+      lang={lang}
       role={role}
       title={title}
       type={type}

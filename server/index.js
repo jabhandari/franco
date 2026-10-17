@@ -1,3 +1,4 @@
+import { createStoryService } from './stories.js';
 import { curriculumConcepts } from './curriculum-contract.js';
 import { createHash, pbkdf2Sync, randomBytes, randomUUID } from 'node:crypto';
 import { reviewCurriculum } from './curriculum-editorial.js';
@@ -258,6 +259,7 @@ async function ingestBatch(batch) {
   await query('UPDATE content_batches SET status=?,completed_at=NOW() WHERE id=?', [itemStatus, batchId]);
   return { status: 202, body: { batch_id: batchId, schema_version: batch.schema_version, status: itemStatus, item_count: batch.items.length, created, duplicates } };
 }
+const storyService=createStoryService(pool);
 async function main() {
     await migrate(); createServer(async (req, res) => {
         try {
@@ -329,6 +331,16 @@ async function main() {
               const input=await body(req);
               const keyId=createHash('sha256').update(req.headers['x-api-key']).digest('hex');
               const result=await reviewCurriculum(pool,decodeURIComponent(curriculumReview[1]),input,keyId);
+              return json(res,result.status,result.body);
+            }
+            const storyRoute=u.pathname.match(/^\/api\/me\/stories(?:\/(story-\d{2})(?:\/(answer|skip))?)?$/);
+            if (storyRoute) {
+              const viewer=await user(req);if(!viewer) return json(res,401,{error:'Authentication required.'});
+              let result;
+              if(req.method==='GET' && !storyRoute[1]) result=await storyService.list(viewer.id);
+              else if(req.method==='GET' && !storyRoute[2]) result=await storyService.detail(viewer.id,storyRoute[1]);
+              else if(req.method==='POST' && storyRoute[2]) result=await storyService.act(viewer.id,storyRoute[1],storyRoute[2],await body(req));
+              else return json(res,405,{error:'Method not allowed.'});
               return json(res,result.status,result.body);
             }
             if (req.method === 'GET' && u.pathname === '/api/health') return json(res, 200, { ok: true, database: 'supabase-postgres' });
