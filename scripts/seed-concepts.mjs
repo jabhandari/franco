@@ -27,13 +27,21 @@ try {
   }
   for (const topic of topics) for (const prereq of topic.prerequisite_concept_ids) await client.query(`INSERT INTO concept_prerequisites(concept_id,prerequisite_concept_id) SELECT c.id,p.id FROM concepts c,concepts p WHERE c.slug=$1 AND p.slug=$2 ON CONFLICT DO NOTHING`, [topic.topic_id,prereq]);
   // Re-running the seed never resets reviewed content or bypasses editorial review.
+  // A pack still at 'generated' may be replaced by a newer file version, so a
+  // corrected pack can re-enter editorial review; reviewed packs never change.
   const directory = new URL('../content/curriculum/', import.meta.url);
   for (const name of (await readdir(directory)).filter(n => n.endsWith('.lessons.json')).sort()) {
     for (const pack of JSON.parse(await readFile(new URL(name, directory), 'utf8'))) {
       if (!topics.some(t => t.topic_id === pack.topic_id)) throw new Error(`Unknown topic ${pack.topic_id}`);
       if (!pack.outcome?.startsWith('I can ') || !pack.explanation || !['example_items','recognition','guided_production'].every(k => Array.isArray(pack[k]) && pack[k].length >= 3 && pack[k].length <= 5) || !pack.mastery?.length || !pack.reading?.english || !pack.realistic_use?.rubric?.length || !Number.isInteger(pack.version)) throw new Error(`Incomplete lesson pack: ${pack.topic_id}`);
       const inserted = await client.query(`INSERT INTO curriculum_lessons(topic_id,review_status,version,pack_json) VALUES($1,'generated',$2,$3) ON CONFLICT(topic_id) DO NOTHING RETURNING topic_id`, [pack.topic_id,pack.version,JSON.stringify(pack)]);
-      if (!inserted.rowCount) continue;
+      let replaced = inserted.rowCount > 0;
+      if (!replaced) {
+        const updated = await client.query(`UPDATE curriculum_lessons SET pack_json=$3,version=$2,updated_at=NOW() WHERE topic_id=$1 AND review_status='generated' AND version<$2 RETURNING topic_id`, [pack.topic_id,pack.version,JSON.stringify(pack)]);
+        replaced = updated.rowCount > 0;
+        if (replaced) await client.query('DELETE FROM curriculum_questions WHERE topic_id=$1', [pack.topic_id]);
+      }
+      if (!replaced) continue;
       for (const section of ['recognition','guided_production','mastery']) for (const [position,question] of (pack[section] || []).entries()) await client.query('INSERT INTO curriculum_questions(id,topic_id,section,position,question_json) VALUES($1,$2,$3,$4,$5)', [`${pack.topic_id}:${section}:${position}`,pack.topic_id,section,position,JSON.stringify(question)]);
     }
   }
