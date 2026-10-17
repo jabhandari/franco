@@ -1,7 +1,7 @@
 import { createHash, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 import { pool } from './database.js';
 import { evaluate, gradeExamQuestion } from './evaluate.js';
-import { publicRaceQuestion, raceChoices, raceWinner, resolveRaceChoice, validRaceConfig } from './race-rules.js';
+import { abandonedRacePlayer, publicRaceQuestion, raceChoices, raceWinner, resolveRaceChoice, validRaceConfig } from './race-rules.js';
 import { originalChoiceId, puzzleReveal, usesWordBank } from './puzzle-rules.js';
 import { localDateString, normalizeTimeZone } from './streak.js';
 
@@ -104,6 +104,16 @@ async function lockRoom(client, roomCode) {
   if (timedOut) {
     room = (await client.query("UPDATE race_rooms SET status='finished' WHERE id=$1 RETURNING *", [room.id])).rows[0];
     await client.query('UPDATE race_players SET finished_at=COALESCE(finished_at,NOW()),final_score=COALESCE(final_score,correct_count) WHERE room_id=$1', [room.id]);
+  } else if (room.status === 'live' && !room.ends_at) {
+    // Unlimited means no race clock, but a player who has finished should
+    // not wait forever for a disconnected opponent. Reads from each active
+    // player refresh their heartbeat; allow ten minutes to reconnect.
+    const players = (await client.query('SELECT id,finished_at,last_seen_at FROM race_players WHERE room_id=$1 FOR UPDATE', [room.id])).rows;
+    const abandoned = abandonedRacePlayer(players);
+    if (abandoned) {
+      await client.query('UPDATE race_players SET finished_at=NOW(),forfeited_at=NOW(),final_score=correct_count WHERE id=$1', [abandoned.id]);
+      room = (await client.query("UPDATE race_rooms SET status='finished' WHERE id=$1 RETURNING *", [room.id])).rows[0];
+    }
   }
   return room;
 }
@@ -235,7 +245,13 @@ export async function getRoom(roomCode, userId = null, playerToken = null) {
   return transaction(async (client) => {
     const room = await lockRoom(client, roomCode);
     const players = await playersFor(client, room);
-    return state(client, room, players, identify(players, userId, playerToken));
+    let player = identify(players, userId, playerToken);
+    if (room.status === 'live' && player && !player.finished_at) {
+      const updated = (await client.query(`UPDATE race_players SET last_seen_at=NOW() WHERE id=$1
+        AND last_seen_at<NOW()-INTERVAL '15 seconds' RETURNING *`, [player.id])).rows[0];
+      if (updated) player = updated;
+    }
+    return state(client, room, players, player);
   });
 }
 
@@ -282,10 +298,11 @@ export async function startRoom(roomCode, userId) {
     if (room.status !== 'lobby') throw new RaceError(409, 'This race cannot be started again.');
     if (players.length !== 2) throw new RaceError(409, 'Wait for a friend to join.');
     const questions = await selectQuestions(client, room.config_json);
+    const readyPlayers = (await client.query('UPDATE race_players SET last_seen_at=NOW() WHERE room_id=$1 RETURNING *', [room.id])).rows;
     room = (await client.query(`UPDATE race_rooms SET status='live',question_ids=$2::jsonb,started_at=NOW(),
       ends_at=CASE WHEN $3::int IS NULL THEN NULL ELSE NOW()+($3::int * INTERVAL '1 second') END
       WHERE id=$1 RETURNING *`, [room.id, JSON.stringify(questions), room.config_json.timer_seconds])).rows[0];
-    return state(client, room, players, host);
+    return state(client, room, readyPlayers, readyPlayers.find((player) => player.id === host.id));
   });
 }
 
@@ -364,7 +381,7 @@ export async function answerRoom(roomCode, userId, playerToken, questionId, resp
     const history = [...player.answer_history_json, { question_id: questionId, prompt: source.prompt, index: player.current_index,
       response, selected: selectedText, correct, reveal, answered_at: new Date().toISOString() }];
     const updated = (await client.query(`UPDATE race_players SET current_index=$2,correct_count=correct_count+$3,
-      lives_left=$4,answer_history_json=$5::jsonb,
+      lives_left=$4,answer_history_json=$5::jsonb,last_seen_at=NOW(),
       finished_at=CASE WHEN $6 THEN NOW() ELSE finished_at END,
       final_score=CASE WHEN $6 THEN correct_count+$3 ELSE final_score END WHERE id=$1 RETURNING *`,
     [player.id, nextIndex, Number(correct), livesLeft, JSON.stringify(history), finished])).rows[0];
