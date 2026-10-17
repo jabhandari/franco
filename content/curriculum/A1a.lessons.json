@@ -218,8 +218,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Bonsoir, je m'appelle Sami.",
-      "model_translation": "Good evening, my name is Sami."
+      "model": "Bonsoir, je m'appelle Sami. Tu habites ici ?",
+      "model_translation": "Good evening, my name is Sami. Do you live here? (familiar)"
     },
     "feedback": {
       "rule": "French uses the Latin alphabet with accent marks that can change a sound or distinguish words: é in café is different from è in mère (mother). Many final consonants are silent: the final s in vous is usually silent. Bonjour means hello; bonsoir is an evening greeting. Say je m'appelle to give your name. Tu addresses one familiar person; vous addresses a group or politely addresses one person. Do not treat rough English sound comparisons as exact pronunciation.",
@@ -248,7 +248,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -488,8 +488,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Sami lit un journal.",
-      "model_translation": "Sami reads a newspaper."
+      "model": "C'est un livre. Ce sont des histoires.",
+      "model_translation": "It is a book. They are stories."
     },
     "feedback": {
       "rule": "A basic French statement usually names who or what acts, then the action, then what receives it: Lina lit un livre means Lina reads a book. This is called subject–verb–object order. C'est introduces one person or thing; ce sont introduces several. French normally keeps a subject word even when English might leave it out in a short note. An apostrophe joins ce and est into c'est.",
@@ -518,7 +518,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -758,8 +758,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Vous parlez français.",
-      "model_translation": "You speak French. (polite or plural)"
+      "model": "Je parle français. Ils parlent anglais. Elles parlent français.",
+      "model_translation": "I speak French. They speak English. (masculine or mixed group) They speak French. (all-feminine group)"
     },
     "feedback": {
       "rule": "A subject pronoun is a short word replacing a person's name before an action. Je means I; tu means familiar singular you; il and elle mean he and she; on often means we in conversation but takes a singular verb. Nous means we; vous means plural or polite you; ils refers to masculine or mixed groups and elles to an all-feminine group. Je becomes j' before a vowel sound, as in j'aime (I like).",
@@ -788,7 +788,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -1028,8 +1028,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "C'est une chaise.",
-      "model_translation": "It is a chair. (feminine)"
+      "model": "C'est un livre. C'est une table. C'est une chaise.",
+      "model_translation": "It is a book. It is a table. It is a chair."
     },
     "feedback": {
       "rule": "A noun names a person, object or idea. Each French noun has a grammatical gender: masculine or feminine; this is a language category, not a claim about an object's identity. Learn un (a, masculine) or une (a, feminine) with the noun. Some endings help: -tion is usually feminine, but patterns have exceptions. People words sometimes change form, such as étudiant and étudiante (student). Memorize unfamiliar words with their articles.",
@@ -1058,7 +1058,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -1083,7 +1083,7 @@
     "topic_id": "A1-05",
     "level": "A1",
     "outcome": "I can choose an article for a known or unspecified thing.",
-    "explanation": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+    "explanation": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. The same written form des has two jobs: it can mean some (plural of un/une), or it can be de + les, meaning of the. The sentence tells you which.",
     "example_items": [
       {
         "french": "J'achète un livre.",
@@ -1141,7 +1141,7 @@
           "0"
         ],
         "feedback": {
-          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. The same written form des has two jobs: it can mean some (plural of un/une), or it can be de + les, meaning of the. The sentence tells you which.",
           "error": "That English meaning belongs to a different message, rather than: J'achète un livre.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am buying a book."
         },
@@ -1174,7 +1174,7 @@
           "1"
         ],
         "feedback": {
-          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. The same written form des has two jobs: it can mean some (plural of un/une), or it can be de + les, meaning of the. The sentence tells you which.",
           "error": "That English meaning belongs to a different message, rather than: Le livre est pour Lina.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: The book is for Lina."
         },
@@ -1207,7 +1207,7 @@
           "2"
         ],
         "feedback": {
-          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. The same written form des has two jobs: it can mean some (plural of un/une), or it can be de + les, meaning of the. The sentence tells you which.",
           "error": "That English meaning belongs to a different message, rather than: Je vais au marché.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am going to the market."
         },
@@ -1228,7 +1228,7 @@
           "J'achète un livre."
         ],
         "feedback": {
-          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. The same written form des has two jobs: it can mean some (plural of un/une), or it can be de + les, meaning of the. The sentence tells you which.",
           "error": "The response does not match the model wording requested for: I am buying a book.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: J'achète un livre."
         },
@@ -1247,7 +1247,7 @@
           "Le livre est pour Lina."
         ],
         "feedback": {
-          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. The same written form des has two jobs: it can mean some (plural of un/une), or it can be de + les, meaning of the. The sentence tells you which.",
           "error": "The response does not match the model wording requested for: The book is for Lina.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Le livre est pour Lina."
         },
@@ -1266,7 +1266,7 @@
           "Je vais au marché."
         ],
         "feedback": {
-          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. The same written form des has two jobs: it can mean some (plural of un/une), or it can be de + les, meaning of the. The sentence tells you which.",
           "error": "The response does not match the model wording requested for: I am going to the market.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Je vais au marché."
         },
@@ -1298,11 +1298,11 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Je parle aux étudiants.",
-      "model_translation": "I am speaking to the students."
+      "model": "J'achète un livre. Le livre est pour Lina. Je vais au marché.",
+      "model_translation": "I am buying a book. The book is for Lina. I am going to the market."
     },
     "feedback": {
-      "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+      "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. The same written form des has two jobs: it can mean some (plural of un/une), or it can be de + les, meaning of the. The sentence tells you which.",
       "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
       "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
     },
@@ -1314,7 +1314,7 @@
           "Je parle aux étudiants."
         ],
         "feedback": {
-          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. The same written form des has two jobs: it can mean some (plural of un/une), or it can be de + les, meaning of the. The sentence tells you which.",
           "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
           "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
         },
@@ -1328,7 +1328,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -1568,8 +1568,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Il y a des bateaux.",
-      "model_translation": "There are boats."
+      "model": "Il y a un journal. Il y a des journaux. Il y a des bateaux.",
+      "model_translation": "There is a newspaper. There are newspapers. There are boats."
     },
     "feedback": {
       "rule": "Plural means more than one. Most French nouns add a written s in the plural, although that s is usually silent. Un and une become des; le and la become les. Many nouns ending in -eau add x, as in bateau/bateaux (boat/boats); many ending in -al change to -aux, as in journal/journaux (newspaper/newspapers). Exceptions exist, such as bal/bals (dance/dances). Check unusual spellings rather than adding s blindly.",
@@ -1598,7 +1598,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -1838,8 +1838,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Vous parlez avec Sami.",
-      "model_translation": "You speak with Sami."
+      "model": "Je parle avec Lina. Nous finissons le travail. Ils vendent des livres.",
+      "model_translation": "I speak with Lina. We are finishing the work. They sell books."
     },
     "feedback": {
       "rule": "A verb is an action or state word. Conjugation means changing its form to match who acts and when. For regular -er verbs, remove -er: parler (to speak) gives je parle, tu parles, il/elle/on parle, nous parlons, vous parlez, ils/elles parlent. Regular -ir verbs like finir (to finish) give nous finissons; regular -re verbs like vendre (to sell) give je vends and nous vendons. Not every -ir verb follows finir. Present forms can describe now or a habit.",
@@ -1868,7 +1868,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -2108,8 +2108,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Je peux venir demain.",
-      "model_translation": "I can come tomorrow."
+      "model": "Je suis à la gare. J'ai un billet. Je voudrais prendre le train. Je peux venir demain.",
+      "model_translation": "I am at the station. I have a ticket. I would like to take the train. I can come tomorrow."
     },
     "feedback": {
       "rule": "Irregular verbs do not follow one reusable ending pattern. Learn useful forms in messages: je suis (I am), j'ai (I have), je vais (I go), je fais (I do), je viens (I come), je prends (I take), je peux (I can), je veux (I want). Polite requests often use je voudrais (I would like), which you can learn as a whole phrase. French uses avoir for age: j'ai vingt ans means I am twenty. Check the form when the subject changes: nous sommes means we are.",
@@ -2138,7 +2138,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
