@@ -314,13 +314,6 @@ instruction; a blocked raw run costs one retry round-trip.
   it — if `rtk` is missing in an environment, work there proceeds with
   `RTK_DISABLED=1`.
 
-## Code Review Rules" section for Franco's AGENTS.md
-# Prepared 2026-10-16. If Juhi approves, this is appended to the repo's
-# AGENTS.md via a PR (Codex cloud review reads this section natively;
-# keep the section order/static-prefix discipline of the file in mind —
-# this goes in as one stable block, edited only when the rules change).
-# It turns Codex's default P0/P1 comments into a verdict protocol.
-
 ## Code Review Rules
 
 When reviewing a pull request (Codex cloud review, automatic or
@@ -344,12 +337,13 @@ a human still merges every PR on this repo.
 
 ### Severity contract
 
-- **P0** — will break production behaviour, lose/corrupt data, bypass
-  auth or the content:review key gate, or violate FRA-21/FRA-16 in a
-  way lint:ui cannot catch. Blocking.
-- **P1** — a real bug or ticket-criterion miss with a concrete failure
-  scenario, missing tests for changed behaviour, or an API-contract
-  break. Must fix or waive.
+- **P0** — breaks production behaviour with severe impact (data loss or
+  corruption, auth or content:review key-gate bypass, outage-class
+  breakage), or violates FRA-21/FRA-16 in a way lint:ui cannot catch.
+  Blocking.
+- **P1** — any other real bug or ticket-criterion miss with a concrete
+  failure scenario, missing tests for changed behaviour, or an
+  API-contract break. Must fix or waive.
 - **P2** — everything else worth saying. Never let a P2 change the
   verdict, and never report style the linters already cover.
 
