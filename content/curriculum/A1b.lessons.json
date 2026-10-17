@@ -218,8 +218,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Sami porte un manteau bleu.",
-      "model_translation": "Sami is wearing a blue coat."
+      "model": "Sami porte un manteau bleu. Lina porte une veste bleue.",
+      "model_translation": "Sami is wearing a blue coat. Lina is wearing a blue jacket."
     },
     "feedback": {
       "rule": "An adjective describes a noun. It usually matches that noun's grammatical gender and number: petit, petite, petits, petites mean small. Many adjectives follow the noun; some common ones, such as petit and grand (big/tall), usually precede it. Colour words normally follow: une porte bleue means a blue door. Nationality adjectives use lower-case letters: française means French, feminine singular. Some colour expressions, such as bleu clair (light blue), do not change form.",
@@ -248,7 +248,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -273,7 +273,7 @@
     "topic_id": "A1-10",
     "level": "A1",
     "outcome": "I can say that an action does not happen, never happens or no longer happens.",
-    "explanation": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+    "explanation": "A negative sentence denies something. In careful written French, put ne before the verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
     "example_items": [
       {
         "french": "Je ne mange pas ici.",
@@ -331,7 +331,7 @@
           "0"
         ],
         "feedback": {
-          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "rule": "A negative sentence denies something. In careful written French, put ne before the verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
           "error": "That English meaning belongs to a different message, rather than: Je ne mange pas ici.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I do not eat here."
         },
@@ -364,7 +364,7 @@
           "1"
         ],
         "feedback": {
-          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "rule": "A negative sentence denies something. In careful written French, put ne before the verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
           "error": "That English meaning belongs to a different message, rather than: Je ne mange jamais seul.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I never eat alone."
         },
@@ -397,7 +397,7 @@
           "2"
         ],
         "feedback": {
-          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "rule": "A negative sentence denies something. In careful written French, put ne before the verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
           "error": "That English meaning belongs to a different message, rather than: Je ne mange plus de viande.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I no longer eat meat."
         },
@@ -418,7 +418,7 @@
           "Je ne mange pas ici."
         ],
         "feedback": {
-          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "rule": "A negative sentence denies something. In careful written French, put ne before the verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
           "error": "The response does not match the model wording requested for: I do not eat here.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Je ne mange pas ici."
         },
@@ -437,7 +437,7 @@
           "Je ne mange jamais seul."
         ],
         "feedback": {
-          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "rule": "A negative sentence denies something. In careful written French, put ne before the verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
           "error": "The response does not match the model wording requested for: I never eat alone.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Je ne mange jamais seul."
         },
@@ -456,7 +456,7 @@
           "Je ne mange plus de viande."
         ],
         "feedback": {
-          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "rule": "A negative sentence denies something. In careful written French, put ne before the verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
           "error": "The response does not match the model wording requested for: I no longer eat meat.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Je ne mange plus de viande."
         },
@@ -488,11 +488,11 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Je ne travaille pas demain.",
-      "model_translation": "I am not working tomorrow."
+      "model": "Je ne travaille pas demain. Je ne mange jamais seul. Je ne mange plus de viande.",
+      "model_translation": "I am not working tomorrow. I never eat alone. I no longer eat meat."
     },
     "feedback": {
-      "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+      "rule": "A negative sentence denies something. In careful written French, put ne before the verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
       "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
       "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
     },
@@ -504,7 +504,7 @@
           "Je ne travaille pas demain."
         ],
         "feedback": {
-          "rule": "A negative sentence denies something. In careful written French, put ne before the changed verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
+          "rule": "A negative sentence denies something. In careful written French, put ne before the verb and pas after it: je ne parle pas means I do not speak. Ne becomes n' before a vowel sound. Replace pas with jamais for never or plus for no longer. In everyday speech people often drop ne, but practise both parts in writing. A short non means no; pas encore means not yet. After a negative quantity statement, un/une/des often becomes de: je n'ai pas de livre means I have no book.",
           "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
           "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
         },
@@ -518,7 +518,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -758,8 +758,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Quand est-ce que vous arrivez ?",
-      "model_translation": "When are you arriving? (polite or plural)"
+      "model": "Tu viens demain ? Où habitez-vous ? Quand est-ce que vous arrivez ?",
+      "model_translation": "Are you coming tomorrow? (familiar) Where do you live? (polite or plural) When are you arriving? (polite or plural)"
     },
     "feedback": {
       "rule": "A statement can become a spoken question when your voice rises at the end: tu viens ? means are you coming? Est-ce que also introduces a yes/no question without changing normal subject order. Question words ask for missing information: où (where), quand (when), comment (how), pourquoi (why), combien (how much/many). Inversion means placing a verb before its subject word, joined by a hyphen: venez-vous ? is a more formal are you coming? An inserted t in parle-t-il ? helps pronunciation.",
@@ -788,7 +788,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -813,7 +813,7 @@
     "topic_id": "A1-12",
     "level": "A1",
     "outcome": "I can read and give basic time, weather and everyday information.",
-    "explanation": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+    "explanation": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le, then a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread.",
     "example_items": [
       {
         "french": "Ma sœur travaille au magasin.",
@@ -871,7 +871,7 @@
           "0"
         ],
         "feedback": {
-          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le, then a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread.",
           "error": "That English meaning belongs to a different message, rather than: Ma sœur travaille au magasin.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: My sister works at the shop."
         },
@@ -904,7 +904,7 @@
           "1"
         ],
         "feedback": {
-          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le, then a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread.",
           "error": "That English meaning belongs to a different message, rather than: Elle achète du pain à neuf heures.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: She buys some bread at nine o'clock."
         },
@@ -937,7 +937,7 @@
           "2"
         ],
         "feedback": {
-          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le, then a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread.",
           "error": "That English meaning belongs to a different message, rather than: Aujourd'hui, il fait froid.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: Today, it is cold."
         },
@@ -958,7 +958,7 @@
           "Ma sœur travaille au magasin."
         ],
         "feedback": {
-          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le, then a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread.",
           "error": "The response does not match the model wording requested for: My sister works at the shop.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Ma sœur travaille au magasin."
         },
@@ -977,7 +977,7 @@
           "Elle achète du pain à neuf heures."
         ],
         "feedback": {
-          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le, then a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread.",
           "error": "The response does not match the model wording requested for: She buys some bread at nine o'clock.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Elle achète du pain à neuf heures."
         },
@@ -996,7 +996,7 @@
           "Aujourd'hui, il fait froid."
         ],
         "feedback": {
-          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le, then a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread.",
           "error": "The response does not match the model wording requested for: Today, it is cold.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Aujourd'hui, il fait froid."
         },
@@ -1028,11 +1028,11 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Le rendez-vous est le deux mai.",
-      "model_translation": "The appointment is on May second."
+      "model": "Le rendez-vous est le deux mai à neuf heures au magasin. Aujourd'hui, il fait froid.",
+      "model_translation": "The appointment is on May second at nine o'clock at the shop. Today, it is cold."
     },
     "feedback": {
-      "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+      "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le, then a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread.",
       "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
       "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
     },
@@ -1044,7 +1044,7 @@
           "Le rendez-vous est le deux mai."
         ],
         "feedback": {
-          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le plus a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread. French prices use euros, and numbers often use a decimal comma in writing.",
+          "rule": "Learn vocabulary inside useful messages. Il est introduces clock time: il est neuf heures means it is nine o'clock. A date uses le, then a number and a month: le deux mai means May second; use le premier for the first. Months and weekdays are lower-case. Il fait froid means it is cold; il pleut means it is raining. Ma sœur means my sister; un magasin is a shop; du pain is some bread.",
           "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
           "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
         },
@@ -1058,7 +1058,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -1298,8 +1298,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Nous nous levons à huit heures.",
-      "model_translation": "We get up at eight o'clock."
+      "model": "Je me lève à sept heures. Je prends souvent le bus. Le soir, j'aime lire. Et toi ?",
+      "model_translation": "I get up at seven o'clock. I often take the bus. In the evening, I like reading. And you?"
     },
     "feedback": {
       "rule": "A routine describes repeated actions. A reflexive verb uses a small word pointing back to the person acting: je me lève means I get up; nous nous levons means we get up. The extra word changes with the person: me, te, se, nous, vous, se. Before a vowel, me becomes m'. Souvent means often, toujours means always and parfois means sometimes. Use aimer plus an unchanged verb for preferences: j'aime lire means I like reading.",
@@ -1328,7 +1328,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -1568,8 +1568,8 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Je vais à Paris et Sami reste ici.",
-      "model_translation": "I am going to Paris and Sami is staying here."
+      "model": "Il y a un café à droite. La maison de Sami est à gauche, et le livre de Lina est chez Sami.",
+      "model_translation": "There is a café on the right. Sami's house is on the left, and Lina's book is at Sami's home."
     },
     "feedback": {
       "rule": "A preposition is a small linking word that shows a relationship. À often locates someone in a city; de can show origin or possession; chez means at someone's home or workplace. En is used with many feminine country names, such as en France. Il y a means there is or there are. The words à gauche and à droite mean on the left and on the right. Et (and), mais (but) and parce que (because) connect short ideas. Learn the whole phrase because English and French prepositions do not always match.",
@@ -1598,7 +1598,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -1623,7 +1623,7 @@
     "topic_id": "A1-15",
     "level": "A1",
     "outcome": "I can introduce myself and handle a short shop or restaurant exchange.",
-    "explanation": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+    "explanation": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Practise the model aloud twice: once as the customer, then answer as the server.",
     "example_items": [
       {
         "french": "Bonjour, je voudrais un café.",
@@ -1681,7 +1681,7 @@
           "0"
         ],
         "feedback": {
-          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Practise the model aloud twice: once as the customer, then answer as the server.",
           "error": "That English meaning belongs to a different message, rather than: Bonjour, je voudrais un café.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: Hello, I would like a coffee."
         },
@@ -1714,7 +1714,7 @@
           "1"
         ],
         "feedback": {
-          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Practise the model aloud twice: once as the customer, then answer as the server.",
           "error": "That English meaning belongs to a different message, rather than: Combien ça coûte ?",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: How much does it cost?"
         },
@@ -1747,7 +1747,7 @@
           "2"
         ],
         "feedback": {
-          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Practise the model aloud twice: once as the customer, then answer as the server.",
           "error": "That English meaning belongs to a different message, rather than: Je vais payer par carte.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am going to pay by card."
         },
@@ -1768,7 +1768,7 @@
           "Bonjour, je voudrais un café."
         ],
         "feedback": {
-          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Practise the model aloud twice: once as the customer, then answer as the server.",
           "error": "The response does not match the model wording requested for: Hello, I would like a coffee.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Bonjour, je voudrais un café."
         },
@@ -1787,7 +1787,7 @@
           "Combien ça coûte ?"
         ],
         "feedback": {
-          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Practise the model aloud twice: once as the customer, then answer as the server.",
           "error": "The response does not match the model wording requested for: How much does it cost?",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Combien ça coûte ?"
         },
@@ -1806,7 +1806,7 @@
           "Je vais payer par carte."
         ],
         "feedback": {
-          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Practise the model aloud twice: once as the customer, then answer as the server.",
           "error": "The response does not match the model wording requested for: I am going to pay by card.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Je vais payer par carte."
         },
@@ -1838,11 +1838,11 @@
         "Use the target pattern accurately and choose language appropriate to the audience.",
         "Produce two original sentences, then revise one after checking the explanation."
       ],
-      "model": "Je voudrais une table pour deux.",
-      "model_translation": "I would like a table for two."
+      "model": "Bonjour, je voudrais une table pour deux. Je voudrais un café. Combien ça coûte ? Je vais payer par carte.",
+      "model_translation": "Hello, I would like a table for two. I would like a coffee. How much does it cost? I am going to pay by card."
     },
     "feedback": {
-      "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+      "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Practise the model aloud twice: once as the customer, then answer as the server.",
       "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
       "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
     },
@@ -1854,7 +1854,7 @@
           "Je voudrais une table pour deux."
         ],
         "feedback": {
-          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Read the model aloud as a customer, then answer as the server; reading aloud supports speaking but is not a recorded listening assessment.",
+          "rule": "Use short complete phrases to make an everyday exchange clear. Je voudrais means I would like and s'il vous plaît means please in polite speech. Ask the price with combien ça coûte ? (how much does it cost?). To describe a near-future plan, use the present form of aller (to go) followed by an unchanged action word: je vais manger means I am going to eat. This pattern is called futur proche. Practise the model aloud twice: once as the customer, then answer as the server.",
           "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
           "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
         },
@@ -1868,7 +1868,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
