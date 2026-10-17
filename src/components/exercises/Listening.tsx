@@ -4,7 +4,7 @@ import { getSpeechStatus, reportAttempt, uploadSpeech } from '../../api/client.j
 import type { SimulateSubmit } from './ExerciseCard';
 import { getErrorMessage } from '../../presenters/format.presenter.js';
 import { useAudioRecorder } from '../../hooks/useAudioRecorder';
-import { AnswerModePicker, AudioPlayer, Box, Button, ClipPlayer, ErrorMessage, ExerciseEyebrow, ExerciseShell, Text, Textarea } from '../ui';
+import { AnswerModePicker, AudioPlayer, Box, Button, ClipPlayer, ErrorMessage, ExerciseEyebrow, ExerciseShell, PronunciationComparison, Text, Textarea } from '../ui';
 import type { AnswerMode } from '../ui';
 
 export type MediaAsset = { kind: 'audio' | 'image' | 'video' | 'document'; url: string; duration_seconds?: number; transcript?: string; checksum?: string };
@@ -24,7 +24,7 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
   const started = React.useRef(Date.now());
   const audio = useAudioRecorder(60);
   const clip = entry.media?.find((media) => media.kind === 'audio');
-  const phrase = entry.expected || clip?.transcript || '';
+  const phrase = clip?.transcript || entry.expected || '';
 
   React.useEffect(() => {
     if (!token || simulateSubmit) return;
@@ -137,6 +137,7 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
           {heard?.pronunciation.unclear_words.length ? <Text>These words sounded unclear: {heard.pronunciation.unclear_words.map((word) => word.word).join(' · ')}</Text> : null}
           <Text className="speaking-feedback-note">Groq’s certainty is an approximate transcription signal, not a pronunciation grade. Microphone noise can affect it.</Text>
         </Box>}
+        {mode === 'spoken' && audio.blob && phrase && <PronunciationComparison recording={audio.blob} referenceUrl={clip?.url} targetText={phrase} attemptId={entry.id} />}
         <Button variant="text" onClick={reset}>Try again</Button>
       </>}
       {error && <ErrorMessage message={error} />}

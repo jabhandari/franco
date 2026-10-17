@@ -103,3 +103,4 @@ export { StoryTrophyShelf } from './StoryTrophyShelf';
 export type { StoryTrophyShelfProps } from './StoryTrophyShelf';
 export { RaceInviteCode } from './RaceInviteCode';
 export { PronunciationSpikePanel } from './PronunciationSpikePanel';
+export { PronunciationComparison } from './PronunciationComparison';

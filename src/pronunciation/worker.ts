@@ -1,11 +1,12 @@
 import { AutoModelForCTC, Wav2Vec2FeatureExtractor, env } from '@huggingface/transformers';
 import { decodePhones } from './ctc';
+import { hasClearSpeech } from './signal';
 
 const MODEL = 'qnighy/wav2vec2-xlsr-53-espeak-cv-ft-ONNX';
 const REVISION = 'd2987af7ae07d53eafee15dc7190479062faa1e8';
 const ROOT = `https://huggingface.co/${MODEL}/resolve/${REVISION}`;
 
-type WorkerRequest = { id: number; samples: Float32Array };
+type WorkerRequest = { id: number; samples: Float32Array; reference?: boolean };
 type WorkerReply =
   | { id: number; kind: 'progress'; progress: number; file: string }
   | { id: number; kind: 'result'; phones: string[]; loadMs: number; inferenceMs: number; sampleCount: number }
@@ -43,13 +44,12 @@ async function load(id: number) {
 }
 
 self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
-  const { id, samples } = event.data;
+  const { id, samples, reference } = event.data;
   try {
     if (!(samples instanceof Float32Array) || samples.length < 4000 || samples.length > 16_000 * 60) {
       throw new Error('Choose a recording between 0.25 and 60 seconds.');
     }
-    const peak = samples.reduce((maximum, value) => Math.max(maximum, Math.abs(value)), 0);
-    if (peak < 0.01) throw new Error('The recording is too quiet. Try again.');
+    if (!reference && !hasClearSpeech(samples)) throw new Error('Could not separate clear speech from background noise. Try again closer to the microphone in a quieter place.');
     const loadStart = performance.now();
     const { model, extractor, vocab } = await load(id);
     const loadMs = Math.round(performance.now() - loadStart);
