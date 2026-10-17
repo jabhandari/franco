@@ -190,7 +190,7 @@ export type CurriculumLesson = {
   version: number;
   review_due_policy: { initial_days: number; subsequent_days: number[] };
 };
-export type StoryState = 'current' | 'completed' | 'skipped' | 'locked';
+export type StoryState = 'current' | 'completed' | 'skipped';
 export type StoryStop = {id:string;title:string;title_en:string;level:CefrLevel;order_index:number;state:StoryState;answered:number};
 export type StoryQuestion = {id:string;prompt:string;options:{id:string;text:string}[]};
 export type ReadingStory = {id:string;title:string;title_en:string;level:CefrLevel;text:string;glossary:{french:string;english:string}[];version:number;questions:StoryQuestion[];answered_question_ids:string[]};
