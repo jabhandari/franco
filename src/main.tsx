@@ -39,6 +39,7 @@ import { Profile } from './views/Profile.js';
 import { QuestionTypes } from './views/QuestionTypes.js';
 import { Puzzles } from './views/Puzzles.js';
 import { StoriesPage } from './views/StoriesPage';
+import { WordsOfDay } from './views/WordsOfDay.js';
 
 const Race = React.lazy(() => import('./views/Race.js').then(({ Race: RaceView }) => ({ default: RaceView })));
 
@@ -59,7 +60,7 @@ declare module 'next-themes' {
 // FRA-67: app-shell types. ViewId is the sidebar's view vocabulary — the
 // auth gate, router, and nav all speak it, so a bad view id is a type
 // error, not a silent blank page.
-type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types' | 'puzzles' | 'stories' | 'race' | 'pronunciation-spike';
+type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types' | 'puzzles' | 'stories' | 'race' | 'pronunciation-spike' | 'words';
 const authViewFromPath = (): AuthMode => window.location.pathname === '/reset-password' ? 'reset' : window.location.pathname === '/verify-email' ? 'verify' : window.location.pathname === '/forgot-password' ? 'forgot' : 'login';
 
 type NavItem = {
@@ -109,8 +110,9 @@ const viewPaths: Record<ViewId, string> = {
   stories: '/stories',
   race: '/race',
   'pronunciation-spike': '/pronunciation-spike',
+  words: '/words',
 };
-const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types', 'puzzles', 'stories', 'race', 'pronunciation-spike'];
+const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types', 'puzzles', 'stories', 'race', 'pronunciation-spike', 'words'];
 
 function viewFromPath(pathname: string): ViewId {
   for (const id of VIEW_IDS) {
@@ -375,6 +377,7 @@ function App(): React.JSX.Element {
           onLesson={(lesson) => navigate('content', false, new URLSearchParams({ level:lesson.level_code || 'A1',concept:lesson.slug }))}
           onExplore={() => navigate('content', false, new URLSearchParams({ level:userData?.profile?.current_level || 'A1' }))}
           onConversation={() => navigate('conversation')} onPuzzles={() => navigate('puzzles')}
+          onWords={() => navigate('words')}
         />}
         {view === 'learn' && <Content token={authToken} onPractice={(level) => { setSessionLevel(level); navigate('session'); }} />}
         {view === 'placement' && <Placement token={authToken} onPlaced={() => refreshUserData()} />}
@@ -390,7 +393,7 @@ function App(): React.JSX.Element {
         {view === 'puzzles' && <Puzzles token={authToken} onRace={() => navigate('race')} />}
         {view === 'stories' && <StoriesPage token={authToken} />}
         {view === 'pronunciation-spike' && <PronunciationSpikePanel />}
-
+        {view === 'words' && <WordsOfDay token={authToken} onHome={() => navigate('home')} />}
       </Box>
     </Box>
   );

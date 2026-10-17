@@ -5,7 +5,7 @@ import type { AuthResponse, MeResponse, StreakResponse, SessionPlanResponse, Les
 import type { LessonPosition, ConceptProgress, SkillId } from '../types';
 import { skillCompletion } from '../presenters/progress.presenter';
 import { Box, Text, Button, StreakCard, SkillCard, ErrorMessage, ActionTile } from '../components/ui';
-import { DailyWordsSection } from '../components/DailyWordsSection.js';
+import { DailyWordsCard } from '../components/DailyWordsCard.js';
 
 type HomeProps = {
   token?: string | null;
@@ -18,6 +18,7 @@ type HomeProps = {
   onExplore: () => void;
   onConversation: () => void;
   onPuzzles: () => void;
+  onWords: () => void;
 };
 
 const SKILLS: {id:SkillId;icon:typeof Mic;title:string;gloss:string;description:string}[] = [
@@ -27,7 +28,7 @@ const SKILLS: {id:SkillId;icon:typeof Mic;title:string;gloss:string;description:
   {id:'parler',icon:Mic,title:'Parler',gloss:'Speaking',description:'Phrases said out loud, with pronunciation checked.'},
 ];
 
-export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLesson,onExplore,onConversation,onPuzzles}:HomeProps) {
+export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLesson,onExplore,onConversation,onPuzzles,onWords}:HomeProps) {
   const {data:plan,error:planError}=useApiResource<SessionPlanResponse>('/api/me/session-plan',token);
   const {data:resume,error:resumeError}=useApiResource<LessonPositionResponse>('/api/me/lesson-position',token);
   const snapshot=userData && 'skill_progress' in userData ? userData : null;
@@ -62,7 +63,7 @@ export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLes
         </Box>
       </Box>
 
-      <DailyWordsSection token={token} />
+      <DailyWordsCard token={token} onOpen={onWords} />
 
       <Box className="home-bottom-grid">
         <Box className="home-continue">
