@@ -5,7 +5,7 @@
     "level": "A1",
     "title": "Le sac bleu",
     "title_en": "The blue bag",
-    "text": "Lina est à la gare. Elle a un sac bleu et un petit livre. Le train arrive à neuf heures. Sami est là aussi. Il cherche son billet. Lina regarde sous le livre : le billet est là ! Sami dit merci. Ils prennent le train ensemble.",
+    "text": "Lina est à la gare. Elle a un sac bleu et un petit livre. Le train arrive à neuf heures. Sami est là aussi. Il cherche son billet. Lina regarde sous le livre : le billet est là ! Sami dit merci. Ils prennent le train ensemble. Dans le train, Lina met son sac à ses pieds. Sami prend la place près de la fenêtre. Il voit des maisons et des arbres. Lina lui montre une photo de sa famille dans le petit livre. Ils parlent de leurs amis. Le voyage est court. Ils sont contents de passer ce moment ensemble.",
     "glossary": [
       {
         "french": "gare",
@@ -18,12 +18,16 @@
       {
         "french": "sous",
         "english": "under"
+      },
+      {
+        "french": "pieds",
+        "english": "feet"
       }
     ],
     "questions": [
       {
         "id": "q1",
-        "prompt": "Où est Lina ?",
+        "prompt": "Où est Lina au début ?",
         "options": [
           {
             "id": "option-1",
@@ -123,7 +127,7 @@
       },
       {
         "id": "q6",
-        "prompt": "Que font Lina et Sami à la fin ?",
+        "prompt": "Que font Lina et Sami après avoir trouvé le billet ?",
         "options": [
           {
             "id": "option-1",
@@ -139,7 +143,7 @@
           }
         ],
         "correct_option_id": "option-3",
-        "explanation": "La dernière phrase dit qu'ils prennent le train ensemble."
+        "explanation": "Après avoir trouvé le billet, ils prennent le train ensemble."
       }
     ],
     "provenance": {
@@ -156,7 +160,7 @@
     "level": "A1",
     "title": "Deux pommes",
     "title_en": "Two apples",
-    "text": "Au marché, Sami achète deux pommes pour trois euros. Une pomme est pour lui. L'autre est pour sa sœur, Nora. Il met les pommes dans son sac. À la maison, Nora prépare du thé. Ils mangent les pommes et parlent de leur journée.",
+    "text": "Au marché, Sami achète deux pommes pour trois euros. Une pomme est pour lui. L'autre est pour sa sœur, Nora. Il met les pommes dans son sac. À la maison, Nora prépare du thé. Ils mangent les pommes et parlent de leur journée. Le thé est chaud et les pommes sont bonnes. Nora pose deux petites assiettes sur la table de la cuisine. Sami coupe sa pomme en quatre. Sa sœur préfère manger la sienne avec la peau. La fenêtre est ouverte et il fait bon. Sami raconte son travail au magasin. Nora écoute et pose des questions. Après le thé, ils rangent la cuisine ensemble.",
     "glossary": [
       {
         "french": "l'autre",
@@ -169,6 +173,10 @@
       {
         "french": "journée",
         "english": "day"
+      },
+      {
+        "french": "peau",
+        "english": "skin"
       }
     ],
     "questions": [
@@ -307,7 +315,7 @@
     "level": "A1",
     "title": "Un café pour deux",
     "title_en": "A café for two",
-    "text": "Il pleut ce matin. Nora et Lina entrent dans un café près de la bibliothèque. Nora prend un thé et Lina un chocolat chaud. Elles s'assoient près de la fenêtre. Lina ouvre son livre. Nora regarde la pluie. À dix heures, elles vont à la bibliothèque.",
+    "text": "Il pleut ce matin. Nora et Lina entrent dans un café près de la bibliothèque. Nora prend un thé et Lina un chocolat chaud. Elles s'assoient près de la fenêtre. Lina ouvre son livre. Nora regarde la pluie. À dix heures, elles vont à la bibliothèque. La bibliothèque est ouverte. À l'entrée, elles ferment leur parapluie et disent bonjour à la dame. Lina cherche un livre avec des images. Nora aime les livres sur les animaux. Elles regardent les étagères et choisissent chacune un livre. Il y a des tables et des chaises au fond de la salle. Elles s'assoient pour lire. Dehors, la pluie continue, mais ici elles sont bien.",
     "glossary": [
       {
         "french": "il pleut",
@@ -320,6 +328,10 @@
       {
         "french": "chocolat chaud",
         "english": "hot chocolate"
+      },
+      {
+        "french": "étagères",
+        "english": "shelves"
       }
     ],
     "questions": [
@@ -385,7 +397,7 @@
       },
       {
         "id": "q4",
-        "prompt": "Où s'assoient-elles ?",
+        "prompt": "Où s'assoient-elles dans le café ?",
         "options": [
           {
             "id": "option-1",
@@ -441,7 +453,7 @@
           }
         ],
         "correct_option_id": "option-1",
-        "explanation": "La dernière phrase donne dix heures."
+        "explanation": "Elles vont à la bibliothèque à dix heures."
       }
     ],
     "provenance": {
@@ -458,7 +470,7 @@
     "level": "A1",
     "title": "La porte verte",
     "title_en": "The green door",
-    "text": "Sami cherche la maison de Lina. Elle dit au téléphone : « Ma maison est petite. La porte est verte. Il y a un arbre devant. » Sami voit une porte bleue, puis une porte verte. Il s'arrête devant la porte verte. Lina ouvre avec un grand sourire.",
+    "text": "Sami cherche la maison de Lina. Elle dit au téléphone : « Ma maison est petite. La porte est verte. Il y a un arbre devant. » Sami voit une porte bleue, puis une porte verte. Il s'arrête devant la porte verte. Lina ouvre avec un grand sourire. Il entre et pose son manteau sur une chaise. La maison est calme. Dans la cuisine, une table ronde est près de la fenêtre. Lina prépare deux verres de jus de pomme. Sami regarde le jardin. Il y a des fleurs rouges autour de l'arbre. Il aime beaucoup cet endroit. Les deux amis s'assoient et parlent. Sami dit : « Ta maison est très jolie ! »",
     "glossary": [
       {
         "french": "devant",
@@ -471,6 +483,10 @@
       {
         "french": "sourire",
         "english": "smile"
+      },
+      {
+        "french": "autour",
+        "english": "around"
       }
     ],
     "questions": [
@@ -609,7 +625,7 @@
     "level": "A1",
     "title": "Le cours du soir",
     "title_en": "The evening class",
-    "text": "Lina travaille le matin dans un magasin. Le mardi, elle va au cours de français à dix-huit heures. Elle apporte un cahier et un stylo. Aujourd'hui, le professeur demande son nom. Lina répond, puis elle parle avec Nora. Après le cours, les deux amies marchent jusqu'au bus.",
+    "text": "Lina travaille le matin dans un magasin. Le mardi, elle va au cours de français à dix-huit heures. Elle apporte un cahier et un stylo. Aujourd'hui, le professeur demande son nom. Lina répond, puis elle parle avec Nora. Après le cours, les deux amies marchent jusqu'au bus. Le bus est devant l'école. Nora habite près de Lina, alors elles prennent le même bus. Elles trouvent deux places et ouvrent leurs cahiers. Nora montre un mot nouveau à son amie. Lina le lit et sourit. À la maison, elle écrit trois petites phrases pour le prochain cours. Elle aime apprendre avec une amie. Le français est plus facile quand elles parlent ensemble.",
     "glossary": [
       {
         "french": "cahier",
@@ -622,6 +638,10 @@
       {
         "french": "jusqu'au",
         "english": "as far as the"
+      },
+      {
+        "french": "prochain",
+        "english": "next"
       }
     ],
     "questions": [
@@ -760,7 +780,7 @@
     "level": "A1",
     "title": "Une place au jardin",
     "title_en": "A place in the garden",
-    "text": "Le dimanche, Nora aime lire au jardin. Aujourd'hui, il fait beau, mais son banc est occupé. Un homme lit le journal sur le banc. Nora demande : « Je peux m'asseoir ici ? » L'homme répond oui et déplace son sac. Nora s'assoit. Ils lisent tranquillement, chacun de son côté.",
+    "text": "Le dimanche, Nora aime lire au jardin. Aujourd'hui, il fait beau, mais son banc est occupé. Un homme lit le journal sur le banc. Nora demande : « Je peux m'asseoir ici ? » L'homme répond oui et déplace son sac. Nora s'assoit. Ils lisent tranquillement, chacun de son côté. Après quelques pages, Nora ferme son livre. Elle regarde les enfants dans le jardin. Une petite fille joue avec un ballon rouge. Un chien dort près d'un arbre. Nora sort une bouteille d'eau de son sac et boit un peu. L'homme lui montre une photo dans son journal. C'est une photo du jardin ! Ils sourient, puis ils continuent leur lecture.",
     "glossary": [
       {
         "french": "banc",
@@ -773,6 +793,10 @@
       {
         "french": "déplace",
         "english": "moves"
+      },
+      {
+        "french": "ballon",
+        "english": "ball"
       }
     ],
     "questions": [
@@ -911,7 +935,7 @@
     "level": "A1",
     "title": "Le dîner de Sami",
     "title_en": "Sami's dinner",
-    "text": "Sami veut préparer un dîner pour ses amis. Il a du riz et des tomates, mais il n'a pas de pain. Il téléphone à Lina. Elle dit : « Je viens à sept heures. J'apporte le pain. » Nora arrive avec de l'eau. À sept heures, tout le monde est là. Le dîner commence.",
+    "text": "Sami veut préparer un dîner pour ses amis. Il a du riz et des tomates, mais il n'a pas de pain. Il téléphone à Lina. Elle dit : « Je viens à sept heures. J'apporte le pain. » Nora arrive avec de l'eau. À sept heures, tout le monde est là. Le dîner commence. La table est dans la cuisine. Sami pose trois assiettes et trois verres. Il sert le riz avec les tomates. Lina coupe le pain et Nora remplit les verres. Les amis parlent de leur semaine. Ils aiment ce repas simple. Après le dîner, ils écoutent de la musique. Sami lave les assiettes et ses amies rangent la table. La soirée est agréable.",
     "glossary": [
       {
         "french": "dîner",
@@ -924,6 +948,10 @@
       {
         "french": "tout le monde",
         "english": "everyone"
+      },
+      {
+        "french": "remplit",
+        "english": "fills"
       }
     ],
     "questions": [
@@ -949,7 +977,7 @@
       },
       {
         "id": "q2",
-        "prompt": "Qu'est-ce qu'il a déjà ?",
+        "prompt": "Qu'est-ce que Sami a avant de téléphoner à Lina ?",
         "options": [
           {
             "id": "option-1",
@@ -969,7 +997,7 @@
       },
       {
         "id": "q3",
-        "prompt": "Qu'est-ce qu'il n'a pas ?",
+        "prompt": "Qu'est-ce qui manque à Sami avant l'arrivée de ses amis ?",
         "options": [
           {
             "id": "option-1",
@@ -1062,7 +1090,7 @@
     "level": "A1",
     "title": "Le téléphone silencieux",
     "title_en": "The silent phone",
-    "text": "Lina attend un appel de Nora. Son téléphone est sur la table, mais elle n'entend rien. Elle regarde l'écran : Nora appelle ! Le téléphone est silencieux. Lina répond et dit : « Pardon, je n'entends pas la sonnerie. » Nora rit. Elles vont se retrouver au parc à trois heures.",
+    "text": "Lina attend un appel de Nora. Son téléphone est sur la table, mais elle n'entend rien. Elle regarde l'écran : Nora appelle ! Le téléphone est silencieux. Lina répond et dit : « Pardon, je n'entends pas la sonnerie. » Nora rit. Elles vont se retrouver au parc à trois heures. Après l'appel, Lina prépare son sac. Elle prend de l'eau et une pomme. Elle met aussi un petit pull dans le sac. Le parc est près de chez elle. Elle part à pied et regarde les fleurs dans la rue. À trois heures, Nora est devant l'entrée du parc. Lina lui dit bonjour. Elles marchent ensemble et cherchent une place au soleil.",
     "glossary": [
       {
         "french": "appel",
@@ -1075,6 +1103,10 @@
       {
         "french": "sonnerie",
         "english": "ringtone"
+      },
+      {
+        "french": "pull",
+        "english": "sweater"
       }
     ],
     "questions": [
@@ -1213,7 +1245,7 @@
     "level": "A1",
     "title": "Un cadeau simple",
     "title_en": "A simple gift",
-    "text": "Demain, c'est l'anniversaire de Nora. Lina cherche un cadeau. Dans un magasin, elle voit une grande tasse blanche et un petit carnet jaune. Nora aime écrire, mais elle a déjà beaucoup de tasses. Lina choisit le carnet. Elle écrit sur une carte : « Pour tes nouvelles histoires ! » Puis elle prépare le paquet.",
+    "text": "Demain, c'est l'anniversaire de Nora. Lina cherche un cadeau. Dans un magasin, elle voit une grande tasse blanche et un petit carnet jaune. Nora aime écrire, mais elle a déjà beaucoup de tasses. Lina choisit le carnet. Elle écrit sur une carte : « Pour tes nouvelles histoires ! » Puis elle prépare le paquet. Le papier du paquet est rouge. Lina ferme le paquet avec un ruban et pose la carte dessus. Elle le met sur son bureau pour demain. Elle téléphone ensuite à Sami. Il prépare un gâteau pour Nora. Les deux amis parlent de la fête. Ils veulent mettre des fleurs sur la table. Lina est contente de son idée : un petit cadeau peut faire très plaisir.",
     "glossary": [
       {
         "french": "anniversaire",
@@ -1226,6 +1258,10 @@
       {
         "french": "paquet",
         "english": "parcel"
+      },
+      {
+        "french": "ruban",
+        "english": "ribbon"
       }
     ],
     "questions": [
@@ -1364,7 +1400,7 @@
     "level": "A2",
     "title": "Le parapluie oublié",
     "title_en": "The forgotten umbrella",
-    "text": "Hier, Lina a oublié son parapluie dans le bus. Ce matin, elle est retournée à l'arrêt, mais le conducteur n'avait rien trouvé. Il lui a donné le numéro des objets perdus. Lina a téléphoné. Une employée a décrit un parapluie rouge avec une poignée en bois. C'était le sien ! Lina est allée le chercher après son travail et a remercié l'employée.",
+    "text": "Hier, Lina a oublié son parapluie dans le bus. Ce matin, elle est retournée à l'arrêt, mais le conducteur n'avait rien trouvé. Il lui a donné le numéro des objets perdus. Lina a téléphoné. Une employée a décrit un parapluie rouge avec une poignée en bois. C'était le sien ! Lina est allée le chercher après son travail et a remercié l'employée. Avant de partir, elle a vérifié les heures d'ouverture du bureau. Elle a pris le bus jusqu'à la gare et a montré sa carte d'identité. L'employée lui a demandé la date de la perte. Lina a répondu sans difficulté. Pour le retour, elle a bien gardé le parapluie dans son sac.",
     "glossary": [
       {
         "french": "parapluie",
@@ -1377,6 +1413,10 @@
       {
         "french": "poignée",
         "english": "handle"
+      },
+      {
+        "french": "carte d'identité",
+        "english": "identity card"
       }
     ],
     "questions": [
@@ -1482,7 +1522,7 @@
       },
       {
         "id": "q6",
-        "prompt": "Qui Lina remercie-t-elle à la fin ?",
+        "prompt": "Qui Lina remercie-t-elle en récupérant son parapluie ?",
         "options": [
           {
             "id": "option-1",
@@ -1498,7 +1538,7 @@
           }
         ],
         "correct_option_id": "option-3",
-        "explanation": "La dernière action est son remerciement à l'employée."
+        "explanation": "Lina remercie l'employée qui lui rend son parapluie."
       }
     ],
     "provenance": {
@@ -1515,7 +1555,7 @@
     "level": "A2",
     "title": "Le changement d'horaire",
     "title_en": "The timetable change",
-    "text": "Nora prend habituellement le train de huit heures pour aller travailler. Lundi, elle a vu une affiche : pendant une semaine, ce train partira quinze minutes plus tôt. Elle a réglé son réveil pour se lever plus tôt. Le lendemain, elle est arrivée à la gare à sept heures trente. Elle avait même le temps d'acheter un café avant de monter dans le train.",
+    "text": "Nora prend habituellement le train de huit heures pour aller travailler. Lundi, elle a vu une affiche : pendant une semaine, ce train partira quinze minutes plus tôt. Elle a réglé son réveil pour se lever plus tôt. Le lendemain, elle est arrivée à la gare à sept heures trente. Elle a acheté un café avant de monter dans le train. Sur le quai, elle a retrouvé une collègue qui attendait aussi. Nora lui a montré l'affiche, car elle n'avait pas vu le nouvel horaire. Elles ont regardé ensemble les informations pour le retour. Le train du soir ne changeait pas. Elles ont pu commencer leur journée sans se dépêcher.",
     "glossary": [
       {
         "french": "affiche",
@@ -1528,6 +1568,10 @@
       {
         "french": "habituellement",
         "english": "usually"
+      },
+      {
+        "french": "quai",
+        "english": "platform"
       }
     ],
     "questions": [
@@ -1666,7 +1710,7 @@
     "level": "A2",
     "title": "Le repas partagé",
     "title_en": "The shared meal",
-    "text": "Pour le repas des voisins, chacun devait apporter un plat. Sami voulait préparer une salade, mais son réfrigérateur était presque vide. Il a demandé à Nora si elle avait des légumes. Elle avait des carottes et du chou. Ils ont préparé deux grandes salades ensemble. Au repas, une voisine leur a demandé la recette. Sami a répondu que le meilleur ingrédient était l'aide de Nora.",
+    "text": "Pour le repas des voisins, chacun devait apporter un plat. Sami voulait préparer une salade, mais son réfrigérateur était presque vide. Il a demandé à Nora si elle avait des légumes. Elle avait des carottes et du chou. Ils ont préparé deux grandes salades ensemble. Au repas, une voisine leur a demandé la recette. Sami a répondu que le meilleur ingrédient était l'aide de Nora. Nora a écrit les étapes sur une petite feuille pour la voisine. Elle a expliqué qu'il fallait couper les légumes très finement. Sami a ajouté un peu de citron. Tout le monde a trouvé les salades fraîches et bonnes. Après le repas, les voisins ont rangé les tables ensemble.",
     "glossary": [
       {
         "french": "chou",
@@ -1679,6 +1723,10 @@
       {
         "french": "ingrédient",
         "english": "ingredient"
+      },
+      {
+        "french": "finement",
+        "english": "finely"
       }
     ],
     "questions": [
@@ -1817,7 +1865,7 @@
     "level": "A2",
     "title": "Le vélo réparé",
     "title_en": "The repaired bicycle",
-    "text": "Le vélo de Lina faisait un bruit étrange. Elle pensait devoir en acheter un autre. À l'atelier du quartier, un bénévole a regardé la roue et a trouvé une petite branche coincée. Après l'avoir retirée, il a vérifié les freins avec Lina. Le vélo roulait de nouveau sans bruit. Lina a payé seulement la pièce usée d'un frein et a proposé d'aider à ranger l'atelier samedi.",
+    "text": "Le vélo de Lina faisait un bruit étrange. Elle pensait devoir en acheter un autre. À l'atelier du quartier, un bénévole a regardé la roue et a trouvé une petite branche coincée. Après l'avoir retirée, il a vérifié les freins avec Lina. Le vélo roulait de nouveau sans bruit. Lina a payé seulement la pièce usée d'un frein et a proposé d'aider à ranger l'atelier samedi. Le bénévole lui a aussi montré comment nettoyer son vélo avec un chiffon. Lina a posé plusieurs questions, car elle voulait apprendre à faire les petites réparations. Pour rentrer, elle a choisi une rue calme et a essayé les freins. Elle était heureuse de garder son vélo et de connaître cet atelier.",
     "glossary": [
       {
         "french": "branche",
@@ -1830,6 +1878,10 @@
       {
         "french": "freins",
         "english": "brakes"
+      },
+      {
+        "french": "chiffon",
+        "english": "cloth"
       }
     ],
     "questions": [
@@ -1968,7 +2020,7 @@
     "level": "A2",
     "title": "La réservation",
     "title_en": "The reservation",
-    "text": "Nora avait réservé une table pour quatre personnes vendredi soir. Dans l'après-midi, deux amis ont annoncé qu'ils ne pourraient pas venir. Elle a appelé le restaurant pour modifier la réservation. Le serveur lui a proposé une petite table près de la fenêtre. Quand Nora et Lina sont arrivées, la table était prête. Elles étaient contentes : le changement avait été facile.",
+    "text": "Nora avait réservé une table pour quatre personnes vendredi soir. Dans l'après-midi, deux amis ont annoncé qu'ils ne pourraient pas venir. Elle a appelé le restaurant pour modifier la réservation. Le serveur lui a proposé une petite table près de la fenêtre. Quand Nora et Lina sont arrivées, la table était prête. Elles étaient contentes : le changement avait été facile. Le serveur leur a apporté le menu et une bouteille d'eau. Elles ont choisi un plat de légumes et ont parlé de leur semaine. Nora a envoyé une photo de la table aux deux amis absents. Ils ont répondu qu'ils espéraient venir la prochaine fois. La soirée est restée très agréable.",
     "glossary": [
       {
         "french": "réserver",
@@ -1981,6 +2033,10 @@
       {
         "french": "prête",
         "english": "ready"
+      },
+      {
+        "french": "absents",
+        "english": "absent"
       }
     ],
     "questions": [
@@ -2119,7 +2175,7 @@
     "level": "A2",
     "title": "Une lettre pour la voisine",
     "title_en": "A letter for the neighbour",
-    "text": "Sami a reçu une lettre qui portait son numéro de rue, mais pas son nom. Il a regardé les boîtes aux lettres de l'immeuble. Le nom correspondait à sa nouvelle voisine du troisième étage. Comme elle n'était pas chez elle, il a glissé un mot sous sa porte. Le soir, elle est descendue chercher la lettre et ils ont fait connaissance.",
+    "text": "Sami a reçu une lettre qui portait son numéro de rue, mais pas son nom. Il a regardé les boîtes aux lettres de l'immeuble. Le nom correspondait à sa nouvelle voisine du troisième étage. Comme elle n'était pas chez elle, il a glissé un mot sous sa porte. Le soir, elle est descendue chercher la lettre et ils ont fait connaissance. La voisine s'appelait Alice. Elle venait d'emménager et ne connaissait pas encore beaucoup de monde. Elle a remercié Sami et lui a demandé où se trouvait la boulangerie. Il lui a indiqué le chemin sur un plan. Avant de remonter, Alice a proposé de prendre un café ensemble le dimanche suivant.",
     "glossary": [
       {
         "french": "boîte aux lettres",
@@ -2132,6 +2188,10 @@
       {
         "french": "un mot",
         "english": "a short note"
+      },
+      {
+        "french": "d'emménager",
+        "english": "to have just moved in"
       }
     ],
     "questions": [
@@ -2270,7 +2330,7 @@
     "level": "A2",
     "title": "Le cours déplacé",
     "title_en": "The relocated class",
-    "text": "À cause de travaux, le cours de français n'avait plus lieu dans la salle habituelle. Un message annonçait une salle au deuxième étage de la bibliothèque. Lina n'avait pas lu ce message. Devant la porte fermée, elle a appelé Nora, qui lui a expliqué le chemin. Lina est arrivée cinq minutes en retard. Le professeur lui a montré une chaise libre sans interrompre l'activité.",
+    "text": "À cause de travaux, le cours de français n'avait plus lieu dans la salle habituelle. Un message annonçait une salle au deuxième étage de la bibliothèque. Lina n'avait pas lu ce message. Devant la porte fermée, elle a appelé Nora, qui lui a expliqué le chemin. Lina est arrivée cinq minutes en retard. Le professeur lui a montré une chaise libre sans interrompre l'activité. Pendant la pause, elle a demandé à Nora de lui montrer le message sur son téléphone. Elle a noté le numéro de la salle dans son cahier pour le prochain cours. Les travaux allaient durer deux semaines. En sortant, les deux amies ont regardé les affiches à l'entrée de la bibliothèque.",
     "glossary": [
       {
         "french": "travaux",
@@ -2283,6 +2343,10 @@
       {
         "french": "interrompre",
         "english": "to interrupt"
+      },
+      {
+        "french": "pause",
+        "english": "break"
       }
     ],
     "questions": [
@@ -2421,7 +2485,7 @@
     "level": "A2",
     "title": "La promenade raccourcie",
     "title_en": "The shortened walk",
-    "text": "Les amis avaient prévu une longue promenade au bord de la rivière. Au départ, le ciel était clair, mais des nuages sont arrivés après une heure. Sami a consulté la météo sur son téléphone. Un orage était annoncé. Le groupe a choisi un chemin plus court pour rentrer. Ils étaient déjà au café quand la pluie a commencé. Nora a proposé de refaire la promenade une autre semaine.",
+    "text": "Les amis avaient prévu une longue promenade au bord de la rivière. Au départ, le ciel était clair, mais des nuages sont arrivés après une heure. Sami a consulté la météo sur son téléphone. Un orage était annoncé. Le groupe a choisi un chemin plus court pour rentrer. Ils étaient déjà au café quand la pluie a commencé. Nora a proposé de refaire la promenade une autre semaine. Au café, ils ont commandé des boissons chaudes et ont posé leurs manteaux sur les chaises. Sami a montré le chemin choisi sur une carte. Il passait près d'un vieux pont qu'ils ne connaissaient pas. Malgré la promenade plus courte, chacun avait découvert quelque chose. Ils sont rentrés après l'orage.",
     "glossary": [
       {
         "french": "rivière",
@@ -2434,6 +2498,10 @@
       {
         "french": "raccourci",
         "english": "shortened"
+      },
+      {
+        "french": "pont",
+        "english": "bridge"
       }
     ],
     "questions": [
@@ -2572,7 +2640,7 @@
     "level": "A2",
     "title": "L'affiche du quartier",
     "title_en": "The neighbourhood poster",
-    "text": "Nora voulait annoncer un échange de livres dans le quartier. Elle a préparé une affiche, puis l'a montrée à Sami. Il a remarqué que l'heure manquait. Nora l'a ajoutée : samedi, de dix à douze heures, devant la bibliothèque. Pour les personnes sans livres à échanger, elle a écrit qu'on pouvait simplement venir choisir un livre. Sami a trouvé cette précision accueillante.",
+    "text": "Nora voulait annoncer un échange de livres dans le quartier. Elle a préparé une affiche, puis l'a montrée à Sami. Il a remarqué que l'heure manquait. Nora l'a ajoutée : samedi, de dix à douze heures, devant la bibliothèque. Pour les personnes sans livres à échanger, elle a écrit qu'on pouvait simplement venir choisir un livre. Sami a trouvé cette précision accueillante. Elle a imprimé plusieurs exemplaires et les a déposés dans les commerces voisins. La boulangère lui a proposé une place près de la caisse. Nora a aussi demandé à deux voisins de l'aider à installer une table. Elle était contente de préparer une rencontre simple pour les lecteurs du quartier.",
     "glossary": [
       {
         "french": "échange",
@@ -2585,6 +2653,10 @@
       {
         "french": "accueillante",
         "english": "welcoming"
+      },
+      {
+        "french": "caisse",
+        "english": "checkout"
       }
     ],
     "questions": [
@@ -2723,7 +2795,7 @@
     "level": "B1",
     "title": "La clé de l'atelier",
     "title_en": "The workshop key",
-    "text": "Sami avait promis d'ouvrir l'atelier à neuf heures pour une séance de réparation. En arrivant, il a découvert qu'il avait laissé la clé chez lui. Trois voisins attendaient déjà. Au lieu de leur demander de repartir, il leur a proposé de commencer dehors par l'examen des objets. Nora a noté les réparations nécessaires pendant qu'il allait chercher la clé. À son retour, chacun savait déjà quel outil demander. Le retard avait finalement permis de mieux préparer la séance.",
+    "text": "Sami avait promis d'ouvrir l'atelier à neuf heures pour une séance de réparation. En arrivant, il a découvert qu'il avait laissé la clé chez lui. Trois voisins attendaient déjà. Au lieu de leur demander de repartir, il leur a proposé de commencer dehors par l'examen des objets. Nora a noté les réparations nécessaires pendant qu'il allait chercher la clé. À son retour, chacun savait déjà quel outil demander. Le retard avait finalement permis de mieux préparer la séance. Avant de repartir, Sami avait vérifié que personne ne restait sous la pluie. À son retour, il remercia Nora pour son aide et accrocha la clé à son sac afin de ne plus l'oublier.",
     "glossary": [
       {
         "french": "séance",
@@ -2736,6 +2808,10 @@
       {
         "french": "au lieu de",
         "english": "instead of"
+      },
+      {
+        "french": "accrocha",
+        "english": "attached"
       }
     ],
     "questions": [
@@ -2874,7 +2950,7 @@
     "level": "B1",
     "title": "Le potager commun",
     "title_en": "The shared vegetable garden",
-    "text": "Dans la cour de l'immeuble, une petite parcelle restait vide. Nora a proposé d'y planter des légumes ensemble. Certains voisins craignaient que personne ne s'occupe des plantes pendant les vacances. Elle a donc organisé un calendrier où chacun pouvait choisir une semaine. Un voisin qui ne pouvait pas jardiner a offert de récupérer l'eau de pluie. Deux mois plus tard, la première salade était prête. Ils l'ont partagée en petites portions : la récolte était modeste, mais tout le monde avait participé.",
+    "text": "Dans la cour de l'immeuble, une petite parcelle restait vide. Nora a proposé d'y planter des légumes ensemble. Certains voisins craignaient que personne ne s'occupe des plantes pendant les vacances. Elle a donc organisé un calendrier où chacun pouvait choisir une semaine. Un voisin qui ne pouvait pas jardiner a offert de récupérer l'eau de pluie. Deux mois plus tard, la première salade était prête. Ils l'ont partagée en petites portions : la récolte était modeste, mais tout le monde avait participé. Pour la prochaine récolte, les voisins décidèrent de garder le même calendrier. Ils y ajoutèrent un espace pour noter les besoins des plantes et les conseils des jardiniers les plus expérimentés.",
     "glossary": [
       {
         "french": "parcelle",
@@ -2887,6 +2963,10 @@
       {
         "french": "portion",
         "english": "portion"
+      },
+      {
+        "french": "expérimentés",
+        "english": "experienced"
       }
     ],
     "questions": [
@@ -3008,7 +3088,7 @@
           }
         ],
         "correct_option_id": "option-2",
-        "explanation": "La dernière phrase insiste sur la contribution de chacun."
+        "explanation": "Le partage de la récolte et du calendrier met en valeur la contribution de chacun."
       }
     ],
     "provenance": {
@@ -3025,7 +3105,7 @@
     "level": "B1",
     "title": "Le détour utile",
     "title_en": "The useful detour",
-    "text": "Le bus de Lina a changé de trajet à cause d'une rue fermée. Elle allait être en retard à un entretien et hésitait à descendre pour chercher un taxi. Une passagère lui a indiqué un arrêt d'où elle pourrait rejoindre le bureau à pied en dix minutes. Lina a appelé son interlocuteur pour prévenir de son retard, puis elle a suivi ce conseil. En marchant, elle a découvert que le bureau était proche d'un parc. À la fin de l'entretien, elle a pu poser une question précise sur les déplacements à vélo.",
+    "text": "Le bus de Lina a changé de trajet à cause d'une rue fermée. Elle allait être en retard à un entretien et hésitait à descendre pour chercher un taxi. Une passagère lui a indiqué un arrêt d'où elle pourrait rejoindre le bureau à pied en dix minutes. Lina a appelé son interlocuteur pour prévenir de son retard, puis elle a suivi ce conseil. En marchant, elle a découvert que le bureau était proche d'un parc. À la fin de l'entretien, elle a pu poser une question précise sur les déplacements à vélo. Son interlocuteur lui expliqua qu'un abri pour les vélos se trouvait derrière le bâtiment. Lina nota cette information : si elle obtenait ce poste, elle pourrait envisager un trajet différent de celui du bus.",
     "glossary": [
       {
         "french": "détour",
@@ -3038,6 +3118,10 @@
       {
         "french": "rejoindre",
         "english": "to reach"
+      },
+      {
+        "french": "abri",
+        "english": "shelter"
       }
     ],
     "questions": [
@@ -3176,7 +3260,7 @@
     "level": "B1",
     "title": "Le livre annoté",
     "title_en": "The annotated book",
-    "text": "À l'échange de livres, Lina a choisi un roman rempli de petites notes au crayon. Elle a d'abord pensé les effacer pour lire sans être influencée. Puis une remarque dans la marge l'a fait sourire : l'ancien lecteur avait compris une scène autrement qu'elle. Lina a continué en comparant leurs impressions. À la dernière page, elle a trouvé une adresse électronique destinée aux prochains lecteurs. Elle a envoyé un message pour expliquer son désaccord sur la fin. Deux jours plus tard, une conversation sur le roman commençait.",
+    "text": "À l'échange de livres, Lina a choisi un roman rempli de petites notes au crayon. Elle a d'abord pensé les effacer pour lire sans être influencée. Puis une remarque dans la marge l'a fait sourire : l'ancien lecteur avait compris une scène autrement qu'elle. Lina a continué en comparant leurs impressions. À la dernière page, elle a trouvé une adresse électronique destinée aux prochains lecteurs. Elle a envoyé un message pour expliquer son désaccord sur la fin. Deux jours plus tard, une conversation sur le roman commençait. Elle avait gardé toutes les notes. Certaines lui semblaient toujours étranges, mais elle aimait désormais imaginer ce lecteur inconnu, assis autrefois devant les mêmes pages.",
     "glossary": [
       {
         "french": "marge",
@@ -3189,6 +3273,10 @@
       {
         "french": "désaccord",
         "english": "disagreement"
+      },
+      {
+        "french": "étranges",
+        "english": "strange"
       }
     ],
     "questions": [
@@ -3327,7 +3415,7 @@
     "level": "B1",
     "title": "Le bruit du samedi",
     "title_en": "Saturday's noise",
-    "text": "Depuis trois samedis, Nora entendait une perceuse dans l'appartement voisin. Elle travaillait chez elle et n'arrivait plus à se concentrer. Plutôt que de laisser un message en colère, elle est allée parler à son voisin. Il réparait des meubles pour une association et ignorait qu'elle travaillait le week-end. Ils ont comparé leurs horaires. Le voisin a proposé de percer seulement entre onze et douze heures et de prévenir avant les travaux exceptionnels. Nora n'a pas obtenu le silence total, mais elle savait désormais quand organiser ses appels.",
+    "text": "Depuis trois samedis, Nora entendait une perceuse dans l'appartement voisin. Elle travaillait chez elle et n'arrivait plus à se concentrer. Plutôt que de laisser un message en colère, elle est allée parler à son voisin. Il réparait des meubles pour une association et ignorait qu'elle travaillait le week-end. Ils ont comparé leurs horaires. Le voisin a proposé de percer seulement entre onze et douze heures et de prévenir avant les travaux exceptionnels. Nora n'a pas obtenu le silence total, mais elle savait désormais quand organiser ses appels. Elle inscrivit cette heure de travaux dans son agenda. Le samedi suivant, elle profita de ce moment pour faire ses courses, puis retrouva le calme nécessaire à son travail.",
     "glossary": [
       {
         "french": "perceuse",
@@ -3340,6 +3428,10 @@
       {
         "french": "prévenir",
         "english": "to give notice"
+      },
+      {
+        "french": "agenda",
+        "english": "diary"
       }
     ],
     "questions": [
@@ -3478,7 +3570,7 @@
     "level": "B1",
     "title": "La recette de mémoire",
     "title_en": "The recipe from memory",
-    "text": "Pour un repas de quartier, Sami voulait refaire une soupe que sa grand-mère préparait. Il se souvenait des légumes, mais pas de l'ordre des étapes. Il l'a appelée en espérant recevoir une recette exacte. Elle lui a plutôt demandé de décrire les odeurs et la couleur du bouillon. Ils ont ajusté la cuisson ensemble au téléphone. La soupe n'était pas tout à fait identique à celle de son enfance. Pourtant, en la servant, Sami a raconté cette conversation avec plus de plaisir que s'il avait simplement suivi une fiche.",
+    "text": "Pour un repas de quartier, Sami voulait refaire une soupe que sa grand-mère préparait. Il se souvenait des légumes, mais pas de l'ordre des étapes. Il l'a appelée en espérant recevoir une recette exacte. Elle lui a plutôt demandé de décrire les odeurs et la couleur du bouillon. Ils ont ajusté la cuisson ensemble au téléphone. La soupe n'était pas tout à fait identique à celle de son enfance. Pourtant, en la servant, Sami a raconté cette conversation avec plus de plaisir que s'il avait simplement suivi une fiche. Sa grand-mère lui demanda ensuite si les voisins avaient aimé le repas. Sami lui répondit que plusieurs voulaient apprendre à préparer cette soupe avec lui.",
     "glossary": [
       {
         "french": "bouillon",
@@ -3491,6 +3583,10 @@
       {
         "french": "fiche",
         "english": "written sheet"
+      },
+      {
+        "french": "voulaient",
+        "english": "wanted"
       }
     ],
     "questions": [
@@ -3629,7 +3725,7 @@
     "level": "B1",
     "title": "La photo manquante",
     "title_en": "The missing photograph",
-    "text": "Pour une exposition sur leur rue, les habitants apportaient de vieilles photographies. Nora préparait les légendes et a remarqué qu'aucune image ne montrait l'ancienne petite épicerie. Sami a proposé de la dessiner à partir de leurs souvenirs. Les voisins n'étaient pas d'accord sur la couleur de la porte ni sur l'emplacement des fruits. Nora a noté leurs versions différentes sous le dessin. Le résultat n'était pas une preuve exacte du passé. Il montrait pourtant ce que chacun avait retenu d'un lieu où tous s'étaient rencontrés.",
+    "text": "Pour une exposition sur leur rue, les habitants apportaient de vieilles photographies. Nora préparait les légendes et a remarqué qu'aucune image ne montrait l'ancienne petite épicerie. Sami a proposé de la dessiner à partir de leurs souvenirs. Les voisins n'étaient pas d'accord sur la couleur de la porte ni sur l'emplacement des fruits. Nora a noté leurs versions différentes sous le dessin. Le résultat n'était pas une preuve exacte du passé. Il montrait pourtant ce que chacun avait retenu d'un lieu où tous s'étaient rencontrés. Pendant l'installation, une habitante ajouta le souvenir du bruit de la clochette. Nora lui réserva aussi une place dans la légende, sans modifier les autres témoignages.",
     "glossary": [
       {
         "french": "légende",
@@ -3642,6 +3738,10 @@
       {
         "french": "retenir",
         "english": "to remember"
+      },
+      {
+        "french": "clochette",
+        "english": "little bell"
       }
     ],
     "questions": [
@@ -3780,7 +3880,7 @@
     "level": "B1",
     "title": "L'invitation tardive",
     "title_en": "The late invitation",
-    "text": "Lina avait accepté d'aider une association le même samedi qu'une fête à laquelle Nora l'invitait. Elle faillit répondre qu'elle était malade pour éviter une explication. Puis elle écrivit simplement qu'elle avait déjà un engagement, mais souhaitait passer plus tard. Nora proposa de garder une part du repas et de lui envoyer l'heure du dernier bus. Lina arriva après le dessert, encore vêtue du tee-shirt de l'association. Personne ne lui reprocha son retard : on lui demanda plutôt de raconter sa journée.",
+    "text": "Lina avait accepté d'aider une association le même samedi qu'une fête à laquelle Nora l'invitait. Elle faillit répondre qu'elle était malade pour éviter une explication. Puis elle écrivit simplement qu'elle avait déjà un engagement, mais souhaitait passer plus tard. Nora proposa de garder une part du repas et de lui envoyer l'heure du dernier bus. Lina arriva après le dessert, encore vêtue du tee-shirt de l'association. Personne ne lui reprocha son retard : on lui demanda plutôt de raconter sa journée. En rentrant, elle se félicita d'avoir répondu honnêtement. Elle avait pu tenir sa promesse à l'association et retrouver ses amis, même pour une visite plus courte.",
     "glossary": [
       {
         "french": "engagement",
@@ -3793,6 +3893,10 @@
       {
         "french": "faillir",
         "english": "to nearly do"
+      },
+      {
+        "french": "honnêtement",
+        "english": "honestly"
       }
     ],
     "questions": [
@@ -3931,7 +4035,7 @@
     "level": "B2",
     "title": "Une place qui change",
     "title_en": "A changing square",
-    "text": "La municipalité souhaitait remplacer quelques places de stationnement par des arbres. Lors de la réunion, Sami défendait le projet, tandis qu'une commerçante craignait de perdre des clients. Au lieu de répondre que ses inquiétudes étaient exagérées, il lui demanda comment ses clients arrivaient habituellement. Elle reconnut ne pas disposer de chiffres. Lui non plus n'avait vérifié ses hypothèses. Ils proposèrent alors un aménagement provisoire accompagné d'une enquête. Leur accord ne portait pas encore sur la transformation définitive de la place, mais sur la manière de décider sans confondre impressions et observations.",
+    "text": "La municipalité souhaitait remplacer quelques places de stationnement par des arbres. Lors de la réunion, Sami défendait le projet, tandis qu'une commerçante craignait de perdre des clients. Au lieu de répondre que ses inquiétudes étaient exagérées, il lui demanda comment ses clients arrivaient habituellement. Elle reconnut ne pas disposer de chiffres. Lui non plus n'avait vérifié ses hypothèses. Ils proposèrent alors un aménagement provisoire accompagné d'une enquête. Leur accord ne portait pas encore sur la transformation définitive de la place, mais sur la manière de décider sans confondre impressions et observations. Avant de partir, ils fixèrent une date pour examiner les réponses ensemble. La commerçante souhaitait notamment entendre les clients qui venaient à pied sans jamais parler du stationnement.",
     "glossary": [
       {
         "french": "aménagement",
@@ -3944,6 +4048,10 @@
       {
         "french": "hypothèse",
         "english": "assumption"
+      },
+      {
+        "french": "examiner",
+        "english": "to examine"
       }
     ],
     "questions": [
@@ -4082,7 +4190,7 @@
     "level": "B2",
     "title": "Le message trop bref",
     "title_en": "The overly brief message",
-    "text": "Après avoir reçu un simple « À revoir » sur son rapport, Nora pensa que sa responsable rejetait tout son travail. Elle passa la soirée à préparer une nouvelle version, supprimant même des passages utiles. Le lendemain, elle demanda enfin quelles parties posaient problème. Sa responsable parlait uniquement du tableau final, dont les chiffres étaient illisibles sur un petit écran. Elles convinrent désormais de distinguer les corrections de fond des problèmes de présentation. Nora regretta le temps perdu, mais retint surtout qu'une demande de précision aurait été plus utile qu'une interprétation immédiate du ton.",
+    "text": "Après avoir reçu un simple « À revoir » sur son rapport, Nora pensa que sa responsable rejetait tout son travail. Elle passa la soirée à préparer une nouvelle version, supprimant même des passages utiles. Le lendemain, elle demanda enfin quelles parties posaient problème. Sa responsable parlait uniquement du tableau final, dont les chiffres étaient illisibles sur un petit écran. Elles convinrent désormais de distinguer les corrections de fond des problèmes de présentation. Nora regretta le temps perdu, mais retint surtout qu'une demande de précision aurait été plus utile qu'une interprétation immédiate du ton. Elle nota cette question dans son carnet pour la prochaine réunion. Sa responsable proposa, de son côté, d'accompagner chaque remarque brève d'un exemple précis.",
     "glossary": [
       {
         "french": "fond",
@@ -4095,6 +4203,10 @@
       {
         "french": "convenir de",
         "english": "to agree on"
+      },
+      {
+        "french": "d'accompagner",
+        "english": "to accompany"
       }
     ],
     "questions": [
@@ -4233,7 +4345,7 @@
     "level": "B2",
     "title": "Le tarif solidaire",
     "title_en": "The solidarity price",
-    "text": "L'atelier proposait un tarif réduit, mais presque personne ne le demandait. Certains bénévoles concluaient que cette aide était inutile. Lina soupçonnait plutôt que la démarche mettait les visiteurs mal à l'aise : il fallait expliquer sa situation devant tout le monde. Elle proposa une fiche où chacun choisirait discrètement parmi trois tarifs, sans justification publique. Le mois suivant, davantage de personnes utilisèrent le tarif réduit, tandis que d'autres payèrent un peu plus. Les recettes restèrent proches des précédentes. L'équipe comprit que l'absence de demandes ne prouvait pas l'absence de besoins.",
+    "text": "L'atelier proposait un tarif réduit, mais presque personne ne le demandait. Certains bénévoles concluaient que cette aide était inutile. Lina soupçonnait plutôt que la démarche mettait les visiteurs mal à l'aise : il fallait expliquer sa situation devant tout le monde. Elle proposa une fiche où chacun choisirait discrètement parmi trois tarifs, sans justification publique. Le mois suivant, davantage de personnes utilisèrent le tarif réduit, tandis que d'autres payèrent un peu plus. Les recettes restèrent proches des précédentes. L'équipe comprit que l'absence de demandes ne prouvait pas l'absence de besoins. Les bénévoles conservèrent donc le nouveau système. Ils décidèrent aussi de demander discrètement aux visiteurs si la fiche était facile à comprendre et à utiliser.",
     "glossary": [
       {
         "french": "tarif",
@@ -4246,6 +4358,10 @@
       {
         "french": "justification",
         "english": "explanation"
+      },
+      {
+        "french": "discrètement",
+        "english": "discreetly"
       }
     ],
     "questions": [
@@ -4384,7 +4500,7 @@
     "level": "B2",
     "title": "Le tableau de résultats",
     "title_en": "The results chart",
-    "text": "Sami devait présenter les résultats d'un programme de lecture. Le tableau montrait une forte progression moyenne, et il préparait déjà un titre enthousiaste. En examinant les données, Nora remarqua que plusieurs débutants avaient quitté le programme et n'apparaissaient plus dans le calcul final. Cela ne signifiait pas que le programme était inefficace, mais la comparaison devenait moins simple. Ils ajoutèrent le nombre de participants à chaque étape et présentèrent séparément les résultats des personnes restées jusqu'au bout. Le titre fut moins spectaculaire. Il permettait en revanche aux lecteurs de comprendre ce qui avait réellement été mesuré.",
+    "text": "Sami devait présenter les résultats d'un programme de lecture. Le tableau montrait une forte progression moyenne, et il préparait déjà un titre enthousiaste. En examinant les données, Nora remarqua que plusieurs débutants avaient quitté le programme et n'apparaissaient plus dans le calcul final. Cela ne signifiait pas que le programme était inefficace, mais la comparaison devenait moins simple. Ils ajoutèrent le nombre de participants à chaque étape et présentèrent séparément les résultats des personnes restées jusqu'au bout. Le titre fut moins spectaculaire. Il permettait en revanche aux lecteurs de comprendre ce qui avait réellement été mesuré. Lors de la présentation, plusieurs collègues demandèrent comment recueillir l'avis des personnes parties. Cette question ouvrait une autre enquête, que le tableau actuel ne pouvait pas remplacer.",
     "glossary": [
       {
         "french": "moyenne",
@@ -4397,6 +4513,10 @@
       {
         "french": "mesurer",
         "english": "to measure"
+      },
+      {
+        "french": "recueillir",
+        "english": "to gather"
       }
     ],
     "questions": [
@@ -4535,7 +4655,7 @@
     "level": "B2",
     "title": "La traduction du panneau",
     "title_en": "The translated sign",
-    "text": "Pour accueillir davantage de visiteurs, la bibliothèque avait fait traduire son règlement. Une phrase indiquant qu'on pouvait emprunter trois documents était devenue, dans une version, une obligation d'en prendre exactement trois. Lina s'en aperçut lorsqu'un lecteur chercha un troisième livre qu'il ne voulait pas vraiment. Plutôt que de corriger uniquement cette phrase, elle fit tester les panneaux avec plusieurs personnes. D'autres ambiguïtés apparurent, y compris dans le texte français. La traduction avait révélé que certaines consignes semblaient évidentes surtout à ceux qui connaissaient déjà le fonctionnement de la bibliothèque.",
+    "text": "Pour accueillir davantage de visiteurs, la bibliothèque avait fait traduire son règlement. Une phrase indiquant qu'on pouvait emprunter trois documents était devenue, dans une version, une obligation d'en prendre exactement trois. Lina s'en aperçut lorsqu'un lecteur chercha un troisième livre qu'il ne voulait pas vraiment. Plutôt que de corriger uniquement cette phrase, elle fit tester les panneaux avec plusieurs personnes. D'autres ambiguïtés apparurent, y compris dans le texte français. La traduction avait révélé que certaines consignes semblaient évidentes surtout à ceux qui connaissaient déjà le fonctionnement de la bibliothèque. L'équipe invita alors des lecteurs récemment inscrits à proposer leurs propres formulations. Leurs essais servirent à préparer une version plus claire pour tous.",
     "glossary": [
       {
         "french": "emprunter",
@@ -4548,6 +4668,10 @@
       {
         "french": "ambiguïté",
         "english": "ambiguity"
+      },
+      {
+        "french": "formulations",
+        "english": "wordings"
       }
     ],
     "questions": [
@@ -4686,7 +4810,7 @@
     "level": "B2",
     "title": "La salle réservée",
     "title_en": "The booked room",
-    "text": "Deux associations avaient reçu une confirmation pour la même salle le même soir. La première préparait un concert, la seconde une réunion avec des habitants qui ne pouvaient pas revenir facilement. Chacune estimait sa réservation prioritaire. Nora, chargée de l'accueil, leur demanda de décrire leurs besoins concrets plutôt que de comparer la valeur de leurs activités. Le concert exigeait une bonne acoustique ; la réunion, un accès sans escalier. Une salle voisine convenait au concert, à condition d'y déplacer quelques chaises. La solution ne désignait pas un gagnant : elle séparait des contraintes qu'on avait d'abord prises pour une rivalité.",
+    "text": "Deux associations avaient reçu une confirmation pour la même salle le même soir. La première préparait un concert, la seconde une réunion avec des habitants qui ne pouvaient pas revenir facilement. Chacune estimait sa réservation prioritaire. Nora, chargée de l'accueil, leur demanda de décrire leurs besoins concrets plutôt que de comparer la valeur de leurs activités. Le concert exigeait une bonne acoustique ; la réunion, un accès sans escalier. Une salle voisine convenait au concert, à condition d'y déplacer quelques chaises. La solution ne désignait pas un gagnant : elle séparait des contraintes qu'on avait d'abord prises pour une rivalité. Nora inscrivit la nouvelle répartition sur le planning et demanda aux deux équipes de la confirmer. Cette vérification devait éviter qu'un malentendu pratique ne relance leur conflit.",
     "glossary": [
       {
         "french": "acoustique",
@@ -4699,6 +4823,10 @@
       {
         "french": "rivalité",
         "english": "rivalry"
+      },
+      {
+        "french": "répartition",
+        "english": "allocation"
       }
     ],
     "questions": [
@@ -4820,7 +4948,7 @@
           }
         ],
         "correct_option_id": "option-2",
-        "explanation": "La dernière phrase oppose adaptation concrète et rivalité."
+        "explanation": "La solution distingue les besoins concrets des deux associations au lieu de chercher un gagnant."
       }
     ],
     "provenance": {
@@ -4837,7 +4965,7 @@
     "level": "B2",
     "title": "La promesse de livraison",
     "title_en": "The delivery promise",
-    "text": "Une petite entreprise promettait désormais une livraison dès le lendemain. Les commandes augmentaient, mais l'équipe terminait de plus en plus tard. Sami proposa de conserver ce délai uniquement pour les articles déjà prêts et d'annoncer un délai plus long pour les commandes particulières. Une collègue craignait que les clients partent ailleurs. Ils testèrent cette présentation pendant deux semaines. Quelques clients renoncèrent, mais les réclamations diminuèrent et les horaires redevinrent prévisibles. Le bilan n'était donc pas une victoire sur tous les indicateurs. Il rendait simplement visible le prix d'une promesse qu'on avait jusque-là présentée comme gratuite.",
+    "text": "Une petite entreprise promettait désormais une livraison dès le lendemain. Les commandes augmentaient, mais l'équipe terminait de plus en plus tard. Sami proposa de conserver ce délai uniquement pour les articles déjà prêts et d'annoncer un délai plus long pour les commandes particulières. Une collègue craignait que les clients partent ailleurs. Ils testèrent cette présentation pendant deux semaines. Quelques clients renoncèrent, mais les réclamations diminuèrent et les horaires redevinrent prévisibles. Le bilan n'était donc pas une victoire sur tous les indicateurs. Il rendait simplement visible le prix d'une promesse qu'on avait jusque-là présentée comme gratuite. L'équipe conserva les délais différenciés et prévit un nouveau bilan. Elle souhaitait vérifier que la baisse des réclamations durerait au-delà des deux semaines d'essai.",
     "glossary": [
       {
         "french": "délai",
@@ -4850,6 +4978,10 @@
       {
         "french": "renoncer",
         "english": "to decide not to proceed"
+      },
+      {
+        "french": "au-delà",
+        "english": "beyond"
       }
     ],
     "questions": [
@@ -4988,7 +5120,7 @@
     "level": "B2",
     "title": "Le siège vide",
     "title_en": "The empty seat",
-    "text": "À chaque réunion, une chaise restait réservée aux personnes absentes du débat : celles qui utiliseraient le service sans participer à sa conception. Au début, Sami trouvait ce symbole un peu théâtral. Puis l'équipe proposa un formulaire disponible uniquement en ligne. Nora désigna la chaise et demanda comment une personne sans connexion ferait sa demande. Personne ne sut répondre immédiatement. La chaise ne remplaçait évidemment pas une consultation réelle. Elle avait néanmoins interrompu une décision qui risquait d'exclure certains usagers. L'équipe invita ensuite plusieurs habitants à tester deux modes d'inscription, numérique et papier.",
+    "text": "À chaque réunion, une chaise restait réservée aux personnes absentes du débat : celles qui utiliseraient le service sans participer à sa conception. Au début, Sami trouvait ce symbole un peu théâtral. Puis l'équipe proposa un formulaire disponible uniquement en ligne. Nora désigna la chaise et demanda comment une personne sans connexion ferait sa demande. Personne ne sut répondre immédiatement. La chaise ne remplaçait évidemment pas une consultation réelle. Elle avait néanmoins interrompu une décision qui risquait d'exclure certains usagers. L'équipe invita ensuite plusieurs habitants à tester deux modes d'inscription, numérique et papier. Sami proposa de noter les difficultés rencontrées pendant ces essais. La prochaine réunion pourrait ainsi s'appuyer sur des observations plutôt que sur la seule force du symbole.",
     "glossary": [
       {
         "french": "usager",
@@ -5001,6 +5133,10 @@
       {
         "french": "inscription",
         "english": "registration"
+      },
+      {
+        "french": "essais",
+        "english": "trials"
       }
     ],
     "questions": [
@@ -5139,7 +5275,7 @@
     "level": "C1",
     "title": "Le compte rendu parfait",
     "title_en": "The perfect minutes",
-    "text": "Le compte rendu de la réunion était si fluide qu'on n'y retrouvait plus aucun désaccord. Nora, qui l'avait rédigé, pensait avoir facilité la lecture en regroupant les interventions. Sami lui fit pourtant remarquer qu'une réserve sur le financement apparaissait désormais comme un simple détail technique. Il ne demandait pas que chaque hésitation soit transcrite, mais que les décisions restent distinguées des questions encore ouvertes. Nora rétablit donc les conditions attachées à l'accord. Le texte devint un peu moins élégant. Il évita toutefois que, trois semaines plus tard, quelqu'un puisse invoquer un consensus dont aucun participant n'avait réellement accepté la portée.",
+    "text": "Le compte rendu de la réunion était si fluide qu'on n'y retrouvait plus aucun désaccord. Nora, qui l'avait rédigé, pensait avoir facilité la lecture en regroupant les interventions. Sami lui fit pourtant remarquer qu'une réserve sur le financement apparaissait désormais comme un simple détail technique. Il ne demandait pas que chaque hésitation soit transcrite, mais que les décisions restent distinguées des questions encore ouvertes. Nora rétablit donc les conditions attachées à l'accord. Le texte devint un peu moins élégant. Il évita toutefois que, trois semaines plus tard, quelqu'un puisse invoquer un consensus dont aucun participant n'avait réellement accepté la portée. Elle transmit la version corrigée aux participants pour vérification avant de l'archiver.",
     "glossary": [
       {
         "french": "compte rendu",
@@ -5152,6 +5288,10 @@
       {
         "french": "portée",
         "english": "scope"
+      },
+      {
+        "french": "l'archiver",
+        "english": "to archive it"
       }
     ],
     "questions": [
@@ -5290,7 +5430,7 @@
     "level": "C1",
     "title": "L'expérience sans témoin",
     "title_en": "The experiment without a comparison group",
-    "text": "Le nouveau dispositif d'accueil avait fait baisser le temps d'attente, et l'équipe s'apprêtait à le généraliser. Lina releva cependant que l'expérimentation s'était déroulée pendant les vacances, lorsque la fréquentation diminuait habituellement. Cette observation fut d'abord perçue comme une critique du travail accompli. Elle précisa qu'elle cherchait à savoir quelle part de l'amélioration pouvait être attribuée au dispositif, non à nier les efforts de ses collègues. Ils décidèrent de prolonger l'essai sur une période plus chargée et de comparer des journées de fréquentation similaire. L'annonce d'un succès définitif fut reportée ; la possibilité d'une amélioration réelle, elle, resta entière.",
+    "text": "Le nouveau dispositif d'accueil avait fait baisser le temps d'attente, et l'équipe s'apprêtait à le généraliser. Lina releva cependant que l'expérimentation s'était déroulée pendant les vacances, lorsque la fréquentation diminuait habituellement. Cette observation fut d'abord perçue comme une critique du travail accompli. Elle précisa qu'elle cherchait à savoir quelle part de l'amélioration pouvait être attribuée au dispositif, non à nier les efforts de ses collègues. Ils décidèrent de prolonger l'essai sur une période plus chargée et de comparer des journées de fréquentation similaire. L'annonce d'un succès définitif fut reportée ; la possibilité d'une amélioration réelle, elle, resta entière. Lina proposa également de consigner les critères de comparaison avant le prochain relevé, afin que l'équipe ne retienne pas ensuite les seules journées favorables à sa conclusion.",
     "glossary": [
       {
         "french": "dispositif",
@@ -5303,6 +5443,10 @@
       {
         "french": "attribuer",
         "english": "to attribute"
+      },
+      {
+        "french": "consigner",
+        "english": "to record"
       }
     ],
     "questions": [
@@ -5441,7 +5585,7 @@
     "level": "C1",
     "title": "Les mots de la fermeture",
     "title_en": "The words of closure",
-    "text": "L'affiche annonçait une « optimisation des espaces », sans préciser que la petite salle de lecture allait fermer. Nora proposa de nommer directement ce changement et d'en expliquer les raisons. On lui objecta qu'un vocabulaire plus positif éviterait d'inquiéter les habitants. Elle répondit qu'une inquiétude fondée sur une information claire permettrait au moins des questions précises. La nouvelle version indiqua la fermeture, le calendrier et les solutions envisagées. Les réactions furent plus nombreuses, parfois critiques. Pourtant, lors de la réunion suivante, les échanges portèrent sur l'accès aux livres plutôt que sur le sentiment d'avoir été tenu à l'écart. Le ton était moins confortable ; le désaccord, plus utile.",
+    "text": "L'affiche annonçait une « optimisation des espaces », sans préciser que la petite salle de lecture allait fermer. Nora proposa de nommer directement ce changement et d'en expliquer les raisons. On lui objecta qu'un vocabulaire plus positif éviterait d'inquiéter les habitants. Elle répondit qu'une inquiétude fondée sur une information claire permettrait au moins des questions précises. La nouvelle version indiqua la fermeture, le calendrier et les solutions envisagées. Les réactions furent plus nombreuses, parfois critiques. Pourtant, lors de la réunion suivante, les échanges portèrent sur l'accès aux livres plutôt que sur le sentiment d'avoir été tenu à l'écart. Le ton était moins confortable ; le désaccord, plus utile. Nora conserva les deux versions pour expliquer ce choix rédactionnel à ses collègues.",
     "glossary": [
       {
         "french": "tenir à l'écart",
@@ -5454,6 +5598,10 @@
       {
         "french": "fondé",
         "english": "well-founded"
+      },
+      {
+        "french": "rédactionnel",
+        "english": "editorial"
       }
     ],
     "questions": [
@@ -5559,7 +5707,7 @@
       },
       {
         "id": "q6",
-        "prompt": "Comment comprendre la dernière opposition ?",
+        "prompt": "Comment comprendre « Le ton était moins confortable ; le désaccord, plus utile » ?",
         "options": [
           {
             "id": "option-1",
@@ -5592,7 +5740,7 @@
     "level": "C1",
     "title": "L'experte du quotidien",
     "title_en": "The everyday expert",
-    "text": "Pour concevoir une nouvelle borne, l'équipe avait consulté plusieurs spécialistes de l'accessibilité. Sami suggéra d'inviter aussi une habitante qui utilisait chaque semaine le service avec ses parents. Elle ne connaissait pas le vocabulaire technique et craignait de n'avoir rien à apporter. Pendant le test, elle expliqua pourtant qu'une consigne obligeait son père à choisir trop vite avant que l'écran ne revienne au début. Les experts avaient vérifié les contrastes et la taille des caractères, mais pas cette séquence d'usage. Sa remarque ne remplaçait pas leur expertise ; elle la déplaçait vers une difficulté concrète. L'équipe modifia le délai, puis refit le test avec plusieurs utilisateurs.",
+    "text": "Pour concevoir une nouvelle borne, l'équipe avait consulté plusieurs spécialistes de l'accessibilité. Sami suggéra d'inviter aussi une habitante qui utilisait chaque semaine le service avec ses parents. Elle ne connaissait pas le vocabulaire technique et craignait de n'avoir rien à apporter. Pendant le test, elle expliqua pourtant qu'une consigne obligeait son père à choisir trop vite avant que l'écran ne revienne au début. Les experts avaient vérifié les contrastes et la taille des caractères, mais pas cette séquence d'usage. Sa remarque ne remplaçait pas leur expertise ; elle la déplaçait vers une difficulté concrète. L'équipe modifia le délai, puis refit le test avec plusieurs utilisateurs. L'habitante demanda à recevoir les résultats ; elle souhaitait savoir si d'autres personnes avaient rencontré la même difficulté.",
     "glossary": [
       {
         "french": "borne",
@@ -5605,6 +5753,10 @@
       {
         "french": "délai",
         "english": "time allowance"
+      },
+      {
+        "french": "rencontré",
+        "english": "encountered"
       }
     ],
     "questions": [
@@ -5743,7 +5895,7 @@
     "level": "C1",
     "title": "Le retour des questionnaires",
     "title_en": "The returned questionnaires",
-    "text": "Le questionnaire sur les horaires avait obtenu un taux de satisfaction impressionnant. Nora demanda où il avait été distribué. Uniquement à l'entrée, pendant les heures d'ouverture : les personnes auxquelles les horaires ne convenaient pas avaient donc peu de chances de répondre. Il ne s'agissait pas d'inventer leur avis pour corriger les résultats. L'équipe ajouta plutôt des exemplaires dans deux lieux voisins ouverts le soir et publia les limites du premier recueil. Les réponses suivantes furent moins uniformes. Ce contraste ne rendait pas le travail initial inutile ; il montrait surtout que la manière de poser une question décide aussi de ceux à qui l'on donne effectivement la parole.",
+    "text": "Le questionnaire sur les horaires avait obtenu un taux de satisfaction impressionnant. Nora demanda où il avait été distribué. Uniquement à l'entrée, pendant les heures d'ouverture : les personnes auxquelles les horaires ne convenaient pas avaient donc peu de chances de répondre. Il ne s'agissait pas d'inventer leur avis pour corriger les résultats. L'équipe ajouta plutôt des exemplaires dans deux lieux voisins ouverts le soir et publia les limites du premier recueil. Les réponses suivantes furent moins uniformes. Ce contraste ne rendait pas le travail initial inutile ; il montrait surtout que la manière de poser une question décide aussi de ceux à qui l'on donne effectivement la parole. Nora joignit donc au bilan une description précise des lieux et des heures de distribution.",
     "glossary": [
       {
         "french": "recueil",
@@ -5756,6 +5908,10 @@
       {
         "french": "uniforme",
         "english": "uniform"
+      },
+      {
+        "french": "distribution",
+        "english": "distribution"
       }
     ],
     "questions": [
@@ -5894,7 +6050,7 @@
     "level": "C1",
     "title": "La phrase prêtée",
     "title_en": "The borrowed remark",
-    "text": "Dans son article sur l'atelier, Lina avait cité Sami : « Nous ne pouvons pas continuer ainsi. » Sortie de la conversation, la phrase semblait annoncer un abandon. Or il parlait du rangement des outils, non de l'activité elle-même. Avant publication, elle lui envoya le passage pour vérifier le contexte. Il ne demanda pas d'effacer toute critique, mais de rétablir son objet. Lina remplaça donc l'introduction dramatique par une description du problème matériel. L'article perdit une formule frappante et gagna une information vérifiable. Elle comprit que citer exactement les mots ne suffisait pas toujours à restituer exactement ce qu'une personne avait voulu dire.",
+    "text": "Dans son article sur l'atelier, Lina avait cité Sami : « Nous ne pouvons pas continuer ainsi. » Sortie de la conversation, la phrase semblait annoncer un abandon. Or il parlait du rangement des outils, non de l'activité elle-même. Avant publication, elle lui envoya le passage pour vérifier le contexte. Il ne demanda pas d'effacer toute critique, mais de rétablir son objet. Lina remplaça donc l'introduction dramatique par une description du problème matériel. L'article perdit une formule frappante et gagna une information vérifiable. Elle comprit que citer exactement les mots ne suffisait pas toujours à restituer exactement ce qu'une personne avait voulu dire. Sami valida le nouveau passage, qui conservait sa critique tout en la situant correctement.",
     "glossary": [
       {
         "french": "frappant",
@@ -5907,6 +6063,10 @@
       {
         "french": "objet",
         "english": "subject or scope"
+      },
+      {
+        "french": "valida",
+        "english": "approved"
       }
     ],
     "questions": [
@@ -6045,7 +6205,7 @@
     "level": "C1",
     "title": "L'accord sous réserve",
     "title_en": "The conditional agreement",
-    "text": "La réunion semblait avoir abouti : chacun avait hoché la tête lorsque le calendrier fut présenté. Dans le couloir, Nora entendit pourtant deux participants expliquer qu'ils n'avaient accepté qu'à condition d'obtenir du personnel supplémentaire. Cette condition n'avait pas été reprise dans la conclusion. Elle demanda donc un bref échange écrit où chaque service préciserait ce qu'il pouvait réellement garantir. Certaines échéances durent être revues. Le responsable craignit d'abord de perdre l'élan collectif, puis reconnut que cet enthousiasme aurait été fragile s'il avait reposé sur des engagements incompatibles. L'accord final fut moins rapide à annoncer, mais plus facile à mettre en œuvre.",
+    "text": "La réunion semblait avoir abouti : chacun avait hoché la tête lorsque le calendrier fut présenté. Dans le couloir, Nora entendit pourtant deux participants expliquer qu'ils n'avaient accepté qu'à condition d'obtenir du personnel supplémentaire. Cette condition n'avait pas été reprise dans la conclusion. Elle demanda donc un bref échange écrit où chaque service préciserait ce qu'il pouvait réellement garantir. Certaines échéances durent être revues. Le responsable craignit d'abord de perdre l'élan collectif, puis reconnut que cet enthousiasme aurait été fragile s'il avait reposé sur des engagements incompatibles. L'accord final fut moins rapide à annoncer, mais plus facile à mettre en œuvre. Nora conserva les réserves avec le calendrier, afin qu'elles restent accessibles lors des prochaines étapes.",
     "glossary": [
       {
         "french": "sous réserve",
@@ -6058,6 +6218,10 @@
       {
         "french": "élan",
         "english": "momentum"
+      },
+      {
+        "french": "accessibles",
+        "english": "accessible"
       }
     ],
     "questions": [
@@ -6196,7 +6360,7 @@
     "level": "C1",
     "title": "La dernière question",
     "title_en": "The last question",
-    "text": "À la fin de sa présentation, Sami demanda si quelqu'un avait une question. Le silence lui parut confirmer la clarté de son exposé. Puis une collègue suggéra que chacun écrive anonymement ce qui lui manquait pour utiliser le nouvel outil. Les papiers révélèrent plusieurs difficultés très concrètes. Certaines personnes n'avaient pas voulu retarder la séance ; d'autres pensaient que leur question était trop élémentaire. Sami reprit les points principaux sans chercher à identifier leurs auteurs. Lors de la séance suivante, il remplaça la formule habituelle par une courte tâche pratique. Il ne cherchait plus seulement l'absence de questions, mais une preuve de compréhension.",
+    "text": "À la fin de sa présentation, Sami demanda si quelqu'un avait une question. Le silence lui parut confirmer la clarté de son exposé. Puis une collègue suggéra que chacun écrive anonymement ce qui lui manquait pour utiliser le nouvel outil. Les papiers révélèrent plusieurs difficultés très concrètes. Certaines personnes n'avaient pas voulu retarder la séance ; d'autres pensaient que leur question était trop élémentaire. Sami reprit les points principaux sans chercher à identifier leurs auteurs. Lors de la séance suivante, il remplaça la formule habituelle par une courte tâche pratique. Il ne cherchait plus seulement l'absence de questions, mais une preuve de compréhension. Les résultats de cette tâche lui permettraient de préparer les explications dont le groupe avait encore besoin.",
     "glossary": [
       {
         "french": "exposé",
@@ -6209,6 +6373,10 @@
       {
         "french": "anonymement",
         "english": "anonymously"
+      },
+      {
+        "french": "tâche",
+        "english": "task"
       }
     ],
     "questions": [
@@ -6347,7 +6515,7 @@
     "level": "C2",
     "title": "Le procès-verbal du silence",
     "title_en": "The record of silence",
-    "text": "On avait inscrit au procès-verbal que personne ne s'était opposé à la fermeture. La formule était irréprochable : aucune opposition n'avait été exprimée pendant les trois minutes réservées aux remarques, après deux heures d'une réunion dont la moitié des participants était déjà partie. Nora ne contesta pas l'exactitude de la phrase ; elle en contesta l'usage. Qu'une objection n'eût pas été formulée ne permettait pas, selon elle, de transformer l'épuisement d'une assemblée en assentiment. Le président accepta qu'on ajoute les circonstances du vote, tout en regrettant une précision qu'il jugeait superflue. Lorsque le document circula, ce furent pourtant ces quelques lignes qui amenèrent plusieurs absents à demander une nouvelle discussion. Le procès-verbal n'avait pas changé les faits. Il avait cessé de leur faire dire davantage qu'ils ne disaient.",
+    "text": "On avait inscrit au procès-verbal que personne ne s'était opposé à la fermeture. La formule était irréprochable : aucune opposition n'avait été exprimée pendant les trois minutes réservées aux remarques, après deux heures d'une réunion dont la moitié des participants était déjà partie. Nora ne contesta pas l'exactitude de la phrase ; elle en contesta l'usage. Qu'une objection n'eût pas été formulée ne permettait pas, selon elle, de transformer l'épuisement d'une assemblée en assentiment. Le président accepta qu'on ajoute les circonstances du vote, tout en regrettant une précision qu'il jugeait superflue. Lorsque le document circula, ce furent pourtant ces quelques lignes qui amenèrent plusieurs absents à demander une nouvelle discussion. Le procès-verbal n'avait pas changé les faits. Il avait cessé de leur faire dire davantage qu'ils ne disaient. Nora conserva cet ajout dans la version archivée.",
     "glossary": [
       {
         "french": "procès-verbal",
@@ -6360,6 +6528,10 @@
       {
         "french": "superflu",
         "english": "unnecessary"
+      },
+      {
+        "french": "archivée",
+        "english": "archived"
       }
     ],
     "questions": [
@@ -6465,7 +6637,7 @@
       },
       {
         "id": "q6",
-        "prompt": "Que signifie la dernière phrase ?",
+        "prompt": "Que signifie « Il avait cessé de leur faire dire davantage » ?",
         "options": [
           {
             "id": "option-1",
@@ -6498,7 +6670,7 @@
     "level": "C2",
     "title": "La marge blanche",
     "title_en": "The white margin",
-    "text": "Pour l'exposition, Sami avait voulu que chaque photographie fût accompagnée d'une légende définitive. Une image résistait : trois personnes devant une boutique disparue, dont nul ne reconnaissait avec certitude le propriétaire. Les témoignages s'accordaient sur le lieu et divergeaient dès qu'il fallait nommer les visages. On lui suggéra de retenir la version la plus souvent répétée. Il la trouva plausible, mais s'aperçut qu'elle remontait à un seul récit, repris ensuite par tous. Il laissa donc une marge blanche, où les visiteurs pourraient proposer une identification en indiquant d'où ils la tenaient. Certains regrettèrent ce qu'ils prenaient pour une lacune. D'autres s'arrêtèrent précisément là, devant cette hésitation rendue visible. À la clôture, aucun nom n'était établi ; en revanche, l'histoire de la photographie était devenue plus riche que la certitude qu'on s'apprêtait à lui prêter.",
+    "text": "Pour l'exposition, Sami avait voulu que chaque photographie fût accompagnée d'une légende définitive. Une image résistait : trois personnes devant une boutique disparue, dont nul ne reconnaissait avec certitude le propriétaire. Les témoignages s'accordaient sur le lieu et divergeaient dès qu'il fallait nommer les visages. On lui suggéra de retenir la version la plus souvent répétée. Il la trouva plausible, mais s'aperçut qu'elle remontait à un seul récit, repris ensuite par tous. Il laissa donc une marge blanche, où les visiteurs pourraient proposer une identification en indiquant d'où ils la tenaient. Certains regrettèrent ce qu'ils prenaient pour une lacune. D'autres s'arrêtèrent précisément là, devant cette hésitation rendue visible. À la clôture, aucun nom n'était établi ; en revanche, l'histoire de la photographie était devenue plus riche que la certitude qu'on s'apprêtait à lui prêter. Sami conserva les propositions, sans en faire une légende définitive.",
     "glossary": [
       {
         "french": "lacune",
@@ -6511,6 +6683,10 @@
       {
         "french": "tenir de",
         "english": "to have learned from"
+      },
+      {
+        "french": "définitive",
+        "english": "definitive"
       }
     ],
     "questions": [
@@ -6649,7 +6825,7 @@
     "level": "C2",
     "title": "Le confort des indicateurs",
     "title_en": "The comfort of indicators",
-    "text": "Le service avait réduit son délai moyen de réponse, résultat que le tableau de bord affichait en vert. Lina aurait volontiers célébré ce progrès si les courriers les plus complexes n'avaient pas été reclassés dans une catégorie exclue du calcul. Rien n'avait été inventé ; la définition de l'indicateur avait simplement changé. Invitée à présenter le bilan, elle juxtaposa les deux méthodes au lieu de choisir celle qui embellissait la courbe. On lui reprocha de rendre le message illisible. Elle répondit que la lisibilité d'une hausse ne dispensait pas d'en préciser l'objet. La comparaison rétablie montrait une amélioration plus faible, mais réelle, pour une partie des demandes. Le directeur renonça au slogan prévu. Il conserva le tableau, désormais moins rassurant et plus apte à orienter le travail qui restait à faire.",
+    "text": "Le service avait réduit son délai moyen de réponse, résultat que le tableau de bord affichait en vert. Lina aurait volontiers célébré ce progrès si les courriers les plus complexes n'avaient pas été reclassés dans une catégorie exclue du calcul. Rien n'avait été inventé ; la définition de l'indicateur avait simplement changé. Invitée à présenter le bilan, elle juxtaposa les deux méthodes au lieu de choisir celle qui embellissait la courbe. On lui reprocha de rendre le message illisible. Elle répondit que la lisibilité d'une hausse ne dispensait pas d'en préciser l'objet. La comparaison rétablie montrait une amélioration plus faible, mais réelle, pour une partie des demandes. Le directeur renonça au slogan prévu. Il conserva le tableau, désormais moins rassurant et plus apte à orienter le travail qui restait à faire. Lina joignit les définitions au bilan pour les comparaisons suivantes.",
     "glossary": [
       {
         "french": "tableau de bord",
@@ -6662,6 +6838,10 @@
       {
         "french": "dispenser de",
         "english": "to exempt from"
+      },
+      {
+        "french": "définitions",
+        "english": "definitions"
       }
     ],
     "questions": [
@@ -6800,7 +6980,7 @@
     "level": "C2",
     "title": "Le traducteur et la promesse",
     "title_en": "The translator and the promise",
-    "text": "Le contrat affirmait que le partenaire « s'efforcerait » de livrer avant vendredi. Dans la version destinée au client, la nuance avait disparu : la livraison y était présentée comme certaine. Sami signala l'écart, et on lui demanda s'il était vraiment nécessaire d'alourdir une phrase aussi simple. Il proposa deux formulations également claires, l'une portant sur un engagement ferme, l'autre sur une obligation de moyens. Ce qui gênait n'était plus la longueur du texte, mais la nécessité de choisir entre ces deux promesses. La discussion remonta jusqu'à la responsable du projet, qui confirma qu'aucune garantie ne pouvait être donnée. Le message final fut moins séduisant. Lorsqu'un retard survint, il fallut encore l'expliquer ; on n'eut toutefois pas à expliquer pourquoi une certitude avait été annoncée là où personne ne l'avait consentie.",
+    "text": "Le contrat affirmait que le partenaire « s'efforcerait » de livrer avant vendredi. Dans la version destinée au client, la nuance avait disparu : la livraison y était présentée comme certaine. Sami signala l'écart, et on lui demanda s'il était vraiment nécessaire d'alourdir une phrase aussi simple. Il proposa deux formulations également claires, l'une portant sur un engagement ferme, l'autre sur une obligation de moyens. Ce qui gênait n'était plus la longueur du texte, mais la nécessité de choisir entre ces deux promesses. La discussion remonta jusqu'à la responsable du projet, qui confirma qu'aucune garantie ne pouvait être donnée. Le message final fut moins séduisant. Lorsqu'un retard survint, il fallut encore l'expliquer ; on n'eut toutefois pas à expliquer pourquoi une certitude avait été annoncée là où personne ne l'avait consentie. Sami conserva les deux formulations dans le dossier du projet.",
     "glossary": [
       {
         "french": "s'efforcer",
@@ -6813,6 +6993,10 @@
       {
         "french": "consentir",
         "english": "to agree to"
+      },
+      {
+        "french": "dossier",
+        "english": "file"
       }
     ],
     "questions": [
@@ -6951,7 +7135,7 @@
     "level": "C2",
     "title": "La voix du bâtiment",
     "title_en": "The building's voice",
-    "text": "On disait que le bâtiment avait toujours été silencieux. Nora, chargée d'en recueillir la mémoire avant sa transformation, entendit pourtant parler d'un atelier de couture, de cours du soir et d'une radio qui couvrait autrefois le bruit des machines. Le silence appartenait aux photographies, non aux souvenirs. Elle renonça à composer une chronologie sans aspérités et installa, près de chaque image, plusieurs récits parfois incompatibles. Un visiteur lui demanda quelle était la vraie version. Elle indiqua ce que les archives permettaient d'établir, puis ce qui demeurait une perception singulière. Ce partage ne résolvait pas toutes les contradictions. Il empêchait seulement que la netteté d'un récit unique fît passer pour naturelle une sélection dont on avait oublié les critères. Le bâtiment, à mesure qu'on renonçait à parler d'une seule voix en son nom, retrouvait un peu de son bruit.",
+    "text": "On disait que le bâtiment avait toujours été silencieux. Nora, chargée d'en recueillir la mémoire avant sa transformation, entendit pourtant parler d'un atelier de couture, de cours du soir et d'une radio qui couvrait autrefois le bruit des machines. Le silence appartenait aux photographies, non aux souvenirs. Elle renonça à composer une chronologie sans aspérités et installa, près de chaque image, plusieurs récits parfois incompatibles. Un visiteur lui demanda quelle était la vraie version. Elle indiqua ce que les archives permettaient d'établir, puis ce qui demeurait une perception singulière. Ce partage ne résolvait pas toutes les contradictions. Il empêchait seulement que la netteté d'un récit unique fît passer pour naturelle une sélection dont on avait oublié les critères. Le bâtiment, à mesure qu'on renonçait à parler d'une seule voix en son nom, retrouvait un peu de son bruit. Nora laissa aussi aux visiteurs un espace pour leurs récits.",
     "glossary": [
       {
         "french": "aspérité",
@@ -6964,6 +7148,10 @@
       {
         "french": "netteté",
         "english": "apparent clarity"
+      },
+      {
+        "french": "récits",
+        "english": "accounts"
       }
     ],
     "questions": [
@@ -7069,7 +7257,7 @@
       },
       {
         "id": "q6",
-        "prompt": "Comment comprendre le retour du bruit final ?",
+        "prompt": "Comment comprendre le retour du bruit dans le bâtiment ?",
         "options": [
           {
             "id": "option-1",
@@ -7102,7 +7290,7 @@
     "level": "C2",
     "title": "Le prix du compromis",
     "title_en": "The price of compromise",
-    "text": "À force de chercher une formulation acceptable par tous, le groupe avait produit un accord auquel chacun pouvait donner un sens différent. Pour les uns, « progressivement » signifiait dès le mois prochain ; pour les autres, lorsque le financement serait acquis. Lina proposa de remplacer ce mot commode par des étapes, des responsables et des conditions de passage. On lui reprocha de rouvrir une négociation enfin terminée. Elle reconnut qu'une part d'ambiguïté avait permis de poursuivre le dialogue, mais ajouta que ce qui aide à conclure peut ensuite empêcher d'agir. L'accord révisé compta deux réserves explicites et une échéance reportée. Aucun communiqué ne célébra une unanimité parfaite. Lorsque vint la première difficulté, on sut pourtant qui devait décider, sur quelles informations et dans quelle limite : ce que la formule initiale avait précisément permis de ne pas dire.",
+    "text": "À force de chercher une formulation acceptable par tous, le groupe avait produit un accord auquel chacun pouvait donner un sens différent. Pour les uns, « progressivement » signifiait dès le mois prochain ; pour les autres, lorsque le financement serait acquis. Lina proposa de remplacer ce mot commode par des étapes, des responsables et des conditions de passage. On lui reprocha de rouvrir une négociation enfin terminée. Elle reconnut qu'une part d'ambiguïté avait permis de poursuivre le dialogue, mais ajouta que ce qui aide à conclure peut ensuite empêcher d'agir. L'accord révisé compta deux réserves explicites et une échéance reportée. Aucun communiqué ne célébra une unanimité parfaite. Lorsque vint la première difficulté, on sut pourtant qui devait décider, sur quelles informations et dans quelle limite : ce que la formule initiale avait précisément permis de ne pas dire. Lina conserva les réserves dans le document transmis aux responsables.",
     "glossary": [
       {
         "french": "commode",
@@ -7115,6 +7303,10 @@
       {
         "french": "échéance",
         "english": "deadline"
+      },
+      {
+        "french": "transmis",
+        "english": "passed on"
       }
     ],
     "questions": [
@@ -7253,7 +7445,7 @@
     "level": "C2",
     "title": "La question de trop",
     "title_en": "The question too many",
-    "text": "La conférence touchait à sa fin lorsqu'un participant demanda sur quelles données reposait l'expression « tous les habitants ». L'oratrice, qui venait de présenter les résultats d'une enquête auprès des usagers inscrits, y vit d'abord une querelle de mots. Elle rappela le nombre élevé de réponses, puis s'arrêta : l'ampleur d'un échantillon ne lui conférait pas à elle seule le droit de parler au nom de ceux qu'il ne pouvait atteindre. Elle corrigea sa phrase sans renier les observations recueillies. Dans le compte rendu, Nora conserva ce bref retour sur le vocabulaire. Certains auraient préféré ne retenir que la conclusion brillante. Elle jugea que la correction montrait mieux la qualité du travail : non une absence miraculeuse d'erreur, mais la capacité de restreindre une affirmation lorsque sa portée excédait ses raisons.",
+    "text": "La conférence touchait à sa fin lorsqu'un participant demanda sur quelles données reposait l'expression « tous les habitants ». L'oratrice, qui venait de présenter les résultats d'une enquête auprès des usagers inscrits, y vit d'abord une querelle de mots. Elle rappela le nombre élevé de réponses, puis s'arrêta : l'ampleur d'un échantillon ne lui conférait pas à elle seule le droit de parler au nom de ceux qu'il ne pouvait atteindre. Elle corrigea sa phrase sans renier les observations recueillies. Dans le compte rendu, Nora conserva ce bref retour sur le vocabulaire. Certains auraient préféré ne retenir que la conclusion brillante. Elle jugea que la correction montrait mieux la qualité du travail : non une absence miraculeuse d'erreur, mais la capacité de restreindre une affirmation lorsque sa portée excédait ses raisons. L'oratrice relut ce passage et en confirma la formulation corrigée.",
     "glossary": [
       {
         "french": "querelle",
@@ -7266,6 +7458,10 @@
       {
         "french": "renier",
         "english": "to disavow"
+      },
+      {
+        "french": "relut",
+        "english": "reread"
       }
     ],
     "questions": [
@@ -7371,7 +7567,7 @@
       },
       {
         "id": "q6",
-        "prompt": "Quel contraste ferme le récit ?",
+        "prompt": "Quel contraste apparaît dans la réflexion de Nora ?",
         "options": [
           {
             "id": "option-1",
@@ -7404,7 +7600,7 @@
     "level": "C2",
     "title": "Ce qui reste à décider",
     "title_en": "What remains to be decided",
-    "text": "Lorsqu'on lui remit les clés du nouvel atelier, Nora trouva sur la table une enveloppe portant ces mots : « Pour la personne qui saura quoi en faire. » Elle crut d'abord à une consigne différée, peut-être au règlement que l'ancien responsable n'avait pas osé imposer. L'enveloppe contenait une liste de difficultés, chacune suivie de deux solutions contradictoires et d'une question. Aucun choix n'était entouré. Au bas de la page, une dernière phrase précisait : « Ce que nous n'avons pas résolu n'est pas nécessairement ce que vous résoudrez de la même façon. » Nora faillit classer ce document parmi les travaux inachevés. Puis elle comprit que la transmission consistait peut-être moins à remettre des réponses qu'à rendre les hésitations discutables. Elle ajouta la date, laissa une marge pour les prochains lecteurs et posa les clés à côté de la première question. L'atelier pouvait ouvrir sans que son histoire fût déclarée close.",
+    "text": "Lorsqu'on lui remit les clés du nouvel atelier, Nora trouva sur la table une enveloppe portant ces mots : « Pour la personne qui saura quoi en faire. » Elle crut d'abord à une consigne différée, au règlement que l'ancien responsable n'avait pas osé imposer. L'enveloppe contenait une liste de difficultés, chacune suivie de deux solutions contradictoires et d'une question. Aucun choix n'était entouré. Au bas de la page, une phrase précisait : « Ce que nous n'avons pas résolu n'est pas nécessairement ce que vous résoudrez de la même façon. » Nora faillit classer ce document parmi les travaux inachevés. Puis elle comprit que la transmission consistait peut-être moins à remettre des réponses qu'à rendre les hésitations discutables. Elle ajouta la date, laissa une marge pour les prochains lecteurs et posa les clés à côté de la question. L'atelier pouvait ouvrir sans que son histoire fût déclarée close.",
     "glossary": [
       {
         "french": "consigne différée",
@@ -7417,6 +7613,10 @@
       {
         "french": "discutable",
         "english": "open to discussion"
+      },
+      {
+        "french": "marge",
+        "english": "margin"
       }
     ],
     "questions": [
