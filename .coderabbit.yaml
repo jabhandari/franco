@@ -1,0 +1,90 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# DRAFT v2 for SnJTwoTales/franco — not committed, not installed.
+# Prepared 2026-10-15 (spike: coderabbit-codex-fallback-spike-2026-10-15.md).
+# Supersedes the 2026-10-14 draft: free tier is now 1 PR review/dev/hr
+# (not 4), so this config is quota-defensive. If Juhi approves, this file
+# goes to the repo root as .coderabbit.yaml via a PR for Samyak's review.
+
+language: "en-US"
+tone_instructions: >-
+  Be direct and concise. Flag bugs, security issues, and violations of the
+  path instructions below. Do not comment on formatting or style that the
+  repo's lint:ui already covers, and do not suggest refactors that do not
+  fix a concrete problem.
+
+reviews:
+  profile: "chill"
+  # Advisory only: CodeRabbit comments, humans decide. It should never
+  # submit a blocking "request changes" review on this repo.
+  request_changes_workflow: false
+  poem: false
+  high_level_summary: true
+  auto_review:
+    enabled: true
+    # Drafts are not reviewed — open as draft while iterating, mark ready
+    # when you want the (single) review event spent.
+    drafts: false
+    auto_incremental_review: true
+    # CHANGED from the v1 draft (was 0 = never pause). At 1 free review
+    # per developer per hour, unlimited incremental reviews burn the
+    # whole pool on one active PR. Pause after 2 reviewed pushes, then
+    # resume deliberately with "@coderabbitai review" when a round is
+    # actually wanted.
+    auto_pause_after_reviewed_commits: 2
+    ignore_title_keywords:
+      - "WIP"
+      - "docs:"
+      - "chore:"
+  path_filters:
+    - "!**/*.lock"
+    - "!package-lock.json"
+    - "!dist/**"
+    # Generated / data files: files-per-review (150 on Free) is counted
+    # AFTER filters, so excluding these protects big content PRs.
+    - "!previews/**"
+    - "!normalized-content.json"
+  path_instructions:
+    - path: "src/**"
+      instructions: |
+        Franco UI rules (from the repo AGENTS.md — flag violations):
+        - Components use the repo's Box/Text primitives only. Raw HTML
+          intrinsics in components are a violation (this broke PR #32's
+          Streak.jsx and Samyak caught it in review).
+        - Global concerns use the app-wide library solution, never a
+          hand-rolled local version: theme is next-themes + useTheme.
+        - No card-in-card / boxed dashboard layouts; content sits on the
+          page background, separated by whitespace and hairlines.
+        - No on/off slider or switch controls. Binary settings are
+          tappable rows with a check-circle state.
+        - Whole cards that act as controls must be clickable across
+          their full surface, not just an inner button.
+        - No developer/data-source captions inside app screens.
+    - path: "src/styles.css"
+      instructions: |
+        - Use the token and class names already in this file; do not
+          invent parallel names. New names follow the file's pattern.
+        - Layout geometry is shared by light and dark themes; dark
+          overrides are colour-only. Both themes use the broad
+          (1440px-capped) layout.
+    - path: "server/**"
+      instructions: |
+        - API keys and secrets live in server environment only and must
+          never appear in client code, responses, or logs.
+        - Content review-queue endpoints stay key-gated: non-published
+          lists and approve/publish/reject actions require the
+          content:review key check.
+    - path: "**/*.test.*"
+      instructions: |
+        Tests must cover the behaviour change in the PR, not just the
+        happy path. Flag PRs that change src/ behaviour with no test
+        change and no explanation in the PR description.
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "**/AGENTS.md"
+      - ".agents/skills/**/SKILL.md"
+
+chat:
+  auto_reply: true

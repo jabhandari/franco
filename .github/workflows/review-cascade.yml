@@ -1,0 +1,171 @@
+# Review cascade router (FRA-157)
+#
+# Layer 1 — CodeRabbit (free tier: 1 PR review per author per hour).
+#   EVERY open PR is in the review queue by default — no label, no
+#   GitHub trip, no human step. This matters because many PRs here are
+#   opened by agents (Codex / Muse) on a human's behalf: the author
+#   should never have to visit GitHub to get their PR reviewed.
+#   The hourly sweep spends each author's CodeRabbit slot on their
+#   oldest unreviewed PR (non-drafts first), so the rolling hourly
+#   allowance is never lost while PRs are waiting. A PR counts as
+#   reviewed at its current head when a dispatch marker for that head
+#   SHA exists on it, or CodeRabbit has already reviewed that head.
+#   Opt a PR out of the cascade with the `no-cascade` label.
+#
+# Layer 2 — Greptile. When CodeRabbit reports it is rate-limited on a
+#   PR, the escalation job hands that PR to Greptile.
+#
+# Layers 3+ (cubic, Korbit, Codex native review) are MANUAL-trigger
+# for now: each vendor's exhaustion signal still has to be verified
+# in trials (FRA-157 open questions) before it can drive an automatic
+# hand-off. Do not add trigger syntax for them until it is verified.
+
+name: Review cascade router
+
+on:
+  schedule:
+    # Hourly sweep, 7 minutes past the hour.
+    - cron: "7 * * * *"
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  # ------------------------------------------------------------------
+  # Hourly sweep: one CodeRabbit review per author per run.
+  # ------------------------------------------------------------------
+  sweep:
+    name: Hourly CodeRabbit sweep
+    if: vars.REVIEW_CASCADE_ENABLED == 'true' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Dispatch oldest unreviewed PR per author to CodeRabbit
+        run: |
+          set -euo pipefail
+
+          # Every open PR is queued by default. Opt-outs carry the
+          # `no-cascade` label. Non-drafts go first (they are the ones
+          # awaiting review); drafts follow, oldest first within each
+          # group, because agent-opened PRs must not need a human to
+          # visit GitHub before they can be reviewed.
+          queued=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open \
+            --limit 200 \
+            --json number,author,createdAt,isDraft,headRefOid,labels)
+
+          # One PR per author per run: CodeRabbit's free allowance is
+          # 1 review per author per hour, so dispatching more than one
+          # per author would just hit the rate limit. Candidates stream
+          # in per-author priority order (non-drafts first, oldest first)
+          # and the first PR per author that is still eligible at its
+          # current head takes that author's slot — an
+          # already-dispatched/reviewed oldest PR must not starve the
+          # author's newer PRs.
+          declare -A slot_taken=()
+          echo "$queued" | jq -c '
+            map(select(.labels | map(.name) | index("no-cascade") | not))
+            | sort_by([.author.login, .isDraft, .createdAt])
+            | .[]
+          ' | while IFS= read -r pr; do
+            number=$(echo "$pr" | jq -r '.number')
+            author=$(echo "$pr" | jq -r '.author.login')
+            sha=$(echo "$pr" | jq -r '.headRefOid')
+
+            # This author's slot is already spent this run.
+            if [[ -n "${slot_taken[$author]:-}" ]]; then
+              continue
+            fi
+
+            # Already dispatched for this exact head? A later PR by the
+            # same author may still be eligible — keep looking. Markers
+            # are authenticated: only the workflow's own dispatch
+            # comments (github-actions[bot]) count, so a contributor
+            # cannot forge a marker to suppress a review. Both checks
+            # paginate so records past the first 100 are not missed.
+            #
+            # Capture each API result before searching it: piping a
+            # paginated `gh api` straight into `grep -q` fails under
+            # `pipefail` — grep exits on its first match, gh then dies
+            # writing the remaining pages (EPIPE/SIGPIPE, exit 141), the
+            # `if` misreads the PR as not dispatched, and the sweep
+            # posts a duplicate review. A failed API call skips the PR
+            # for this run (the next hourly run retries) instead of
+            # dispatching on unknown state.
+            if ! dispatch_comments=$(gh api --paginate "repos/$GITHUB_REPOSITORY/issues/$number/comments?per_page=100" \
+                 --jq '.[] | select(.user.login == "github-actions[bot]") | .body'); then
+              echo "Warning: could not list comments on PR #$number; skipping it this run."
+              continue
+            fi
+            if grep -Fq "review-cascade coderabbit-slot: $author @ $sha" <<< "$dispatch_comments"; then
+              echo "PR #$number already dispatched at $sha; trying $author's next PR."
+              continue
+            fi
+
+            # CodeRabbit already reviewed this exact head on its own
+            # (e.g. its automatic review on PR open)? Never spend a
+            # second review on the same head — try the next PR.
+            if ! reviewed_heads=$(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$number/reviews?per_page=100" \
+                 --jq '.[] | select(.user.login == "coderabbitai[bot]") | .commit_id'); then
+              echo "Warning: could not list reviews on PR #$number; skipping it this run."
+              continue
+            fi
+            if grep -Fxq "$sha" <<< "$reviewed_heads"; then
+              echo "PR #$number already reviewed by CodeRabbit at $sha; trying $author's next PR."
+              continue
+            fi
+
+            echo "CodeRabbit slot: PR #$number (author: $author, head: $sha)"
+            gh pr comment "$number" --repo "$GITHUB_REPOSITORY" --body "Review cascade: hourly CodeRabbit slot for @${author}.
+
+          @coderabbitai review
+
+          <!-- review-cascade coderabbit-slot: ${author} @ ${sha} -->"
+
+            gh pr edit "$number" --repo "$GITHUB_REPOSITORY" \
+              --add-label review-active || true
+            slot_taken[$author]=1
+          done
+
+  # ------------------------------------------------------------------
+  # Escalation: CodeRabbit rate-limited -> hand off to Greptile.
+  # Layers 3+ stay manual until their exhaustion signals are verified
+  # (see the note at the top of this file).
+  # ------------------------------------------------------------------
+  escalation:
+    name: CodeRabbit exhausted - hand off to Greptile
+    if: vars.REVIEW_CASCADE_ENABLED == 'true' && github.event_name == 'issue_comment' && github.event.issue.pull_request != null && github.event.comment.user.login == 'coderabbitai[bot]' && contains(github.event.comment.body, 'rate limit')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: review-cascade-escalation-${{ github.event.issue.number }}
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Hand off to Greptile (layer 2)
+        run: |
+          set -euo pipefail
+          number="${{ github.event.issue.number }}"
+          echo "CodeRabbit rate-limited on PR #$number; handing off to Greptile."
+
+          # The sweep excludes `no-cascade` PRs; the escalation must too.
+          # A maintainer may opt a PR out after dispatch — never hand an
+          # opted-out PR to the next layer.
+          if gh pr view "$number" --repo "$GITHUB_REPOSITORY" --json labels \
+               --jq '.labels[].name' | grep -Fxq "no-cascade"; then
+            echo "PR #$number carries no-cascade; skipping Greptile handoff."
+            exit 0
+          fi
+
+          gh pr comment "$number" --repo "$GITHUB_REPOSITORY" --body "Review cascade: CodeRabbit is rate-limited on this PR, so the review is handing off to the next layer.
+
+          @greptileai please review this pull request.
+
+          <!-- review-cascade layer: greptile -->"
+
+          gh pr edit "$number" --repo "$GITHUB_REPOSITORY" \
+            --add-label review-layer-2
