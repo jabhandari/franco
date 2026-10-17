@@ -482,13 +482,14 @@ async function main() {
               try {
                 if (req.method === 'GET' && u.pathname === '/api/me/puzzles') return json(res, 200, await puzzleSummary(x.id));
                 if (req.method === 'POST' && u.pathname === '/api/me/puzzles/verb-sprint/runs') return json(res, 201, await startVerbSprint(x.id));
-                const sprintMatch = u.pathname.match(/^\/api\/me\/puzzles\/verb-sprint\/runs\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})(?:\/(answer|end))?$/);
-                if (sprintMatch && req.method === 'GET' && !sprintMatch[2]) return json(res, 200, await getVerbSprint(x.id, sprintMatch[1]));
+                const sprintMatch = u.pathname.match(/^\/api\/me\/puzzles\/verb-sprint\/runs\/([A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12})(?:\/(answer|end))?$/);
+                const sprintRunId = sprintMatch?.[1].toLowerCase();
+                if (sprintMatch && req.method === 'GET' && !sprintMatch[2]) return json(res, 200, await getVerbSprint(x.id, sprintRunId));
                 if (sprintMatch && req.method === 'POST' && sprintMatch[2] === 'answer') {
                   const submission = await body(req);
-                  return json(res, 200, await answerVerbSprint(x.id, sprintMatch[1], submission.question_id, submission.response));
+                  return json(res, 200, await answerVerbSprint(x.id, sprintRunId, submission.question_id, submission.response));
                 }
-                if (sprintMatch && req.method === 'POST' && sprintMatch[2] === 'end') return json(res, 200, await endVerbSprint(x.id, sprintMatch[1]));
+                if (sprintMatch && req.method === 'POST' && sprintMatch[2] === 'end') return json(res, 200, await endVerbSprint(x.id, sprintRunId));
                 if (req.method === 'POST' && u.pathname === '/api/me/puzzles/runs') {
                   const config = await body(req);
                   return json(res, 201, await startPuzzle(x.id, config.lives, config.minutes));
