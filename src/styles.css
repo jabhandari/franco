@@ -2365,11 +2365,10 @@ html:not([data-theme="light"]) .ui-success-message { color:#86efac; }
 @media(max-width:650px) { .auth-direction-b { padding:20px 16px; align-items:start; } .auth-b-card { grid-template-columns:minmax(0,1fr); } .auth-b-rail { padding:20px 24px; } .auth-b-rail h1, .auth-b-values, .auth-b-saved { display:none; } .auth-b-form { padding:24px; } }
 @media(max-width:380px) { .auth-b-name-row { grid-template-columns:minmax(0,1fr); } }
 
-/* FRA-96: shell-level language help. Reserve a row so the trigger overlaps no content. */
-html[data-theme] .language-tools-enabled .main-content { padding-top:80px; }
-.language-tools-button { position:fixed; z-index:45; top:16px; right:20px; width:42px; height:42px; display:grid; place-items:center; border:0; border-radius:50%; background:var(--color-sidebar); color:var(--color-sidebar-text); box-shadow:0 4px 12px color-mix(in srgb,var(--color-text) 12%,transparent); }
+/* Shell-level language help, above mobile navigation and device safe areas. */
+.language-tools-button { position:fixed; z-index:45; bottom:calc(20px + env(safe-area-inset-bottom)); right:max(20px,env(safe-area-inset-right)); width:42px; height:42px; display:grid; place-items:center; border:0; border-radius:50%; background:var(--color-sidebar); color:var(--color-sidebar-text); box-shadow:0 4px 12px color-mix(in srgb,var(--color-text) 12%,transparent); }
 .language-mode-dot { position:absolute; top:1px; right:1px; width:7px; height:7px; border-radius:50%; background:var(--color-accent); border:1px solid var(--color-background); }
-.language-menu { position:fixed; z-index:46; top:68px; right:20px; width:250px; max-width:calc(100vw - 32px); padding:8px; border:1px solid var(--color-border); border-radius:var(--radius-control); background:var(--color-surface); box-shadow:0 8px 30px color-mix(in srgb,var(--color-text) 12%,transparent); }
+.language-menu { position:fixed; z-index:46; bottom:calc(72px + env(safe-area-inset-bottom)); right:max(20px,env(safe-area-inset-right)); max-height:calc(100dvh - 88px - env(safe-area-inset-bottom)); overflow-y:auto; width:250px; max-width:calc(100vw - 32px); padding:8px; border:1px solid var(--color-border); border-radius:var(--radius-control); background:var(--color-surface); box-shadow:0 8px 30px color-mix(in srgb,var(--color-text) 12%,transparent); }
 .language-menu button { display:flex; justify-content:space-between; align-items:center; width:100%; padding:10px; border:0; border-radius:6px; color:var(--color-text); background:transparent; font-size:13px; text-align:left; }
 .language-menu button.checked { background:color-mix(in srgb,var(--color-accent) 12%,transparent); }
 .language-check { display:grid; place-items:center; width:20px; height:20px; color:var(--palette-white); background:var(--color-accent); border-radius:50%; }
@@ -2405,7 +2404,7 @@ html[data-theme] .language-tools-enabled .main-content { padding-top:80px; }
 .language-bubble > small { font-size:10px; color:var(--color-muted); }
 .language-bubble .language-result { margin-top:10px; }
 .language-bubble .language-result p { font-size:16px; }
-@media(max-width:680px) { .language-tools-button { top:76px; right:16px; } .language-menu { top:126px; right:16px; } .language-panel { top:var(--phone-header-height); bottom:var(--phone-tabs-height); padding-top:38px; } }
+@media(max-width:680px) { .language-tools-button { bottom:calc(var(--phone-tabs-height) + env(safe-area-inset-bottom) + 16px); right:max(16px,env(safe-area-inset-right)); } .language-menu { bottom:calc(var(--phone-tabs-height) + env(safe-area-inset-bottom) + 68px); right:max(16px,env(safe-area-inset-right)); max-height:calc(100dvh - var(--phone-header-height) - var(--phone-tabs-height) - env(safe-area-inset-bottom) - 84px); } .language-panel { top:var(--phone-header-height); bottom:var(--phone-tabs-height); padding-top:38px; } }
 .language-tools { position:fixed; z-index:70; width:0; height:0; }
 .language-bubble { max-height:min(320px,calc(100dvh - 24px)); max-width:calc(100vw - 24px); overflow-y:auto; }
 
