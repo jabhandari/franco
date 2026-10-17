@@ -1,0 +1,102 @@
+# Review cascade router (FRA-157)
+#
+# Layer 1 — CodeRabbit (free tier: 1 PR review per author per hour).
+#   The hourly sweep spends each author's CodeRabbit slot on their
+#   oldest queued PR, so the rolling hourly allowance is never lost
+#   while PRs are waiting. PRs join the queue with the `review-queued`
+#   label; the sweep moves them to `review-active` once dispatched.
+#
+# Layer 2 — Greptile. When CodeRabbit reports it is rate-limited on a
+#   PR, the escalation job hands that PR to Greptile.
+#
+# Layers 3+ (cubic, Korbit, Codex native review) are MANUAL-trigger
+# for now: each vendor's exhaustion signal still has to be verified
+# in trials (FRA-157 open questions) before it can drive an automatic
+# hand-off. Do not add trigger syntax for them until it is verified.
+
+name: Review cascade router
+
+on:
+  schedule:
+    # Hourly sweep, 7 minutes past the hour.
+    - cron: "7 * * * *"
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  # ------------------------------------------------------------------
+  # Hourly sweep: one CodeRabbit review per author per run.
+  # ------------------------------------------------------------------
+  sweep:
+    name: Hourly CodeRabbit sweep
+    if: vars.REVIEW_CASCADE_ENABLED == 'true' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Dispatch oldest queued PR per author to CodeRabbit
+        run: |
+          set -euo pipefail
+
+          # Open, non-draft PRs waiting in the review queue.
+          queued=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open \
+            --label review-queued --limit 200 \
+            --json number,author,createdAt,isDraft)
+
+          # One PR per author: the oldest queued one. CodeRabbit's free
+          # allowance is 1 review per author per hour, so dispatching
+          # more than one per author would just hit the rate limit.
+          echo "$queued" | jq -c '
+            [.[] | select(.isDraft == false)]
+            | group_by(.author.login)
+            | map(min_by(.createdAt))
+            | .[]
+          ' | while IFS= read -r pr; do
+            number=$(echo "$pr" | jq -r '.number')
+            author=$(echo "$pr" | jq -r '.author.login')
+            echo "CodeRabbit slot: PR #$number (author: $author)"
+
+            gh pr comment "$number" --repo "$GITHUB_REPOSITORY" --body "Review cascade: hourly CodeRabbit slot for @${author}.
+
+          @coderabbitai review
+
+          <!-- review-cascade coderabbit-slot: ${author} -->"
+
+            gh pr edit "$number" --repo "$GITHUB_REPOSITORY" \
+              --remove-label review-queued --add-label review-active
+          done
+
+  # ------------------------------------------------------------------
+  # Escalation: CodeRabbit rate-limited -> hand off to Greptile.
+  # Layers 3+ stay manual until their exhaustion signals are verified
+  # (see the note at the top of this file).
+  # ------------------------------------------------------------------
+  escalation:
+    name: CodeRabbit exhausted - hand off to Greptile
+    if: vars.REVIEW_CASCADE_ENABLED == 'true' && github.event_name == 'issue_comment' && github.event.issue.pull_request != null && github.event.comment.user.login == 'coderabbitai[bot]' && contains(github.event.comment.body, 'rate limit')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: review-cascade-escalation-${{ github.event.issue.number }}
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Hand off to Greptile (layer 2)
+        run: |
+          set -euo pipefail
+          number="${{ github.event.issue.number }}"
+          echo "CodeRabbit rate-limited on PR #$number; handing off to Greptile."
+
+          gh pr comment "$number" --repo "$GITHUB_REPOSITORY" --body "Review cascade: CodeRabbit is rate-limited on this PR, so the review is handing off to the next layer.
+
+          @greptileai please review this pull request.
+
+          <!-- review-cascade layer: greptile -->"
+
+          gh pr edit "$number" --repo "$GITHUB_REPOSITORY" \
+            --add-label review-layer-2
