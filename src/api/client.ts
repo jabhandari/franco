@@ -1,3 +1,4 @@
+import type { CurriculumLesson } from '../types';
 // Canonical API boundary types for the franco backend (server/index.js).
 // FRA-61 owns these: every view consumes the API through the helpers at the
 // bottom of this file. Other wave-2 tickets may define local copies of these
@@ -562,6 +563,9 @@ export type ContentBatchDetail = {
 /** The metadata_json seeded per concept (scripts/seed-concepts.mjs): theory
  *  and examples are [label, text, ...] / [french, english] string pairs. */
 export type ConceptMetadata = {
+  lesson?: CurriculumLesson;
+  review_status?: string;
+  subtopics?: {subtopic_id: string; title: string}[];
   theory: string[][];
   vocabulary: string[];
   examples: string[][];
