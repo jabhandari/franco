@@ -103,7 +103,7 @@ paths:
               required: [question_id, response]
               properties:
                 question_id: { type: string }
-                response: { type: string, description: Opaque choice token from the current question }
+                response: { type: string, maxLength: 100, description: Opaque choice token from the current question }
       responses:
         '200': { description: Correctness, revealed answer, updated run and next question; timed_out when the server timer has expired }
         '400': { description: Invalid choice }
