@@ -97,3 +97,6 @@ export { ProductTour } from './ProductTour';
 export { WelcomeHighlights } from './WelcomeHighlights';
 
 export { StoryPath } from './StoryPath';
+export type { StoryPathProps } from './StoryPath';
+export { StoryTrophyShelf } from './StoryTrophyShelf';
+export type { StoryTrophyShelfProps } from './StoryTrophyShelf';
