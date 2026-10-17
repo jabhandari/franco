@@ -197,6 +197,7 @@ ALTER TABLE public.learner_lesson_positions ENABLE ROW LEVEL SECURITY;
   await query("INSERT INTO schema_migrations(version) VALUES('content-v1') ON CONFLICT(version) DO NOTHING");
   await pool.query(await readFile(new URL('../supabase/migrations/202610150002_curriculum_editorial.sql', import.meta.url), 'utf8'));
   await pool.query(await readFile(new URL('../supabase/migrations/20261015042641_learner_story_progress.sql', import.meta.url), 'utf8'));
+  await pool.query(await readFile(new URL('../supabase/migrations/20261017_words_of_the_day.sql', import.meta.url), 'utf8'));
   if (process.env.CONTENT_API_KEY) {
     const hash = createHash('sha256').update(process.env.CONTENT_API_KEY).digest('hex');
     await query("INSERT INTO content_api_keys(id,key_hash,name,scopes) VALUES(?,?,?,?) ON CONFLICT(key_hash) DO NOTHING", [createHash('sha256').update(`id:${hash}`).digest('hex'), hash, 'environment-content-key', ['content:write', 'content:review']]);

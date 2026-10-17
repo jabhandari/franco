@@ -109,6 +109,48 @@ paths:
       responses:
         '200': { description: Authoritative final or current state }
         '401': { description: Not seated in this race }
+  /api/content/v1/vocab-words:
+    get:
+      parameters:
+        - in: query
+          name: level
+          required: true
+          schema: { enum: [A1, A2, B1, B2, C1, C2] }
+      description: The published Words of the Day word bank for one level (FRA-153). Every word carries an English gloss and a bilingual example sentence. Public read.
+      responses:
+        '200': { description: Level and its words (id, word, level, gloss, part_of_speech, example_fr, example_en, source) }
+        '400': { description: Missing or invalid level }
+  /api/me/words/today:
+    get:
+      security: [{ LearnerSession: [] }]
+      parameters:
+        - in: query
+          name: tz
+          schema: { type: string }
+          description: Learner IANA timezone; the daily set is frozen per learner-local date.
+      description: The learner's frozen set of 5 words for today (FRA-154) at their current level, with 10 generated practice questions and the day's saved practice state. Recycled words (pool exhausted) are flagged is_recycled. First request of the day creates and freezes the set.
+      responses:
+        '200': { description: Date, level, words, questions (choices shuffled, no answer keys), answered map, answered_count, total_questions, completed }
+        '401': { description: Authentication required }
+  /api/me/words/answers:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Grade one Words of the Day answer server-side and store it in word_practice_answers only. Deliberately separate from /api/me/attempts — word practice never counts toward the daily streak.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [question_id, choice_id]
+              properties:
+                question_id: { type: string }
+                choice_id: { type: string, description: Id of the chosen word (choices carry word ids) }
+                tz: { type: string }
+      responses:
+        '200': { description: correct, correct_choice_id, answered_count, total_questions, completed }
+        '400': { description: Question is not part of today's set, or ids missing }
+        '401': { description: Authentication required }
   /api/me/stories:
     get:
       security: [{ LearnerSession: [] }]

@@ -1,4 +1,5 @@
 import { createStoryService } from './stories.js';
+import { createWordsOfDayService } from './words-of-day.js';
 import { curriculumConcepts } from './curriculum-contract.js';
 import { createHash, pbkdf2Sync, randomBytes, randomUUID } from 'node:crypto';
 import { reviewCurriculum } from './curriculum-editorial.js';
@@ -261,6 +262,7 @@ async function ingestBatch(batch) {
   return { status: 202, body: { batch_id: batchId, schema_version: batch.schema_version, status: itemStatus, item_count: batch.items.length, created, duplicates } };
 }
 const storyService=createStoryService(pool);
+const wordsOfDayService=createWordsOfDayService(pool);
 async function main() {
     await migrate();
     const cleanExpiredRaces = () => { void pruneRaceRooms().catch((error) => console.error('Race cleanup failed:', error)); };
@@ -346,6 +348,20 @@ async function main() {
               if(req.method==='GET' && !storyRoute[1]) result=await storyService.list(viewer.id);
               else if(req.method==='GET' && !storyRoute[2]) result=await storyService.detail(viewer.id,storyRoute[1]);
               else if(req.method==='POST' && storyRoute[2]) result=await storyService.act(viewer.id,storyRoute[1],storyRoute[2],await body(req));
+              else return json(res,405,{error:'Method not allowed.'});
+              return json(res,result.status,result.body);
+            }
+            // FRA-153: public read of the published word bank, by level.
+            if (req.method === 'GET' && u.pathname === '/api/content/v1/vocab-words') {
+              const result=await wordsOfDayService.listWords(u.searchParams.get('level'));
+              return json(res,result.status,result.body);
+            }
+            // FRA-154: Words of the Day — frozen daily set + streak-isolated practice.
+            if (u.pathname === '/api/me/words/today' || u.pathname === '/api/me/words/answers') {
+              const viewer=await user(req);if(!viewer) return json(res,401,{error:'Authentication required.'});
+              let result;
+              if(req.method==='GET' && u.pathname==='/api/me/words/today') result=await wordsOfDayService.today(viewer.id,u.searchParams.get('tz'));
+              else if(req.method==='POST' && u.pathname==='/api/me/words/answers') result=await wordsOfDayService.answer(viewer.id,await body(req));
               else return json(res,405,{error:'Method not allowed.'});
               return json(res,result.status,result.body);
             }
