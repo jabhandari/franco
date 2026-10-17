@@ -13,7 +13,8 @@ type DailyWordsSectionProps = {
 
 type LastResult = { question_id: string; correct: boolean; correct_choice_id: string; choice_id: string };
 
-// FRA-155: Words of the Day on Home — a card, no new menu or route.
+// FRA-155: Words of the Day body — rendered on the words page, which is
+// reached from the compact teaser card on Home (no menu item).
 // The day's 5 words plus the 10-question practice block. Practice state
 // comes from the server (refresh-safe); answers post to the words endpoint
 // only, never to attempts, so the streak is untouched (FRA-154).

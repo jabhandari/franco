@@ -29,6 +29,20 @@ export function practiceProgress(answeredCount: number, totalQuestions: number):
   return `${answeredCount} of ${totalQuestions} answered`;
 }
 
+export type WordsTeaser = { kicker: string; title: string; subtitle: string; progressLabel: string; done: boolean };
+
+/** Home teaser card copy: headline + progress only — the words themselves
+ * live on the words page so Home stays light. */
+export function wordsTeaser(data: { level: string; answered_count: number; total_questions: number; completed: boolean }): WordsTeaser {
+  return {
+    kicker: `WORDS OF THE DAY · ${data.level}`,
+    title: data.completed ? 'Words of the day — done' : 'Five new words for today',
+    subtitle: data.completed ? 'Come back tomorrow for five more.' : `${data.total_questions} quick questions · about 2 minutes`,
+    progressLabel: practiceProgress(data.answered_count, data.total_questions),
+    done: data.completed,
+  };
+}
+
 /** First question the learner has not answered yet (null when complete). */
 export function nextQuestion(questions: WordQuestion[], answered: Record<string, { correct: boolean }>): WordQuestion | null {
   return questions.find((q) => !answered[q.id]) || null;

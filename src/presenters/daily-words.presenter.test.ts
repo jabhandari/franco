@@ -1,5 +1,5 @@
 // Unit checks for the FRA-155 daily-words presenter.
-import { dailyWordsPath, wordMeta, questionHeading, practiceProgress, nextQuestion } from './daily-words.presenter.ts';
+import { dailyWordsPath, wordMeta, questionHeading, practiceProgress, nextQuestion, wordsTeaser } from './daily-words.presenter.ts';
 import type { DailyWord, WordQuestion } from '../api/client.ts';
 
 function assert(cond: boolean, message: string) {
@@ -26,3 +26,12 @@ assert(nextQuestion(questions, { q1: { correct: true } })?.id === 'q2', 'nextQue
 assert(nextQuestion(questions, { q1: { correct: true }, q2: { correct: false } }) === null, 'nextQuestion: null when all answered (wrong answers still count as answered)');
 
 console.log('daily-words.presenter checks passed');
+
+// wordsTeaser: Home card copy.
+const teaserFresh = wordsTeaser({ level: 'A2', answered_count: 0, total_questions: 10, completed: false });
+assert(teaserFresh.title === 'Five new words for today', 'teaser: fresh title');
+assert(teaserFresh.kicker === 'WORDS OF THE DAY · A2', 'teaser: kicker carries the level');
+assert(teaserFresh.progressLabel === '0 of 10 answered', 'teaser: progress label');
+assert(teaserFresh.done === false, 'teaser: not done');
+const teaserDone = wordsTeaser({ level: 'B1', answered_count: 10, total_questions: 10, completed: true });
+assert(teaserDone.done === true && teaserDone.title.includes('done'), 'teaser: completed state');
