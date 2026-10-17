@@ -518,17 +518,18 @@ async function main() {
               try {
                 if (req.method === 'GET' && u.pathname === '/api/me/puzzles') return json(res, 200, await puzzleSummary(x.id));
                 if (req.method === 'POST' && u.pathname === '/api/me/puzzles/expedition/runs') return json(res, 201, await startExpedition(x.id));
-                const expeditionMatch = u.pathname.match(/^\/api\/me\/puzzles\/expedition\/runs\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})(?:\/(answer|route|end))?$/);
-                if (expeditionMatch && req.method === 'GET' && !expeditionMatch[2]) return json(res, 200, await getExpedition(x.id, expeditionMatch[1]));
+                const expeditionMatch = u.pathname.match(/^\/api\/me\/puzzles\/expedition\/runs\/([A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12})(?:\/(answer|route|end))?$/);
+                const expeditionRunId = expeditionMatch?.[1].toLowerCase();
+                if (expeditionMatch && req.method === 'GET' && !expeditionMatch[2]) return json(res, 200, await getExpedition(x.id, expeditionRunId));
                 if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'answer') {
                   const submission = await body(req);
-                  return json(res, 200, await answerExpedition(x.id, expeditionMatch[1], submission.question_id, submission.response));
+                  return json(res, 200, await answerExpedition(x.id, expeditionRunId, submission.question_id, submission.response));
                 }
                 if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'route') {
                   const selection = await body(req);
-                  return json(res, 200, await chooseExpeditionRoute(x.id, expeditionMatch[1], selection.route));
+                  return json(res, 200, await chooseExpeditionRoute(x.id, expeditionRunId, selection.route));
                 }
-                if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'end') return json(res, 200, await endExpedition(x.id, expeditionMatch[1]));
+                if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'end') return json(res, 200, await endExpedition(x.id, expeditionRunId));
                 if (req.method === 'POST' && u.pathname === '/api/me/puzzles/verb-sprint/runs') return json(res, 201, await startVerbSprint(x.id));
                 const sprintMatch = u.pathname.match(/^\/api\/me\/puzzles\/verb-sprint\/runs\/([A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12})(?:\/(answer|end))?$/);
                 const sprintRunId = sprintMatch?.[1].toLowerCase();
