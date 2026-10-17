@@ -3277,6 +3277,17 @@
           "license_id": "original",
           "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
         }
+      },
+      {
+        "french": "Nous avons reporté la réunion parce que le rapport n'était pas prêt.",
+        "english": "We postponed the meeting because the report was not ready.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
       }
     ],
     "recognition": [
@@ -3437,11 +3448,30 @@
           "license_id": "original",
           "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
         }
+      },
+      {
+        "id": "B2-13-guided-4",
+        "prompt": "Write the French sentence for: We postponed the meeting because the report was not ready. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Nous avons reporté la réunion parce que le rapport n'était pas prêt."
+        ],
+        "feedback": {
+          "rule": "A subordinate clause depends on another part of the sentence. Parce que gives a cause; pour que gives a purpose and takes subjunctive; alors que can express simultaneous time or contrast depending on context. Avant que (before) takes subjunctive, while après que (after) takes indicative in standard usage. Keep the subject and time relationship clear when joining clauses. A longer sentence is useful only when the reader can still identify the main assertion and how each added clause supports or limits it.",
+          "error": "The response does not match the model wording requested for: We postponed the meeting because the report was not ready.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous avons reporté la réunion parce que le rapport n'était pas prêt."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
       }
     ],
     "reading": {
-      "french": "Nous avons simplifié le texte pour que chacun le comprenne. Alors que Lina prépare le dossier, Sami vérifie les chiffres. Après que l'équipe a voté, la décision a été annoncée.",
-      "english": "We simplified the text so that everyone could understand it. While Lina prepares the file, Sami checks the figures. After the team voted, the decision was announced.",
+      "french": "Nous avons simplifié le texte pour que chacun le comprenne. Alors que Lina prépare le dossier, Sami vérifie les chiffres. Après que l'équipe a voté, la décision a été annoncée. Nous avons reporté la réunion parce que le rapport n'était pas prêt.",
+      "english": "We simplified the text so that everyone could understand it. While Lina prepares the file, Sami checks the figures. After the team voted, the decision was announced. We postponed the meeting because the report was not ready.",
       "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
       "provenance": {
         "kind": "original",
@@ -3488,7 +3518,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
