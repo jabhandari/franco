@@ -20,7 +20,7 @@
     "test:learning-engine": "node scripts/test-learning-engine.mjs",
     "test:streak": "node scripts/test-streak.mjs && tsx src/presenters/streak.presenter.test.js",
     "seed:concepts": "node --env-file=.env scripts/seed-concepts.mjs",
-    "pretest": "node scripts/test-curriculum.mjs",
+    "pretest": "node scripts/test-curriculum.mjs && node scripts/test-story-content.mjs",
     "import:normalized": "node --env-file=.env scripts/import-normalized-content.mjs",
     "publish:founding": "node --env-file=.env scripts/publish-founding-content.mjs",
     "sync:founding": "node --env-file=.env scripts/sync-founding-content.mjs",
