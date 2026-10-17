@@ -3417,28 +3417,48 @@ html[data-theme] .learn-lesson-band h1, html[data-theme] .learn-lesson-band p { 
 .expedition-status strong span { color:var(--color-muted); font-size:var(--text-16); }
 .expedition-hearts { display:flex; gap:7px; color:var(--palette-coral); }
 .expedition-hearts .is-lost { color:var(--color-border); }
-.expedition-map { overflow:hidden; border:1px solid #92b6a8; border-radius:25px; background:#dcebd6; box-shadow:0 18px 38px #143a3420; }
+.expedition-map { overflow:hidden; border:5px solid #f7e9cd; border-radius:25px; background:#dcebd6; box-shadow:0 4px 0 #c9b894,0 20px 40px #143a342a; }
 .expedition-map-top,.expedition-map-caption { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 22px; color:#184d4a; font-size:var(--text-11); font-weight:800; letter-spacing:.1em; }
-.expedition-map-top { background:#dcebd6; }
+.expedition-map-top { background:#e9edcf; border-bottom:1px solid #94ae9c; }
+.expedition-map-top > span:first-child::before { content:"◆"; margin-right:8px; color:#c47858; }
+.expedition-map-expand { display:none; padding:6px 10px; border:1px solid #8eac9a; border-radius:8px; background:#fff9e9; color:#235b55; font:inherit; letter-spacing:0; cursor:pointer; }
+.expedition-map-expand:focus-visible { outline:3px solid #115f5a; outline-offset:2px; }
 .expedition-map-caption { background:#e9f1e4; letter-spacing:0; font-size:var(--text-13); }
 .expedition-map-caption span { display:inline-flex; align-items:center; gap:7px; }
+.expedition-map-stage { position:relative; }
+.expedition-map-landscape-frame { position:relative; overflow:hidden; }
+.expedition-map-encounter { position:relative; z-index:2; width:min(620px,calc(100% - 44px)); margin:-245px 22px 22px auto; }
+.expedition-map.is-late .expedition-map-encounter { margin-right:auto; margin-left:22px; }
+.expedition-map-encounter .expedition-question { gap:16px; padding:25px; border:2px solid #e9d7b5; border-radius:20px; box-shadow:0 7px 0 #bca786,0 23px 45px #15372f55; }
+.expedition-map-encounter .expedition-feedback { border:2px solid #e9d7b5; box-shadow:0 7px 0 #bca786,0 23px 45px #15372f55; }
+.expedition-map-encounter .expedition-question h2 { font-size:clamp(1.35rem,2vw,1.85rem); }
+.expedition-map-encounter .expedition-choice { min-height:57px; }
 .expedition-landscape { display:block; width:100%; height:auto; }
 .expedition-landscape-mobile { display:none; }
 .expedition-sun-glow { filter:drop-shadow(0 0 22px #ffe7ab); }
+.expedition-scenery-tree { fill:#275d52; filter:drop-shadow(2px 5px 2px #244c3e66); }
+.expedition-scenery-tree path:nth-of-type(2) { fill:#347964; }
+.expedition-scenery-house { fill:#e9d4a2; filter:drop-shadow(3px 6px 2px #163e3866); }
+.expedition-scenery-house path:nth-of-type(2) { fill:none; stroke:#ab644c; stroke-width:7; stroke-linecap:round; }
+.expedition-scenery-house rect { fill:#7b5345; }
+.expedition-scenery-bridge { fill:none; stroke:#e5d4aa; stroke-width:11; stroke-linecap:round; filter:drop-shadow(2px 5px 2px #244c3e66); }
+.expedition-contour { fill:none; stroke:#e1efd3; stroke-width:3; opacity:.4; }
 .expedition-trail-line { fill:none; stroke:#fff6dc; stroke-width:13; stroke-linecap:round; stroke-dasharray:1 0; filter:drop-shadow(0 2px 2px #21493644); }
 .expedition-trail-line.is-travelled { stroke:#ffb96f; stroke-width:15; animation:expedition-draw .55s ease-out both; }
 .expedition-landmark { color:#275b56; }
 .expedition-landmark-disc { fill:#fff8e8; stroke:#537b6b; stroke-width:3; }
+.expedition-landmark-shadow { fill:#183f3a66; }
+.expedition-landmark-disc { filter:drop-shadow(2px 4px 1px #214b4555); }
 .expedition-landmark.is-visited .expedition-landmark-disc { fill:#116d67; stroke:#e8fbec; }
 .expedition-landmark.is-visited { color:white; }
 .expedition-landmark.is-current .expedition-landmark-disc { fill:#ff765e; stroke:white; stroke-width:4; }
 .expedition-landmark.is-current { color:white; }
-.expedition-landmark.is-current .expedition-landmark-disc { animation:expedition-arrive .45s cubic-bezier(.2,1.6,.5,1) both; transform-origin:center; }
+.expedition-landmark.is-current .expedition-landmark-disc { animation:expedition-arrive .45s ease-out both; }
 .expedition-current-halo { fill:#ff765e55; transform-origin:center; animation:expedition-pulse 2.5s ease-in-out infinite; }
 .expedition-landmark-label { fill:#183e3c; stroke:#edf4e4; stroke-width:3; paint-order:stroke; font-size:13px; font-weight:800; }
 .expedition-landmark-number { fill:currentColor; font-size:14px; font-weight:800; }
 @keyframes expedition-pulse { 50% { transform:scale(1.25); opacity:.45; } }
-@keyframes expedition-arrive { from { transform:scale(.6); } to { transform:scale(1); } }
+@keyframes expedition-arrive { from { opacity:.45; } to { opacity:1; } }
 @keyframes expedition-draw { from { opacity:.4; } to { opacity:1; } }
 @media(prefers-reduced-motion:reduce) { .expedition-current-halo,.expedition-landmark.is-current .expedition-landmark-disc,.expedition-trail-line.is-travelled { animation:none; } }
 .expedition-question { display:grid; gap:22px; padding:34px; border:1px solid var(--color-border); border-radius:22px; background:var(--color-surface); box-shadow:0 16px 36px #0716260a; }
@@ -3491,3 +3511,20 @@ html[data-theme] .learn-lesson-band h1, html[data-theme] .learn-lesson-band p { 
 
 @media(max-width:800px) { .expedition-intro { grid-template-columns:1fr; }.expedition-intro-art { min-height:230px; }.expedition-routes { grid-template-columns:1fr; }.expedition-route { min-height:0; }.expedition-choices { grid-template-columns:1fr; } }
 @media(max-width:520px) { .expedition-heading { flex-direction:column; }.expedition-status strong { font-size:var(--text-22); }.expedition-hearts svg { width:18px; }.expedition-intro-copy,.expedition-question,.expedition-result { padding:25px; }.expedition-landscape-wide { display:none; }.expedition-landscape-mobile { display:block; }.expedition-map-top,.expedition-map-caption { padding:12px 14px; }.expedition-map-caption { flex-wrap:wrap; }.expedition-route-art { height:120px; } }
+
+@media(min-width:521px) and (max-width:800px) { .expedition-map-encounter { margin-top:-110px; } }
+@media(max-width:520px) {
+  .expedition-map { border-width:4px; }
+  .expedition-map-top { flex-wrap:wrap; }
+  .expedition-map-top > span:nth-child(2) { margin-left:auto; }
+  .expedition-map-expand { display:inline-flex; }
+  .expedition-map-landscape-frame { height:360px; }
+  .expedition-landscape-mobile { position:absolute; top:70%; width:100%; height:auto; transition:transform .65s cubic-bezier(.22,.8,.25,1); }
+  .expedition-map.is-expanded .expedition-map-landscape-frame { height:auto; }
+  .expedition-map.is-expanded .expedition-landscape-mobile { position:relative; top:auto; transform:none; }
+  .expedition-map-encounter,.expedition-map.is-late .expedition-map-encounter { width:calc(100% - 20px); margin:-15px 10px 16px; }
+  .expedition-map-encounter .expedition-question { padding:18px; }
+  .expedition-map-encounter .expedition-question-meta { align-items:flex-start; flex-direction:column; }
+  .expedition-map-encounter .expedition-choice { min-height:54px; }
+}
+@media(prefers-reduced-motion:reduce) { .expedition-landscape-mobile { transition:none; } }
