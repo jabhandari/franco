@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { publicRaceQuestion, raceChoices, raceWinner, resolveRaceChoice, validRaceConfig } from '../server/race-rules.js';
+import { abandonedRacePlayer, publicRaceQuestion, raceChoices, raceWinner, resolveRaceChoice, validRaceConfig } from '../server/race-rules.js';
 import { evaluate, gradeExamQuestion } from '../server/evaluate.js';
 import { originalChoiceId, usesWordBank } from '../server/puzzle-rules.js';
 
@@ -53,4 +53,10 @@ assert.equal(raceWinner([{ seat: 1, correct_count: 8, finished_at: finished, for
   { seat: 2, correct_count: 6, finished_at: '2026-10-16T10:00:01Z' }]), 2);
 assert.equal(raceWinner([{ seat: 1, correct_count: 8, finished_at: null },
   { seat: 2, correct_count: 6, finished_at: finished }]), null);
+assert.equal(abandonedRacePlayer([{ finished_at: finished, last_seen_at: finished },
+  { finished_at: null, last_seen_at: '2026-10-16T10:01:00Z' }], Date.parse('2026-10-16T10:12:00Z'))?.last_seen_at, '2026-10-16T10:01:00Z');
+assert.equal(abandonedRacePlayer([{ finished_at: finished, last_seen_at: finished },
+  { finished_at: null, last_seen_at: '2026-10-16T10:08:00Z' }], Date.parse('2026-10-16T10:12:00Z')), null);
+assert.equal(abandonedRacePlayer([{ finished_at: null, last_seen_at: finished },
+  { finished_at: null, last_seen_at: finished }], Date.parse('2026-10-16T10:12:00Z')), null);
 console.log('race rules checks passed');

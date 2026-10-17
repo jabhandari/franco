@@ -26,11 +26,13 @@ CREATE TABLE IF NOT EXISTS public.race_players (
   correct_count INTEGER NOT NULL DEFAULT 0 CHECK (correct_count >= 0),
   lives_left SMALLINT NOT NULL CHECK (lives_left = -1 OR lives_left BETWEEN 0 AND 5),
   answer_history_json JSONB NOT NULL DEFAULT '[]'::jsonb CHECK (jsonb_typeof(answer_history_json) = 'array'),
+  last_seen_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   finished_at TIMESTAMPTZ,
   forfeited_at TIMESTAMPTZ,
   final_score INTEGER CHECK (final_score >= 0),
   UNIQUE (room_id,seat)
 );
+ALTER TABLE public.race_players ADD COLUMN IF NOT EXISTS last_seen_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
 
 -- A signed-in learner may occupy only one seat; NULL guest user IDs remain
 -- unrestricted and are instead identified by their unique token hash.

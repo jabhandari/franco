@@ -113,6 +113,7 @@ export function Race({ code, token, onExit }: Props) {
   const [qrImage, setQrImage] = React.useState<string | null>(null);
   const [copied, setCopied] = React.useState(false);
   const polling = React.useRef(false);
+  const mutationVersion = React.useRef(0);
   const mounted = React.useRef(true);
   const configLoaded = React.useRef<string | null>(null);
   const autoJoinCode = React.useRef<string | null>(null);
@@ -154,9 +155,10 @@ export function Race({ code, token, onExit }: Props) {
     async function refresh() {
       if (polling.current || !roomCode) return;
       polling.current = true;
+      const version = mutationVersion.current;
       try {
         const next = await raceRequest<RaceState>(`/api/races/${encodeURIComponent(roomCode)}`, 'GET', token, playerToken);
-        if (!active) return;
+        if (!active || version !== mutationVersion.current) return;
         setState(next); setError('');
         setClockOffset(Date.parse(next.room.server_now) - Date.now());
         if (configLoaded.current !== roomCode) { setConfig(next.room.config); configLoaded.current = roomCode; }
@@ -182,10 +184,12 @@ export function Race({ code, token, onExit }: Props) {
 
   async function act<T extends RaceState>(path: string, body?: object): Promise<T | null> {
     if (!roomCode || busy) return null;
+    mutationVersion.current += 1;
     setBusy(true); setError('');
     try {
       const next = await raceRequest<T>(`/api/races/${encodeURIComponent(roomCode)}${path}`, path === '/config' ? 'PATCH' : 'POST', token, playerToken, body ?? {});
       if (mounted.current) {
+        mutationVersion.current += 1;
         setState(next); setClockOffset(Date.parse(next.room.server_now) - Date.now());
         setNow(Date.now());
         if (path === '/config') setConfig(next.room.config);
@@ -198,10 +202,12 @@ export function Race({ code, token, onExit }: Props) {
 
   async function create() {
     if (!token || busy) return;
+    mutationVersion.current += 1;
     setBusy(true); setError('');
     try {
       const next = await raceRequest<RaceState>('/api/races', 'POST', token, null, {});
       if (!mounted.current) return;
+      mutationVersion.current += 1;
       setState(next); setRoomCode(next.room.code); setConfig(next.room.config); setClockOffset(Date.parse(next.room.server_now) - Date.now());
       configLoaded.current = next.room.code;
       window.history.pushState({}, '', `/race/${encodeURIComponent(next.room.code)}`);
@@ -211,17 +217,22 @@ export function Race({ code, token, onExit }: Props) {
 
   async function join() {
     if (!roomCode || (!token && !displayName.trim()) || busy) return;
+    mutationVersion.current += 1;
     setBusy(true); setError('');
     try {
       const next = await raceRequest<RaceState>(`/api/races/${encodeURIComponent(roomCode)}/join`, 'POST', token, null, token ? {} : { display_name: displayName.trim() });
       if (!mounted.current) return;
+      mutationVersion.current += 1;
       if (next.player_token) {
         localStorage.setItem(tokenKey(roomCode), next.player_token);
         setPlayerToken(next.player_token);
       }
       setState(next); setClockOffset(Date.parse(next.room.server_now) - Date.now());
       realtime.broadcast();
-    } catch (caught) { if (mounted.current) setError(errorText(caught instanceof Error ? caught : 'Could not join the race.')); }
+    } catch (caught) {
+      autoJoinCode.current = null;
+      if (mounted.current) setError(errorText(caught instanceof Error ? caught : 'Could not join the race.'));
+    }
     finally { if (mounted.current) setBusy(false); }
   }
 
@@ -293,7 +304,7 @@ export function Race({ code, token, onExit }: Props) {
           {isHost && <Box className="race-lobby-settings"><Box><Text className="race-kicker">RACE RULES</Text><Text as="h2">Choose your challenge.</Text></Box><RaceSettings value={config} onChange={setConfig} disabled={busy} /><Box className="race-lobby-actions"><Button variant="text" disabled={busy || !rulesUnsaved} onClick={() => void act('/config', config)}>{rulesUnsaved ? 'Save rules' : 'Rules saved'}</Button><Button variant="primary" icon={ArrowRight} iconPosition="after" disabled={busy || !opponent || rulesUnsaved} onClick={() => void act('/start')}>{busy ? 'Starting…' : 'Start race'}</Button></Box><Text className="race-footnote">You can edit the rules until the race starts. Your friend sees each saved change.</Text></Box>}
           {!isHost && <Box className="race-lobby-settings"><Box><Text className="race-kicker">RACE RULES</Text><Text as="h2">Your challenge.</Text></Box><Box className="race-rule-summary"><Text>{room.config.source === 'past_questions' ? 'Past questions' : 'Lesson exercises'} · {room.config.level}</Text><Text>{room.config.question_count} questions · {room.config.lives === null ? 'Unlimited' : room.config.lives} lives · {room.config.timer_seconds === null ? 'No time limit' : `${Math.round(room.config.timer_seconds / 60)} min`}</Text></Box><Text className="race-footnote">The host can update the rules until the race starts.</Text></Box>}
           {canJoin && !token && <Box className="race-join-panel"><Text className="race-kicker">YOU’RE INVITED</Text><Text as="h2">Ready to race?</Text><Text>Enter the name your friend will see. No account needed.</Text><TextInput value={displayName} onChange={(event) => setDisplayName(event.target.value)} placeholder="Your display name" autoComplete="nickname" onKeyDown={(event) => { if (event.key === 'Enter') void join(); }} /><Button variant="primary" icon={ArrowRight} iconPosition="after" disabled={busy || !displayName.trim()} onClick={() => void join()}>{busy ? 'Joining…' : 'Join race'}</Button></Box>}
-          {canJoin && token && <Box className="race-guest-wait"><Clock3 size={24} /><Text as="h2">Joining your friend…</Text></Box>}
+          {canJoin && token && <Box className="race-guest-wait"><Clock3 size={24} /><Text as="h2">{busy ? 'Joining your friend…' : 'Join your friend’s race'}</Text><Text>Your account name will be shown in the lobby.</Text><Button variant="primary" disabled={busy} onClick={() => void join()}>{busy ? 'Joining…' : error ? 'Retry joining' : 'Join race'}</Button></Box>}
           {!me && !canJoin && <Box className="race-guest-wait"><LockKeyhole size={24} /><Text as="h2">Both seats are taken.</Text><Text>Ask the host to create another race for you.</Text></Box>}
           {!isHost && me && <Box className="race-guest-wait"><Clock3 size={24} /><Text as="h2">You’re in. Waiting for the host.</Text><Text>This page will update when the race begins.</Text></Box>}
         </Box>
@@ -307,7 +318,7 @@ export function Race({ code, token, onExit }: Props) {
           {shownQuestion.kind === 'word_order' && <><Box className="race-word-answer">{selectedTokens.length ? selectedTokens.map((id) => { const item = shownQuestion.tokens?.find((tokenItem) => tokenItem.id === id); return <Box as="button" type="button" key={id} disabled={busy || Boolean(feedback)} onClick={() => setSelectedTokens((previous) => previous.filter((candidate) => candidate !== id))}>{item?.text}</Box>; }) : <Text>Tap words to build your answer.</Text>}</Box><Box className="race-word-bank">{shownQuestion.tokens?.filter((item) => !selectedTokens.includes(item.id)).map((item) => <Box as="button" type="button" key={item.id} disabled={busy || Boolean(feedback)} onClick={() => setSelectedTokens((previous) => [...previous, item.id])}>{item.text}</Box>)}</Box>{!feedback && <Button variant="primary" disabled={busy || selectedTokens.length !== shownQuestion.tokens?.length} onClick={() => void answer(shownQuestion, selectedTokens.map((id) => shownQuestion.tokens?.find((item) => item.id === id)?.text || ''), selectedTokens.join(','))}>Check answer</Button>}</>}
           {feedback && <Box className={`race-feedback ${feedback.correct ? 'is-correct' : 'is-wrong'}`} role="status"><Box className="race-feedback-icon">{feedback.correct ? <Check size={22} /> : <X size={22} />}</Box><Box><Text as="strong">{feedback.correct ? 'Nicely done. Keep moving!' : 'Not this time. Keep racing!'}</Text>{feedback.reveal && <Text>Answer: {feedback.reveal}</Text>}</Box><Button variant="primary" onClick={() => setFeedback(null)} icon={ArrowRight} iconPosition="after">Continue</Button></Box>}
         </Box>}
-        {me?.finished_at && <Box className="race-finished-wait"><Trophy size={36} /><Text as="h2">You crossed the finish line.</Text><Text>Your score is in. Waiting for your friend to finish…</Text></Box>}
+        {me?.finished_at && <Box className="race-finished-wait"><Trophy size={36} /><Text as="h2">You crossed the finish line.</Text><Text>Your score is in. Waiting for your friend to finish…</Text>{room.config.timer_seconds === null && <Text>If your friend disconnects, the race ends after 10 minutes of inactivity.</Text>}</Box>}
         {!me && <Box className="race-finished-wait"><LockKeyhole size={34} /><Text as="h2">This race has started.</Text><Text>Only the two invited players can race. Ask for a new invite if you missed the start.</Text></Box>}
         {me && !shownQuestion && !me.finished_at && <Box className="race-finished-wait"><Clock3 size={28} /><Text as="h2">Loading your next question…</Text></Box>}
         {me && !me.finished_at && <Box className="race-leave-action"><Button variant="text" onClick={() => void act('/finish')} disabled={busy}>Finish my race early</Button></Box>}
