@@ -3017,7 +3017,7 @@ html:not([data-theme="light"]) .story-shelf-copy small { color: #f6a957; }
 }
 
 /* FRA-146 — Friend Race */
-.race-page { display:grid; gap:28px; max-width:1200px; margin:0 auto; padding:10px 0 72px; }
+.race-page { display:grid; gap:28px; max-width:1200px; margin:0 auto; padding:10px clamp(18px,3vw,32px) 72px; }
 .race-topline { display:flex; align-items:center; justify-content:space-between; gap:18px; }
 .race-topline .text-button { width:auto; margin:0; color:var(--color-accent); }
 .race-topline > span { display:flex; align-items:center; gap:8px; color:var(--color-muted); font-size:var(--text-11); font-weight:750; letter-spacing:.12em; }
@@ -3070,8 +3070,7 @@ html:not([data-theme="light"]) .story-shelf-copy small { color: #f6a957; }
 .race-lobby-card,.race-lobby-settings,.race-join-panel,.race-guest-wait,.race-invite-panel,.race-question,.race-finished-wait,.race-results,.race-review { border:1px solid var(--color-border); border-radius:23px; background:var(--color-surface); }
 .race-lobby-card,.race-lobby-settings,.race-join-panel,.race-guest-wait { display:grid; gap:18px; padding:28px; }
 .race-runners { display:grid; grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr); align-items:center; gap:8px; margin-top:8px; }
-.race-runner { display:grid; justify-items:center; gap:5px; min-width:0; padding:26px 10px; border:1px dashed var(--color-border); border-radius:17px; text-align:center; }
-.race-runner.is-here { border-style:solid; background:color-mix(in srgb,var(--color-accent) 5%,var(--color-surface)); }
+.race-runner { display:grid; justify-items:center; gap:5px; min-width:0; padding:26px 10px; border-bottom:1px solid var(--color-border); text-align:center; }
 .race-runner-avatar,.race-score-avatar { display:grid; place-items:center; width:66px; height:66px; border-radius:21px; background:linear-gradient(140deg,#2fb7ae,#176b83); color:white; font-size:var(--text-28); font-weight:800; box-shadow:0 10px 22px #06375036; }
 .race-runner:not(.is-here) .race-runner-avatar { background:var(--color-border); color:var(--color-muted); box-shadow:none; }
 .race-runner small,.race-score-person small { color:var(--color-accent); font-size:var(--text-10); font-weight:850; letter-spacing:.12em; }
@@ -3080,7 +3079,7 @@ html:not([data-theme="light"]) .story-shelf-copy small { color: #f6a957; }
 .race-versus { display:grid; place-items:center; width:45px; height:45px; margin:auto; border-radius:50%; background:var(--color-background); color:var(--color-muted); font-size:var(--text-11); font-weight:850; }
 .race-ready { display:flex; align-items:center; gap:8px; padding:13px; border-radius:11px; background:color-mix(in srgb,var(--palette-green) 10%,var(--color-surface)); color:var(--palette-green); font-size:var(--text-13); font-weight:750; }
 .race-lobby-settings > div:first-child { display:grid; gap:8px; }
-.race-rule-summary { display:grid; gap:12px; padding:18px; border:1px solid var(--color-border); border-radius:var(--radius-panel); background:var(--color-background); }
+.race-rule-summary { display:grid; gap:12px; padding:18px 0; border-top:1px solid var(--color-border); border-bottom:1px solid var(--color-border); }
 .race-rule-summary p { margin:0; color:var(--color-text); font-weight:600; }
 .race-lobby-actions { display:flex; justify-content:space-between; align-items:center; gap:10px; }
 .race-lobby-actions .text-button,.race-invite-actions .text-button { width:auto; margin:0; color:var(--color-accent); }
@@ -3092,10 +3091,10 @@ html:not([data-theme="light"]) .story-shelf-copy small { color: #f6a957; }
 .race-invite-icon { display:grid; place-items:center; width:49px; height:49px; border-radius:15px; background:color-mix(in srgb,var(--color-accent) 13%,var(--color-surface)); color:var(--color-accent); }
 .race-invite-heading h2 { font-family:var(--font-heading); font-size:var(--text-26); font-weight:500; }
 .race-invite-heading p { color:var(--color-muted); font-size:var(--text-13); }
-.race-invite-code { display:grid; place-items:center; width:236px; height:236px; padding:8px; border:1px solid var(--color-border); border-radius:20px; background:white; color:#14364a; }
-.race-invite-code img { width:100%; height:100%; border-radius:10px; }
+.race-invite-code { display:grid; place-items:center; width:236px; height:236px; padding:8px; color:#14364a; }
+.race-invite-code img { width:100%; height:100%; }
 .race-invite-code span { font-size:var(--text-12); }
-.race-invite-link { display:grid; gap:6px; width:100%; padding:13px; border:1px dashed var(--color-border); border-radius:10px; text-align:left; }
+.race-invite-link { display:grid; gap:6px; width:100%; padding:13px 0 0; border-top:1px solid var(--color-border); text-align:left; }
 .race-invite-link small { color:var(--color-muted); font-size:var(--text-10); font-weight:850; letter-spacing:.12em; }
 .race-invite-link span { overflow-wrap:anywhere; color:var(--color-accent); font-size:var(--text-12); }
 .race-invite-actions { display:flex; align-items:center; justify-content:center; gap:12px; }
