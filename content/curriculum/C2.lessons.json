@@ -2707,7 +2707,7 @@
     "example_items": [
       {
         "french": "A : Je ne remets pas en cause le principe ; c'est la manière dont on prétend l'appliquer qui me paraît discutable.",
-        "english": "A: I am not questioning the principle; it is the way it is supposedly to be applied that seems questionable to me.",
+        "english": "A: I am not questioning the principle; it is the way it is supposedly applied that seems questionable to me.",
         "provenance": {
           "kind": "original",
           "source_url": null,
@@ -2746,7 +2746,7 @@
         "choices": [
           {
             "id": "0",
-            "text": "A: I am not questioning the principle; it is the way it is supposedly to be applied that seems questionable to me."
+            "text": "A: I am not questioning the principle; it is the way it is supposedly applied that seems questionable to me."
           },
           {
             "id": "1",
@@ -2763,7 +2763,7 @@
         "feedback": {
           "rule": "Listening mastery involves identifying which speaker owns a claim, where a qualification begins and whether an interruption challenges or completes it. Overlap can signal agreement as well as competition. First listen for the argument's structure, then verify names, negations and stance markers; do not infer a whole position from a clipped fragment. The original dialogue is a simulation for two readers, not a licensed authentic recording. Perform it once clearly, then with moderate overlap at the dash; vary delivery only after the meaning is established.",
           "error": "That English meaning belongs to a different message, rather than: A : Je ne remets pas en cause le principe ; c'est la manière dont on prétend l'appliquer qui me paraît discutable.",
-          "remediation": "Identify the person and action in the French sentence; its intended meaning is: A: I am not questioning the principle; it is the way it is supposedly to be applied that seems questionable to me."
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: A: I am not questioning the principle; it is the way it is supposedly applied that seems questionable to me."
         },
         "provenance": {
           "kind": "original",
@@ -2779,7 +2779,7 @@
         "choices": [
           {
             "id": "0",
-            "text": "A: I am not questioning the principle; it is the way it is supposedly to be applied that seems questionable to me."
+            "text": "A: I am not questioning the principle; it is the way it is supposedly applied that seems questionable to me."
           },
           {
             "id": "1",
@@ -2812,7 +2812,7 @@
         "choices": [
           {
             "id": "0",
-            "text": "A: I am not questioning the principle; it is the way it is supposedly to be applied that seems questionable to me."
+            "text": "A: I am not questioning the principle; it is the way it is supposedly applied that seems questionable to me."
           },
           {
             "id": "1",
@@ -2843,13 +2843,13 @@
     "guided_production": [
       {
         "id": "C2-11-guided-1",
-        "prompt": "Write the French sentence for: A: I am not questioning the principle; it is the way it is supposedly to be applied that seems questionable to me. Use the wording from the example, including accents and punctuation.",
+        "prompt": "Write the French sentence for: A: I am not questioning the principle; it is the way it is supposedly applied that seems questionable to me. Use the wording from the example, including accents and punctuation.",
         "correct_answers": [
           "A : Je ne remets pas en cause le principe ; c'est la manière dont on prétend l'appliquer qui me paraît discutable."
         ],
         "feedback": {
           "rule": "Listening mastery involves identifying which speaker owns a claim, where a qualification begins and whether an interruption challenges or completes it. Overlap can signal agreement as well as competition. First listen for the argument's structure, then verify names, negations and stance markers; do not infer a whole position from a clipped fragment. The original dialogue is a simulation for two readers, not a licensed authentic recording. Perform it once clearly, then with moderate overlap at the dash; vary delivery only after the meaning is established.",
-          "error": "The response does not match the model wording requested for: A: I am not questioning the principle; it is the way it is supposedly to be applied that seems questionable to me.",
+          "error": "The response does not match the model wording requested for: A: I am not questioning the principle; it is the way it is supposedly applied that seems questionable to me.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: A : Je ne remets pas en cause le principe ; c'est la manière dont on prétend l'appliquer qui me paraît discutable."
         },
         "provenance": {
@@ -2901,7 +2901,7 @@
     ],
     "reading": {
       "french": "A : Je ne remets pas en cause le principe ; c'est la manière dont on prétend l'appliquer qui me paraît discutable. B : Sur ce point, justement — A : Nous sommes peut-être moins éloignés que vous ne le pensez. B : À condition de distinguer l'accord sur l'objectif de l'adhésion au calendrier proposé.",
-      "english": "A: I am not questioning the principle; it is the way it is supposedly to be applied that seems questionable to me. B: On that very point—A: We may be less far apart than you think. B: Provided we distinguish agreement on the objective from support for the proposed timetable.",
+      "english": "A: I am not questioning the principle; it is the way it is supposedly applied that seems questionable to me. B: On that very point—A: We may be less far apart than you think. B: Provided we distinguish agreement on the objective from support for the proposed timetable.",
       "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
       "provenance": {
         "kind": "original",
@@ -2948,7 +2948,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
