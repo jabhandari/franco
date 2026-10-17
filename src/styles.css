@@ -3194,4 +3194,3 @@ html:not([data-theme="light"]) .story-shelf-copy small { color: #f6a957; }
 .phoneme-spike-phones { font-size:var(--text-22); font-weight:750; overflow-wrap:anywhere; }
 .phoneme-spike .phoneme-spike-error { padding:12px 16px; border-radius:10px; background:var(--palette-red-soft); color:var(--palette-red); }
 html:not([data-theme="light"]) .phoneme-spike .phoneme-spike-error { background:var(--palette-gray); color:var(--palette-coral); }
-
