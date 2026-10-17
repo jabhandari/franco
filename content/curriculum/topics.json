@@ -1,0 +1,2626 @@
+[
+  {
+    "topic_id": "A1-01",
+    "level": "A1",
+    "topic_title": "French Basics",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-01-1",
+        "title": "Alphabet"
+      },
+      {
+        "subtopic_id": "A1-01-2",
+        "title": "pronunciation"
+      },
+      {
+        "subtopic_id": "A1-01-3",
+        "title": "accents"
+      },
+      {
+        "subtopic_id": "A1-01-4",
+        "title": "greetings"
+      },
+      {
+        "subtopic_id": "A1-01-5",
+        "title": "introductions"
+      },
+      {
+        "subtopic_id": "A1-01-6",
+        "title": "tu versus vous"
+      }
+    ],
+    "order_index": 0,
+    "prerequisite_concept_ids": [],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "A1-02",
+    "level": "A1",
+    "topic_title": "Sentence Structure",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-02-1",
+        "title": "Subject-verb-object"
+      },
+      {
+        "subtopic_id": "A1-02-2",
+        "title": "basic statements"
+      },
+      {
+        "subtopic_id": "A1-02-3",
+        "title": "c'est and ce sont"
+      },
+      {
+        "subtopic_id": "A1-02-4",
+        "title": "short sentences"
+      }
+    ],
+    "order_index": 1,
+    "prerequisite_concept_ids": [
+      "A1-01"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A1-03",
+    "level": "A1",
+    "topic_title": "Subject Pronouns",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-03-1",
+        "title": "Je"
+      },
+      {
+        "subtopic_id": "A1-03-2",
+        "title": "tu"
+      },
+      {
+        "subtopic_id": "A1-03-3",
+        "title": "il/elle/on"
+      },
+      {
+        "subtopic_id": "A1-03-4",
+        "title": "nous"
+      },
+      {
+        "subtopic_id": "A1-03-5",
+        "title": "vous"
+      },
+      {
+        "subtopic_id": "A1-03-6",
+        "title": "ils/elles"
+      }
+    ],
+    "order_index": 2,
+    "prerequisite_concept_ids": [
+      "A1-02"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A1-04",
+    "level": "A1",
+    "topic_title": "Nouns & Gender",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-04-1",
+        "title": "Masculine and feminine nouns"
+      },
+      {
+        "subtopic_id": "A1-04-2",
+        "title": "gender patterns"
+      },
+      {
+        "subtopic_id": "A1-04-3",
+        "title": "people and objects"
+      }
+    ],
+    "order_index": 3,
+    "prerequisite_concept_ids": [
+      "A1-03"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "A1-05",
+    "level": "A1",
+    "topic_title": "Articles",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-05-1",
+        "title": "Definite"
+      },
+      {
+        "subtopic_id": "A1-05-2",
+        "title": "indefinite"
+      },
+      {
+        "subtopic_id": "A1-05-3",
+        "title": "contracted articles introduction"
+      },
+      {
+        "subtopic_id": "A1-05-4",
+        "title": "articles in context"
+      }
+    ],
+    "order_index": 4,
+    "prerequisite_concept_ids": [
+      "A1-04"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A1-06",
+    "level": "A1",
+    "topic_title": "Singular & Plural",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-06-1",
+        "title": "Plural nouns"
+      },
+      {
+        "subtopic_id": "A1-06-2",
+        "title": "plural articles"
+      },
+      {
+        "subtopic_id": "A1-06-3",
+        "title": "spelling patterns"
+      },
+      {
+        "subtopic_id": "A1-06-4",
+        "title": "exceptions"
+      }
+    ],
+    "order_index": 5,
+    "prerequisite_concept_ids": [
+      "A1-05"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "A1-07",
+    "level": "A1",
+    "topic_title": "Present Tense",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-07-1",
+        "title": "Conjugation concepts"
+      },
+      {
+        "subtopic_id": "A1-07-2",
+        "title": "regular -ER"
+      },
+      {
+        "subtopic_id": "A1-07-3",
+        "title": "beginner -IR/-RE"
+      },
+      {
+        "subtopic_id": "A1-07-4",
+        "title": "subject agreement"
+      }
+    ],
+    "order_index": 6,
+    "prerequisite_concept_ids": [
+      "A1-06"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A1-08",
+    "level": "A1",
+    "topic_title": "Essential Verbs",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-08-1",
+        "title": "Être"
+      },
+      {
+        "subtopic_id": "A1-08-2",
+        "title": "avoir"
+      },
+      {
+        "subtopic_id": "A1-08-3",
+        "title": "aller"
+      },
+      {
+        "subtopic_id": "A1-08-4",
+        "title": "faire"
+      },
+      {
+        "subtopic_id": "A1-08-5",
+        "title": "venir"
+      },
+      {
+        "subtopic_id": "A1-08-6",
+        "title": "prendre"
+      },
+      {
+        "subtopic_id": "A1-08-7",
+        "title": "pouvoir"
+      },
+      {
+        "subtopic_id": "A1-08-8",
+        "title": "vouloir"
+      }
+    ],
+    "order_index": 7,
+    "prerequisite_concept_ids": [
+      "A1-07"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A1-09",
+    "level": "A1",
+    "topic_title": "Adjectives",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-09-1",
+        "title": "Agreement"
+      },
+      {
+        "subtopic_id": "A1-09-2",
+        "title": "placement"
+      },
+      {
+        "subtopic_id": "A1-09-3",
+        "title": "colours"
+      },
+      {
+        "subtopic_id": "A1-09-4",
+        "title": "nationalities"
+      },
+      {
+        "subtopic_id": "A1-09-5",
+        "title": "simple description"
+      }
+    ],
+    "order_index": 8,
+    "prerequisite_concept_ids": [
+      "A1-08"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A1-10",
+    "level": "A1",
+    "topic_title": "Negation",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-10-1",
+        "title": "Ne...pas"
+      },
+      {
+        "subtopic_id": "A1-10-2",
+        "title": "ne...jamais"
+      },
+      {
+        "subtopic_id": "A1-10-3",
+        "title": "ne...plus"
+      },
+      {
+        "subtopic_id": "A1-10-4",
+        "title": "short negative responses"
+      }
+    ],
+    "order_index": 9,
+    "prerequisite_concept_ids": [
+      "A1-09"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A1-11",
+    "level": "A1",
+    "topic_title": "Questions",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-11-1",
+        "title": "Intonation"
+      },
+      {
+        "subtopic_id": "A1-11-2",
+        "title": "est-ce que"
+      },
+      {
+        "subtopic_id": "A1-11-3",
+        "title": "question words"
+      },
+      {
+        "subtopic_id": "A1-11-4",
+        "title": "introductory inversion"
+      }
+    ],
+    "order_index": 10,
+    "prerequisite_concept_ids": [
+      "A1-10"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "A1-12",
+    "level": "A1",
+    "topic_title": "Everyday Vocabulary",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-12-1",
+        "title": "Numbers"
+      },
+      {
+        "subtopic_id": "A1-12-2",
+        "title": "dates"
+      },
+      {
+        "subtopic_id": "A1-12-3",
+        "title": "time"
+      },
+      {
+        "subtopic_id": "A1-12-4",
+        "title": "family"
+      },
+      {
+        "subtopic_id": "A1-12-5",
+        "title": "work"
+      },
+      {
+        "subtopic_id": "A1-12-6",
+        "title": "food"
+      },
+      {
+        "subtopic_id": "A1-12-7",
+        "title": "shopping"
+      },
+      {
+        "subtopic_id": "A1-12-8",
+        "title": "places"
+      },
+      {
+        "subtopic_id": "A1-12-9",
+        "title": "weather"
+      }
+    ],
+    "order_index": 11,
+    "prerequisite_concept_ids": [
+      "A1-11"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "A1-13",
+    "level": "A1",
+    "topic_title": "Daily Life & Routines",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-13-1",
+        "title": "Reflexive verbs introduction"
+      },
+      {
+        "subtopic_id": "A1-13-2",
+        "title": "routine"
+      },
+      {
+        "subtopic_id": "A1-13-3",
+        "title": "frequency"
+      },
+      {
+        "subtopic_id": "A1-13-4",
+        "title": "hobbies"
+      },
+      {
+        "subtopic_id": "A1-13-5",
+        "title": "preferences"
+      }
+    ],
+    "order_index": 12,
+    "prerequisite_concept_ids": [
+      "A1-12"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "A1-14",
+    "level": "A1",
+    "topic_title": "Prepositions & Expressions",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-14-1",
+        "title": "À"
+      },
+      {
+        "subtopic_id": "A1-14-2",
+        "title": "de"
+      },
+      {
+        "subtopic_id": "A1-14-3",
+        "title": "en"
+      },
+      {
+        "subtopic_id": "A1-14-4",
+        "title": "chez"
+      },
+      {
+        "subtopic_id": "A1-14-5",
+        "title": "location"
+      },
+      {
+        "subtopic_id": "A1-14-6",
+        "title": "directions"
+      },
+      {
+        "subtopic_id": "A1-14-7",
+        "title": "il y a"
+      },
+      {
+        "subtopic_id": "A1-14-8",
+        "title": "possession"
+      },
+      {
+        "subtopic_id": "A1-14-9",
+        "title": "connectors"
+      }
+    ],
+    "order_index": 13,
+    "prerequisite_concept_ids": [
+      "A1-13"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A1-15",
+    "level": "A1",
+    "topic_title": "Practical Communication",
+    "subtopics": [
+      {
+        "subtopic_id": "A1-15-1",
+        "title": "Self-introduction"
+      },
+      {
+        "subtopic_id": "A1-15-2",
+        "title": "restaurant"
+      },
+      {
+        "subtopic_id": "A1-15-3",
+        "title": "shops"
+      },
+      {
+        "subtopic_id": "A1-15-4",
+        "title": "messages"
+      },
+      {
+        "subtopic_id": "A1-15-5",
+        "title": "futur proche"
+      },
+      {
+        "subtopic_id": "A1-15-6",
+        "title": "guided listening and speaking"
+      }
+    ],
+    "order_index": 14,
+    "prerequisite_concept_ids": [
+      "A1-14"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "A2-01",
+    "level": "A2",
+    "topic_title": "Present Tense Mastery",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-01-1",
+        "title": "-ER/-IR/-RE"
+      },
+      {
+        "subtopic_id": "A2-01-2",
+        "title": "spelling-change verbs"
+      },
+      {
+        "subtopic_id": "A2-01-3",
+        "title": "irregular present"
+      },
+      {
+        "subtopic_id": "A2-01-4",
+        "title": "review"
+      }
+    ],
+    "order_index": 15,
+    "prerequisite_concept_ids": [
+      "A1-15"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A2-02",
+    "level": "A2",
+    "topic_title": "Past Tense — Passé Composé",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-02-1",
+        "title": "Avoir/être auxiliaries"
+      },
+      {
+        "subtopic_id": "A2-02-2",
+        "title": "participles"
+      },
+      {
+        "subtopic_id": "A2-02-3",
+        "title": "agreement"
+      },
+      {
+        "subtopic_id": "A2-02-4",
+        "title": "negatives"
+      },
+      {
+        "subtopic_id": "A2-02-5",
+        "title": "questions"
+      }
+    ],
+    "order_index": 16,
+    "prerequisite_concept_ids": [
+      "A2-01"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A2-03",
+    "level": "A2",
+    "topic_title": "Imparfait Introduction",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-03-1",
+        "title": "Formation"
+      },
+      {
+        "subtopic_id": "A2-03-2",
+        "title": "habits"
+      },
+      {
+        "subtopic_id": "A2-03-3",
+        "title": "background description"
+      },
+      {
+        "subtopic_id": "A2-03-4",
+        "title": "contrasted past"
+      }
+    ],
+    "order_index": 17,
+    "prerequisite_concept_ids": [
+      "A2-02"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "A2-04",
+    "level": "A2",
+    "topic_title": "Future Expressions",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-04-1",
+        "title": "Futur proche review"
+      },
+      {
+        "subtopic_id": "A2-04-2",
+        "title": "futur simple introduction"
+      },
+      {
+        "subtopic_id": "A2-04-3",
+        "title": "planning"
+      }
+    ],
+    "order_index": 18,
+    "prerequisite_concept_ids": [
+      "A2-03"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A2-05",
+    "level": "A2",
+    "topic_title": "Reflexive Verbs",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-05-1",
+        "title": "Routine"
+      },
+      {
+        "subtopic_id": "A2-05-2",
+        "title": "reciprocal actions"
+      },
+      {
+        "subtopic_id": "A2-05-3",
+        "title": "past tense"
+      },
+      {
+        "subtopic_id": "A2-05-4",
+        "title": "agreement"
+      }
+    ],
+    "order_index": 19,
+    "prerequisite_concept_ids": [
+      "A2-04"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A2-06",
+    "level": "A2",
+    "topic_title": "Object Pronouns",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-06-1",
+        "title": "Direct le/la/les"
+      },
+      {
+        "subtopic_id": "A2-06-2",
+        "title": "indirect lui/leur"
+      },
+      {
+        "subtopic_id": "A2-06-3",
+        "title": "position"
+      }
+    ],
+    "order_index": 20,
+    "prerequisite_concept_ids": [
+      "A2-05"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A2-07",
+    "level": "A2",
+    "topic_title": "Comparatives & Superlatives",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-07-1",
+        "title": "Plus/moins/aussi"
+      },
+      {
+        "subtopic_id": "A2-07-2",
+        "title": "le plus/le moins"
+      },
+      {
+        "subtopic_id": "A2-07-3",
+        "title": "meilleur/mieux"
+      }
+    ],
+    "order_index": 21,
+    "prerequisite_concept_ids": [
+      "A2-06"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A2-08",
+    "level": "A2",
+    "topic_title": "Adverbs & Frequency",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-08-1",
+        "title": "-ment formation"
+      },
+      {
+        "subtopic_id": "A2-08-2",
+        "title": "degree"
+      },
+      {
+        "subtopic_id": "A2-08-3",
+        "title": "frequency"
+      },
+      {
+        "subtopic_id": "A2-08-4",
+        "title": "placement"
+      }
+    ],
+    "order_index": 22,
+    "prerequisite_concept_ids": [
+      "A2-07"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A2-09",
+    "level": "A2",
+    "topic_title": "Pronouns & Determiners",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-09-1",
+        "title": "Possessives"
+      },
+      {
+        "subtopic_id": "A2-09-2",
+        "title": "demonstratives"
+      },
+      {
+        "subtopic_id": "A2-09-3",
+        "title": "stressed pronouns"
+      },
+      {
+        "subtopic_id": "A2-09-4",
+        "title": "y/en introduction"
+      }
+    ],
+    "order_index": 23,
+    "prerequisite_concept_ids": [
+      "A2-08"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A2-10",
+    "level": "A2",
+    "topic_title": "Prepositions & Directions",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-10-1",
+        "title": "Movement"
+      },
+      {
+        "subtopic_id": "A2-10-2",
+        "title": "cities/countries"
+      },
+      {
+        "subtopic_id": "A2-10-3",
+        "title": "directions"
+      },
+      {
+        "subtopic_id": "A2-10-4",
+        "title": "travel"
+      }
+    ],
+    "order_index": 24,
+    "prerequisite_concept_ids": [
+      "A2-09"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A2-11",
+    "level": "A2",
+    "topic_title": "Questions & Negation",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-11-1",
+        "title": "Expanded question forms"
+      },
+      {
+        "subtopic_id": "A2-11-2",
+        "title": "jamais/rien/personne/plus"
+      }
+    ],
+    "order_index": 25,
+    "prerequisite_concept_ids": [
+      "A2-10"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "A2-12",
+    "level": "A2",
+    "topic_title": "Everyday Communication",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-12-1",
+        "title": "Shopping"
+      },
+      {
+        "subtopic_id": "A2-12-2",
+        "title": "travel"
+      },
+      {
+        "subtopic_id": "A2-12-3",
+        "title": "appointments"
+      },
+      {
+        "subtopic_id": "A2-12-4",
+        "title": "restaurants"
+      },
+      {
+        "subtopic_id": "A2-12-5",
+        "title": "help requests"
+      }
+    ],
+    "order_index": 26,
+    "prerequisite_concept_ids": [
+      "A2-11"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "A2-13",
+    "level": "A2",
+    "topic_title": "Describing Experiences",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-13-1",
+        "title": "Memories"
+      },
+      {
+        "subtopic_id": "A2-13-2",
+        "title": "vacations"
+      },
+      {
+        "subtopic_id": "A2-13-3",
+        "title": "chronological narration"
+      },
+      {
+        "subtopic_id": "A2-13-4",
+        "title": "emotion"
+      }
+    ],
+    "order_index": 27,
+    "prerequisite_concept_ids": [
+      "A2-12"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "A2-14",
+    "level": "A2",
+    "topic_title": "Opinions & Preferences",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-14-1",
+        "title": "Preferences"
+      },
+      {
+        "subtopic_id": "A2-14-2",
+        "title": "comparisons"
+      },
+      {
+        "subtopic_id": "A2-14-3",
+        "title": "reasons"
+      },
+      {
+        "subtopic_id": "A2-14-4",
+        "title": "suggestions"
+      }
+    ],
+    "order_index": 28,
+    "prerequisite_concept_ids": [
+      "A2-13"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "A2-15",
+    "level": "A2",
+    "topic_title": "Connected Communication",
+    "subtopics": [
+      {
+        "subtopic_id": "A2-15-1",
+        "title": "Basic connectors"
+      },
+      {
+        "subtopic_id": "A2-15-2",
+        "title": "short emails"
+      },
+      {
+        "subtopic_id": "A2-15-3",
+        "title": "narratives"
+      },
+      {
+        "subtopic_id": "A2-15-4",
+        "title": "dialogues"
+      },
+      {
+        "subtopic_id": "A2-15-5",
+        "title": "listening"
+      }
+    ],
+    "order_index": 29,
+    "prerequisite_concept_ids": [
+      "A2-14"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B1-01",
+    "level": "B1",
+    "topic_title": "Past Tense Mastery",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-01-1",
+        "title": "Passé composé versus imparfait"
+      },
+      {
+        "subtopic_id": "B1-01-2",
+        "title": "narrative sequencing"
+      },
+      {
+        "subtopic_id": "B1-01-3",
+        "title": "background"
+      }
+    ],
+    "order_index": 30,
+    "prerequisite_concept_ids": [
+      "A2-15"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B1-02",
+    "level": "B1",
+    "topic_title": "Future Simple",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-02-1",
+        "title": "Regular/irregular stems"
+      },
+      {
+        "subtopic_id": "B1-02-2",
+        "title": "predictions"
+      },
+      {
+        "subtopic_id": "B1-02-3",
+        "title": "promises"
+      },
+      {
+        "subtopic_id": "B1-02-4",
+        "title": "future plans"
+      }
+    ],
+    "order_index": 31,
+    "prerequisite_concept_ids": [
+      "B1-01"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B1-03",
+    "level": "B1",
+    "topic_title": "Conditional Present",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-03-1",
+        "title": "Polite requests"
+      },
+      {
+        "subtopic_id": "B1-03-2",
+        "title": "advice"
+      },
+      {
+        "subtopic_id": "B1-03-3",
+        "title": "wishes"
+      },
+      {
+        "subtopic_id": "B1-03-4",
+        "title": "hypotheses"
+      }
+    ],
+    "order_index": 32,
+    "prerequisite_concept_ids": [
+      "B1-02"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B1-04",
+    "level": "B1",
+    "topic_title": "Hypotheses & Conditions",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-04-1",
+        "title": "Si + present"
+      },
+      {
+        "subtopic_id": "B1-04-2",
+        "title": "si + imparfait"
+      },
+      {
+        "subtopic_id": "B1-04-3",
+        "title": "possible outcomes"
+      }
+    ],
+    "order_index": 33,
+    "prerequisite_concept_ids": [
+      "B1-03"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B1-05",
+    "level": "B1",
+    "topic_title": "Cause & Consequence",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-05-1",
+        "title": "Parce que"
+      },
+      {
+        "subtopic_id": "B1-05-2",
+        "title": "puisque"
+      },
+      {
+        "subtopic_id": "B1-05-3",
+        "title": "car"
+      },
+      {
+        "subtopic_id": "B1-05-4",
+        "title": "donc"
+      },
+      {
+        "subtopic_id": "B1-05-5",
+        "title": "alors"
+      },
+      {
+        "subtopic_id": "B1-05-6",
+        "title": "grâce à"
+      },
+      {
+        "subtopic_id": "B1-05-7",
+        "title": "à cause de"
+      }
+    ],
+    "order_index": 34,
+    "prerequisite_concept_ids": [
+      "B1-04"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B1-06",
+    "level": "B1",
+    "topic_title": "Expressing Opinions",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-06-1",
+        "title": "Perspective"
+      },
+      {
+        "subtopic_id": "B1-06-2",
+        "title": "agreement and disagreement"
+      },
+      {
+        "subtopic_id": "B1-06-3",
+        "title": "supporting reasons"
+      }
+    ],
+    "order_index": 35,
+    "prerequisite_concept_ids": [
+      "B1-05"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B1-07",
+    "level": "B1",
+    "topic_title": "Relative Pronouns",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-07-1",
+        "title": "Qui"
+      },
+      {
+        "subtopic_id": "B1-07-2",
+        "title": "que"
+      },
+      {
+        "subtopic_id": "B1-07-3",
+        "title": "où"
+      },
+      {
+        "subtopic_id": "B1-07-4",
+        "title": "dont"
+      },
+      {
+        "subtopic_id": "B1-07-5",
+        "title": "connected descriptions"
+      }
+    ],
+    "order_index": 36,
+    "prerequisite_concept_ids": [
+      "B1-06"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B1-08",
+    "level": "B1",
+    "topic_title": "Object Pronouns Mastery",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-08-1",
+        "title": "COD/COI review"
+      },
+      {
+        "subtopic_id": "B1-08-2",
+        "title": "y/en"
+      },
+      {
+        "subtopic_id": "B1-08-3",
+        "title": "pronoun order introduction"
+      }
+    ],
+    "order_index": 37,
+    "prerequisite_concept_ids": [
+      "B1-07"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B1-09",
+    "level": "B1",
+    "topic_title": "Introduction to Subjunctive",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-09-1",
+        "title": "Il faut que"
+      },
+      {
+        "subtopic_id": "B1-09-2",
+        "title": "wishes"
+      },
+      {
+        "subtopic_id": "B1-09-3",
+        "title": "necessity"
+      },
+      {
+        "subtopic_id": "B1-09-4",
+        "title": "emotions"
+      },
+      {
+        "subtopic_id": "B1-09-5",
+        "title": "high-frequency forms"
+      }
+    ],
+    "order_index": 38,
+    "prerequisite_concept_ids": [
+      "B1-08"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B1-10",
+    "level": "B1",
+    "topic_title": "Reported Speech",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-10-1",
+        "title": "Reported statements and questions"
+      },
+      {
+        "subtopic_id": "B1-10-2",
+        "title": "basic tense relationships"
+      }
+    ],
+    "order_index": 39,
+    "prerequisite_concept_ids": [
+      "B1-09"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B1-11",
+    "level": "B1",
+    "topic_title": "Expressing Purpose & Contrast",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-11-1",
+        "title": "Pour"
+      },
+      {
+        "subtopic_id": "B1-11-2",
+        "title": "afin de"
+      },
+      {
+        "subtopic_id": "B1-11-3",
+        "title": "cependant"
+      },
+      {
+        "subtopic_id": "B1-11-4",
+        "title": "pourtant"
+      },
+      {
+        "subtopic_id": "B1-11-5",
+        "title": "même si"
+      },
+      {
+        "subtopic_id": "B1-11-6",
+        "title": "concession"
+      }
+    ],
+    "order_index": 40,
+    "prerequisite_concept_ids": [
+      "B1-10"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B1-12",
+    "level": "B1",
+    "topic_title": "Narrating Experiences",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-12-1",
+        "title": "Storytelling"
+      },
+      {
+        "subtopic_id": "B1-12-2",
+        "title": "sequence"
+      },
+      {
+        "subtopic_id": "B1-12-3",
+        "title": "details"
+      },
+      {
+        "subtopic_id": "B1-12-4",
+        "title": "experiences"
+      }
+    ],
+    "order_index": 41,
+    "prerequisite_concept_ids": [
+      "B1-11"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B1-13",
+    "level": "B1",
+    "topic_title": "Advice & Problem Solving",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-13-1",
+        "title": "Recommendations"
+      },
+      {
+        "subtopic_id": "B1-13-2",
+        "title": "obligations"
+      },
+      {
+        "subtopic_id": "B1-13-3",
+        "title": "solutions"
+      },
+      {
+        "subtopic_id": "B1-13-4",
+        "title": "negotiation"
+      }
+    ],
+    "order_index": 42,
+    "prerequisite_concept_ids": [
+      "B1-12"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B1-14",
+    "level": "B1",
+    "topic_title": "Intermediate Communication",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-14-1",
+        "title": "Travel"
+      },
+      {
+        "subtopic_id": "B1-14-2",
+        "title": "work"
+      },
+      {
+        "subtopic_id": "B1-14-3",
+        "title": "education"
+      },
+      {
+        "subtopic_id": "B1-14-4",
+        "title": "social issues"
+      },
+      {
+        "subtopic_id": "B1-14-5",
+        "title": "feelings"
+      }
+    ],
+    "order_index": 43,
+    "prerequisite_concept_ids": [
+      "B1-13"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B1-15",
+    "level": "B1",
+    "topic_title": "Structured Writing & Speaking",
+    "subtopics": [
+      {
+        "subtopic_id": "B1-15-1",
+        "title": "Opinion paragraphs"
+      },
+      {
+        "subtopic_id": "B1-15-2",
+        "title": "presentations"
+      },
+      {
+        "subtopic_id": "B1-15-3",
+        "title": "listening summaries"
+      },
+      {
+        "subtopic_id": "B1-15-4",
+        "title": "discussions"
+      }
+    ],
+    "order_index": 44,
+    "prerequisite_concept_ids": [
+      "B1-14"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B2-01",
+    "level": "B2",
+    "topic_title": "Advanced Past Tenses",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-01-1",
+        "title": "Plus-que-parfait"
+      },
+      {
+        "subtopic_id": "B2-01-2",
+        "title": "anteriority"
+      },
+      {
+        "subtopic_id": "B2-01-3",
+        "title": "nuanced past narratives"
+      }
+    ],
+    "order_index": 45,
+    "prerequisite_concept_ids": [
+      "B1-15"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B2-02",
+    "level": "B2",
+    "topic_title": "Advanced Relative Pronouns",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-02-1",
+        "title": "Lequel"
+      },
+      {
+        "subtopic_id": "B2-02-2",
+        "title": "auquel"
+      },
+      {
+        "subtopic_id": "B2-02-3",
+        "title": "duquel"
+      },
+      {
+        "subtopic_id": "B2-02-4",
+        "title": "prepositional relatives"
+      }
+    ],
+    "order_index": 46,
+    "prerequisite_concept_ids": [
+      "B2-01"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B2-03",
+    "level": "B2",
+    "topic_title": "Subjunctive Mastery",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-03-1",
+        "title": "Present/past forms"
+      },
+      {
+        "subtopic_id": "B2-03-2",
+        "title": "doubt"
+      },
+      {
+        "subtopic_id": "B2-03-3",
+        "title": "emotions"
+      },
+      {
+        "subtopic_id": "B2-03-4",
+        "title": "indicative contrasts"
+      }
+    ],
+    "order_index": 47,
+    "prerequisite_concept_ids": [
+      "B2-02"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B2-04",
+    "level": "B2",
+    "topic_title": "Advanced Conditional",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-04-1",
+        "title": "Conditional past"
+      },
+      {
+        "subtopic_id": "B2-04-2",
+        "title": "regrets"
+      },
+      {
+        "subtopic_id": "B2-04-3",
+        "title": "counterfactual situations"
+      }
+    ],
+    "order_index": 48,
+    "prerequisite_concept_ids": [
+      "B2-03"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B2-05",
+    "level": "B2",
+    "topic_title": "Hypotheses & Possibilities",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-05-1",
+        "title": "Complex si clauses"
+      },
+      {
+        "subtopic_id": "B2-05-2",
+        "title": "likelihood"
+      },
+      {
+        "subtopic_id": "B2-05-3",
+        "title": "speculation"
+      }
+    ],
+    "order_index": 49,
+    "prerequisite_concept_ids": [
+      "B2-04"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B2-06",
+    "level": "B2",
+    "topic_title": "Argumentation",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-06-1",
+        "title": "Claims"
+      },
+      {
+        "subtopic_id": "B2-06-2",
+        "title": "evidence"
+      },
+      {
+        "subtopic_id": "B2-06-3",
+        "title": "counterarguments"
+      },
+      {
+        "subtopic_id": "B2-06-4",
+        "title": "persuasion"
+      },
+      {
+        "subtopic_id": "B2-06-5",
+        "title": "conclusions"
+      }
+    ],
+    "order_index": 50,
+    "prerequisite_concept_ids": [
+      "B2-05"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B2-07",
+    "level": "B2",
+    "topic_title": "Discourse Connectors",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-07-1",
+        "title": "Toutefois"
+      },
+      {
+        "subtopic_id": "B2-07-2",
+        "title": "néanmoins"
+      },
+      {
+        "subtopic_id": "B2-07-3",
+        "title": "en revanche"
+      },
+      {
+        "subtopic_id": "B2-07-4",
+        "title": "par conséquent"
+      },
+      {
+        "subtopic_id": "B2-07-5",
+        "title": "en outre"
+      }
+    ],
+    "order_index": 51,
+    "prerequisite_concept_ids": [
+      "B2-06"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B2-08",
+    "level": "B2",
+    "topic_title": "Advanced Reported Speech",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-08-1",
+        "title": "Tense shifts"
+      },
+      {
+        "subtopic_id": "B2-08-2",
+        "title": "indirect questions"
+      },
+      {
+        "subtopic_id": "B2-08-3",
+        "title": "reported opinions"
+      }
+    ],
+    "order_index": 52,
+    "prerequisite_concept_ids": [
+      "B2-07"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B2-09",
+    "level": "B2",
+    "topic_title": "Formal Language & Register",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-09-1",
+        "title": "Professional emails"
+      },
+      {
+        "subtopic_id": "B2-09-2",
+        "title": "tone"
+      },
+      {
+        "subtopic_id": "B2-09-3",
+        "title": "politeness"
+      },
+      {
+        "subtopic_id": "B2-09-4",
+        "title": "audience"
+      }
+    ],
+    "order_index": 53,
+    "prerequisite_concept_ids": [
+      "B2-08"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B2-10",
+    "level": "B2",
+    "topic_title": "Passive Voice & Emphasis",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-10-1",
+        "title": "Passive voice"
+      },
+      {
+        "subtopic_id": "B2-10-2",
+        "title": "agency"
+      },
+      {
+        "subtopic_id": "B2-10-3",
+        "title": "c'est...qui/que"
+      },
+      {
+        "subtopic_id": "B2-10-4",
+        "title": "transformations"
+      }
+    ],
+    "order_index": 54,
+    "prerequisite_concept_ids": [
+      "B2-09"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B2-11",
+    "level": "B2",
+    "topic_title": "Advanced Pronouns",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-11-1",
+        "title": "Double objects"
+      },
+      {
+        "subtopic_id": "B2-11-2",
+        "title": "y/en order"
+      },
+      {
+        "subtopic_id": "B2-11-3",
+        "title": "complex placement"
+      }
+    ],
+    "order_index": 55,
+    "prerequisite_concept_ids": [
+      "B2-10"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B2-12",
+    "level": "B2",
+    "topic_title": "Expressing Nuance",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-12-1",
+        "title": "Doubt"
+      },
+      {
+        "subtopic_id": "B2-12-2",
+        "title": "certainty"
+      },
+      {
+        "subtopic_id": "B2-12-3",
+        "title": "concession"
+      },
+      {
+        "subtopic_id": "B2-12-4",
+        "title": "restriction"
+      },
+      {
+        "subtopic_id": "B2-12-5",
+        "title": "hedging"
+      }
+    ],
+    "order_index": 56,
+    "prerequisite_concept_ids": [
+      "B2-11"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B2-13",
+    "level": "B2",
+    "topic_title": "Complex Sentence Structures",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-13-1",
+        "title": "Subordinate clauses"
+      },
+      {
+        "subtopic_id": "B2-13-2",
+        "title": "cause"
+      },
+      {
+        "subtopic_id": "B2-13-3",
+        "title": "purpose"
+      },
+      {
+        "subtopic_id": "B2-13-4",
+        "title": "opposition"
+      },
+      {
+        "subtopic_id": "B2-13-5",
+        "title": "time"
+      }
+    ],
+    "order_index": 57,
+    "prerequisite_concept_ids": [
+      "B2-12"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "Lawless French (reference) + original Franco explanation; Tatoeba (licensed examples)"
+  },
+  {
+    "topic_id": "B2-14",
+    "level": "B2",
+    "topic_title": "Debates & Discussions",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-14-1",
+        "title": "Defending viewpoints"
+      },
+      {
+        "subtopic_id": "B2-14-2",
+        "title": "objections"
+      },
+      {
+        "subtopic_id": "B2-14-3",
+        "title": "social topics"
+      }
+    ],
+    "order_index": 58,
+    "prerequisite_concept_ids": [
+      "B2-13"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "B2-15",
+    "level": "B2",
+    "topic_title": "Advanced Writing & Comprehension",
+    "subtopics": [
+      {
+        "subtopic_id": "B2-15-1",
+        "title": "Argument essays"
+      },
+      {
+        "subtopic_id": "B2-15-2",
+        "title": "reports"
+      },
+      {
+        "subtopic_id": "B2-15-3",
+        "title": "interviews"
+      },
+      {
+        "subtopic_id": "B2-15-4",
+        "title": "authentic texts"
+      }
+    ],
+    "order_index": 59,
+    "prerequisite_concept_ids": [
+      "B2-14"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "TV5MONDE (A1–B2) or DELF/DALF samples (reference) + original Franco task"
+  },
+  {
+    "topic_id": "C1-01",
+    "level": "C1",
+    "topic_title": "Advanced Connectors",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-01-1",
+        "title": "Complex logic"
+      },
+      {
+        "subtopic_id": "C1-01-2",
+        "title": "concession"
+      },
+      {
+        "subtopic_id": "C1-01-3",
+        "title": "discourse cohesion"
+      },
+      {
+        "subtopic_id": "C1-01-4",
+        "title": "transitions"
+      }
+    ],
+    "order_index": 60,
+    "prerequisite_concept_ids": [
+      "B2-15"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-02",
+    "level": "C1",
+    "topic_title": "Advanced Reported Speech",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-02-1",
+        "title": "Complex tense relationships"
+      },
+      {
+        "subtopic_id": "C1-02-2",
+        "title": "attribution"
+      },
+      {
+        "subtopic_id": "C1-02-3",
+        "title": "nuance"
+      }
+    ],
+    "order_index": 61,
+    "prerequisite_concept_ids": [
+      "C1-01"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-03",
+    "level": "C1",
+    "topic_title": "Language Registers",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-03-1",
+        "title": "Colloquial"
+      },
+      {
+        "subtopic_id": "C1-03-2",
+        "title": "neutral"
+      },
+      {
+        "subtopic_id": "C1-03-3",
+        "title": "formal"
+      },
+      {
+        "subtopic_id": "C1-03-4",
+        "title": "academic"
+      },
+      {
+        "subtopic_id": "C1-03-5",
+        "title": "register switching"
+      }
+    ],
+    "order_index": 62,
+    "prerequisite_concept_ids": [
+      "C1-02"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-04",
+    "level": "C1",
+    "topic_title": "Lexical Nuance",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-04-1",
+        "title": "Synonyms"
+      },
+      {
+        "subtopic_id": "C1-04-2",
+        "title": "connotations"
+      },
+      {
+        "subtopic_id": "C1-04-3",
+        "title": "collocations"
+      },
+      {
+        "subtopic_id": "C1-04-4",
+        "title": "precision"
+      }
+    ],
+    "order_index": 63,
+    "prerequisite_concept_ids": [
+      "C1-03"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-05",
+    "level": "C1",
+    "topic_title": "Complex Grammar Structures",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-05-1",
+        "title": "Embedding"
+      },
+      {
+        "subtopic_id": "C1-05-2",
+        "title": "subordinate structures"
+      },
+      {
+        "subtopic_id": "C1-05-3",
+        "title": "refined syntax"
+      }
+    ],
+    "order_index": 64,
+    "prerequisite_concept_ids": [
+      "C1-04"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-06",
+    "level": "C1",
+    "topic_title": "Advanced Subjunctive & Modality",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-06-1",
+        "title": "Subjectivity"
+      },
+      {
+        "subtopic_id": "C1-06-2",
+        "title": "uncertainty"
+      },
+      {
+        "subtopic_id": "C1-06-3",
+        "title": "complex modal constructions"
+      }
+    ],
+    "order_index": 65,
+    "prerequisite_concept_ids": [
+      "C1-05"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-07",
+    "level": "C1",
+    "topic_title": "Argumentation & Persuasion",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-07-1",
+        "title": "Sophisticated claims"
+      },
+      {
+        "subtopic_id": "C1-07-2",
+        "title": "counterarguments"
+      },
+      {
+        "subtopic_id": "C1-07-3",
+        "title": "rhetoric"
+      }
+    ],
+    "order_index": 66,
+    "prerequisite_concept_ids": [
+      "C1-06"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-08",
+    "level": "C1",
+    "topic_title": "Implicit Meaning & Inference",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-08-1",
+        "title": "Subtext"
+      },
+      {
+        "subtopic_id": "C1-08-2",
+        "title": "implied stance"
+      },
+      {
+        "subtopic_id": "C1-08-3",
+        "title": "assumptions"
+      },
+      {
+        "subtopic_id": "C1-08-4",
+        "title": "irony"
+      }
+    ],
+    "order_index": 67,
+    "prerequisite_concept_ids": [
+      "C1-07"
+    ],
+    "activity": "Listen to original/licensed audio, identify explicit information and implied meaning.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-09",
+    "level": "C1",
+    "topic_title": "Idiomatic Expressions",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-09-1",
+        "title": "Idioms"
+      },
+      {
+        "subtopic_id": "C1-09-2",
+        "title": "metaphor"
+      },
+      {
+        "subtopic_id": "C1-09-3",
+        "title": "cultural uses"
+      },
+      {
+        "subtopic_id": "C1-09-4",
+        "title": "context"
+      }
+    ],
+    "order_index": 68,
+    "prerequisite_concept_ids": [
+      "C1-08"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-10",
+    "level": "C1",
+    "topic_title": "Discourse Organization",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-10-1",
+        "title": "Thematic progression"
+      },
+      {
+        "subtopic_id": "C1-10-2",
+        "title": "cohesion"
+      },
+      {
+        "subtopic_id": "C1-10-3",
+        "title": "long explanations"
+      }
+    ],
+    "order_index": 69,
+    "prerequisite_concept_ids": [
+      "C1-09"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-11",
+    "level": "C1",
+    "topic_title": "Professional & Academic French",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-11-1",
+        "title": "Meetings"
+      },
+      {
+        "subtopic_id": "C1-11-2",
+        "title": "reports"
+      },
+      {
+        "subtopic_id": "C1-11-3",
+        "title": "presentations"
+      },
+      {
+        "subtopic_id": "C1-11-4",
+        "title": "academic discussions"
+      }
+    ],
+    "order_index": 70,
+    "prerequisite_concept_ids": [
+      "C1-10"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-12",
+    "level": "C1",
+    "topic_title": "Critical Reading & Analysis",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-12-1",
+        "title": "Editorials"
+      },
+      {
+        "subtopic_id": "C1-12-2",
+        "title": "tone"
+      },
+      {
+        "subtopic_id": "C1-12-3",
+        "title": "bias"
+      },
+      {
+        "subtopic_id": "C1-12-4",
+        "title": "author stance"
+      },
+      {
+        "subtopic_id": "C1-12-5",
+        "title": "argument analysis"
+      }
+    ],
+    "order_index": 71,
+    "prerequisite_concept_ids": [
+      "C1-11"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-13",
+    "level": "C1",
+    "topic_title": "Advanced Listening",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-13-1",
+        "title": "Debates"
+      },
+      {
+        "subtopic_id": "C1-13-2",
+        "title": "lectures"
+      },
+      {
+        "subtopic_id": "C1-13-3",
+        "title": "fast speech"
+      },
+      {
+        "subtopic_id": "C1-13-4",
+        "title": "multiple accents"
+      }
+    ],
+    "order_index": 72,
+    "prerequisite_concept_ids": [
+      "C1-12"
+    ],
+    "activity": "Listen to original/licensed audio, identify explicit information and implied meaning.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-14",
+    "level": "C1",
+    "topic_title": "Advanced Speaking",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-14-1",
+        "title": "Debate"
+      },
+      {
+        "subtopic_id": "C1-14-2",
+        "title": "negotiation"
+      },
+      {
+        "subtopic_id": "C1-14-3",
+        "title": "extended presentations"
+      },
+      {
+        "subtopic_id": "C1-14-4",
+        "title": "spontaneity"
+      }
+    ],
+    "order_index": 73,
+    "prerequisite_concept_ids": [
+      "C1-13"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C1-15",
+    "level": "C1",
+    "topic_title": "Advanced Writing",
+    "subtopics": [
+      {
+        "subtopic_id": "C1-15-1",
+        "title": "Synthesis"
+      },
+      {
+        "subtopic_id": "C1-15-2",
+        "title": "analytical reports"
+      },
+      {
+        "subtopic_id": "C1-15-3",
+        "title": "essays"
+      },
+      {
+        "subtopic_id": "C1-15-4",
+        "title": "editing"
+      }
+    ],
+    "order_index": 74,
+    "prerequisite_concept_ids": [
+      "C1-14"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-01",
+    "level": "C2",
+    "topic_title": "Advanced Argumentation",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-01-1",
+        "title": "Layered reasoning"
+      },
+      {
+        "subtopic_id": "C2-01-2",
+        "title": "persuasive discourse"
+      },
+      {
+        "subtopic_id": "C2-01-3",
+        "title": "rebuttals"
+      }
+    ],
+    "order_index": 75,
+    "prerequisite_concept_ids": [
+      "C1-15"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-02",
+    "level": "C2",
+    "topic_title": "Idiomatic Mastery",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-02-1",
+        "title": "Advanced idioms"
+      },
+      {
+        "subtopic_id": "C2-02-2",
+        "title": "figurative expressions"
+      },
+      {
+        "subtopic_id": "C2-02-3",
+        "title": "regional variation"
+      }
+    ],
+    "order_index": 76,
+    "prerequisite_concept_ids": [
+      "C2-01"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-03",
+    "level": "C2",
+    "topic_title": "Implicit Meaning",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-03-1",
+        "title": "Subtext"
+      },
+      {
+        "subtopic_id": "C2-03-2",
+        "title": "hidden assumptions"
+      },
+      {
+        "subtopic_id": "C2-03-3",
+        "title": "indirect social cues"
+      }
+    ],
+    "order_index": 77,
+    "prerequisite_concept_ids": [
+      "C2-02"
+    ],
+    "activity": "Listen to original/licensed audio, identify explicit information and implied meaning.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-04",
+    "level": "C2",
+    "topic_title": "Stylistic Precision",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-04-1",
+        "title": "Precision"
+      },
+      {
+        "subtopic_id": "C2-04-2",
+        "title": "tone"
+      },
+      {
+        "subtopic_id": "C2-04-3",
+        "title": "rhythm"
+      },
+      {
+        "subtopic_id": "C2-04-4",
+        "title": "unambiguous wording"
+      }
+    ],
+    "order_index": 78,
+    "prerequisite_concept_ids": [
+      "C2-03"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-05",
+    "level": "C2",
+    "topic_title": "Rhetorical Mastery",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-05-1",
+        "title": "Irony"
+      },
+      {
+        "subtopic_id": "C2-05-2",
+        "title": "understatement"
+      },
+      {
+        "subtopic_id": "C2-05-3",
+        "title": "satire"
+      },
+      {
+        "subtopic_id": "C2-05-4",
+        "title": "rhetorical techniques"
+      }
+    ],
+    "order_index": 79,
+    "prerequisite_concept_ids": [
+      "C2-04"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-06",
+    "level": "C2",
+    "topic_title": "Semantic Nuance",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-06-1",
+        "title": "Connotation"
+      },
+      {
+        "subtopic_id": "C2-06-2",
+        "title": "polysemy"
+      },
+      {
+        "subtopic_id": "C2-06-3",
+        "title": "near-synonyms"
+      },
+      {
+        "subtopic_id": "C2-06-4",
+        "title": "pragmatics"
+      }
+    ],
+    "order_index": 80,
+    "prerequisite_concept_ids": [
+      "C2-05"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-07",
+    "level": "C2",
+    "topic_title": "Advanced Literary French",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-07-1",
+        "title": "Literary styles"
+      },
+      {
+        "subtopic_id": "C2-07-2",
+        "title": "narrative techniques"
+      },
+      {
+        "subtopic_id": "C2-07-3",
+        "title": "close reading"
+      }
+    ],
+    "order_index": 81,
+    "prerequisite_concept_ids": [
+      "C2-06"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-08",
+    "level": "C2",
+    "topic_title": "Complex Discourse Analysis",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-08-1",
+        "title": "Framing"
+      },
+      {
+        "subtopic_id": "C2-08-2",
+        "title": "rhetorical strategies"
+      },
+      {
+        "subtopic_id": "C2-08-3",
+        "title": "implied relationships"
+      }
+    ],
+    "order_index": 82,
+    "prerequisite_concept_ids": [
+      "C2-07"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-09",
+    "level": "C2",
+    "topic_title": "Cultural & Pragmatic Fluency",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-09-1",
+        "title": "Humour"
+      },
+      {
+        "subtopic_id": "C2-09-2",
+        "title": "conventions"
+      },
+      {
+        "subtopic_id": "C2-09-3",
+        "title": "politeness"
+      },
+      {
+        "subtopic_id": "C2-09-4",
+        "title": "intercultural use"
+      }
+    ],
+    "order_index": 83,
+    "prerequisite_concept_ids": [
+      "C2-08"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-10",
+    "level": "C2",
+    "topic_title": "Specialized Language",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-10-1",
+        "title": "Academic"
+      },
+      {
+        "subtopic_id": "C2-10-2",
+        "title": "professional"
+      },
+      {
+        "subtopic_id": "C2-10-3",
+        "title": "technical registers"
+      }
+    ],
+    "order_index": 84,
+    "prerequisite_concept_ids": [
+      "C2-09"
+    ],
+    "activity": "Study an original worked example, answer 5 targeted items, then produce 2 original sentences.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-11",
+    "level": "C2",
+    "topic_title": "Advanced Listening Mastery",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-11-1",
+        "title": "Fast conversation"
+      },
+      {
+        "subtopic_id": "C2-11-2",
+        "title": "overlapping voices"
+      },
+      {
+        "subtopic_id": "C2-11-3",
+        "title": "implicit stance"
+      }
+    ],
+    "order_index": 85,
+    "prerequisite_concept_ids": [
+      "C2-10"
+    ],
+    "activity": "Listen to original/licensed audio, identify explicit information and implied meaning.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-12",
+    "level": "C2",
+    "topic_title": "Spontaneous Speaking Mastery",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-12-1",
+        "title": "Rapid reformulation"
+      },
+      {
+        "subtopic_id": "C2-12-2",
+        "title": "complex debate"
+      },
+      {
+        "subtopic_id": "C2-12-3",
+        "title": "natural fluency"
+      }
+    ],
+    "order_index": 86,
+    "prerequisite_concept_ids": [
+      "C2-11"
+    ],
+    "activity": "Complete a role-play or recorded response, then review pragmatic and language feedback.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-13",
+    "level": "C2",
+    "topic_title": "Advanced Writing Mastery",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-13-1",
+        "title": "Critical analyses"
+      },
+      {
+        "subtopic_id": "C2-13-2",
+        "title": "syntheses"
+      },
+      {
+        "subtopic_id": "C2-13-3",
+        "title": "editorial refinement"
+      }
+    ],
+    "order_index": 87,
+    "prerequisite_concept_ids": [
+      "C2-12"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-14",
+    "level": "C2",
+    "topic_title": "Information Synthesis",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-14-1",
+        "title": "Reconciling sources"
+      },
+      {
+        "subtopic_id": "C2-14-2",
+        "title": "summarizing divergent viewpoints"
+      }
+    ],
+    "order_index": 88,
+    "prerequisite_concept_ids": [
+      "C2-13"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  },
+  {
+    "topic_id": "C2-15",
+    "level": "C2",
+    "topic_title": "Precision & Refinement",
+    "subtopics": [
+      {
+        "subtopic_id": "C2-15-1",
+        "title": "Subtle error detection"
+      },
+      {
+        "subtopic_id": "C2-15-2",
+        "title": "ambiguity resolution"
+      },
+      {
+        "subtopic_id": "C2-15-3",
+        "title": "self-editing"
+      }
+    ],
+    "order_index": 89,
+    "prerequisite_concept_ids": [
+      "C2-14"
+    ],
+    "activity": "Read a short prompt, produce a structured response, then revise using a rubric.",
+    "source_mapping": "CEFR descriptors + DELF/DALF examples; authentic articles/audio only with permission or links"
+  }
+]

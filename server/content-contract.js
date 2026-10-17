@@ -100,3 +100,5 @@ export function normalizeItem(item) {
   const clean = (value) => typeof value === 'string' ? value.normalize('NFKC').trim() : value;
   return { ...item, external_id: clean(item.external_id), title: item.title === undefined ? undefined : clean(item.title), prompt: clean(item.prompt), instructions: item.instructions === undefined ? undefined : clean(item.instructions), context: item.context === undefined ? undefined : clean(item.context), cefr: { ...item.cefr, level: item.cefr.level.toUpperCase() }, tags: item.tags?.map(clean).filter(Boolean) ?? [], concepts: item.concepts?.map(clean).filter(Boolean) ?? [] };
 }
+
+export { validateCurriculumTopic } from './curriculum-contract.js';
