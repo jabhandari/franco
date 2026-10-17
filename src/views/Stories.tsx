@@ -2,8 +2,8 @@ import React from 'react';
 import {ArrowLeft,BookOpen,Compass} from 'lucide-react';
 import {apiGet,apiPost,getErrorMessage} from '../api/client';
 import type {ReadingStory,StoryActionResult,StoryState,StoryStop} from '../types';
-import {storySummary} from '../presenters/stories.presenter';
-import {Box,Button,EmptyState,ErrorMessage,LoadingSpinner,Page,PageHeader,Panel,StoryPath,Text} from '../components/ui';
+import {nextStory,storyCtaLabel} from '../presenters/stories.presenter';
+import {Box,Button,EmptyState,ErrorMessage,LoadingSpinner,Page,PageHeader,Panel,StoryPath,StoryTrophyShelf,Text} from '../components/ui';
 
 function StoryReader({id,token,onBack,onProgress}:{key?:React.Key;id:string;token:string;onBack:()=>void;onProgress:()=>Promise<void>}) {
   const [story,setStory]=React.useState<ReadingStory|null>(null),[state,setState]=React.useState<StoryState>('current');
@@ -60,12 +60,23 @@ export function Stories({token}:{token:string|null}) {
   },[token]);
   React.useEffect(()=>{setSelected(null);setStops([]);setLoading(true);load();return()=>{sequence.current++;};},[load]);
   if(!token) return <Page><EmptyState icon={BookOpen} title="Sign in to start your story adventure" text="Your reading progress is saved to your account."/></Page>;
+  const next=nextStory(stops);
   return <Page>
     {selected ? <StoryReader key={`${token}:${selected}`} id={selected} token={token} onBack={()=>setSelected(null)} onProgress={load}/> : <>
-      <PageHeader eyebrow="Read · Discover · Continue" title="Your story adventure" lede="Choose any story, from everyday French to richer adventures. Read and answer six questions at your own pace."/>
       {loading && <LoadingSpinner label="Loading your story path…"/>}
       {error && <><ErrorMessage message={error}/><Button variant="text" onClick={load}>Retry loading stories</Button></>}
-      {!loading && !error && (stops.length ? <><Text>{storySummary(stops)}</Text><StoryPath stops={stops} onSelect={setSelected}/></> : <EmptyState icon={Compass} title="Stories are being prepared" text="Your adventure will appear here when the story collection is available."/>)}
+      {!loading && !error && (stops.length ? <>
+        <Box className="story-hero">
+          <Box className="story-hero-copy">
+            <Text className="home-kicker">Read · Discover · Continue</Text>
+            <Text as="h1">Your story adventure</Text>
+            <Text className="story-hero-lede">Choose any story, from everyday French to richer adventures. Read and answer six questions at your own pace — finish a chapter to earn its trophy.</Text>
+            {next && <Button variant="primary" icon={BookOpen} onClick={()=>setSelected(next.id)}>{storyCtaLabel(next)}</Button>}
+          </Box>
+          <StoryTrophyShelf stops={stops}/>
+        </Box>
+        <StoryPath stops={stops} onSelect={setSelected} nextId={next && next.state!=='completed' ? next.id : null}/>
+      </> : <EmptyState icon={Compass} title="Stories are being prepared" text="Your adventure will appear here when the story collection is available."/>)}
     </>}
   </Page>;
 }
