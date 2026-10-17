@@ -319,6 +319,46 @@ export function createWordsOfDayService(pool, loadBank = null) {
       });
     },
 
+    // GET /api/me/words/history?tz=... — the learner's sets from the last
+    // 7 days before today, newest first, for review on the words page.
+    async history(userId, timeZone) {
+      const client = await pool.connect();
+      try {
+        const today = localDateString(new Date(), normalizeTimeZone(timeZone));
+        const setRows = (await client.query(
+          'SELECT local_date, level, word_ids FROM daily_word_sets WHERE user_id=$1 AND local_date<$2 ORDER BY local_date DESC LIMIT 7',
+          [userId, today],
+        )).rows;
+        if (!setRows.length) return { status: 200, body: { days: [] } };
+        const idsOf = (row) => (typeof row.word_ids === 'string' ? JSON.parse(row.word_ids) : (row.word_ids || []));
+        const allIds = [...new Set(setRows.flatMap(idsOf))];
+        let words;
+        if (loadBank) {
+          const bank = await loadBank();
+          const historyRows = (await client.query('SELECT word_id, is_recycled FROM user_word_history WHERE user_id=$1', [userId])).rows;
+          const recycledById = new Map(historyRows.map((row) => [row.word_id, row.is_recycled]));
+          words = bank.filter((w) => allIds.includes(w.id)).map((w) => ({ ...w, is_recycled: recycledById.get(w.id) }));
+        } else {
+          words = (await client.query(
+            'SELECT w.id, w.word, w.level, w.gloss, w.part_of_speech, w.example_fr, w.example_en, h.is_recycled FROM vocab_words w LEFT JOIN user_word_history h ON h.user_id=$1 AND h.word_id=w.id WHERE w.id = ANY($2)',
+            [userId, allIds],
+          )).rows;
+        }
+        const byId = new Map(words.map((w) => [w.id, w]));
+        const shape = (w) => ({ id: w.id, word: w.word, level: w.level, gloss: w.gloss, part_of_speech: w.part_of_speech, example_fr: w.example_fr, example_en: w.example_en, is_recycled: Boolean(w.is_recycled) });
+        return {
+          status: 200,
+          body: {
+            days: setRows.map((row) => ({
+              date: row.local_date instanceof Date ? row.local_date.toISOString().slice(0, 10) : String(row.local_date),
+              level: row.level,
+              words: idsOf(row).map((id) => byId.get(id)).filter(Boolean).map(shape),
+            })),
+          },
+        };
+      } finally { client.release(); }
+    },
+
     // POST /api/me/words/answers {question_id, choice_id, tz}
     async answer(userId, input) {
       if (!input || typeof input.question_id !== 'string' || typeof input.choice_id !== 'string') {

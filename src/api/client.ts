@@ -199,6 +199,10 @@ export type DailyWordsResponse = {
   completed: boolean;
 };
 
+/** GET /api/me/words/history — past sets for review (today excluded). */
+export type WordHistoryDay = { date: string; level: string; words: DailyWord[] };
+export type WordHistoryResponse = { days: WordHistoryDay[] };
+
 /** POST /api/me/words/answers. */
 export type WordAnswerResponse = {
   question_id: string;
@@ -888,6 +892,7 @@ export type ApiResponse =
   | PlacementResponse
   | StreakResponse
   | DailyWordsResponse
+  | WordHistoryResponse
   | WordAnswerResponse
   | SessionPlanResponse
   | ProgressResponse

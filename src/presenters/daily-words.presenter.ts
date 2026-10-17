@@ -16,6 +16,19 @@ export function wordMeta(word: DailyWord): string {
   return parts.join(' · ');
 }
 
+/** API path for the review history (last 7 days before today). */
+export function wordsHistoryPath(timeZone: string = browserTimeZone()): string {
+  return `/api/me/words/history?tz=${encodeURIComponent(timeZone || 'UTC')}`;
+}
+
+/** "Yesterday" for the day before todayStr, else "Thu, Oct 15". */
+export function historyDayLabel(date: string, today: string): string {
+  const prev = new Date(`${today}T12:00:00Z`);
+  prev.setUTCDate(prev.getUTCDate() - 1);
+  if (prev.toISOString().slice(0, 10) === date) return 'Yesterday';
+  return new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T12:00:00Z`));
+}
+
 /** Short heading per question type, shown above each practice question. */
 export function questionHeading(question: WordQuestion): string {
   if (question.type === 'meaning') return 'What does it mean?';

@@ -1,5 +1,5 @@
 // Unit checks for the FRA-155 daily-words presenter.
-import { dailyWordsPath, wordMeta, questionHeading, practiceProgress, nextQuestion, wordsTeaser } from './daily-words.presenter.ts';
+import { dailyWordsPath, wordMeta, questionHeading, practiceProgress, nextQuestion, wordsTeaser, wordsHistoryPath, historyDayLabel } from './daily-words.presenter.ts';
 import type { DailyWord, WordQuestion } from '../api/client.ts';
 
 function assert(cond: boolean, message: string) {
@@ -35,3 +35,8 @@ assert(teaserFresh.progressLabel === '0 of 10 answered', 'teaser: progress label
 assert(teaserFresh.done === false, 'teaser: not done');
 const teaserDone = wordsTeaser({ level: 'B1', answered_count: 10, total_questions: 10, completed: true });
 assert(teaserDone.done === true && teaserDone.title.includes('done'), 'teaser: completed state');
+
+// History: path + day labels.
+assert(wordsHistoryPath('UTC') === '/api/me/words/history?tz=UTC', 'history path carries tz');
+assert(historyDayLabel('2026-10-16', '2026-10-17') === 'Yesterday', 'history label: the day before is Yesterday');
+assert(historyDayLabel('2026-10-15', '2026-10-17') === 'Thu, Oct 15', 'history label: older days show weekday + date');
