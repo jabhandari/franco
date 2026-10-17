@@ -1691,6 +1691,24 @@ html[data-theme="light"] .learn-view .report-button { border-color:transparent; 
 .answer-word-signal { display:grid; gap:3px; min-width:150px; padding:10px 12px; border:1px solid var(--color-border); border-radius:8px; }
 .answer-word-signal > strong { color:var(--color-text); }
 .answer-word-signal > p { margin:0; color:var(--color-muted); font-size:var(--text-12); }
+.local-pronunciation { display:grid; gap:14px; padding:20px; border:1px solid var(--color-border); border-radius:14px; background:color-mix(in srgb,var(--color-accent) 6%,var(--color-surface)); }
+.local-pronunciation > strong { font-size:var(--text-19); }
+.local-pronunciation p { margin:0; color:var(--color-muted); line-height:1.55; }
+.local-pronunciation-action { justify-self:start; min-height:44px; padding:10px 18px; border:0; border-radius:9px; background:var(--color-accent); color:white; font:inherit; font-weight:700; cursor:pointer; }
+.local-pronunciation-action:disabled { opacity:.65; cursor:wait; }
+.local-pronunciation-result { display:grid; gap:16px; padding-top:16px; border-top:1px solid var(--color-border); }
+.local-pronunciation-meter { display:flex; align-items:center; gap:12px; }
+.local-pronunciation-meter strong { font-size:clamp(2rem,4vw,3rem); line-height:1; color:var(--color-accent); }
+.local-pronunciation-meter span,.local-pronunciation-tracks span { color:var(--color-muted); font-size:var(--text-12); font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
+.local-pronunciation-tracks { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.local-pronunciation-tracks > div { display:grid; gap:5px; padding:12px; border:1px solid var(--color-border); border-radius:9px; }
+.local-pronunciation-tracks strong { overflow-wrap:anywhere; }
+.local-pronunciation-sounds { display:flex; flex-wrap:wrap; gap:5px; }
+.local-pronunciation-sound { min-width:35px; padding:6px 8px; border:1px solid var(--color-border); border-radius:7px; text-align:center; font-weight:700; }
+.local-pronunciation-sound--matched { border-color:#21a37a; background:color-mix(in srgb,#21a37a 18%,var(--color-surface)); }
+.local-pronunciation-sound--missing,.local-pronunciation-sound--different { border-color:#e6855a; background:color-mix(in srgb,#e6855a 17%,var(--color-surface)); }
+.local-pronunciation .local-pronunciation-error { color:var(--palette-coral); }
+@media(max-width:600px) { .local-pronunciation-tracks { grid-template-columns:1fr; } .local-pronunciation-action { width:100%; } }
 @media(max-width:600px) { .answer-comparison { grid-template-columns:1fr; } .answer-mode-row { flex-direction:column; } .answer-mode-row > .primary-button { width:100%; min-height:44px; } .answer-mode-picker button { padding-inline:7px; font-size:var(--text-12); } .answer-recording-row > .primary-button { order:-1; width:100%; min-height:44px; } }
 .freeform-exercise,.read-aloud-exercise { display:grid; gap:16px; }
 .freeform-exercise .free-text-input { min-height:180px; }
