@@ -13,6 +13,102 @@ paths:
       responses:
         '200': { description: Lessons with topic_id, review_status, version and pack_json }
         '401': { description: Missing or insufficiently scoped key }
+  /api/races:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Create an empty two-seat race lobby. Only signed-in learners may create; the host configures the room before Start. Creation is rate-limited per account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config: { $ref: '#/components/schemas/RaceConfig' }
+      responses:
+        '201': { description: Room code, host seat, lobby state and shareable path }
+        '401': { description: Sign-in required }
+        '429': { description: Host room cap or create throttle exceeded }
+  /api/races/{code}:
+    get:
+      description: Public invite state. A seat holder may use a Franco session or guest player token to retrieve their current question and private review; a non-seat never receives question answers.
+      security: [{}, { LearnerSession: [] }, { RacePlayerToken: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/RaceCode' }
+      responses:
+        '200': { description: Authoritative room state, roster, viewer seat and current question when authorized }
+        '404': { description: Room not found or removed after expiry }
+  /api/races/{code}/join:
+    post:
+      description: Claim the second seat. A signed-in learner uses their account name; a guest supplies a display name and receives a one-time player token to store for rejoin.
+      security: [{}, { LearnerSession: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/RaceCode' }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                display_name: { type: string, maxLength: 40 }
+      responses:
+        '200': { description: Claimed seat and guest player token when anonymous }
+        '409': { description: Race started, expired or full }
+  /api/races/{code}/config:
+    patch:
+      security: [{ LearnerSession: [] }]
+      description: Host-only room settings while the room is in lobby status.
+      parameters:
+        - { $ref: '#/components/parameters/RaceCode' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RaceConfig' }
+      responses:
+        '200': { description: Updated lobby state }
+        '403': { description: Viewer is not the host }
+        '409': { description: Race already started or expired }
+  /api/races/{code}/start:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Host-only start. Freezes one ordered question set for both seats and starts the server clock.
+      parameters:
+        - { $ref: '#/components/parameters/RaceCode' }
+      responses:
+        '200': { description: Started race and host's first question }
+        '409': { description: Challenger missing or not enough objective questions at the configured level }
+  /api/races/{code}/answer:
+    post:
+      security: [{ LearnerSession: [] }, { RacePlayerToken: [] }]
+      description: Grade the seat holder's current question on the server, save score and lives, and return their next question. Other player's answers remain private during the race.
+      parameters:
+        - { $ref: '#/components/parameters/RaceCode' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [question_id, response]
+              properties:
+                question_id: { type: string }
+                response:
+                  oneOf:
+                    - { type: string, description: Opaque choice token }
+                    - { type: array, items: { type: string }, description: Word order answer }
+      responses:
+        '200': { description: Graded answer, reveal and updated personal progress }
+        '401': { description: Not seated in this race }
+        '409': { description: Stale question, ended race or expired clock }
+  /api/races/{code}/finish:
+    post:
+      security: [{ LearnerSession: [] }, { RacePlayerToken: [] }]
+      description: Forfeit the remaining questions; once both players finish, return the final winner and scores.
+      parameters:
+        - { $ref: '#/components/parameters/RaceCode' }
+      responses:
+        '200': { description: Authoritative final or current state }
+        '401': { description: Not seated in this race }
   /api/me/stories:
     get:
       security: [{ LearnerSession: [] }]
@@ -401,8 +497,22 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+    RacePlayerToken:
+      type: apiKey
+      in: header
+      name: X-Race-Player-Token
   parameters:
     BatchId: { name: id, in: path, required: true, schema: { type: string } }
+    RaceCode: { name: code, in: path, required: true, schema: { type: string, pattern: '^[A-Za-z0-9]{8}$' } }
   schemas:
+    RaceConfig:
+      type: object
+      required: [source, level, question_count, lives, timer_seconds]
+      properties:
+        source: { type: string, enum: [past_questions, lesson_exercises] }
+        level: { type: string, enum: [A1, A2, B1, B2, C1, C2] }
+        question_count: { type: integer, minimum: 1, maximum: 30 }
+        lives: { type: [integer, 'null'], enum: [1, 3, 5, null] }
+        timer_seconds: { type: [integer, 'null'], minimum: 60, maximum: 1800 }
     ContentBatch:
       $ref: https://franco.app/schemas/content.v1.schema.json

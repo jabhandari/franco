@@ -100,3 +100,4 @@ export { StoryPath } from './StoryPath';
 export type { StoryPathProps } from './StoryPath';
 export { StoryTrophyShelf } from './StoryTrophyShelf';
 export type { StoryTrophyShelfProps } from './StoryTrophyShelf';
+export { RaceInviteCode } from './RaceInviteCode';
