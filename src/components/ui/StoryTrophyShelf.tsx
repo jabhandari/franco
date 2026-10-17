@@ -29,21 +29,27 @@ export function StoryTrophyShelf({stops}: StoryTrophyShelfProps) {
         </span>
       </div>
       <div className="story-shelf-medals">
-        {progress.chapters.map(chapter => (
-          <span
-            key={chapter.level}
-            className={`story-medal${chapter.earned ? ' earned' : ''}`}
-            role="img"
-            aria-label={
-              chapter.earned
-                ? `${chapter.level} trophy earned`
-                : `${chapter.level} trophy · ${chapter.completed} of ${chapter.total} stories completed`
-            }
-          >
-            <Trophy size={17} aria-hidden="true" />
-            <small>{chapter.level}</small>
-          </span>
-        ))}
+        {progress.chapters.map(chapter => {
+          const fill = chapter.total ? Math.round((chapter.completed / chapter.total) * 100) : 0;
+          return (
+            <span
+              key={chapter.level}
+              className={`story-medal${chapter.earned ? ' earned' : ''}`}
+              role="img"
+              aria-label={
+                chapter.earned
+                  ? `${chapter.level} trophy earned`
+                  : `${chapter.level} trophy · ${chapter.completed} of ${chapter.total} stories completed`
+              }
+            >
+              {!chapter.earned && fill > 0 && (
+                <span className="story-medal-fill" style={{height: `${fill}%`}} aria-hidden="true" />
+              )}
+              <Trophy size={17} aria-hidden="true" />
+              <small>{chapter.level}</small>
+            </span>
+          );
+        })}
       </div>
       <ProgressBar label="Stories completed" percent={percent} />
       <p className="story-shelf-note">

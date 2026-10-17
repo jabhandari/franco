@@ -2942,7 +2942,9 @@ html:not([data-theme="light"]) .welcome-highlight-play .welcome-highlight-label 
 .story-shelf-copy small { font-size: var(--text-10); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--palette-amber); }
 .story-shelf-copy strong { font-family: var(--font-heading); font-size: var(--text-20); font-weight: 600; }
 .story-shelf-medals { display: flex; gap: 8px; flex-wrap: wrap; }
-.story-medal { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 46px; padding: 7px 0 5px; border: 1px solid var(--color-border); border-radius: 14px; background: var(--color-surface); color: var(--color-muted); }
+.story-medal { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; gap: 2px; width: 46px; padding: 7px 0 5px; border: 1px solid var(--color-border); border-radius: 14px; background: var(--color-surface); color: var(--color-muted); }
+.story-medal-fill { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, #f6c453, #eda93a); }
+.story-medal > svg, .story-medal > small { position: relative; z-index: 1; }
 .story-medal.earned { border-color: color-mix(in srgb, #d99b28 55%, var(--color-border)); background: linear-gradient(160deg, #f6c453, #e9a13b); color: var(--palette-navy); }
 .story-medal small { font-size: var(--text-10); font-weight: 800; letter-spacing: .06em; }
 .story-shelf-note { margin: 0; font-size: var(--text-12-5); color: var(--color-muted); }
@@ -2990,6 +2992,8 @@ html:not([data-theme="light"]) .welcome-highlight-play .welcome-highlight-label 
 .story-trophy-stop strong { font-family: var(--font-heading); font-size: var(--text-22); font-weight: 600; }
 .story-trophy-stop > span:last-child { max-width: 400px; color: var(--color-muted); font-size: var(--text-13); line-height: 1.55; }
 .story-reader { display: flex; flex-direction: column; gap: 20px; max-width: 860px; margin: 0 auto; }
+.story-reader-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.story-reader-actions .text-button { width: auto; flex: 0 0 auto; }
 .story-reading-text { font-size: 1.15rem; line-height: 1.9; white-space: pre-wrap; overflow-wrap: anywhere; }
 .story-options { display: flex; flex-direction: column; align-items: stretch; gap: 8px; margin: 16px 0; }
 html:not([data-theme="light"]) .story-chapter { --chapter-deep: color-mix(in srgb, var(--chapter) 62%, #ffffff); }

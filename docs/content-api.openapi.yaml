@@ -44,8 +44,8 @@ paths:
         - in: path
           name: action
           required: true
-          schema: { enum: [answer] }
-      description: Check one answer with unlimited retries in any story, regardless of prior progress. Six distinct correct answers mark the story completed. Writes serialize per learner; repeats are idempotent and client-supplied user IDs or completion flags are never trusted.
+          schema: { enum: [answer, skip] }
+      description: Check one answer with unlimited retries in any story, regardless of prior progress. Six distinct correct answers mark the story completed. The skip action records that the learner skipped this story's questions for now — it never completes the story, keeps any saved answers, and a completed story stays completed. Writes serialize per learner; repeats are idempotent and client-supplied user IDs or completion flags are never trusted.
       requestBody:
         required: true
         content:
