@@ -357,10 +357,11 @@ async function main() {
               return json(res,result.status,result.body);
             }
             // FRA-154: Words of the Day — frozen daily set + streak-isolated practice.
-            if (u.pathname === '/api/me/words/today' || u.pathname === '/api/me/words/answers') {
+            if (u.pathname === '/api/me/words/today' || u.pathname === '/api/me/words/answers' || u.pathname === '/api/me/words/history') {
               const viewer=await user(req);if(!viewer) return json(res,401,{error:'Authentication required.'});
               let result;
               if(req.method==='GET' && u.pathname==='/api/me/words/today') result=await wordsOfDayService.today(viewer.id,u.searchParams.get('tz'));
+              else if(req.method==='GET' && u.pathname==='/api/me/words/history') result=await wordsOfDayService.history(viewer.id,u.searchParams.get('tz'));
               else if(req.method==='POST' && u.pathname==='/api/me/words/answers') result=await wordsOfDayService.answer(viewer.id,await body(req));
               else return json(res,405,{error:'Method not allowed.'});
               return json(res,result.status,result.body);

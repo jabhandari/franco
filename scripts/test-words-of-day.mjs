@@ -102,6 +102,14 @@ function fakePool() {
       if (sql === 'BEGIN' || sql === 'COMMIT' || sql === 'ROLLBACK') return { rows: [] };
       if (sql.includes('FROM users')) return { rows: [{ id: params[0] }] };
       if (sql.includes('FROM learner_profiles')) return { rows: [{ current_level: 'A1' }] };
+      if (sql.includes('local_date<$2')) {
+        const rows = [...sets.entries()]
+          .filter(([k, row]) => k.startsWith(`${params[0]}::`) && row.local_date < params[1])
+          .map(([, row]) => row)
+          .sort((a, b) => String(b.local_date).localeCompare(String(a.local_date)))
+          .slice(0, params[2] || 7);
+        return { rows };
+      }
       if (sql.includes('SELECT local_date, level, word_ids FROM daily_word_sets')) {
         const row = sets.get(key(params[0], params[1]));
         return { rows: row ? [row] : [] };
@@ -151,6 +159,22 @@ const after = await service.today('learner-one', 'America/Toronto');
 assert(after.body.answered_count === 1 && after.body.answered[q.id]?.correct === true, 'service: practice state survives a refresh (comes from the server)');
 const bad = await service.answer('learner-one', { question_id: 'w-a1-999:meaning', choice_id: 'w-a1-001', tz: 'America/Toronto' });
 assert(bad.status === 400, 'service: answers to foreign questions are rejected');
+
+// --- Service: last week's sets for review --------------------------------------
+const dayMs = 24 * 60 * 60 * 1000;
+const isoDaysAgo = (n) => new Date(Date.now() - n * dayMs).toISOString().slice(0, 10);
+const a1Words = bank.filter((w) => w.level === 'A1');
+for (let n = 1; n <= 8; n += 1) {
+  pool._sets.set(`learner-week::${isoDaysAgo(n)}`, { local_date: isoDaysAgo(n), level: 'A1', word_ids: a1Words.slice(n * 5, n * 5 + 5).map((w) => w.id) });
+}
+const week = await service.history('learner-week', 'UTC');
+assert(week.status === 200 && week.body.days.length === 7, 'history: returns at most 7 past days');
+assert(week.body.days[0].date === isoDaysAgo(1), 'history: newest first, today excluded');
+assert(week.body.days[6].date === isoDaysAgo(7), 'history: the 8th day back is cut off');
+assert(week.body.days[0].words.length === 5 && week.body.days[0].words.every((w) => w.gloss && w.example_fr), 'history: words resolved with gloss + example');
+assert(week.body.days[0].words.map((w) => w.id).join() === a1Words.slice(5, 10).map((w) => w.id).join(), 'history: set order preserved');
+const none = await service.history('learner-new', 'UTC');
+assert(none.status === 200 && none.body.days.length === 0, 'history: a new learner gets an empty list');
 
 // --- Streak isolation (static guard) -------------------------------------------
 const moduleSource = await readFile(new URL('../server/words-of-day.js', import.meta.url), 'utf8');

@@ -132,6 +132,18 @@ paths:
       responses:
         '200': { description: Date, level, words, questions (choices shuffled, no answer keys), answered map, answered_count, total_questions, completed }
         '401': { description: Authentication required }
+  /api/me/words/history:
+    get:
+      security: [{ LearnerSession: [] }]
+      parameters:
+        - in: query
+          name: tz
+          schema: { type: string }
+          description: Learner IANA timezone; "today" is the learner-local date.
+      description: The learner's word sets from the last 7 days before today, newest first, for review on the words page. Days without a set are omitted.
+      responses:
+        '200': { description: days[] with date, level and the day's 5 words (same shape as /today words) }
+        '401': { description: Authentication required }
   /api/me/words/answers:
     post:
       security: [{ LearnerSession: [] }]

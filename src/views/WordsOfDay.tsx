@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { DailyWordsSection } from '../components/DailyWordsSection.js';
+import { WordHistory } from '../components/WordHistory.js';
 import { Box, Button } from '../components/ui';
 
 // FRA-155: the Words of the Day page. Reached only from the Home teaser
@@ -11,6 +12,7 @@ export function WordsOfDay({ token, onHome }: { token?: string | null; onHome: (
     <Box className="words-page">
       <Button variant="text" icon={ArrowLeft} onClick={onHome}>Back to Home</Button>
       <DailyWordsSection token={token} />
+      <WordHistory token={token} />
     </Box>
   );
 }
