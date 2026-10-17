@@ -1,10 +1,16 @@
 # Review cascade router (FRA-157)
 #
 # Layer 1 — CodeRabbit (free tier: 1 PR review per author per hour).
+#   EVERY open PR is in the review queue by default — no label, no
+#   GitHub trip, no human step. This matters because many PRs here are
+#   opened by agents (Codex / Muse) on a human's behalf: the author
+#   should never have to visit GitHub to get their PR reviewed.
 #   The hourly sweep spends each author's CodeRabbit slot on their
-#   oldest queued PR, so the rolling hourly allowance is never lost
-#   while PRs are waiting. PRs join the queue with the `review-queued`
-#   label; the sweep moves them to `review-active` once dispatched.
+#   oldest unreviewed PR (non-drafts first), so the rolling hourly
+#   allowance is never lost while PRs are waiting. A PR counts as
+#   reviewed at its current head when a dispatch marker for that head
+#   SHA exists on it, or CodeRabbit has already reviewed that head.
+#   Opt a PR out of the cascade with the `no-cascade` label.
 #
 # Layer 2 — Greptile. When CodeRabbit reports it is rate-limited on a
 #   PR, the escalation job hands that PR to Greptile.
@@ -39,36 +45,59 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Dispatch oldest queued PR per author to CodeRabbit
+      - name: Dispatch oldest unreviewed PR per author to CodeRabbit
         run: |
           set -euo pipefail
 
-          # Open, non-draft PRs waiting in the review queue.
+          # Every open PR is queued by default. Opt-outs carry the
+          # `no-cascade` label. Non-drafts go first (they are the ones
+          # awaiting review); drafts follow, oldest first within each
+          # group, because agent-opened PRs must not need a human to
+          # visit GitHub before they can be reviewed.
           queued=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open \
-            --label review-queued --limit 200 \
-            --json number,author,createdAt,isDraft)
+            --limit 200 \
+            --json number,author,createdAt,isDraft,headRefOid,labels)
 
-          # One PR per author: the oldest queued one. CodeRabbit's free
-          # allowance is 1 review per author per hour, so dispatching
-          # more than one per author would just hit the rate limit.
+          # One PR per author per run: CodeRabbit's free allowance is
+          # 1 review per author per hour, so dispatching more than one
+          # per author would just hit the rate limit.
           echo "$queued" | jq -c '
-            [.[] | select(.isDraft == false)]
+            map(select(.labels | map(.name) | index("no-cascade") | not))
+            | sort_by([.isDraft, .createdAt])
             | group_by(.author.login)
-            | map(min_by(.createdAt))
+            | map(.[0])
             | .[]
           ' | while IFS= read -r pr; do
             number=$(echo "$pr" | jq -r '.number')
             author=$(echo "$pr" | jq -r '.author.login')
-            echo "CodeRabbit slot: PR #$number (author: $author)"
+            sha=$(echo "$pr" | jq -r '.headRefOid')
 
+            # Already dispatched for this exact head? Skip.
+            if gh api "repos/$GITHUB_REPOSITORY/issues/$number/comments?per_page=100" \
+                 --jq '.[].body' | grep -Fq "coderabbit-slot: $author @ $sha"; then
+              echo "PR #$number already dispatched at $sha; skipping."
+              continue
+            fi
+
+            # CodeRabbit already reviewed this exact head on its own
+            # (e.g. its automatic review on PR open)? Skip — never
+            # spend a second review on the same head.
+            if gh api "repos/$GITHUB_REPOSITORY/pulls/$number/reviews?per_page=100" \
+                 --jq '.[] | select(.user.login == "coderabbitai[bot]") | .commit_id' \
+               | grep -Fxq "$sha"; then
+              echo "PR #$number already reviewed by CodeRabbit at $sha; skipping."
+              continue
+            fi
+
+            echo "CodeRabbit slot: PR #$number (author: $author, head: $sha)"
             gh pr comment "$number" --repo "$GITHUB_REPOSITORY" --body "Review cascade: hourly CodeRabbit slot for @${author}.
 
           @coderabbitai review
 
-          <!-- review-cascade coderabbit-slot: ${author} -->"
+          <!-- review-cascade coderabbit-slot: ${author} @ ${sha} -->"
 
             gh pr edit "$number" --repo "$GITHUB_REPOSITORY" \
-              --remove-label review-queued --add-label review-active
+              --add-label review-active || true
           done
 
   # ------------------------------------------------------------------
