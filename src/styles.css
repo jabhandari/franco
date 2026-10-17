@@ -2790,12 +2790,15 @@ html[data-theme] .verb-sprint-intro h1 { max-width:565px; color:white; font-fami
 .daily-words-teaser-side { display:flex; align-items:center; gap:10px; color:var(--color-accent); }
 .daily-words-teaser-progress { font-size:13px; font-weight:700; white-space:nowrap; }
 .word-history { width:100%; margin-top:26px; }
-.word-history-title { font-family:var(--font-heading); font-size:27px; font-weight:500; margin:0 0 4px; }
-.word-history-sub { color:var(--color-muted); margin:0 0 18px; }
-.word-history-day { margin-bottom:22px; }
-.word-history-day-head { display:flex; align-items:baseline; gap:10px; margin-bottom:10px; }
-.word-history-date { font-size:16px; font-weight:700; }
-.word-history-level { color:var(--color-accent); font-size:12px; font-weight:700; letter-spacing:.06em; }
+.word-history-title { font-family:var(--font-heading); font-size:27px; font-weight:500; margin:0 0 14px; }
+.word-history-table { width:100%; border-collapse:collapse; }
+.word-history-table td, .word-history-table th { padding:9px 12px; text-align:left; border-bottom:1px solid var(--color-border); }
+.wh-head-cell { color:var(--color-muted); font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+.wh-day-row td { background:color-mix(in srgb,var(--color-accent) 7%,transparent); border-bottom:1px solid var(--color-border); font-weight:700; }
+.wh-day-level { color:var(--color-accent); font-size:12px; letter-spacing:.06em; text-align:right; }
+.word-history-table .wh-day-level { text-align:right; }
+.wh-cell-fr { font-weight:600; width:38%; }
+.wh-cell-en { color:var(--color-muted); }
 .words-page { display:flex; flex-direction:column; gap:14px; align-items:flex-start; }
 .words-page .daily-words-card { width:100%; }
 .daily-words-card { padding:22px; border:1px solid color-mix(in srgb,var(--color-accent) 30%,var(--color-border)); border-radius:22px; background:color-mix(in srgb,var(--color-accent) 6%,var(--color-surface)); }
