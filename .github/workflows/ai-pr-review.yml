@@ -1,3 +1,7 @@
+# FRA-157: automatic reviews retired — the review cascade
+# (.github/workflows/review-cascade.yml) owns PR reviews now.
+# This workflow is manual-only (workflow_dispatch); the
+# pull_request trigger was removed so the two never double-review.
 # FRA-33: free AI PR reviewer (Gemini Flash, $0)
 #
 # Posts an advisory review + plain-language summary on every PR.
@@ -9,8 +13,6 @@
 name: AI PR review (Gemini)
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
   workflow_dispatch:
     inputs:
       pr_number:
