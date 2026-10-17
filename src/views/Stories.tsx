@@ -1,5 +1,5 @@
 import React from 'react';
-import {ArrowLeft,BookOpen,Compass,SkipForward} from 'lucide-react';
+import {ArrowLeft,BookOpen,Compass} from 'lucide-react';
 import {apiGet,apiPost,getErrorMessage} from '../api/client';
 import type {ReadingStory,StoryActionResult,StoryState,StoryStop} from '../types';
 import {storySummary} from '../presenters/stories.presenter';
@@ -9,19 +9,18 @@ function StoryReader({id,token,onBack,onProgress}:{key?:React.Key;id:string;toke
   const [story,setStory]=React.useState<ReadingStory|null>(null),[state,setState]=React.useState<StoryState>('current');
   const [answered,setAnswered]=React.useState<string[]>([]),[questionsOpen,setQuestionsOpen]=React.useState(false);
   const [selection,setSelection]=React.useState(''),[feedback,setFeedback]=React.useState<StoryActionResult|null>(null),[error,setError]=React.useState(''),[busy,setBusy]=React.useState(false);
-  const [confirmSkip,setConfirmSkip]=React.useState(false);
   React.useEffect(()=>{
     let active=true;
     apiGet<{story:ReadingStory;state:StoryState}>(`/api/me/stories/${id}`,token).then(data=>{if(active){setStory(data.story);setAnswered(data.story.answered_question_ids);setState(data.state);}}).catch(error=>{if(active) setError(getErrorMessage(error));});
     return()=>{active=false;};
   },[id,token]);
   const question=story?.questions.find(q=>!answered.includes(q.id));
-  async function act(action:'answer'|'skip') {
+  async function answer() {
     if(!story || busy) return;
     setBusy(true);setError('');
     try {
-      const result=await apiPost<StoryActionResult>(`/api/me/stories/${id}/${action}`,{version:story.version,question_id:question?.id ?? null,option_id:selection || null},token);
-      setFeedback(result);setAnswered(result.answered_question_ids);setState(result.state);setConfirmSkip(false);
+      const result=await apiPost<StoryActionResult>(`/api/me/stories/${id}/answer`,{version:story.version,question_id:question?.id ?? null,option_id:selection || null},token);
+      setFeedback(result);setAnswered(result.answered_question_ids);setState(result.state);
       if(result.correct) setSelection('');
       await onProgress();
     } catch(error) {setError(getErrorMessage(error));} finally {setBusy(false);}
@@ -43,14 +42,10 @@ function StoryReader({id,token,onBack,onProgress}:{key?:React.Key;id:string;toke
         {question ? <Box>
           <Text as="h3">{question.prompt}</Text>
           <Box className="story-options">{question.options.map(option=><Button key={option.id} variant={selection===option.id?'primary':'text'} aria-pressed={selection===option.id} disabled={busy} onClick={()=>setSelection(option.id)}>{option.text}</Button>)}</Box>
-          <Button variant="primary" disabled={busy || !selection} onClick={()=>act('answer')}>{busy?'Checking…':'Check answer'}</Button>
+          <Button variant="primary" disabled={busy || !selection} onClick={answer}>{busy?'Checking…':'Check answer'}</Button>
         </Box> : <Text as="strong">All six questions answered. Well done!</Text>}
       </Panel>}
-      {state==='completed' && <Panel><Text as="h2">Story completed</Text><Text>The next stop is unlocked. Your progress is saved to your account.</Text><Button variant="primary" icon={Compass} onClick={onBack}>Explore the path</Button></Panel>}
-      {state==='skipped' && <Panel><Text as="h2">Story skipped</Text><Text>The next stop is unlocked. You can return to this story whenever you like.</Text><Button variant="primary" onClick={onBack}>Continue on the path</Button></Panel>}
-      {state==='current' && <Box>
-        {!confirmSkip ? <Button variant="text" icon={SkipForward} disabled={busy} onClick={()=>setConfirmSkip(true)}>Skip this story</Button> : <Panel><Text>Skip this story and unlock the next stop? You can return later.</Text><Button variant="primary" disabled={busy} onClick={()=>act('skip')}>Yes, skip and continue</Button><Button variant="text" disabled={busy} onClick={()=>setConfirmSkip(false)}>Keep reading</Button></Panel>}
-      </Box>}
+      {state==='completed' && <Panel><Text as="h2">Story completed</Text><Text>Your progress is saved to your account. Choose any story to read next.</Text><Button variant="primary" icon={Compass} onClick={onBack}>Explore the path</Button></Panel>}
     </>}
   </Box>;
 }
@@ -64,10 +59,10 @@ export function Stories({token}:{token:string|null}) {
     finally{if(request===sequence.current) setLoading(false);}
   },[token]);
   React.useEffect(()=>{setSelected(null);setStops([]);setLoading(true);load();return()=>{sequence.current++;};},[load]);
-  if(!token) return <Page><EmptyState icon={BookOpen} title="Sign in to start your story adventure" text="Your completed and skipped stories are saved to your account."/></Page>;
+  if(!token) return <Page><EmptyState icon={BookOpen} title="Sign in to start your story adventure" text="Your reading progress is saved to your account."/></Page>;
   return <Page>
     {selected ? <StoryReader key={`${token}:${selected}`} id={selected} token={token} onBack={()=>setSelected(null)} onProgress={load}/> : <>
-      <PageHeader eyebrow="Read · Discover · Continue" title="Your story adventure" lede="Follow a trail from everyday French to richer stories. Read, answer six questions, and unlock the next stop — or skip and come back later."/>
+      <PageHeader eyebrow="Read · Discover · Continue" title="Your story adventure" lede="Choose any story, from everyday French to richer adventures. Read and answer six questions at your own pace."/>
       {loading && <LoadingSpinner label="Loading your story path…"/>}
       {error && <><ErrorMessage message={error}/><Button variant="text" onClick={load}>Retry loading stories</Button></>}
       {!loading && !error && (stops.length ? <><Text>{storySummary(stops)}</Text><StoryPath stops={stops} onSelect={setSelected}/></> : <EmptyState icon={Compass} title="Stories are being prepared" text="Your adventure will appear here when the story collection is available."/>)}

@@ -16,7 +16,7 @@ paths:
   /api/me/stories:
     get:
       security: [{ LearnerSession: [] }]
-      description: Ordered story adventure with per-user completed, skipped, current and locked states. Returns no answer keys; an empty collection is a valid rollout state.
+      description: Ordered story adventure with per-user completed, legacy skipped and current states; every story is open from the start. Returns no answer keys; an empty collection is a valid rollout state.
       responses:
         '200': { description: Story summaries and saved learner states }
         '401': { description: Authentication required }
@@ -28,11 +28,10 @@ paths:
           name: story_id
           required: true
           schema: { type: string, pattern: '^story-[0-9]{2}$' }
-      description: Read an unlocked story with six questions and English vocabulary support. Correct options and answer explanations remain private until grading.
+      description: Read any story in any order with six questions and English vocabulary support. Correct options and answer explanations remain private until grading.
       responses:
         '200': { description: Story, questions and saved correct question IDs }
         '401': { description: Authentication required }
-        '403': { description: Finish or skip the current stop first }
         '404': { description: Story not found }
   /api/me/stories/{story_id}/{action}:
     post:
@@ -45,8 +44,8 @@ paths:
         - in: path
           name: action
           required: true
-          schema: { enum: [answer, skip] }
-      description: Check one answer with unlimited retries, or skip. Six distinct correct answers or explicit skip unlock the next stop. Writes serialize per learner; repeats are idempotent and client-supplied user IDs or completion flags are never trusted.
+          schema: { enum: [answer] }
+      description: Check one answer with unlimited retries in any story, regardless of prior progress. Six distinct correct answers mark the story completed. Writes serialize per learner; repeats are idempotent and client-supplied user IDs or completion flags are never trusted.
       requestBody:
         required: true
         content:
@@ -62,7 +61,6 @@ paths:
         '200': { description: Saved state, correct question IDs and feedback }
         '400': { description: Invalid question, option or missing version }
         '401': { description: Authentication required }
-        '403': { description: Locked-ahead story }
         '404': { description: Story not found }
         '409': { description: Story version changed; reload required }
   /api/me/puzzles/verb-sprint/runs:
