@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  Apple, Armchair, Bike, BookOpen, Building2, CalendarCheck, CalendarClock, Camera, ChefHat,
+  Apple, Armchair, Bike, BookOpen, BookText, Building2, CalendarCheck, CalendarClock, Camera, ChefHat,
   ClipboardCheck, ClipboardList, Coffee, Coins, Compass, Crown, DoorOpen, Feather, Flag,
   FlaskConical, Flower2, Footprints, Gauge, Gift, KeyRound, Landmark, Languages, Lightbulb,
-  ListChecks, Lock, Mail, Map, Megaphone, MessageSquare, MessagesSquare, MoonStar, Notebook,
+  ListChecks, Mail, Map, Megaphone, MessageSquare, MessagesSquare, MoonStar, Notebook,
   PartyPopper, PhoneOff, PiggyBank, Quote, Route, Salad, Scale, School, ShoppingBag, Signpost,
   Sparkles, Sprout, Star, Ticket, Trophy, Truck, Umbrella, UtensilsCrossed, Volume2, VolumeX,
   Check,
@@ -51,7 +51,7 @@ const STORY_ICONS: Record<string, LucideIcon> = {
   'story-34': Ticket,
   'story-35': ClipboardCheck,
   'story-36': FlaskConical,
-  'story-37': Lock,
+  'story-37': BookText,
   'story-38': Lightbulb,
   'story-39': ListChecks,
   'story-40': Quote,
@@ -88,8 +88,9 @@ function StoryDots({answered}: {answered: number}) {
 
 function storyStatus(stop: StoryStop, isNext: boolean): string {
   if (stop.state === 'completed') return 'Completed · Read again';
+  if (stop.answered) return `${stop.answered}/6 answered · Jump back in`;
   if (isNext) return 'Your next adventure';
-  return stop.answered ? `${stop.answered}/6 answered · Jump back in` : 'Start story';
+  return 'Start story';
 }
 
 export type StoryPathProps = {
@@ -137,7 +138,7 @@ export function StoryPath({stops, onSelect, nextId = null}: StoryPathProps) {
                     <button
                       type="button"
                       className="story-stop-button"
-                      aria-label={`${stop.order_index}. ${stop.title}. ${isNext ? 'Your next adventure' : storyStateLabel(stop)}`}
+                      aria-label={`${stop.order_index}. ${stop.title}. ${isNext && !stop.answered ? 'Your next adventure' : storyStateLabel(stop)}`}
                       onClick={() => onSelect(stop.id)}
                     >
                       <span className="story-stop-marker">
@@ -165,7 +166,7 @@ export function StoryPath({stops, onSelect, nextId = null}: StoryPathProps) {
                           <Star size={18} aria-hidden="true" />
                         </span>
                       )}
-                      {isNext && <span className="story-stop-cta">Start reading</span>}
+                      {isNext && <span className="story-stop-cta">{stop.answered ? 'Jump back in' : 'Start reading'}</span>}
                     </button>
                   </li>
                 );
