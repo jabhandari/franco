@@ -3,7 +3,7 @@
     "topic_id": "C1-01",
     "level": "C1",
     "outcome": "I can connect a complex argument while making concessions and limits explicit.",
-    "explanation": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
+    "explanation": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. A formal concessive pattern, si + adjective + subjunctive (Si utile soit-elle… — useful though it may be…), concedes a quality before limiting its effect. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
     "example_items": [
       {
         "french": "La réforme paraît prometteuse ; encore faut-il que les moyens suivent.",
@@ -61,7 +61,7 @@
           "0"
         ],
         "feedback": {
-          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
+          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. A formal concessive pattern, si + adjective + subjunctive (Si utile soit-elle… — useful though it may be…), concedes a quality before limiting its effect. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
           "error": "That English meaning belongs to a different message, rather than: La réforme paraît prometteuse ; encore faut-il que les moyens suivent.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: The reform seems promising; however, adequate resources must also follow."
         },
@@ -94,7 +94,7 @@
           "1"
         ],
         "feedback": {
-          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
+          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. A formal concessive pattern, si + adjective + subjunctive (Si utile soit-elle… — useful though it may be…), concedes a quality before limiting its effect. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
           "error": "That English meaning belongs to a different message, rather than: Cela étant, l'absence de certitude ne justifie pas l'inaction.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: That being said, the lack of certainty does not justify inaction."
         },
@@ -127,7 +127,7 @@
           "2"
         ],
         "feedback": {
-          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
+          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. A formal concessive pattern, si + adjective + subjunctive (Si utile soit-elle… — useful though it may be…), concedes a quality before limiting its effect. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
           "error": "That English meaning belongs to a different message, rather than: Dès lors, une expérimentation encadrée semble préférable à une décision définitive.",
           "remediation": "Identify the person and action in the French sentence; its intended meaning is: Therefore, a supervised trial seems preferable to a definitive decision."
         },
@@ -148,7 +148,7 @@
           "La réforme paraît prometteuse ; encore faut-il que les moyens suivent."
         ],
         "feedback": {
-          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
+          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. A formal concessive pattern, si + adjective + subjunctive (Si utile soit-elle… — useful though it may be…), concedes a quality before limiting its effect. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
           "error": "The response does not match the model wording requested for: The reform seems promising; however, adequate resources must also follow.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: La réforme paraît prometteuse ; encore faut-il que les moyens suivent."
         },
@@ -167,7 +167,7 @@
           "Cela étant, l'absence de certitude ne justifie pas l'inaction."
         ],
         "feedback": {
-          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
+          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. A formal concessive pattern, si + adjective + subjunctive (Si utile soit-elle… — useful though it may be…), concedes a quality before limiting its effect. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
           "error": "The response does not match the model wording requested for: That being said, the lack of certainty does not justify inaction.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Cela étant, l'absence de certitude ne justifie pas l'inaction."
         },
@@ -186,7 +186,7 @@
           "Dès lors, une expérimentation encadrée semble préférable à une décision définitive."
         ],
         "feedback": {
-          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
+          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. A formal concessive pattern, si + adjective + subjunctive (Si utile soit-elle… — useful though it may be…), concedes a quality before limiting its effect. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
           "error": "The response does not match the model wording requested for: Therefore, a supervised trial seems preferable to a definitive decision.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Dès lors, une expérimentation encadrée semble préférable à une décision définitive."
         },
@@ -222,7 +222,7 @@
       "model_translation": "Useful though it may be, this measure will not solve everything."
     },
     "feedback": {
-      "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
+      "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. A formal concessive pattern, si + adjective + subjunctive (Si utile soit-elle… — useful though it may be…), concedes a quality before limiting its effect. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
       "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
       "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
     },
@@ -234,7 +234,7 @@
           "Si utile soit-elle, cette mesure ne résoudra pas tout."
         ],
         "feedback": {
-          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
+          "rule": "Cohesion is the way a text's parts connect so a reader can follow the reasoning. Encore faut-il que (provided also that/it still remains necessary that) introduces a condition that qualifies an apparent solution and takes subjunctive. Cela étant (that being said) returns to the main argument after a concession; dès lors (from that point/therefore) can signal a consequence, depending on context. A formal concessive pattern, si + adjective + subjunctive (Si utile soit-elle… — useful though it may be…), concedes a quality before limiting its effect. Do not mistake stylistic variety for logical precision: identify whether you add evidence, concede a point, impose a condition or infer a result before choosing a connector.",
           "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
           "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
         },
@@ -248,7 +248,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -558,7 +558,7 @@
       },
       {
         "french": "Peux-tu m'aider à relire ce dossier ?",
-        "english": "Can you help me reread this file? (neutral, familiar address)",
+        "english": "Can you help me reread this file? (everyday neutral wording, tu form)",
         "provenance": {
           "kind": "original",
           "source_url": null,
@@ -590,7 +590,7 @@
           },
           {
             "id": "1",
-            "text": "Can you help me reread this file? (neutral, familiar address)"
+            "text": "Can you help me reread this file? (everyday neutral wording, tu form)"
           },
           {
             "id": "2",
@@ -623,7 +623,7 @@
           },
           {
             "id": "1",
-            "text": "Can you help me reread this file? (neutral, familiar address)"
+            "text": "Can you help me reread this file? (everyday neutral wording, tu form)"
           },
           {
             "id": "2",
@@ -636,7 +636,7 @@
         "feedback": {
           "rule": "Register concerns audience, relationship and setting, not simply difficult vocabulary. Colloquial speech may use ça (that/it), shortened negatives and familiar requests; neutral language works across many contexts; formal or academic language tends toward explicit relationships and careful qualification. Rewriting should preserve the requested action and interpersonal stance, not add unnecessary abstraction. A contraction appropriate in conversation can be distracting in a report, while a ceremonial formula may sound distant among close colleagues. Regional and organizational norms also matter.",
           "error": "That English meaning belongs to a different message, rather than: Peux-tu m'aider à relire ce dossier ?",
-          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Can you help me reread this file? (neutral, familiar address)"
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Can you help me reread this file? (everyday neutral wording, tu form)"
         },
         "provenance": {
           "kind": "original",
@@ -656,7 +656,7 @@
           },
           {
             "id": "1",
-            "text": "Can you help me reread this file? (neutral, familiar address)"
+            "text": "Can you help me reread this file? (everyday neutral wording, tu form)"
           },
           {
             "id": "2",
@@ -702,13 +702,13 @@
       },
       {
         "id": "C1-03-guided-2",
-        "prompt": "Write the French sentence for: Can you help me reread this file? (neutral, familiar address) Use the wording from the example, including accents and punctuation.",
+        "prompt": "Write the French sentence for: Can you help me reread this file? (everyday neutral wording, tu form) Use the wording from the example, including accents and punctuation.",
         "correct_answers": [
           "Peux-tu m'aider à relire ce dossier ?"
         ],
         "feedback": {
           "rule": "Register concerns audience, relationship and setting, not simply difficult vocabulary. Colloquial speech may use ça (that/it), shortened negatives and familiar requests; neutral language works across many contexts; formal or academic language tends toward explicit relationships and careful qualification. Rewriting should preserve the requested action and interpersonal stance, not add unnecessary abstraction. A contraction appropriate in conversation can be distracting in a report, while a ceremonial formula may sound distant among close colleagues. Regional and organizational norms also matter.",
-          "error": "The response does not match the model wording requested for: Can you help me reread this file? (neutral, familiar address)",
+          "error": "The response does not match the model wording requested for: Can you help me reread this file? (everyday neutral wording, tu form)",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Peux-tu m'aider à relire ce dossier ?"
         },
         "provenance": {
@@ -741,7 +741,7 @@
     ],
     "reading": {
       "french": "Tu peux me filer un coup de main ? Peux-tu m'aider à relire ce dossier ? Pourriez-vous examiner ce dossier avant sa transmission ?",
-      "english": "Can you give me a hand? (familiar) Can you help me reread this file? (neutral, familiar address) Could you examine this file before it is forwarded? (formal)",
+      "english": "Can you give me a hand? (familiar) Can you help me reread this file? (everyday neutral wording, tu form) Could you examine this file before it is forwarded? (formal)",
       "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
       "provenance": {
         "kind": "original",
@@ -788,7 +788,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
@@ -2448,7 +2448,7 @@
       },
       {
         "french": "Cette distinction conduit à examiner séparément les coûts et les bénéfices.",
-        "english": "This distinction leads us to examine costs and benefits separately.",
+        "english": "This distinction leads to examining costs and benefits separately.",
         "provenance": {
           "kind": "original",
           "source_url": null,
@@ -2480,7 +2480,7 @@
           },
           {
             "id": "1",
-            "text": "This distinction leads us to examine costs and benefits separately."
+            "text": "This distinction leads to examining costs and benefits separately."
           },
           {
             "id": "2",
@@ -2513,7 +2513,7 @@
           },
           {
             "id": "1",
-            "text": "This distinction leads us to examine costs and benefits separately."
+            "text": "This distinction leads to examining costs and benefits separately."
           },
           {
             "id": "2",
@@ -2526,7 +2526,7 @@
         "feedback": {
           "rule": "Discourse organization is the progression of ideas across a text or speech. Begin a paragraph from information the reader already knows, then introduce a manageable new point. A recurring term can keep the topic stable; a pronoun must have a clear referent. Announce distinctions that matter, such as immediate versus long-term effects, and use transitions to show how a section changes the analysis. A summary should gather the argument's implications, not repeat every sentence. Check the outline by reading only the first sentence of each paragraph.",
           "error": "That English meaning belongs to a different message, rather than: Cette distinction conduit à examiner séparément les coûts et les bénéfices.",
-          "remediation": "Identify the person and action in the French sentence; its intended meaning is: This distinction leads us to examine costs and benefits separately."
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: This distinction leads to examining costs and benefits separately."
         },
         "provenance": {
           "kind": "original",
@@ -2546,7 +2546,7 @@
           },
           {
             "id": "1",
-            "text": "This distinction leads us to examine costs and benefits separately."
+            "text": "This distinction leads to examining costs and benefits separately."
           },
           {
             "id": "2",
@@ -2592,13 +2592,13 @@
       },
       {
         "id": "C1-10-guided-2",
-        "prompt": "Write the French sentence for: This distinction leads us to examine costs and benefits separately. Use the wording from the example, including accents and punctuation.",
+        "prompt": "Write the French sentence for: This distinction leads to examining costs and benefits separately. Use the wording from the example, including accents and punctuation.",
         "correct_answers": [
           "Cette distinction conduit à examiner séparément les coûts et les bénéfices."
         ],
         "feedback": {
           "rule": "Discourse organization is the progression of ideas across a text or speech. Begin a paragraph from information the reader already knows, then introduce a manageable new point. A recurring term can keep the topic stable; a pronoun must have a clear referent. Announce distinctions that matter, such as immediate versus long-term effects, and use transitions to show how a section changes the analysis. A summary should gather the argument's implications, not repeat every sentence. Check the outline by reading only the first sentence of each paragraph.",
-          "error": "The response does not match the model wording requested for: This distinction leads us to examine costs and benefits separately.",
+          "error": "The response does not match the model wording requested for: This distinction leads to examining costs and benefits separately.",
           "remediation": "Compare the subject, verb form, spelling and punctuation with: Cette distinction conduit à examiner séparément les coûts et les bénéfices."
         },
         "provenance": {
@@ -2631,7 +2631,7 @@
     ],
     "reading": {
       "french": "À court terme, cette mesure simplifierait les démarches ; à long terme, ses effets restent à préciser. Cette distinction conduit à examiner séparément les coûts et les bénéfices. Reste alors à déterminer qui assumera le financement de la transition.",
-      "english": "In the short term, this measure would simplify procedures; in the long term, its effects remain to be specified. This distinction leads us to examine costs and benefits separately. It then remains to determine who will fund the transition.",
+      "english": "In the short term, this measure would simplify procedures; in the long term, its effects remain to be specified. This distinction leads to examining costs and benefits separately. It then remains to determine who will fund the transition.",
       "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
       "provenance": {
         "kind": "original",
@@ -2678,7 +2678,7 @@
       }
     ],
     "review_status": "generated",
-    "version": 1,
+    "version": 2,
     "skills": [
       "reading",
       "writing",
