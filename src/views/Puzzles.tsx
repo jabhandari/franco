@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, Flame, Heart, RotateCcw, Sparkles, Trophy, X, Zap } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, Flame, Heart, RotateCcw, Sparkles, Swords, Trophy, X, Zap } from 'lucide-react';
 import { apiGet, apiPost } from '../api/client.js';
 import { getErrorMessage } from '../presenters/format.presenter.js';
 import type { PuzzleAnswer, PuzzleQuestion, PuzzleRun, PuzzleState, PuzzleSummary } from '../types';
@@ -8,7 +8,7 @@ import { VerbSprint } from './VerbSprint';
 
 type Stage = 'gallery' | 'setup' | 'playing' | 'over' | 'verb';
 type Feedback = { correct: boolean; reveal: string; next: PuzzleQuestion | null; selected: string | null };
-type Props = { token: string | null };
+type Props = { token: string | null; onRace: () => void };
 
 const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const KIND_LABELS: Record<string, string> = {
@@ -22,7 +22,7 @@ function clockLabel(milliseconds: number) {
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 }
 
-export function Puzzles({ token }: Props) {
+export function Puzzles({ token, onRace }: Props) {
   const [stage, setStage] = React.useState<Stage>('gallery');
   const [summary, setSummary] = React.useState<PuzzleSummary | null>(null);
   const [run, setRun] = React.useState<PuzzleRun | null>(null);
@@ -146,7 +146,7 @@ export function Puzzles({ token }: Props) {
         </Box>
       </Box>
 
-      <Box className="puzzles-section-heading"><Box><Text className="puzzles-kicker">CHOOSE A PUZZLE</Text><Text as="h2">Ready when you are</Text></Box><Text>2 games available</Text></Box>
+      <Box className="puzzles-section-heading"><Box><Text className="puzzles-kicker">CHOOSE A PUZZLE</Text><Text as="h2">Ready when you are</Text></Box><Text>3 games available</Text></Box>
       <Box className="puzzles-game-card">
         <Box className="puzzles-game-art" aria-hidden="true"><Box className="puzzles-art-ring"><Zap size={46} /></Box><Text as="span">A1 → C2</Text></Box>
         <Box className="puzzles-game-copy">
@@ -168,6 +168,16 @@ export function Puzzles({ token }: Props) {
           <Text>Race through present-tense conjugations. Correct answers build your streak; a miss resets it, but the clock keeps running.</Text>
           <Box className="puzzles-pills"><Text as="span"><Clock3 size={15} /> One minute</Text><Text as="span"><Flame size={15} /> Streaks</Text><Text as="span"><Trophy size={15} /> Best {summary?.verb_best ?? '—'}</Text></Box>
           <Box className="puzzles-card-actions"><Button variant="primary" onClick={() => { setError(''); setStage('verb'); }} icon={ChevronRight} iconPosition="after">{summary?.verb_active ? 'Resume or restart' : 'Play Verb Sprint'}</Button></Box>
+        </Box>
+      </Box>
+      <Box className="puzzles-game-card puzzles-race-card">
+        <Box className="puzzles-game-art" aria-hidden="true"><Box className="puzzles-art-ring"><Swords size={46} /></Box><Text as="span">TWO PLAYERS</Text></Box>
+        <Box className="puzzles-game-copy">
+          <Text className="puzzles-kicker">PLAY TOGETHER</Text>
+          <Text as="h3">Race a friend</Text>
+          <Text>Create a room, send its invite link or QR code, then answer the same French questions at your own pace. First to the finish has bragging rights.</Text>
+          <Box className="puzzles-pills"><Text as="span"><Swords size={15} /> Head to head</Text><Text as="span"><Clock3 size={15} /> Your rules</Text><Text as="span"><Heart size={15} /> Lives or timer</Text></Box>
+          <Box className="puzzles-card-actions"><Button variant="primary" onClick={onRace} icon={ChevronRight} iconPosition="after">Play with a friend</Button></Box>
         </Box>
       </Box>
     </>}

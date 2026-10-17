@@ -484,6 +484,48 @@ CREATE INDEX IF NOT EXISTS puzzle_runs_user_recent_idx ON public.puzzle_runs(use
 CREATE INDEX IF NOT EXISTS puzzle_runs_user_best_idx ON public.puzzle_runs(user_id,lives_total,minutes,score DESC);
 CREATE INDEX IF NOT EXISTS puzzle_runs_game_best_idx ON public.puzzle_runs(user_id,game,score DESC);
 ALTER TABLE public.puzzle_runs ENABLE ROW LEVEL SECURITY;
+-- FRA-146 race rooms and their two seats are private server-owned state.
+-- The ordered question list is pinned at start; answer history lets a player
+-- reconnect without revealing another player's unsubmitted answers.
+CREATE TABLE IF NOT EXISTS public.race_rooms (
+  id TEXT PRIMARY KEY,
+  code TEXT NOT NULL UNIQUE CHECK (code COLLATE "C" ~ '^[0-9A-Za-z]{8}$'),
+  host_player_id TEXT,
+  status TEXT NOT NULL DEFAULT 'lobby' CHECK (status IN ('lobby','live','finished','expired')),
+  config_json JSONB NOT NULL DEFAULT '{}'::jsonb CHECK (jsonb_typeof(config_json) = 'object'),
+  question_ids JSONB NOT NULL DEFAULT '[]'::jsonb CHECK (jsonb_typeof(question_ids) = 'array'),
+  choice_secret TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  started_at TIMESTAMPTZ,
+  ends_at TIMESTAMPTZ,
+  expires_at TIMESTAMPTZ NOT NULL
+);
+CREATE TABLE IF NOT EXISTS public.race_players (
+  id TEXT PRIMARY KEY,
+  room_id TEXT NOT NULL REFERENCES public.race_rooms(id) ON DELETE CASCADE,
+  user_id TEXT REFERENCES public.users(id) ON DELETE SET NULL,
+  display_name TEXT NOT NULL CHECK (length(btrim(display_name)) BETWEEN 1 AND 40),
+  player_token_hash TEXT UNIQUE,
+  seat SMALLINT NOT NULL CHECK (seat IN (1,2)),
+  current_index INTEGER NOT NULL DEFAULT 0 CHECK (current_index >= 0),
+  correct_count INTEGER NOT NULL DEFAULT 0 CHECK (correct_count >= 0),
+  lives_left SMALLINT NOT NULL CHECK (lives_left = -1 OR lives_left BETWEEN 0 AND 5),
+  answer_history_json JSONB NOT NULL DEFAULT '[]'::jsonb CHECK (jsonb_typeof(answer_history_json) = 'array'),
+  finished_at TIMESTAMPTZ,
+  forfeited_at TIMESTAMPTZ,
+  final_score INTEGER CHECK (final_score >= 0),
+  UNIQUE (room_id,seat)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS race_players_room_user_uidx
+  ON public.race_players(room_id,user_id) WHERE user_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS race_rooms_status_expiry_idx
+  ON public.race_rooms(status,expires_at);
+CREATE INDEX IF NOT EXISTS race_players_room_idx
+  ON public.race_players(room_id,seat);
+ALTER TABLE public.race_rooms ADD CONSTRAINT race_rooms_host_player_fkey
+  FOREIGN KEY (host_player_id) REFERENCES public.race_players(id) ON DELETE SET NULL;
+ALTER TABLE public.race_rooms ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.race_players ENABLE ROW LEVEL SECURITY;
 -- Lessons, reusable concepts, question banks and learner attempts stay separate.
 CREATE TABLE IF NOT EXISTS public.curriculum_lessons (
   topic_id TEXT PRIMARY KEY REFERENCES public.concepts(slug),

@@ -40,6 +40,8 @@ import { QuestionTypes } from './views/QuestionTypes.js';
 import { Puzzles } from './views/Puzzles.js';
 import { StoriesPage } from './views/StoriesPage';
 
+const Race = React.lazy(() => import('./views/Race.js').then(({ Race: RaceView }) => ({ default: RaceView })));
+
 // next-themes ships its own types, but this repo has no @types/react, so
 // `React.PropsWithChildren` in its ThemeProviderProps resolves to nothing
 // and the `children` prop is missing from the declared props. Re-declare it
@@ -57,7 +59,7 @@ declare module 'next-themes' {
 // FRA-67: app-shell types. ViewId is the sidebar's view vocabulary — the
 // auth gate, router, and nav all speak it, so a bad view id is a type
 // error, not a silent blank page.
-type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types' | 'puzzles' | 'stories';
+type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types' | 'puzzles' | 'stories' | 'race';
 const authViewFromPath = (): AuthMode => window.location.pathname === '/reset-password' ? 'reset' : window.location.pathname === '/verify-email' ? 'verify' : window.location.pathname === '/forgot-password' ? 'forgot' : 'login';
 
 type NavItem = {
@@ -105,9 +107,10 @@ const viewPaths: Record<ViewId, string> = {
   'question-types': '/question-types',
   puzzles: '/puzzles',
   stories: '/stories',
+  race: '/race',
 };
 
-const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types', 'puzzles', 'stories'];
+const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types', 'puzzles', 'stories', 'race'];
 
 function viewFromPath(pathname: string): ViewId {
   for (const id of VIEW_IDS) {
@@ -316,6 +319,11 @@ function App(): React.JSX.Element {
     window.history.replaceState({},'','/');
   }
 
+  if (view === 'race') {
+    const code = window.location.pathname.match(/^\/race\/([A-Za-z0-9]{8})\/?$/)?.[1] ?? null;
+    return <React.Suspense fallback={<LoadingScreen />}><Race code={code} token={authToken} onExit={() => navigate('puzzles')} /></React.Suspense>;
+  }
+
   if (loading && authToken && !session) {
     return <LoadingScreen />;
   }
@@ -379,7 +387,7 @@ function App(): React.JSX.Element {
         {view === 'review' && <ReviewQueue />}
         {view === 'profile' && <Profile token={authToken} user={session} userData={userData} streak={streak} onSaved={handleProfileSaved} onLogout={logout} onRoadmap={() => navigate('content')} />}
         {view === 'question-types' && <QuestionTypes token={authToken} />}
-        {view === 'puzzles' && <Puzzles token={authToken} />}
+        {view === 'puzzles' && <Puzzles token={authToken} onRace={() => navigate('race')} />}
         {view === 'stories' && <StoriesPage token={authToken} />}
       </Box>
     </Box>

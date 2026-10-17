@@ -21,11 +21,12 @@ import { displayName, isNonEmptyName } from './user-names.js';
 import { getLearnerProgress } from './learner-progress.js';
 import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
 import { PuzzleError, puzzleSummary, startPuzzle, getPuzzle, answerPuzzle, endPuzzle, startVerbSprint, getVerbSprint, answerVerbSprint, endVerbSprint } from './puzzles.js';
+import { RaceError, createRoom, getRoom, joinRoom, configureRoom, startRoom, answerRoom, finishRoom } from './races.js';
 import { allowAuthEmail, authClientIp, genericEmailResponse, hashEmailToken, sendAuthEmail, validEmailToken } from './auth-email.js';
 import { emailConfigured } from './email.js';
 
 const PORT = getPort(); const HOST = getHost(); const hashToken = (v) => createHash('sha256').update(v).digest('hex');
-const json = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-headers': 'content-type, authorization', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-expose-headers': 'retry-after', ...headers }); res.end(JSON.stringify(body)); };
+const json = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-headers': 'content-type, authorization, x-race-player-token', 'access-control-allow-methods': 'GET, POST, PATCH, OPTIONS', 'access-control-expose-headers': 'retry-after', ...headers }); res.end(JSON.stringify(body)); };
 const body = (req) => new Promise((resolve, reject) => { let b = ''; req.on('data', c => b += c); req.on('end', () => { try { resolve(b ? JSON.parse(b) : {}) } catch (e) { reject(e) } }); });
 const password = (p, s = randomBytes(16).toString('hex')) => ({ salt: s, hash: pbkdf2Sync(p, s, 120000, 64, 'sha512').toString('hex') });
 async function user(req) { const h = req.headers.authorization || ''; if (!h.startsWith('Bearer ')) return null; const r = await query('SELECT u.id,u.email,u.name,u.first_name,u.last_name,s.expires_at FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=?', [hashToken(h.slice(7))]); return r[0] && new Date(r[0].expires_at) > new Date() ? r[0] : null; }
@@ -681,6 +682,47 @@ async function main() {
             if (req.method === 'GET' && u.pathname === '/api/content/tv5-exercises') return json(res, 200, { section: u.searchParams.get('section') || 'all', exercises: await query('SELECT * FROM tv5_exercises WHERE ($1 IS NULL OR cefr_section=$1) ORDER BY cefr_section,title', [u.searchParams.get('section')?.toUpperCase() || null]) });
             if (req.method === 'GET' && u.pathname === '/api/exam/questions') return json(res, 200, { section: u.searchParams.get('section') || 'A1', questions: await query('SELECT *,choices_json AS choices FROM exam_questions WHERE cefr_section=? ORDER BY external_id', [u.searchParams.get('section')?.toUpperCase() || 'A1']), sources: [] });
             if (req.method === 'GET' && u.pathname === '/api/exam/past-questions') return json(res, 200, { questions: await query('SELECT *,choices_json AS choices FROM exam_questions ORDER BY cefr_section,external_id'), sources: [] });
+            if (u.pathname === '/api/races' && req.method === 'POST') {
+              const viewer = await user(req);
+              if (!viewer) return json(res, 401, { error: 'Sign in to create a race.' });
+              try {
+                const payload = await body(req);
+                return json(res, 201, await createRoom(viewer.id, payload.config ?? null, viewer.name));
+              } catch (error) {
+                if (error instanceof RaceError) return json(res, error.status, { error: error.message });
+                throw error;
+              }
+            }
+            const raceMatch = u.pathname.match(/^\/api\/races\/([A-Za-z0-9]{8})(?:\/(join|config|start|answer|finish))?$/);
+            if (raceMatch) {
+              const [, code, action] = raceMatch;
+              const viewer = await user(req);
+              const playerToken = typeof req.headers['x-race-player-token'] === 'string' ? req.headers['x-race-player-token'] : null;
+              try {
+                if (req.method === 'GET' && !action) return json(res, 200, await getRoom(code, viewer?.id ?? null, playerToken));
+                if (req.method === 'POST' && action === 'join') {
+                  const payload = await body(req);
+                  return json(res, 200, await joinRoom(code, viewer?.id ?? null, payload.display_name ?? viewer?.name ?? null));
+                }
+                if (req.method === 'PATCH' && action === 'config') {
+                  if (!viewer) return json(res, 401, { error: 'Host sign-in required.' });
+                  const payload = await body(req);
+                  return json(res, 200, await configureRoom(code, viewer.id, payload));
+                }
+                if (req.method === 'POST' && action === 'start') {
+                  if (!viewer) return json(res, 401, { error: 'Host sign-in required.' });
+                  return json(res, 200, await startRoom(code, viewer.id));
+                }
+                if (req.method === 'POST' && action === 'answer') {
+                  const payload = await body(req);
+                  return json(res, 200, await answerRoom(code, viewer?.id ?? null, playerToken, payload.question_id, payload.response, payload.timezone));
+                }
+                if (req.method === 'POST' && action === 'finish') return json(res, 200, await finishRoom(code, viewer?.id ?? null, playerToken));
+              } catch (error) {
+                if (error instanceof RaceError) return json(res, error.status, { error: error.message });
+                throw error;
+              }
+            }
             if (req.method === 'GET' && u.pathname === '/api/me') {
               const x = await user(req);
               if (!x) return json(res, 401, { error: 'Authentication required.' });
