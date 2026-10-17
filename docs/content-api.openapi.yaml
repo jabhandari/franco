@@ -6,6 +6,7 @@ info:
 servers:
   - url: https://franco.example.com
 paths:
+  /api/content/v1/curriculum/review:
   /api/me/stories:
     get:
       security: [{ LearnerSession: [] }]
@@ -67,55 +68,39 @@ paths:
         '401': { description: Missing or expired session }
   /api/me/puzzles/verb-sprint/runs/{runId}:
     get:
-      security: [{ LearnerSession: [] }]
-      description: Resume a learner-owned sprint or obtain its final state after expiry.
-      parameters:
-        - name: runId
-          in: path
-          required: true
-          schema: { type: string, format: uuid }
+      description: Internal curriculum review queue with full lesson bodies and per-item provenance. Requires a content API key with content:review scope.
+      security: [{ ContentApiKey: [] }]
       responses:
-        '200': { description: Run state and current question, or null after finish }
-        '401': { description: Missing or expired session }
-        '404': { description: Run not found for this learner and game }
-  /api/me/puzzles/verb-sprint/runs/{runId}/answer:
+        '200': { description: Lessons with topic_id, review_status, version and pack_json }
+        '401': { description: Missing or insufficiently scoped key }
+  /api/content/v1/curriculum/{topic_id}/review:
     post:
-      security: [{ LearnerSession: [] }]
-      description: Grade one opaque choice token, update score and streak, and return the next question. Duplicate or stale questions cannot score twice.
+      description: Complete the next editorial stage. Approvals bind to exact content hash and version; publication validates all lesson sections and licensing. Revision invalidates earlier approvals.
+      security: [{ ContentApiKey: [] }]
       parameters:
-        - name: runId
-          in: path
+        - in: path
+          name: topic_id
           required: true
-          schema: { type: string, format: uuid }
+          schema: { type: string }
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [question_id, response]
+              required: [version, from, state, reviewer, note]
               properties:
-                question_id: { type: string }
-                response: { type: string, description: Opaque choice token from the current question }
+                version: { type: integer, minimum: 1 }
+                from: { type: string }
+                state: { enum: [generated, factual_review, language_review, license_check, approved, published, revision_needed] }
+                reviewer: { type: string, minLength: 1 }
+                note: { type: string, minLength: 1 }
       responses:
-        '200': { description: Correctness, revealed answer, updated run and next question; timed_out when the server timer has expired }
-        '400': { description: Invalid choice }
-        '401': { description: Missing or expired session }
-        '404': { description: Run not found for this learner and game }
-        '409': { description: Stale question }
-  /api/me/puzzles/verb-sprint/runs/{runId}/end:
-    post:
-      security: [{ LearnerSession: [] }]
-      description: End a learner-owned sprint early.
-      parameters:
-        - name: runId
-          in: path
-          required: true
-          schema: { type: string, format: uuid }
-      responses:
-        '200': { description: Final run state }
-        '401': { description: Missing or expired session }
-        '404': { description: Run not found for this learner and game }
+        '200': { description: Topic and updated editorial state }
+        '401': { description: Missing or insufficiently scoped key }
+        '404': { description: Unknown topic }
+        '409': { description: Stale lesson state or version }
+        '422': { description: Invalid transition, incomplete lesson, missing approval or provenance failure }
   /api/me/conversation-targets:
     get:
       security: [{ LearnerSession: [] }]

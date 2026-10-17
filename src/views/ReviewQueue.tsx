@@ -1,3 +1,4 @@
+import { CurriculumReview } from '../components/CurriculumReview';
 import React from 'react';
 import { Check, CheckCircle2, Flag, KeyRound, RefreshCw, Send, X } from 'lucide-react';
 import { apiGet, apiPost, formatEnum, getErrorMessage, normalizeChoices, safeText } from '../api/client.js';
@@ -205,6 +206,8 @@ export function ReviewQueue({ onKeyChange }: ReviewQueueProps) {
         title="Review queue"
         lede="New items from content sources land here as pending review, and so do published questions that learners keep flagging. Publishing is what grows the question bank."
       />
+
+      <CurriculumReview apiKey={apiKey} />
 
       <Tabs
         variant="section"

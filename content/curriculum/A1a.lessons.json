@@ -1,0 +1,2162 @@
+[
+  {
+    "topic_id": "A1-01",
+    "level": "A1",
+    "outcome": "I can greet someone, introduce myself and choose a polite form of address.",
+    "explanation": "French uses the Latin alphabet with accent marks that can change a sound or distinguish words: é in café is different from è in mère (mother). Many final consonants are silent: the final s in vous is usually silent. Bonjour means hello; bonsoir is an evening greeting. Say je m'appelle to give your name. Tu addresses one familiar person; vous addresses a group or politely addresses one person. Do not treat rough English sound comparisons as exact pronunciation.",
+    "example_items": [
+      {
+        "french": "Bonjour, je m'appelle Lina.",
+        "english": "Hello, my name is Lina.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Vous vous appelez comment ?",
+        "english": "What is your name? (polite)",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Tu habites ici ?",
+        "english": "Do you live here? (familiar)",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-01-recognition-1",
+        "prompt": "Choose the meaning in this context: Bonjour, je m'appelle Lina.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Hello, my name is Lina."
+          },
+          {
+            "id": "1",
+            "text": "What is your name? (polite)"
+          },
+          {
+            "id": "2",
+            "text": "Do you live here? (familiar)"
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "French uses the Latin alphabet with accent marks that can change a sound or distinguish words: é in café is different from è in mère (mother). Many final consonants are silent: the final s in vous is usually silent. Bonjour means hello; bonsoir is an evening greeting. Say je m'appelle to give your name. Tu addresses one familiar person; vous addresses a group or politely addresses one person. Do not treat rough English sound comparisons as exact pronunciation.",
+          "error": "That English meaning belongs to a different message, rather than: Bonjour, je m'appelle Lina.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Hello, my name is Lina."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-01-recognition-2",
+        "prompt": "Choose the meaning in this context: Vous vous appelez comment ?",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Hello, my name is Lina."
+          },
+          {
+            "id": "1",
+            "text": "What is your name? (polite)"
+          },
+          {
+            "id": "2",
+            "text": "Do you live here? (familiar)"
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "French uses the Latin alphabet with accent marks that can change a sound or distinguish words: é in café is different from è in mère (mother). Many final consonants are silent: the final s in vous is usually silent. Bonjour means hello; bonsoir is an evening greeting. Say je m'appelle to give your name. Tu addresses one familiar person; vous addresses a group or politely addresses one person. Do not treat rough English sound comparisons as exact pronunciation.",
+          "error": "That English meaning belongs to a different message, rather than: Vous vous appelez comment ?",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: What is your name? (polite)"
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-01-recognition-3",
+        "prompt": "Choose the meaning in this context: Tu habites ici ?",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Hello, my name is Lina."
+          },
+          {
+            "id": "1",
+            "text": "What is your name? (polite)"
+          },
+          {
+            "id": "2",
+            "text": "Do you live here? (familiar)"
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "French uses the Latin alphabet with accent marks that can change a sound or distinguish words: é in café is different from è in mère (mother). Many final consonants are silent: the final s in vous is usually silent. Bonjour means hello; bonsoir is an evening greeting. Say je m'appelle to give your name. Tu addresses one familiar person; vous addresses a group or politely addresses one person. Do not treat rough English sound comparisons as exact pronunciation.",
+          "error": "That English meaning belongs to a different message, rather than: Tu habites ici ?",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Do you live here? (familiar)"
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-01-guided-1",
+        "prompt": "Write the French sentence for: Hello, my name is Lina. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Bonjour, je m'appelle Lina."
+        ],
+        "feedback": {
+          "rule": "French uses the Latin alphabet with accent marks that can change a sound or distinguish words: é in café is different from è in mère (mother). Many final consonants are silent: the final s in vous is usually silent. Bonjour means hello; bonsoir is an evening greeting. Say je m'appelle to give your name. Tu addresses one familiar person; vous addresses a group or politely addresses one person. Do not treat rough English sound comparisons as exact pronunciation.",
+          "error": "The response does not match the model wording requested for: Hello, my name is Lina.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Bonjour, je m'appelle Lina."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-01-guided-2",
+        "prompt": "Write the French sentence for: What is your name? (polite) Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Vous vous appelez comment ?"
+        ],
+        "feedback": {
+          "rule": "French uses the Latin alphabet with accent marks that can change a sound or distinguish words: é in café is different from è in mère (mother). Many final consonants are silent: the final s in vous is usually silent. Bonjour means hello; bonsoir is an evening greeting. Say je m'appelle to give your name. Tu addresses one familiar person; vous addresses a group or politely addresses one person. Do not treat rough English sound comparisons as exact pronunciation.",
+          "error": "The response does not match the model wording requested for: What is your name? (polite)",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Vous vous appelez comment ?"
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-01-guided-3",
+        "prompt": "Write the French sentence for: Do you live here? (familiar) Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Tu habites ici ?"
+        ],
+        "feedback": {
+          "rule": "French uses the Latin alphabet with accent marks that can change a sound or distinguish words: é in café is different from è in mère (mother). Many final consonants are silent: the final s in vous is usually silent. Bonjour means hello; bonsoir is an evening greeting. Say je m'appelle to give your name. Tu addresses one familiar person; vous addresses a group or politely addresses one person. Do not treat rough English sound comparisons as exact pronunciation.",
+          "error": "The response does not match the model wording requested for: Do you live here? (familiar)",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Tu habites ici ?"
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Bonjour, je m'appelle Lina. Vous vous appelez comment ? Tu habites ici ?",
+      "english": "Hello, my name is Lina. What is your name? (polite) Do you live here? (familiar)",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "At an evening class, greet the teacher politely, give your name, and ask a classmate a familiar question. Say both versions aloud and explain your choice of tu or vous.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Bonsoir, je m'appelle Sami.",
+      "model_translation": "Good evening, my name is Sami."
+    },
+    "feedback": {
+      "rule": "French uses the Latin alphabet with accent marks that can change a sound or distinguish words: é in café is different from è in mère (mother). Many final consonants are silent: the final s in vous is usually silent. Bonjour means hello; bonsoir is an evening greeting. Say je m'appelle to give your name. Tu addresses one familiar person; vous addresses a group or politely addresses one person. Do not treat rough English sound comparisons as exact pronunciation.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-01-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: Good evening, my name is Sami. Word bank: Sami. / m'appelle / je / Bonsoir,",
+        "correct_answers": [
+          "Bonsoir, je m'appelle Sami."
+        ],
+        "feedback": {
+          "rule": "French uses the Latin alphabet with accent marks that can change a sound or distinguish words: é in café is different from è in mère (mother). Many final consonants are silent: the final s in vous is usually silent. Bonjour means hello; bonsoir is an evening greeting. Say je m'appelle to give your name. Tu addresses one familiar person; vous addresses a group or politely addresses one person. Do not treat rough English sound comparisons as exact pronunciation.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-02",
+    "level": "A1",
+    "outcome": "I can build a short statement and distinguish one thing from several.",
+    "explanation": "A basic French statement usually names who or what acts, then the action, then what receives it: Lina lit un livre means Lina reads a book. This is called subject–verb–object order. C'est introduces one person or thing; ce sont introduces several. French normally keeps a subject word even when English might leave it out in a short note. An apostrophe joins ce and est into c'est.",
+    "example_items": [
+      {
+        "french": "Lina lit un livre.",
+        "english": "Lina reads a book.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "C'est un roman.",
+        "english": "It is a novel.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Ce sont des histoires.",
+        "english": "They are stories.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-02-recognition-1",
+        "prompt": "Choose the meaning in this context: Lina lit un livre.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Lina reads a book."
+          },
+          {
+            "id": "1",
+            "text": "It is a novel."
+          },
+          {
+            "id": "2",
+            "text": "They are stories."
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "A basic French statement usually names who or what acts, then the action, then what receives it: Lina lit un livre means Lina reads a book. This is called subject–verb–object order. C'est introduces one person or thing; ce sont introduces several. French normally keeps a subject word even when English might leave it out in a short note. An apostrophe joins ce and est into c'est.",
+          "error": "That English meaning belongs to a different message, rather than: Lina lit un livre.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Lina reads a book."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-02-recognition-2",
+        "prompt": "Choose the meaning in this context: C'est un roman.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Lina reads a book."
+          },
+          {
+            "id": "1",
+            "text": "It is a novel."
+          },
+          {
+            "id": "2",
+            "text": "They are stories."
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "A basic French statement usually names who or what acts, then the action, then what receives it: Lina lit un livre means Lina reads a book. This is called subject–verb–object order. C'est introduces one person or thing; ce sont introduces several. French normally keeps a subject word even when English might leave it out in a short note. An apostrophe joins ce and est into c'est.",
+          "error": "That English meaning belongs to a different message, rather than: C'est un roman.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It is a novel."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-02-recognition-3",
+        "prompt": "Choose the meaning in this context: Ce sont des histoires.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "Lina reads a book."
+          },
+          {
+            "id": "1",
+            "text": "It is a novel."
+          },
+          {
+            "id": "2",
+            "text": "They are stories."
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "A basic French statement usually names who or what acts, then the action, then what receives it: Lina lit un livre means Lina reads a book. This is called subject–verb–object order. C'est introduces one person or thing; ce sont introduces several. French normally keeps a subject word even when English might leave it out in a short note. An apostrophe joins ce and est into c'est.",
+          "error": "That English meaning belongs to a different message, rather than: Ce sont des histoires.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: They are stories."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-02-guided-1",
+        "prompt": "Write the French sentence for: Lina reads a book. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Lina lit un livre."
+        ],
+        "feedback": {
+          "rule": "A basic French statement usually names who or what acts, then the action, then what receives it: Lina lit un livre means Lina reads a book. This is called subject–verb–object order. C'est introduces one person or thing; ce sont introduces several. French normally keeps a subject word even when English might leave it out in a short note. An apostrophe joins ce and est into c'est.",
+          "error": "The response does not match the model wording requested for: Lina reads a book.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Lina lit un livre."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-02-guided-2",
+        "prompt": "Write the French sentence for: It is a novel. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "C'est un roman."
+        ],
+        "feedback": {
+          "rule": "A basic French statement usually names who or what acts, then the action, then what receives it: Lina lit un livre means Lina reads a book. This is called subject–verb–object order. C'est introduces one person or thing; ce sont introduces several. French normally keeps a subject word even when English might leave it out in a short note. An apostrophe joins ce and est into c'est.",
+          "error": "The response does not match the model wording requested for: It is a novel.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: C'est un roman."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-02-guided-3",
+        "prompt": "Write the French sentence for: They are stories. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Ce sont des histoires."
+        ],
+        "feedback": {
+          "rule": "A basic French statement usually names who or what acts, then the action, then what receives it: Lina lit un livre means Lina reads a book. This is called subject–verb–object order. C'est introduces one person or thing; ce sont introduces several. French normally keeps a subject word even when English might leave it out in a short note. An apostrophe joins ce and est into c'est.",
+          "error": "The response does not match the model wording requested for: They are stories.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Ce sont des histoires."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Lina lit un livre. C'est un roman. Ce sont des histoires.",
+      "english": "Lina reads a book. It is a novel. They are stories.",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Introduce one book and several stories to a classmate. Write two statements with a named person, an action and a thing, then check the word order.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Sami lit un journal.",
+      "model_translation": "Sami reads a newspaper."
+    },
+    "feedback": {
+      "rule": "A basic French statement usually names who or what acts, then the action, then what receives it: Lina lit un livre means Lina reads a book. This is called subject–verb–object order. C'est introduces one person or thing; ce sont introduces several. French normally keeps a subject word even when English might leave it out in a short note. An apostrophe joins ce and est into c'est.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-02-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: Sami reads a newspaper. Word bank: journal. / un / lit / Sami",
+        "correct_answers": [
+          "Sami lit un journal."
+        ],
+        "feedback": {
+          "rule": "A basic French statement usually names who or what acts, then the action, then what receives it: Lina lit un livre means Lina reads a book. This is called subject–verb–object order. C'est introduces one person or thing; ce sont introduces several. French normally keeps a subject word even when English might leave it out in a short note. An apostrophe joins ce and est into c'est.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-03",
+    "level": "A1",
+    "outcome": "I can choose a subject word for the person or people acting.",
+    "explanation": "A subject pronoun is a short word replacing a person's name before an action. Je means I; tu means familiar singular you; il and elle mean he and she; on often means we in conversation but takes a singular verb. Nous means we; vous means plural or polite you; ils refers to masculine or mixed groups and elles to an all-feminine group. Je becomes j' before a vowel sound, as in j'aime (I like).",
+    "example_items": [
+      {
+        "french": "Je parle français.",
+        "english": "I speak French.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Nous parlons ensemble.",
+        "english": "We speak together.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Elles parlent anglais.",
+        "english": "They speak English. (all-feminine group)",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-03-recognition-1",
+        "prompt": "Choose the meaning in this context: Je parle français.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I speak French."
+          },
+          {
+            "id": "1",
+            "text": "We speak together."
+          },
+          {
+            "id": "2",
+            "text": "They speak English. (all-feminine group)"
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "A subject pronoun is a short word replacing a person's name before an action. Je means I; tu means familiar singular you; il and elle mean he and she; on often means we in conversation but takes a singular verb. Nous means we; vous means plural or polite you; ils refers to masculine or mixed groups and elles to an all-feminine group. Je becomes j' before a vowel sound, as in j'aime (I like).",
+          "error": "That English meaning belongs to a different message, rather than: Je parle français.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I speak French."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-03-recognition-2",
+        "prompt": "Choose the meaning in this context: Nous parlons ensemble.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I speak French."
+          },
+          {
+            "id": "1",
+            "text": "We speak together."
+          },
+          {
+            "id": "2",
+            "text": "They speak English. (all-feminine group)"
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "A subject pronoun is a short word replacing a person's name before an action. Je means I; tu means familiar singular you; il and elle mean he and she; on often means we in conversation but takes a singular verb. Nous means we; vous means plural or polite you; ils refers to masculine or mixed groups and elles to an all-feminine group. Je becomes j' before a vowel sound, as in j'aime (I like).",
+          "error": "That English meaning belongs to a different message, rather than: Nous parlons ensemble.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We speak together."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-03-recognition-3",
+        "prompt": "Choose the meaning in this context: Elles parlent anglais.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I speak French."
+          },
+          {
+            "id": "1",
+            "text": "We speak together."
+          },
+          {
+            "id": "2",
+            "text": "They speak English. (all-feminine group)"
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "A subject pronoun is a short word replacing a person's name before an action. Je means I; tu means familiar singular you; il and elle mean he and she; on often means we in conversation but takes a singular verb. Nous means we; vous means plural or polite you; ils refers to masculine or mixed groups and elles to an all-feminine group. Je becomes j' before a vowel sound, as in j'aime (I like).",
+          "error": "That English meaning belongs to a different message, rather than: Elles parlent anglais.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: They speak English. (all-feminine group)"
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-03-guided-1",
+        "prompt": "Write the French sentence for: I speak French. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Je parle français."
+        ],
+        "feedback": {
+          "rule": "A subject pronoun is a short word replacing a person's name before an action. Je means I; tu means familiar singular you; il and elle mean he and she; on often means we in conversation but takes a singular verb. Nous means we; vous means plural or polite you; ils refers to masculine or mixed groups and elles to an all-feminine group. Je becomes j' before a vowel sound, as in j'aime (I like).",
+          "error": "The response does not match the model wording requested for: I speak French.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je parle français."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-03-guided-2",
+        "prompt": "Write the French sentence for: We speak together. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Nous parlons ensemble."
+        ],
+        "feedback": {
+          "rule": "A subject pronoun is a short word replacing a person's name before an action. Je means I; tu means familiar singular you; il and elle mean he and she; on often means we in conversation but takes a singular verb. Nous means we; vous means plural or polite you; ils refers to masculine or mixed groups and elles to an all-feminine group. Je becomes j' before a vowel sound, as in j'aime (I like).",
+          "error": "The response does not match the model wording requested for: We speak together.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous parlons ensemble."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-03-guided-3",
+        "prompt": "Write the French sentence for: They speak English. (all-feminine group) Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Elles parlent anglais."
+        ],
+        "feedback": {
+          "rule": "A subject pronoun is a short word replacing a person's name before an action. Je means I; tu means familiar singular you; il and elle mean he and she; on often means we in conversation but takes a singular verb. Nous means we; vous means plural or polite you; ils refers to masculine or mixed groups and elles to an all-feminine group. Je becomes j' before a vowel sound, as in j'aime (I like).",
+          "error": "The response does not match the model wording requested for: They speak English. (all-feminine group)",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Elles parlent anglais."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Je parle français. Nous parlons ensemble. Elles parlent anglais.",
+      "english": "I speak French. We speak together. They speak English. (all-feminine group)",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Introduce yourself and two groups at a language exchange. Replace the names with suitable subject words and explain who each word refers to.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Vous parlez français.",
+      "model_translation": "You speak French. (polite or plural)"
+    },
+    "feedback": {
+      "rule": "A subject pronoun is a short word replacing a person's name before an action. Je means I; tu means familiar singular you; il and elle mean he and she; on often means we in conversation but takes a singular verb. Nous means we; vous means plural or polite you; ils refers to masculine or mixed groups and elles to an all-feminine group. Je becomes j' before a vowel sound, as in j'aime (I like).",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-03-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: You speak French. (polite or plural) Word bank: français. / parlez / Vous",
+        "correct_answers": [
+          "Vous parlez français."
+        ],
+        "feedback": {
+          "rule": "A subject pronoun is a short word replacing a person's name before an action. Je means I; tu means familiar singular you; il and elle mean he and she; on often means we in conversation but takes a singular verb. Nous means we; vous means plural or polite you; ils refers to masculine or mixed groups and elles to an all-feminine group. Je becomes j' before a vowel sound, as in j'aime (I like).",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-04",
+    "level": "A1",
+    "outcome": "I can identify a noun's grammatical gender using its article.",
+    "explanation": "A noun names a person, object or idea. Each French noun has a grammatical gender: masculine or feminine; this is a language category, not a claim about an object's identity. Learn un (a, masculine) or une (a, feminine) with the noun. Some endings help: -tion is usually feminine, but patterns have exceptions. People words sometimes change form, such as étudiant and étudiante (student). Memorize unfamiliar words with their articles.",
+    "example_items": [
+      {
+        "french": "C'est un livre.",
+        "english": "It is a book. (masculine)",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "C'est une table.",
+        "english": "It is a table. (feminine)",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Lina est une étudiante.",
+        "english": "Lina is a student. (feminine)",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-04-recognition-1",
+        "prompt": "Choose the meaning in this context: C'est un livre.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "It is a book. (masculine)"
+          },
+          {
+            "id": "1",
+            "text": "It is a table. (feminine)"
+          },
+          {
+            "id": "2",
+            "text": "Lina is a student. (feminine)"
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "A noun names a person, object or idea. Each French noun has a grammatical gender: masculine or feminine; this is a language category, not a claim about an object's identity. Learn un (a, masculine) or une (a, feminine) with the noun. Some endings help: -tion is usually feminine, but patterns have exceptions. People words sometimes change form, such as étudiant and étudiante (student). Memorize unfamiliar words with their articles.",
+          "error": "That English meaning belongs to a different message, rather than: C'est un livre.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It is a book. (masculine)"
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-04-recognition-2",
+        "prompt": "Choose the meaning in this context: C'est une table.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "It is a book. (masculine)"
+          },
+          {
+            "id": "1",
+            "text": "It is a table. (feminine)"
+          },
+          {
+            "id": "2",
+            "text": "Lina is a student. (feminine)"
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "A noun names a person, object or idea. Each French noun has a grammatical gender: masculine or feminine; this is a language category, not a claim about an object's identity. Learn un (a, masculine) or une (a, feminine) with the noun. Some endings help: -tion is usually feminine, but patterns have exceptions. People words sometimes change form, such as étudiant and étudiante (student). Memorize unfamiliar words with their articles.",
+          "error": "That English meaning belongs to a different message, rather than: C'est une table.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: It is a table. (feminine)"
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-04-recognition-3",
+        "prompt": "Choose the meaning in this context: Lina est une étudiante.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "It is a book. (masculine)"
+          },
+          {
+            "id": "1",
+            "text": "It is a table. (feminine)"
+          },
+          {
+            "id": "2",
+            "text": "Lina is a student. (feminine)"
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "A noun names a person, object or idea. Each French noun has a grammatical gender: masculine or feminine; this is a language category, not a claim about an object's identity. Learn un (a, masculine) or une (a, feminine) with the noun. Some endings help: -tion is usually feminine, but patterns have exceptions. People words sometimes change form, such as étudiant and étudiante (student). Memorize unfamiliar words with their articles.",
+          "error": "That English meaning belongs to a different message, rather than: Lina est une étudiante.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: Lina is a student. (feminine)"
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-04-guided-1",
+        "prompt": "Write the French sentence for: It is a book. (masculine) Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "C'est un livre."
+        ],
+        "feedback": {
+          "rule": "A noun names a person, object or idea. Each French noun has a grammatical gender: masculine or feminine; this is a language category, not a claim about an object's identity. Learn un (a, masculine) or une (a, feminine) with the noun. Some endings help: -tion is usually feminine, but patterns have exceptions. People words sometimes change form, such as étudiant and étudiante (student). Memorize unfamiliar words with their articles.",
+          "error": "The response does not match the model wording requested for: It is a book. (masculine)",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: C'est un livre."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-04-guided-2",
+        "prompt": "Write the French sentence for: It is a table. (feminine) Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "C'est une table."
+        ],
+        "feedback": {
+          "rule": "A noun names a person, object or idea. Each French noun has a grammatical gender: masculine or feminine; this is a language category, not a claim about an object's identity. Learn un (a, masculine) or une (a, feminine) with the noun. Some endings help: -tion is usually feminine, but patterns have exceptions. People words sometimes change form, such as étudiant and étudiante (student). Memorize unfamiliar words with their articles.",
+          "error": "The response does not match the model wording requested for: It is a table. (feminine)",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: C'est une table."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-04-guided-3",
+        "prompt": "Write the French sentence for: Lina is a student. (feminine) Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Lina est une étudiante."
+        ],
+        "feedback": {
+          "rule": "A noun names a person, object or idea. Each French noun has a grammatical gender: masculine or feminine; this is a language category, not a claim about an object's identity. Learn un (a, masculine) or une (a, feminine) with the noun. Some endings help: -tion is usually feminine, but patterns have exceptions. People words sometimes change form, such as étudiant and étudiante (student). Memorize unfamiliar words with their articles.",
+          "error": "The response does not match the model wording requested for: Lina is a student. (feminine)",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Lina est une étudiante."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "C'est un livre. C'est une table. Lina est une étudiante.",
+      "english": "It is a book. (masculine) It is a table. (feminine) Lina is a student. (feminine)",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Label three objects in a study room with un or une. Verify each unfamiliar noun's gender rather than guessing from what the object looks like.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "C'est une chaise.",
+      "model_translation": "It is a chair. (feminine)"
+    },
+    "feedback": {
+      "rule": "A noun names a person, object or idea. Each French noun has a grammatical gender: masculine or feminine; this is a language category, not a claim about an object's identity. Learn un (a, masculine) or une (a, feminine) with the noun. Some endings help: -tion is usually feminine, but patterns have exceptions. People words sometimes change form, such as étudiant and étudiante (student). Memorize unfamiliar words with their articles.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-04-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: It is a chair. (feminine) Word bank: chaise. / une / C'est",
+        "correct_answers": [
+          "C'est une chaise."
+        ],
+        "feedback": {
+          "rule": "A noun names a person, object or idea. Each French noun has a grammatical gender: masculine or feminine; this is a language category, not a claim about an object's identity. Learn un (a, masculine) or une (a, feminine) with the noun. Some endings help: -tion is usually feminine, but patterns have exceptions. People words sometimes change form, such as étudiant and étudiante (student). Memorize unfamiliar words with their articles.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-05",
+    "level": "A1",
+    "outcome": "I can choose an article for a known or unspecified thing.",
+    "explanation": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+    "example_items": [
+      {
+        "french": "J'achète un livre.",
+        "english": "I am buying a book.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Le livre est pour Lina.",
+        "english": "The book is for Lina.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Je vais au marché.",
+        "english": "I am going to the market.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-05-recognition-1",
+        "prompt": "Choose the meaning in this context: J'achète un livre.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I am buying a book."
+          },
+          {
+            "id": "1",
+            "text": "The book is for Lina."
+          },
+          {
+            "id": "2",
+            "text": "I am going to the market."
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "error": "That English meaning belongs to a different message, rather than: J'achète un livre.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am buying a book."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-05-recognition-2",
+        "prompt": "Choose the meaning in this context: Le livre est pour Lina.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I am buying a book."
+          },
+          {
+            "id": "1",
+            "text": "The book is for Lina."
+          },
+          {
+            "id": "2",
+            "text": "I am going to the market."
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "error": "That English meaning belongs to a different message, rather than: Le livre est pour Lina.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The book is for Lina."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-05-recognition-3",
+        "prompt": "Choose the meaning in this context: Je vais au marché.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I am buying a book."
+          },
+          {
+            "id": "1",
+            "text": "The book is for Lina."
+          },
+          {
+            "id": "2",
+            "text": "I am going to the market."
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "error": "That English meaning belongs to a different message, rather than: Je vais au marché.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am going to the market."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-05-guided-1",
+        "prompt": "Write the French sentence for: I am buying a book. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "J'achète un livre."
+        ],
+        "feedback": {
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "error": "The response does not match the model wording requested for: I am buying a book.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: J'achète un livre."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-05-guided-2",
+        "prompt": "Write the French sentence for: The book is for Lina. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Le livre est pour Lina."
+        ],
+        "feedback": {
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "error": "The response does not match the model wording requested for: The book is for Lina.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Le livre est pour Lina."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-05-guided-3",
+        "prompt": "Write the French sentence for: I am going to the market. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Je vais au marché."
+        ],
+        "feedback": {
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "error": "The response does not match the model wording requested for: I am going to the market.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je vais au marché."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "J'achète un livre. Le livre est pour Lina. Je vais au marché.",
+      "english": "I am buying a book. The book is for Lina. I am going to the market.",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Describe buying an unspecified object, then refer to the same object as known. Add a destination using au or aux and explain the contraction.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Je parle aux étudiants.",
+      "model_translation": "I am speaking to the students."
+    },
+    "feedback": {
+      "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-05-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: I am speaking to the students. Word bank: étudiants. / aux / parle / Je",
+        "correct_answers": [
+          "Je parle aux étudiants."
+        ],
+        "feedback": {
+          "rule": "An article is the small word before a noun. Un, une and des introduce an unspecified thing or things, like a or some. Le, la and les refer to known things or a whole category, like the; le and la become l' before a vowel sound. À plus le becomes au; à plus les becomes aux. De plus le becomes du; de plus les becomes des. Thus des can mean some or of the depending on the sentence.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-06",
+    "level": "A1",
+    "outcome": "I can change a simple noun phrase from one item to several.",
+    "explanation": "Plural means more than one. Most French nouns add a written s in the plural, although that s is usually silent. Un and une become des; le and la become les. Many nouns ending in -eau add x, as in bateau/bateaux (boat/boats); many ending in -al change to -aux, as in journal/journaux (newspaper/newspapers). Exceptions exist, such as bal/bals (dance/dances). Check unusual spellings rather than adding s blindly.",
+    "example_items": [
+      {
+        "french": "Il y a un livre.",
+        "english": "There is a book.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Il y a des livres.",
+        "english": "There are books.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Les journaux sont ici.",
+        "english": "The newspapers are here.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-06-recognition-1",
+        "prompt": "Choose the meaning in this context: Il y a un livre.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "There is a book."
+          },
+          {
+            "id": "1",
+            "text": "There are books."
+          },
+          {
+            "id": "2",
+            "text": "The newspapers are here."
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "Plural means more than one. Most French nouns add a written s in the plural, although that s is usually silent. Un and une become des; le and la become les. Many nouns ending in -eau add x, as in bateau/bateaux (boat/boats); many ending in -al change to -aux, as in journal/journaux (newspaper/newspapers). Exceptions exist, such as bal/bals (dance/dances). Check unusual spellings rather than adding s blindly.",
+          "error": "That English meaning belongs to a different message, rather than: Il y a un livre.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: There is a book."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-06-recognition-2",
+        "prompt": "Choose the meaning in this context: Il y a des livres.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "There is a book."
+          },
+          {
+            "id": "1",
+            "text": "There are books."
+          },
+          {
+            "id": "2",
+            "text": "The newspapers are here."
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "Plural means more than one. Most French nouns add a written s in the plural, although that s is usually silent. Un and une become des; le and la become les. Many nouns ending in -eau add x, as in bateau/bateaux (boat/boats); many ending in -al change to -aux, as in journal/journaux (newspaper/newspapers). Exceptions exist, such as bal/bals (dance/dances). Check unusual spellings rather than adding s blindly.",
+          "error": "That English meaning belongs to a different message, rather than: Il y a des livres.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: There are books."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-06-recognition-3",
+        "prompt": "Choose the meaning in this context: Les journaux sont ici.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "There is a book."
+          },
+          {
+            "id": "1",
+            "text": "There are books."
+          },
+          {
+            "id": "2",
+            "text": "The newspapers are here."
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "Plural means more than one. Most French nouns add a written s in the plural, although that s is usually silent. Un and une become des; le and la become les. Many nouns ending in -eau add x, as in bateau/bateaux (boat/boats); many ending in -al change to -aux, as in journal/journaux (newspaper/newspapers). Exceptions exist, such as bal/bals (dance/dances). Check unusual spellings rather than adding s blindly.",
+          "error": "That English meaning belongs to a different message, rather than: Les journaux sont ici.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: The newspapers are here."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-06-guided-1",
+        "prompt": "Write the French sentence for: There is a book. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Il y a un livre."
+        ],
+        "feedback": {
+          "rule": "Plural means more than one. Most French nouns add a written s in the plural, although that s is usually silent. Un and une become des; le and la become les. Many nouns ending in -eau add x, as in bateau/bateaux (boat/boats); many ending in -al change to -aux, as in journal/journaux (newspaper/newspapers). Exceptions exist, such as bal/bals (dance/dances). Check unusual spellings rather than adding s blindly.",
+          "error": "The response does not match the model wording requested for: There is a book.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Il y a un livre."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-06-guided-2",
+        "prompt": "Write the French sentence for: There are books. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Il y a des livres."
+        ],
+        "feedback": {
+          "rule": "Plural means more than one. Most French nouns add a written s in the plural, although that s is usually silent. Un and une become des; le and la become les. Many nouns ending in -eau add x, as in bateau/bateaux (boat/boats); many ending in -al change to -aux, as in journal/journaux (newspaper/newspapers). Exceptions exist, such as bal/bals (dance/dances). Check unusual spellings rather than adding s blindly.",
+          "error": "The response does not match the model wording requested for: There are books.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Il y a des livres."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-06-guided-3",
+        "prompt": "Write the French sentence for: The newspapers are here. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Les journaux sont ici."
+        ],
+        "feedback": {
+          "rule": "Plural means more than one. Most French nouns add a written s in the plural, although that s is usually silent. Un and une become des; le and la become les. Many nouns ending in -eau add x, as in bateau/bateaux (boat/boats); many ending in -al change to -aux, as in journal/journaux (newspaper/newspapers). Exceptions exist, such as bal/bals (dance/dances). Check unusual spellings rather than adding s blindly.",
+          "error": "The response does not match the model wording requested for: The newspapers are here.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Les journaux sont ici."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Il y a un livre. Il y a des livres. Les journaux sont ici.",
+      "english": "There is a book. There are books. The newspapers are here.",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Make a shopping or packing list for one person, then change it for several people. Check both the article and noun, including an -eau or -al word.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Il y a des bateaux.",
+      "model_translation": "There are boats."
+    },
+    "feedback": {
+      "rule": "Plural means more than one. Most French nouns add a written s in the plural, although that s is usually silent. Un and une become des; le and la become les. Many nouns ending in -eau add x, as in bateau/bateaux (boat/boats); many ending in -al change to -aux, as in journal/journaux (newspaper/newspapers). Exceptions exist, such as bal/bals (dance/dances). Check unusual spellings rather than adding s blindly.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-06-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: There are boats. Word bank: bateaux. / des / a / y / Il",
+        "correct_answers": [
+          "Il y a des bateaux."
+        ],
+        "feedback": {
+          "rule": "Plural means more than one. Most French nouns add a written s in the plural, although that s is usually silent. Un and une become des; le and la become les. Many nouns ending in -eau add x, as in bateau/bateaux (boat/boats); many ending in -al change to -aux, as in journal/journaux (newspaper/newspapers). Exceptions exist, such as bal/bals (dance/dances). Check unusual spellings rather than adding s blindly.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-07",
+    "level": "A1",
+    "outcome": "I can change a common action word to match its subject in the present.",
+    "explanation": "A verb is an action or state word. Conjugation means changing its form to match who acts and when. For regular -er verbs, remove -er: parler (to speak) gives je parle, tu parles, il/elle/on parle, nous parlons, vous parlez, ils/elles parlent. Regular -ir verbs like finir (to finish) give nous finissons; regular -re verbs like vendre (to sell) give je vends and nous vendons. Not every -ir verb follows finir. Present forms can describe now or a habit.",
+    "example_items": [
+      {
+        "french": "Je parle avec Lina.",
+        "english": "I speak with Lina.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Nous finissons le travail.",
+        "english": "We are finishing the work.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Ils vendent des livres.",
+        "english": "They sell books.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-07-recognition-1",
+        "prompt": "Choose the meaning in this context: Je parle avec Lina.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I speak with Lina."
+          },
+          {
+            "id": "1",
+            "text": "We are finishing the work."
+          },
+          {
+            "id": "2",
+            "text": "They sell books."
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "A verb is an action or state word. Conjugation means changing its form to match who acts and when. For regular -er verbs, remove -er: parler (to speak) gives je parle, tu parles, il/elle/on parle, nous parlons, vous parlez, ils/elles parlent. Regular -ir verbs like finir (to finish) give nous finissons; regular -re verbs like vendre (to sell) give je vends and nous vendons. Not every -ir verb follows finir. Present forms can describe now or a habit.",
+          "error": "That English meaning belongs to a different message, rather than: Je parle avec Lina.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I speak with Lina."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-07-recognition-2",
+        "prompt": "Choose the meaning in this context: Nous finissons le travail.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I speak with Lina."
+          },
+          {
+            "id": "1",
+            "text": "We are finishing the work."
+          },
+          {
+            "id": "2",
+            "text": "They sell books."
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "A verb is an action or state word. Conjugation means changing its form to match who acts and when. For regular -er verbs, remove -er: parler (to speak) gives je parle, tu parles, il/elle/on parle, nous parlons, vous parlez, ils/elles parlent. Regular -ir verbs like finir (to finish) give nous finissons; regular -re verbs like vendre (to sell) give je vends and nous vendons. Not every -ir verb follows finir. Present forms can describe now or a habit.",
+          "error": "That English meaning belongs to a different message, rather than: Nous finissons le travail.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: We are finishing the work."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-07-recognition-3",
+        "prompt": "Choose the meaning in this context: Ils vendent des livres.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I speak with Lina."
+          },
+          {
+            "id": "1",
+            "text": "We are finishing the work."
+          },
+          {
+            "id": "2",
+            "text": "They sell books."
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "A verb is an action or state word. Conjugation means changing its form to match who acts and when. For regular -er verbs, remove -er: parler (to speak) gives je parle, tu parles, il/elle/on parle, nous parlons, vous parlez, ils/elles parlent. Regular -ir verbs like finir (to finish) give nous finissons; regular -re verbs like vendre (to sell) give je vends and nous vendons. Not every -ir verb follows finir. Present forms can describe now or a habit.",
+          "error": "That English meaning belongs to a different message, rather than: Ils vendent des livres.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: They sell books."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-07-guided-1",
+        "prompt": "Write the French sentence for: I speak with Lina. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Je parle avec Lina."
+        ],
+        "feedback": {
+          "rule": "A verb is an action or state word. Conjugation means changing its form to match who acts and when. For regular -er verbs, remove -er: parler (to speak) gives je parle, tu parles, il/elle/on parle, nous parlons, vous parlez, ils/elles parlent. Regular -ir verbs like finir (to finish) give nous finissons; regular -re verbs like vendre (to sell) give je vends and nous vendons. Not every -ir verb follows finir. Present forms can describe now or a habit.",
+          "error": "The response does not match the model wording requested for: I speak with Lina.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je parle avec Lina."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-07-guided-2",
+        "prompt": "Write the French sentence for: We are finishing the work. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Nous finissons le travail."
+        ],
+        "feedback": {
+          "rule": "A verb is an action or state word. Conjugation means changing its form to match who acts and when. For regular -er verbs, remove -er: parler (to speak) gives je parle, tu parles, il/elle/on parle, nous parlons, vous parlez, ils/elles parlent. Regular -ir verbs like finir (to finish) give nous finissons; regular -re verbs like vendre (to sell) give je vends and nous vendons. Not every -ir verb follows finir. Present forms can describe now or a habit.",
+          "error": "The response does not match the model wording requested for: We are finishing the work.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Nous finissons le travail."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-07-guided-3",
+        "prompt": "Write the French sentence for: They sell books. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Ils vendent des livres."
+        ],
+        "feedback": {
+          "rule": "A verb is an action or state word. Conjugation means changing its form to match who acts and when. For regular -er verbs, remove -er: parler (to speak) gives je parle, tu parles, il/elle/on parle, nous parlons, vous parlez, ils/elles parlent. Regular -ir verbs like finir (to finish) give nous finissons; regular -re verbs like vendre (to sell) give je vends and nous vendons. Not every -ir verb follows finir. Present forms can describe now or a habit.",
+          "error": "The response does not match the model wording requested for: They sell books.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Ils vendent des livres."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Je parle avec Lina. Nous finissons le travail. Ils vendent des livres.",
+      "english": "I speak with Lina. We are finishing the work. They sell books.",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "Describe what you and two classmates do during class. Use one -er, one regular -ir and one regular -re verb, then match every ending to its subject.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Vous parlez avec Sami.",
+      "model_translation": "You speak with Sami."
+    },
+    "feedback": {
+      "rule": "A verb is an action or state word. Conjugation means changing its form to match who acts and when. For regular -er verbs, remove -er: parler (to speak) gives je parle, tu parles, il/elle/on parle, nous parlons, vous parlez, ils/elles parlent. Regular -ir verbs like finir (to finish) give nous finissons; regular -re verbs like vendre (to sell) give je vends and nous vendons. Not every -ir verb follows finir. Present forms can describe now or a habit.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-07-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: You speak with Sami. Word bank: Sami. / avec / parlez / Vous",
+        "correct_answers": [
+          "Vous parlez avec Sami."
+        ],
+        "feedback": {
+          "rule": "A verb is an action or state word. Conjugation means changing its form to match who acts and when. For regular -er verbs, remove -er: parler (to speak) gives je parle, tu parles, il/elle/on parle, nous parlons, vous parlez, ils/elles parlent. Regular -ir verbs like finir (to finish) give nous finissons; regular -re verbs like vendre (to sell) give je vends and nous vendons. Not every -ir verb follows finir. Present forms can describe now or a habit.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  },
+  {
+    "topic_id": "A1-08",
+    "level": "A1",
+    "outcome": "I can use essential irregular verbs to describe myself and make a simple request.",
+    "explanation": "Irregular verbs do not follow one reusable ending pattern. Learn useful forms in messages: je suis (I am), j'ai (I have), je vais (I go), je fais (I do), je viens (I come), je prends (I take), je peux (I can), je veux (I want). Polite requests often use je voudrais (I would like), which you can learn as a whole phrase. French uses avoir for age: j'ai vingt ans means I am twenty. Check the form when the subject changes: nous sommes means we are.",
+    "example_items": [
+      {
+        "french": "Je suis à la gare.",
+        "english": "I am at the station.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "J'ai un billet.",
+        "english": "I have a ticket.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "french": "Je voudrais prendre le train.",
+        "english": "I would like to take the train.",
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "recognition": [
+      {
+        "id": "A1-08-recognition-1",
+        "prompt": "Choose the meaning in this context: Je suis à la gare.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I am at the station."
+          },
+          {
+            "id": "1",
+            "text": "I have a ticket."
+          },
+          {
+            "id": "2",
+            "text": "I would like to take the train."
+          }
+        ],
+        "correct_answers": [
+          "0"
+        ],
+        "feedback": {
+          "rule": "Irregular verbs do not follow one reusable ending pattern. Learn useful forms in messages: je suis (I am), j'ai (I have), je vais (I go), je fais (I do), je viens (I come), je prends (I take), je peux (I can), je veux (I want). Polite requests often use je voudrais (I would like), which you can learn as a whole phrase. French uses avoir for age: j'ai vingt ans means I am twenty. Check the form when the subject changes: nous sommes means we are.",
+          "error": "That English meaning belongs to a different message, rather than: Je suis à la gare.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I am at the station."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-08-recognition-2",
+        "prompt": "Choose the meaning in this context: J'ai un billet.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I am at the station."
+          },
+          {
+            "id": "1",
+            "text": "I have a ticket."
+          },
+          {
+            "id": "2",
+            "text": "I would like to take the train."
+          }
+        ],
+        "correct_answers": [
+          "1"
+        ],
+        "feedback": {
+          "rule": "Irregular verbs do not follow one reusable ending pattern. Learn useful forms in messages: je suis (I am), j'ai (I have), je vais (I go), je fais (I do), je viens (I come), je prends (I take), je peux (I can), je veux (I want). Polite requests often use je voudrais (I would like), which you can learn as a whole phrase. French uses avoir for age: j'ai vingt ans means I am twenty. Check the form when the subject changes: nous sommes means we are.",
+          "error": "That English meaning belongs to a different message, rather than: J'ai un billet.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I have a ticket."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-08-recognition-3",
+        "prompt": "Choose the meaning in this context: Je voudrais prendre le train.",
+        "choices": [
+          {
+            "id": "0",
+            "text": "I am at the station."
+          },
+          {
+            "id": "1",
+            "text": "I have a ticket."
+          },
+          {
+            "id": "2",
+            "text": "I would like to take the train."
+          }
+        ],
+        "correct_answers": [
+          "2"
+        ],
+        "feedback": {
+          "rule": "Irregular verbs do not follow one reusable ending pattern. Learn useful forms in messages: je suis (I am), j'ai (I have), je vais (I go), je fais (I do), je viens (I come), je prends (I take), je peux (I can), je veux (I want). Polite requests often use je voudrais (I would like), which you can learn as a whole phrase. French uses avoir for age: j'ai vingt ans means I am twenty. Check the form when the subject changes: nous sommes means we are.",
+          "error": "That English meaning belongs to a different message, rather than: Je voudrais prendre le train.",
+          "remediation": "Identify the person and action in the French sentence; its intended meaning is: I would like to take the train."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "guided_production": [
+      {
+        "id": "A1-08-guided-1",
+        "prompt": "Write the French sentence for: I am at the station. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Je suis à la gare."
+        ],
+        "feedback": {
+          "rule": "Irregular verbs do not follow one reusable ending pattern. Learn useful forms in messages: je suis (I am), j'ai (I have), je vais (I go), je fais (I do), je viens (I come), je prends (I take), je peux (I can), je veux (I want). Polite requests often use je voudrais (I would like), which you can learn as a whole phrase. French uses avoir for age: j'ai vingt ans means I am twenty. Check the form when the subject changes: nous sommes means we are.",
+          "error": "The response does not match the model wording requested for: I am at the station.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je suis à la gare."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-08-guided-2",
+        "prompt": "Write the French sentence for: I have a ticket. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "J'ai un billet."
+        ],
+        "feedback": {
+          "rule": "Irregular verbs do not follow one reusable ending pattern. Learn useful forms in messages: je suis (I am), j'ai (I have), je vais (I go), je fais (I do), je viens (I come), je prends (I take), je peux (I can), je veux (I want). Polite requests often use je voudrais (I would like), which you can learn as a whole phrase. French uses avoir for age: j'ai vingt ans means I am twenty. Check the form when the subject changes: nous sommes means we are.",
+          "error": "The response does not match the model wording requested for: I have a ticket.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: J'ai un billet."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      },
+      {
+        "id": "A1-08-guided-3",
+        "prompt": "Write the French sentence for: I would like to take the train. Use the wording from the example, including accents and punctuation.",
+        "correct_answers": [
+          "Je voudrais prendre le train."
+        ],
+        "feedback": {
+          "rule": "Irregular verbs do not follow one reusable ending pattern. Learn useful forms in messages: je suis (I am), j'ai (I have), je vais (I go), je fais (I do), je viens (I come), je prends (I take), je peux (I can), je veux (I want). Polite requests often use je voudrais (I would like), which you can learn as a whole phrase. French uses avoir for age: j'ai vingt ans means I am twenty. Check the form when the subject changes: nous sommes means we are.",
+          "error": "The response does not match the model wording requested for: I would like to take the train.",
+          "remediation": "Compare the subject, verb form, spelling and punctuation with: Je voudrais prendre le train."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "reading": {
+      "french": "Je suis à la gare. J'ai un billet. Je voudrais prendre le train.",
+      "english": "I am at the station. I have a ticket. I would like to take the train.",
+      "prompt": "Read this original mini-text aloud, then explain its situation and the purpose of each sentence. Identify the lesson pattern before opening the English support.",
+      "provenance": {
+        "kind": "original",
+        "source_url": null,
+        "source_author": "Franco",
+        "license_id": "original",
+        "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+      }
+    },
+    "realistic_use": {
+      "prompt": "At a station, say where you are, what you have and what you would like to do. Then tell a friend what you can do tomorrow.",
+      "rubric": [
+        "Fulfil the situation and make the intended meaning clear.",
+        "Use the target pattern accurately and choose language appropriate to the audience.",
+        "Produce two original sentences, then revise one after checking the explanation."
+      ],
+      "model": "Je peux venir demain.",
+      "model_translation": "I can come tomorrow."
+    },
+    "feedback": {
+      "rule": "Irregular verbs do not follow one reusable ending pattern. Learn useful forms in messages: je suis (I am), j'ai (I have), je vais (I go), je fais (I do), je viens (I come), je prends (I take), je peux (I can), je veux (I want). Polite requests often use je voudrais (I would like), which you can learn as a whole phrase. French uses avoir for age: j'ai vingt ans means I am twenty. Check the form when the subject changes: nous sommes means we are.",
+      "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+      "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+    },
+    "mastery": [
+      {
+        "id": "A1-08-mastery-1",
+        "prompt": "Reconstruct this new French message from the word bank, keeping accents and punctuation: I can come tomorrow. Word bank: demain. / venir / peux / Je",
+        "correct_answers": [
+          "Je peux venir demain."
+        ],
+        "feedback": {
+          "rule": "Irregular verbs do not follow one reusable ending pattern. Learn useful forms in messages: je suis (I am), j'ai (I have), je vais (I go), je fais (I do), je viens (I come), je prends (I take), je peux (I can), je veux (I want). Polite requests often use je voudrais (I would like), which you can learn as a whole phrase. French uses avoir for age: j'ai vingt ans means I am twenty. Check the form when the subject changes: nous sommes means we are.",
+          "error": "Check the meaning, word order and the highlighted language pattern; a literal English word order can change the message.",
+          "remediation": "Read the bilingual examples aloud, identify the changed words, then rebuild the sentence before trying again."
+        },
+        "provenance": {
+          "kind": "original",
+          "source_url": null,
+          "source_author": "Franco",
+          "license_id": "original",
+          "attribution_text": "Original Franco lesson; no third-party text or audio reproduced."
+        }
+      }
+    ],
+    "review_status": "generated",
+    "version": 1,
+    "skills": [
+      "reading",
+      "writing",
+      "speaking"
+    ],
+    "difficulty": "A1",
+    "source_url": null,
+    "source_author": "Franco",
+    "license_id": "original",
+    "attribution_text": "Original Franco lesson; no third-party text or audio reproduced.",
+    "review_due_policy": {
+      "initial_days": 1,
+      "subsequent_days": [
+        3,
+        7,
+        14,
+        30
+      ]
+    }
+  }
+]

@@ -1,6 +1,7 @@
 import { createStoryService } from './stories.js';
 import { curriculumConcepts } from './curriculum-contract.js';
 import { createHash, pbkdf2Sync, randomBytes, randomUUID } from 'node:crypto';
+import { reviewCurriculum } from './curriculum-editorial.js';
 import { createServer } from 'node:http';
 import { query, pool, migrate, createProfileForUser } from './database.js';
 import { CONTENT_SCHEMA_VERSION, normalizeItem, schemaDocument, validateBatch } from './content-contract.js';
@@ -319,6 +320,18 @@ async function main() {
                 if (error instanceof ContentFeedbackError) return json(res, error.status, { code: error.code, error: error.message });
                 throw error;
               }
+            }
+            if (u.pathname === '/api/content/v1/curriculum/review' && req.method === 'GET') {
+              if (!(await apiKey(req,'content:review'))) return json(res,401,{error:'A content:review API key is required.'});
+              return json(res,200,{lessons:await query('SELECT topic_id,review_status,version,pack_json FROM curriculum_lessons ORDER BY topic_id')});
+            }
+            const curriculumReview=u.pathname.match(/^\/api\/content\/v1\/curriculum\/([^/]+)\/review$/);
+            if (curriculumReview && req.method === 'POST') {
+              if (!(await apiKey(req,'content:review'))) return json(res,401,{error:'A content:review API key is required.'});
+              const input=await body(req);
+              const keyId=createHash('sha256').update(req.headers['x-api-key']).digest('hex');
+              const result=await reviewCurriculum(pool,decodeURIComponent(curriculumReview[1]),input,keyId);
+              return json(res,result.status,result.body);
             }
             const storyRoute=u.pathname.match(/^\/api\/me\/stories(?:\/(story-\d{2})(?:\/(answer|skip))?)?$/);
             if (storyRoute) {

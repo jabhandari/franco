@@ -58,7 +58,7 @@ export function Content({token,onPractice}:ContentProps) {
   }
   function selectLevel(next:typeof level) {setLevel(next);setActiveSlug(null);window.history.replaceState({},'',`${window.location.pathname}?level=${next}`);}
   function detail(concept:ContentConcept) {
-    return {id:concept.slug,title:concept.title,category:concept.concept_type,level:concept.level_code || level,shortDescription:concept.description || '',theory:concept.metadata.theory || [],vocabulary:concept.metadata.vocabulary || [],examples:concept.metadata.examples || [],sources:concept.metadata.sources || [],stub:Boolean(concept.metadata.stub)};
+    return {id:concept.slug,title:concept.title,category:concept.concept_type,level:concept.level_code || level,shortDescription:concept.description || '',theory:concept.metadata.theory || [],vocabulary:concept.metadata.vocabulary || [],examples:concept.metadata.examples || [],sources:concept.metadata.sources || [],stub:Boolean(concept.metadata.stub),lesson:concept.metadata.lesson,review_status:concept.metadata.review_status,subtopics:concept.metadata.subtopics};
   }
   return <Box as="section" className="learn-roadmap-page">
     <Box className="learn-level-bar">

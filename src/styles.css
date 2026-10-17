@@ -2732,7 +2732,6 @@ html[data-theme] .verb-sprint-intro h1 { max-width:565px; color:white; font-fami
   .verb-sprint-over { padding:32px 20px; }
 }
 @media(prefers-reduced-motion:reduce) { .verb-sprint-choice { transition:none; } }
-
 /* FRA-151: visual home, shared action tiles, and product preview. */
 .action-tile { --tile-accent:var(--color-accent); display:flex; flex-direction:column; gap:20px; min-height:214px; width:100%; padding:22px; text-align:left; border:1px solid color-mix(in srgb,var(--tile-accent) 34%,var(--color-border)); border-radius:22px; color:var(--color-text); background:color-mix(in srgb,var(--tile-accent) 11%,var(--color-surface)); transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease; }
 .action-tile:hover { transform:translateY(-4px); border-color:var(--tile-accent); box-shadow:0 12px 28px color-mix(in srgb,var(--tile-accent) 12%,transparent); }
@@ -2927,6 +2926,7 @@ html:not([data-theme="light"]) .welcome-section-kicker,
 html:not([data-theme="light"]) .welcome-highlight-learn .welcome-highlight-label,
 html:not([data-theme="light"]) .auth-landing .product-tour-eyebrow { color:#79ddd3; }
 html:not([data-theme="light"]) .welcome-highlight-play .welcome-highlight-label { color:#c7a6fc; }
+.curriculum-review-json { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 36rem; overflow: auto; }
 
 /* Stories: identical geometry in both themes; shared paint tokens adapt. */
 .story-path { list-style: none; display: flex; flex-direction: column; align-items: center; gap: 42px; max-width: 760px; margin: 36px auto; padding: 0 88px; }
