@@ -333,7 +333,7 @@ async function main() {
               const result=await reviewCurriculum(pool,decodeURIComponent(curriculumReview[1]),input,keyId);
               return json(res,result.status,result.body);
             }
-            const storyRoute=u.pathname.match(/^\/api\/me\/stories(?:\/(story-\d{2})(?:\/(answer))?)?$/);
+            const storyRoute=u.pathname.match(/^\/api\/me\/stories(?:\/(story-\d{2})(?:\/(answer|skip))?)?$/);
             if (storyRoute) {
               const viewer=await user(req);if(!viewer) return json(res,401,{error:'Authentication required.'});
               let result;

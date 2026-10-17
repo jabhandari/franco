@@ -51,9 +51,16 @@ for(const question of catalog[24].questions) await answer('fresh',catalog[24],qu
 assert.equal((await service.detail('fresh','story-25')).body.state,'completed');
 assert.equal((await service.detail('fresh','absent')).status,404);
 assert.equal((await service.act('fresh',last.id,'answer',{})).status,400);
-assert.equal((await service.act('fresh',last.id,'skip',{version:last.version})).status,400);
+const skippedDone=await service.act('fresh',last.id,'skip',{version:last.version});
+assert.equal(skippedDone.status,200);assert.equal(skippedDone.body.state,'completed');
+const mid=catalog[29];
+const skippedMid=await service.act('fresh',mid.id,'skip',{version:mid.version});
+assert.equal(skippedMid.status,200);assert.equal(skippedMid.body.state,'skipped');assert.deepEqual(skippedMid.body.answered_question_ids,[]);
+assert.equal((await service.list('fresh')).body.stories[29].state,'skipped');
+assert.equal((await answer('fresh',mid,mid.questions[0])).body.answered_question_ids.length,1);
+assert.equal((await service.act('fresh',mid.id,'skip',{version:mid.version+1})).status,409);
 assert.equal((await service.act('fresh',last.id,'answer',{version:last.version+1})).status,409);
 assert.equal((await service.act('fresh',last.id,'answer',{version:last.version,question_id:'absent',option_id:'a'})).status,400);
 assert.equal((await answer('missing',last,q)).status,401);
 assert.ok(commits>0 && rollbacks>0);
-console.log('Stories: story 50 first, out-of-order completion, retries, idempotence, saved legacy progress, user isolation, private keys, shuffled options and input guards passed.');
+console.log('Stories: story 50 first, out-of-order completion, retries, idempotence, saved legacy progress, question skips, user isolation, private keys, shuffled options and input guards passed.');

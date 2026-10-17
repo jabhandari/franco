@@ -55,6 +55,10 @@ export function createStoryService(pool,loadCatalog=loadStoryCatalog) {
           if(correct) answered.add(question.id);
           explanation=correct?question.explanation:'Not quite. Reread the story and try again; there is no retry limit.';
           if(state!=='completed' && answered.size===story.questions.length) state='completed';
+        } else if(action==='skip') {
+          // Skipping the questions is a reading-session exit, not progress:
+          // saved answers are kept and a completed story stays completed.
+          if(state!=='completed') state='skipped';
         } else return await stop(400,'Unsupported story action.');
         await client.query(`INSERT INTO learner_story_progress(user_id,story_id,version,state,answered_question_ids) VALUES($1,$2,$3,$4,$5)
           ON CONFLICT(user_id,story_id) DO UPDATE SET version=EXCLUDED.version,state=EXCLUDED.state,answered_question_ids=EXCLUDED.answered_question_ids,updated_at=NOW()`,[userId,id,story.version,state,[...answered]]);
