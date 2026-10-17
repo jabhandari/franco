@@ -2,6 +2,11 @@ import assert from 'node:assert/strict';
 import {loadStories,validateStories} from '../server/story-content.js';
 const stories=await loadStories();
 assert.equal(stories.length,50);assert.equal(stories.reduce((n,s)=>n+s.questions.length,0),300);
+for(const story of stories) {
+ const words=story.text.trim().split(/\s+/).length;
+ assert.ok(words>=100 && words<=150, `${story.id}: ${words} words; expected 100–150`);
+ assert.equal(story.questions.length,6,`${story.id}: expected six questions`);
+}
 const bad=structuredClone(stories);bad[0].questions.pop();assert.equal(validateStories(bad).valid,false);
 const answer=structuredClone(stories);answer[1].questions[0].correct_option_id='missing';assert.equal(validateStories(answer).valid,false);
 const order=structuredClone(stories);order[5].order_index=1;assert.equal(validateStories(order).valid,false);
