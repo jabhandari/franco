@@ -195,6 +195,7 @@ ALTER TABLE public.learner_lesson_positions ENABLE ROW LEVEL SECURITY;
   }
   for (const [code, ordinal] of [['A1',1],['A2',2],['B1',3],['B2',4],['C1',5],['C2',6]]) await query('INSERT INTO cefr_levels(code,ordinal) VALUES(?,?) ON CONFLICT(code) DO NOTHING', [code, ordinal]);
   await query("INSERT INTO schema_migrations(version) VALUES('content-v1') ON CONFLICT(version) DO NOTHING");
+  await pool.query(await readFile(new URL('../supabase/migrations/202610150002_curriculum_editorial.sql', import.meta.url), 'utf8'));
   if (process.env.CONTENT_API_KEY) {
     const hash = createHash('sha256').update(process.env.CONTENT_API_KEY).digest('hex');
     await query("INSERT INTO content_api_keys(id,key_hash,name,scopes) VALUES(?,?,?,?) ON CONFLICT(key_hash) DO NOTHING", [createHash('sha256').update(`id:${hash}`).digest('hex'), hash, 'environment-content-key', ['content:write', 'content:review']]);
