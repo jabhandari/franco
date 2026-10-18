@@ -3067,7 +3067,7 @@ html:not([data-theme="light"]) .story-shelf-copy small { color: #f6a957; }
 .race-room-badge > div { width:8px; height:8px; border-radius:50%; background:currentColor; box-shadow:0 0 0 4px color-mix(in srgb,var(--color-accent) 16%,transparent); }
 .race-lobby-grid { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(300px,.7fr); gap:20px; align-items:start; }
 .race-lobby-main { display:grid; gap:20px; }
-.race-lobby-card,.race-lobby-settings,.race-join-panel,.race-guest-wait,.race-invite-panel,.race-question,.race-finished-wait,.race-results,.race-review { border:1px solid var(--color-border); border-radius:23px; background:var(--color-surface); }
+.race-lobby-card,.race-lobby-settings,.race-join-panel,.race-guest-wait,.race-invite-panel,.race-question,.race-finished-wait,.race-review { border:1px solid var(--color-border); border-radius:23px; background:var(--color-surface); }
 .race-lobby-card,.race-lobby-settings,.race-join-panel,.race-guest-wait { display:grid; gap:18px; padding:28px; }
 .race-runners { display:grid; grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr); align-items:center; gap:8px; margin-top:8px; }
 .race-runner { display:grid; justify-items:center; gap:5px; min-width:0; padding:26px 10px; border-bottom:1px solid var(--color-border); text-align:center; }
@@ -3144,7 +3144,7 @@ html:not([data-theme="light"]) .story-shelf-copy small { color: #f6a957; }
 .race-results-hero h2 { font-family:var(--font-heading); font-size:clamp(2.5rem,5vw,4rem); font-weight:500; line-height:1.08; }
 .race-results-hero > p:last-child { color:var(--color-muted); }
 .race-trophy { display:grid; place-items:center; width:88px; height:88px; border-radius:28px; background:color-mix(in srgb,var(--palette-coral) 15%,var(--color-surface)); color:var(--palette-coral); }
-.race-result-cards { display:grid; grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr); align-items:center; gap:12px; width:100%; }
+.race-result-cards { display:grid; grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr); align-items:center; gap:12px; width:100%; border-top:1px solid var(--color-border); padding-top:26px; }
 .race-result-cards .race-score { min-height:118px; }
 .race-review { display:grid; gap:12px; width:100%; padding:20px; }
 .race-review h3 { font-size:var(--text-20); }
