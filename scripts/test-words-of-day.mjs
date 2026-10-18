@@ -102,12 +102,12 @@ function fakePool() {
       if (sql === 'BEGIN' || sql === 'COMMIT' || sql === 'ROLLBACK') return { rows: [] };
       if (sql.includes('FROM users')) return { rows: [{ id: params[0] }] };
       if (sql.includes('FROM learner_profiles')) return { rows: [{ current_level: 'A1' }] };
-      if (sql.includes('local_date<$2')) {
+      if (sql.includes('local_date<$3')) {
         const rows = [...sets.entries()]
-          .filter(([k, row]) => k.startsWith(`${params[0]}::`) && row.local_date < params[1])
+          .filter(([k, row]) => k.startsWith(`${params[0]}::`) && row.local_date >= params[1] && row.local_date < params[2])
           .map(([, row]) => row)
           .sort((a, b) => String(b.local_date).localeCompare(String(a.local_date)))
-          .slice(0, params[2] || 7);
+          .slice(0, params[3] || 7);
         return { rows };
       }
       if (sql.includes('SELECT local_date, level, word_ids FROM daily_word_sets')) {
@@ -175,6 +175,15 @@ assert(week.body.days[0].words.length === 5 && week.body.days[0].words.every((w)
 assert(week.body.days[0].words.map((w) => w.id).join() === a1Words.slice(5, 10).map((w) => w.id).join(), 'history: set order preserved');
 const none = await service.history('learner-new', 'UTC');
 assert(none.status === 200 && none.body.days.length === 0, 'history: a new learner gets an empty list');
+
+// Regression: a learner who skips days must not get sets older than the
+// promised 7-day window, even when fewer than 7 recent sets exist.
+for (const n of [2, 7, 10]) {
+  pool._sets.set(`learner-gap::${isoDaysAgo(n)}`, { local_date: isoDaysAgo(n), level: 'A1', word_ids: a1Words.slice(n * 5, n * 5 + 5).map((w) => w.id) });
+}
+const gap = await service.history('learner-gap', 'UTC');
+assert(gap.status === 200 && gap.body.days.length === 2, 'history: exactly-7-days-back is included, 10-days-back is not');
+assert(gap.body.days.map((d) => d.date).join() === [isoDaysAgo(2), isoDaysAgo(7)].join(), 'history: sets older than 7 days are excluded even when fewer than 7 recent sets exist');
 
 // --- Streak isolation (static guard) -------------------------------------------
 const moduleSource = await readFile(new URL('../server/words-of-day.js', import.meta.url), 'utf8');
