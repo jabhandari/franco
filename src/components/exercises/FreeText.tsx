@@ -4,6 +4,7 @@ import { getSpeechStatus, reportAttempt, requestContentFeedback, uploadSpeech } 
 import type { SimulateSubmit } from './ExerciseCard';
 import { getErrorMessage } from '../../presenters/format.presenter.js';
 import { useAudioRecorder } from '../../hooks/useAudioRecorder';
+import { Mic, RotateCcw, Square } from 'lucide-react';
 import { AnswerModePicker, AudioPlayer, Box, Button, ErrorMessage, ExerciseEyebrow, ExerciseShell, Text, Textarea } from '../ui';
 import type { AnswerMode } from '../ui';
 
@@ -103,18 +104,17 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
       {entry.example && <Box as="details" className="speaking-followups"><Box as="summary">See an example</Box><Text>{entry.example}</Text></Box>}
       {!feedback && <>
         <Box className="answer-mode-row">
-          <AnswerModePicker value={mode} onChange={choose} onSpokenAction={useSpokenInput} disabled={busy || recorder.phase === 'requesting'}
-            spokenLabel={simulateSubmit ? 'Use sample recording' : recorder.phase === 'recording' || recorder.phase === 'ready' ? 'Record yourself' : 'Start recording'} />
-          {mode === 'spoken' && recorder.phase === 'recording' && <Button variant="primary" onClick={recorder.stopRecording}>Finish recording</Button>}
+          <AnswerModePicker value={mode} onChange={choose} disabled={busy || recorder.phase === 'requesting'} />
         </Box>
         {mode === 'typed' ? <Textarea rows={7} value={value} onChange={(event) => setValue(event.target.value)} placeholder="Write your answer in French…" />
-          : <>
+          : <Box className="practice-recording-stage">
             {!available && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable. You can type your answer instead.</Text>}
-            {recorder.phase === 'recording' && <Text role="status">Recording · {recorder.elapsed}s / 60s</Text>}
+            {recorder.phase === 'idle' && (available || simulateSubmit) && !heard && <Button variant="primary" icon={Mic} onClick={useSpokenInput}>{simulateSubmit ? 'Use sample recording' : 'Start recording'}</Button>}
+            {recorder.phase === 'recording' && <Box className="practice-recording-live"><Text role="status">Recording <Text as="span">{recorder.elapsed}s / 60s</Text></Text><Button variant="primary" icon={Square} onClick={recorder.stopRecording}>Finish recording</Button></Box>}
             {recorder.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
-            {recorder.phase === 'ready' && <Box className="answer-recording-row"><Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={recorder.previewUrl} /></Box><Button variant="primary" onClick={recordAgain}>Record again</Button></Box>}
+            {recorder.phase === 'ready' && <Box className="answer-recording-row"><Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={recorder.previewUrl} /></Box><Button variant="text" icon={RotateCcw} onClick={recordAgain}>Record again</Button></Box>}
             {heard && !recorder.previewUrl && <Text className="speaking-task-note">Sample answer ready for feedback.</Text>}
-          </>}
+          </Box>}
         {(mode === 'typed' ? Boolean(value.trim()) : Boolean(heard || recorder.blob)) && <Box className="answer-submit"><Button variant="primary" wide disabled={busy} onClick={submit}>{busy ? 'Getting feedback…' : 'Get feedback'}</Button></Box>}
       </>}
       {feedback && <Box className="content-feedback" aria-live="polite">

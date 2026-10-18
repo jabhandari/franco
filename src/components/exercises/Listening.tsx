@@ -4,6 +4,7 @@ import { reportAttempt } from '../../api/client.js';
 import type { SimulateSubmit } from './ExerciseCard';
 import { getErrorMessage } from '../../presenters/format.presenter.js';
 import { useAudioRecorder } from '../../hooks/useAudioRecorder';
+import { RotateCcw, Mic, Square } from 'lucide-react';
 import { AnswerModePicker, AudioPlayer, Box, Button, ClipPlayer, ErrorMessage, ExerciseEyebrow, ExerciseShell, PronunciationComparison, Text, Textarea } from '../ui';
 import type { AnswerMode } from '../ui';
 
@@ -71,18 +72,17 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
       <ClipPlayer src={clip?.url} onPlay={() => setListened(true)} />
       {listened && !result && <>
         <Box className="answer-mode-row">
-          <AnswerModePicker value={mode} onChange={choose} onSpokenAction={useSpokenInput} disabled={busy || audio.phase === 'requesting'}
-            spokenLabel={simulateSubmit ? 'Use sample recording' : audio.phase === 'recording' || audio.phase === 'ready' ? 'Record yourself' : 'Start recording'} />
-          {mode === 'spoken' && audio.phase === 'recording' && <Button variant="primary" onClick={audio.stopRecording}>Finish recording</Button>}
+          <AnswerModePicker value={mode} onChange={choose} disabled={busy || audio.phase === 'requesting'} />
         </Box>
         {mode === 'typed'
           ? <Textarea rows={3} value={typed} onChange={(event) => setTyped(event.target.value)} placeholder="Type what you heard…" />
-          : <>
+          : <Box className="practice-recording-stage">
             {!audio.browserSupported && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable in this browser. You can type your answer instead.</Text>}
+            {audio.phase === 'idle' && (audio.browserSupported || simulateSubmit) && <Button variant="primary" icon={Mic} onClick={useSpokenInput}>{simulateSubmit ? 'Use sample recording' : 'Start recording'}</Button>}
             {audio.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
-            {audio.phase === 'recording' && <Text role="status">Recording · {audio.elapsed}s</Text>}
-            {audio.phase === 'ready' && <Box className="answer-recording-row"><Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={audio.previewUrl} /></Box><Button variant="primary" onClick={recordAgain}>Record again</Button></Box>}
-          </>}
+            {audio.phase === 'recording' && <Box className="practice-recording-live"><Text role="status">Recording <Text as="span">{audio.elapsed}s / 60s</Text></Text><Button variant="primary" icon={Square} onClick={audio.stopRecording}>Finish recording</Button></Box>}
+            {audio.phase === 'ready' && <Box className="answer-recording-row"><Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={audio.previewUrl} /></Box><Button variant="text" icon={RotateCcw} onClick={recordAgain}>Record again</Button></Box>}
+          </Box>}
         {ready && <Box className="answer-submit"><Button variant="primary" wide disabled={busy} onClick={compare}>{busy ? 'Comparing…' : 'Show answer & compare'}</Button></Box>}
       </>}
       {result && <>
