@@ -75,6 +75,9 @@ try {
   assert.equal(guestResult.me.seat, 2);
   assert.equal(hostResult.opponent.correct_count, 0);
   assert.equal(guestResult.opponent.correct_count, 1);
+  await pool.query('UPDATE race_players SET correct_count=2,final_score=2 WHERE room_id=$1', [roomIds[1]]);
+  assert.equal((await getRoom(rooms[1].code, userId)).room.winner_seat, 'tie');
+  assert.equal((await getRoom(rooms[1].code, otherUserId)).room.winner_seat, 'tie');
   const timed = (await pool.query('SELECT status,question_ids FROM race_rooms WHERE id=$1', [roomIds[2]])).rows[0];
   assert.equal(timed.status, 'finished', 'elapsed clock settles without another room visit');
   assert.deepEqual(timed.question_ids, []);
