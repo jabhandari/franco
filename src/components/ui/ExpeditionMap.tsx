@@ -76,7 +76,7 @@ function BoardScene({ points, cy, viewBox, id, step, trail, complete, result, re
         <path d="M0 340 Q140 270 285 328 T555 280 T825 262 T1080 250 V510 H0Z" fill={`url(#expedition-hill-${id})`} />
         <path d="M0 470 Q180 380 360 425 T720 375 T1080 365 V510 H0Z" fill="#417c72" />
         <path d="M477 0 Q512 160 466 250 T508 510" stroke={`url(#expedition-river-${id})`} strokeWidth="35" fill="none" opacity=".9" />
-        <path d="M478 0 Q511 158 465 250 T508 510" stroke="#d8f4ec" strokeWidth="5" fill="none" opacity=".85" />
+        <path d="M478 0 Q511 158 465 250 T508 510" stroke="#d8f4ec" strokeWidth="5" fill="none" opacity=".85" className="expedition-river-flow" />
         <path d="M790 185 L925 20 L1050 186Z" fill={`url(#expedition-ridge-${id})`} /><path d="M857 101 L925 20 L996 103Z" fill="#e9f5e8" />
         <path d="M0 282 Q150 218 298 282 M8 304 Q160 240 305 302 M730 224 Q850 185 1070 248" className="expedition-contour" />
         {[60, 110, 160, 280, 320, 570, 630, 690, 755].map((x, index) => <g key={`tree-${x}`} transform={`translate(${x} ${index % 2 ? 250 : 280})`} className="expedition-scenery-tree"><ellipse cy="16" rx="14" ry="5" fill="#1e554b55" /><path d="M0 5V20" stroke="#725e48" strokeWidth="5" /><path d="M-15 8L0 -23 15 8Z" /><path d="M-12 -3L0 -30 12 -3Z" /></g>)}
@@ -87,7 +87,7 @@ function BoardScene({ points, cy, viewBox, id, step, trail, complete, result, re
         <path d="M0 500 Q100 420 220 460 T400 415 V1120 H0Z" fill={`url(#expedition-hill-${id})`} />
         <path d="M0 830 Q100 750 230 790 T400 740 V1120 H0Z" fill="#417c72" />
         <path d="M0 640 Q170 615 400 650" stroke={`url(#expedition-river-${id})`} strokeWidth="35" fill="none" opacity=".9" />
-        <path d="M0 640 Q170 615 400 650" stroke="#d8f4ec" strokeWidth="5" fill="none" opacity=".85" />
+        <path d="M0 640 Q170 615 400 650" stroke="#d8f4ec" strokeWidth="5" fill="none" opacity=".85" className="expedition-river-flow" />
         <path d="M180 200 L290 32 L390 200Z" fill={`url(#expedition-ridge-${id})`} /><path d="M242 102 L290 32 L336 102Z" fill="#e9f5e8" />
         {[60, 330, 40, 345, 70, 315, 65, 335].map((x, index) => <g key={`tree-${index}`} transform={`translate(${x} ${310 + index * 91})`} className="expedition-scenery-tree"><ellipse cy="16" rx="14" ry="5" fill="#1e554b55" /><path d="M0 5V20" stroke="#725e48" strokeWidth="5" /><path d="M-15 8L0 -23 15 8Z" /><path d="M-12 -3L0 -30 12 -3Z" /></g>)}
         <g transform="translate(112 808)" className="expedition-scenery-house"><path d="M-22 0L0 -20 22 0V22H-22Z" /><path d="M-27 1L0 -26 27 1" /><rect x="-5" y="7" width="10" height="15" /></g>
@@ -95,6 +95,74 @@ function BoardScene({ points, cy, viewBox, id, step, trail, complete, result, re
       {points.slice(0, -1).map((point, index) => <path key={`path-${index}`} d={curve(point, points[index + 1])} className={`expedition-trail-line${index < step ? ' is-travelled' : ''}`} />)}
       {points.map(([x, y]) => <ellipse key={`shadow-${x}-${y}`} cx={x} cy={y + 15} rx="24" ry="7" className="expedition-landmark-shadow" />)}
       <rect x={0} y={id === 'wide' ? 60 : 0} width={id === 'wide' ? 1080 : 400} height={id === 'wide' ? 370 : 1120} fill={`url(#expedition-nightwash-${id})`} className="expedition-night-wash" />
+    </g>
+    {id === 'wide' ? <g className="expedition-wildlife-sky" aria-hidden="true">
+      {[0, 1, 2].map((bird) => <g key={`bird-${bird}`} opacity=".75">
+        <animateMotion dur={`${24 + bird * 7}s`} begin={`${-bird * 9}s`} repeatCount="indefinite"
+          path={`M -60 ${105 + bird * 18} Q 280 ${72 + bird * 10} 560 ${100 + bird * 14} T 1140 ${88 + bird * 12}`} />
+        <path d="M0 0 q7 -7 14 0 q7 -7 14 0" className="expedition-bird" stroke="#3d5a54" strokeWidth="2.6" fill="none" strokeLinecap="round" />
+      </g>)}
+    </g> : <g className="expedition-wildlife-sky" aria-hidden="true">
+      {[0, 1].map((bird) => <g key={`bird-${bird}`} opacity=".75">
+        <animateMotion dur={`${20 + bird * 8}s`} begin={`${-bird * 7}s`} repeatCount="indefinite"
+          path={`M -40 ${120 + bird * 30} Q 180 ${90 + bird * 12} 440 ${115 + bird * 20}`} />
+        <path d="M0 0 q7 -7 14 0 q7 -7 14 0" className="expedition-bird" stroke="#3d5a54" strokeWidth="2.6" fill="none" strokeLinecap="round" />
+      </g>)}
+    </g>}
+    <g transform={tilt} aria-hidden="true">
+      {id === 'wide' ? <>
+        <g transform="translate(310 336)"><rect x="9" y="-34" width="7" height="16" className="expedition-chimney" />
+          {[0, 1, 2].map((puff) => <circle key={puff} cx="12" cy="-38" r="5" className="expedition-smoke" style={cssVars({ '--smoke-delay': `${puff * 1.4}s` })} />)}
+        </g>
+        <g transform="translate(185 395)"><g className="expedition-fox">
+          <animateMotion dur="22s" repeatCount="indefinite" path="M 0 0 q 34 -14 68 0 t 68 0 t -68 0 t -68 0" />
+          <ellipse cx="0" cy="0" rx="13" ry="7" className="expedition-fox-body" />
+          <circle cx="11" cy="-5" r="6" className="expedition-fox-body" />
+          <path d="M7 -9 L9 -15 L12 -10 Z M12 -10 L15 -15 L16 -9 Z" className="expedition-fox-ear" />
+          <path d="M-12 -1 q -10 2 -14 8 q 8 1 14 -4" className="expedition-fox-tail" />
+        </g></g>
+        {[0, 1].map((npc) => <g key={`npc-${npc}`} transform={`translate(${npc ? 790 : 520} ${npc ? 330 : 360})`} opacity=".9">
+          <g className="expedition-npc">
+            <animateMotion dur={`${16 + npc * 5}s`} begin={`${-npc * 6}s`} repeatCount="indefinite"
+              path={npc ? 'M 0 0 q 26 -10 52 0 t 52 0 t -52 0 t -52 0' : 'M 0 0 q -24 -8 -48 0 t -48 0 t 48 0 t 48 0'} />
+            <g transform="scale(.62)">
+              <rect x="-11" y="-36" width="22" height="28" rx="10" className="expedition-traveler-body" />
+              <circle cx="0" cy="-42" r="10" className="expedition-traveler-head" />
+              <path d="M-11 -45 L11 -45 L6 -57 L-6 -57 Z" className="expedition-traveler-hat" />
+            </g>
+          </g>
+        </g>)}
+        {[0, 1].map((fly) => <g key={`butterfly-${fly}`} transform={`translate(${fly ? 660 : 250} ${fly ? 285 : 305})`}>
+          <g className="expedition-butterfly">
+            <animateMotion dur={`${9 + fly * 3}s`} repeatCount="indefinite"
+              path={fly ? 'M 0 0 q 18 -22 36 0 t 36 0 t -36 0 t -36 0' : 'M 0 0 q -16 -20 -32 0 t -32 0 t 32 0 t 32 0'} />
+            <g className="expedition-butterfly-wings">
+              <ellipse cx="-4" cy="0" rx="5" ry="7" className="expedition-butterfly-wing" />
+              <ellipse cx="4" cy="0" rx="5" ry="7" className="expedition-butterfly-wing" />
+              <rect x="-1" y="-6" width="2" height="12" rx="1" fill="#4a3728" />
+            </g>
+          </g>
+        </g>)}
+      </> : <>
+        <g transform="translate(112 808)"><rect x="9" y="-34" width="7" height="16" className="expedition-chimney" />
+          {[0, 1, 2].map((puff) => <circle key={puff} cx="12" cy="-38" r="5" className="expedition-smoke" style={cssVars({ '--smoke-delay': `${puff * 1.4}s` })} />)}
+        </g>
+        <g transform="translate(210 560)"><g className="expedition-fox">
+          <animateMotion dur="20s" repeatCount="indefinite" path="M 0 0 q 26 -12 52 0 t 52 0 t -52 0 t -52 0" />
+          <ellipse cx="0" cy="0" rx="13" ry="7" className="expedition-fox-body" />
+          <circle cx="11" cy="-5" r="6" className="expedition-fox-body" />
+          <path d="M7 -9 L9 -15 L12 -10 Z M12 -10 L15 -15 L16 -9 Z" className="expedition-fox-ear" />
+          <path d="M-12 -1 q -10 2 -14 8 q 8 1 14 -4" className="expedition-fox-tail" />
+        </g></g>
+        <g transform="translate(300 700)"><g className="expedition-butterfly">
+          <animateMotion dur="10s" repeatCount="indefinite" path="M 0 0 q 18 -22 36 0 t 36 0 t -36 0 t -36 0" />
+          <g className="expedition-butterfly-wings">
+            <ellipse cx="-4" cy="0" rx="5" ry="7" className="expedition-butterfly-wing" />
+            <ellipse cx="4" cy="0" rx="5" ry="7" className="expedition-butterfly-wing" />
+            <rect x="-1" y="-6" width="2" height="12" rx="1" fill="#4a3728" />
+          </g>
+        </g></g>
+      </>}
     </g>
     {points.map(([x, y], index) => {
       const py = projectY(y, cy);
@@ -157,6 +225,12 @@ export function ExpeditionMap({ step, trail, complete, place, score, livesLeft, 
         {timeOfDay !== 'day' && <div className="expedition-fireflies" aria-hidden="true">
           {FIREFLIES.map(([x, y, delay], index) => <span key={index} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${delay}s` }} />)}
         </div>}
+        <div className="expedition-foreground" aria-hidden="true">
+          {[4, 11, 19, 33, 47, 58, 71, 83, 92].map((x, index) => <i key={`g${index}`} className="fg-grass"
+            style={cssVars({ left: `${x}%`, height: `${26 + (index * 13) % 30}px`, animationDelay: `${(index % 5) * .5}s` })} />)}
+          {[16, 64, 88].map((x, index) => <i key={`r${index}`} className="fg-rock"
+            style={{ left: `${x}%`, width: `${34 + index * 12}px`, height: `${20 + index * 7}px` }} />)}
+        </div>
         <div className="expedition-hud">
           <div className="expedition-hud-chip" key={`score-${score}`}><Trophy size={15} /><strong>{score}</strong><span>PTS</span></div>
           {combo >= 2 && <div className="expedition-hud-chip is-combo"><Flame size={15} /><strong>×{combo >= 5 ? 3 : 2}</strong><span>COMBO {combo}</span></div>}

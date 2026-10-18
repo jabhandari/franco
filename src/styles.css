@@ -3449,6 +3449,38 @@ html[data-theme] .learn-lesson-band h1, html[data-theme] .learn-lesson-band p { 
 .expedition-cloud-3 { top:6%; left:-200px; width:160px; height:40px; animation-duration:95s; animation-delay:-60s; opacity:.7; }
 .expedition-map.is-night .expedition-cloud { opacity:.18; }
 .expedition-fireflies { position:absolute; inset:0; pointer-events:none; z-index:4; }
+/* ---- Living world: ambient wildlife, smoke, river flow, foreground depth ---- */
+.expedition-wildlife-sky { pointer-events:none; }
+.expedition-bird { transform-box:fill-box; transform-origin:center; animation:expedition-flap .55s ease-in-out infinite; }
+@keyframes expedition-flap { 50% { transform:scaleY(.35); } }
+.expedition-map.is-night .expedition-bird { opacity:0; transition:opacity 1.2s; }
+.expedition-butterfly-wings { transform-box:fill-box; transform-origin:center; animation:expedition-flutter .32s ease-in-out infinite; }
+@keyframes expedition-flutter { 50% { transform:scaleX(.3); } }
+.expedition-map.is-night .expedition-butterfly { opacity:0; transition:opacity 1.2s; }
+.expedition-butterfly-wing { fill:#f2b8d0; stroke:#c984a3; stroke-width:1; }
+.expedition-fox-body { fill:#c97b4a; }
+.expedition-fox-ear { fill:#8a4f2c; }
+.expedition-fox-tail { fill:none; stroke:#e8a56b; stroke-width:5; stroke-linecap:round; }
+.expedition-fox { animation:expedition-bob 1.1s ease-in-out infinite; }
+.expedition-npc { animation:expedition-bob .8s ease-in-out infinite; }
+@keyframes expedition-bob { 50% { transform:translateY(-3px); } }
+.expedition-chimney { fill:#6b5a4e; }
+.expedition-smoke { fill:#ffffff; opacity:0; animation:expedition-smoke-rise 4.2s ease-out infinite; animation-delay:var(--smoke-delay, 0s); }
+@keyframes expedition-smoke-rise {
+  0% { opacity:0; transform:translateY(0) scale(.6); }
+  25% { opacity:.55; }
+  100% { opacity:0; transform:translateY(-46px) scale(1.6); }
+}
+.expedition-river-flow { stroke-dasharray:16 26; animation:expedition-flow 2.6s linear infinite; }
+@keyframes expedition-flow { to { stroke-dashoffset:-42; } }
+.expedition-foreground { position:absolute; left:0; right:0; bottom:-6px; height:88px; pointer-events:none; z-index:5; overflow:hidden; filter:blur(.6px); }
+.expedition-foreground i { position:absolute; bottom:0; display:block; }
+.expedition-foreground .fg-grass { width:7px; border-radius:4px 4px 0 0; background:linear-gradient(180deg,#5da283,#2f6b57); transform-origin:bottom; animation:expedition-sway 3.4s ease-in-out infinite; }
+.expedition-foreground .fg-rock { border-radius:50%; background:radial-gradient(circle at 35% 30%,#9aa5a1,#5d6a66); }
+@keyframes expedition-sway { 50% { transform:rotate(7deg); } }
+@media (prefers-reduced-motion:reduce) {
+  .expedition-bird,.expedition-butterfly-wings,.expedition-fox,.expedition-npc,.expedition-smoke,.expedition-river-flow,.expedition-foreground .fg-grass { animation:none; }
+}
 .expedition-fireflies span { position:absolute; width:5px; height:5px; border-radius:50%; background:#ffe98a; box-shadow:0 0 9px #ffe98a; animation:expedition-firefly 4.5s ease-in-out infinite; }
 .expedition-board { display:block; position:relative; z-index:2; width:100%; height:auto; }
 .expedition-board-mobile-wrap { display:none; }
