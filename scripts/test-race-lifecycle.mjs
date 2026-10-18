@@ -6,7 +6,7 @@ if (!databaseUrl || process.env.DATABASE_URL !== databaseUrl
   throw new Error('DATABASE_URL and TEST_DATABASE_URL must match and point to local PostgreSQL.');
 }
 const { pool, migrate } = await import('../server/database.js');
-const { createRoom, closeRoom, listHostedRooms, finishRoom, pruneRaceRooms, RaceError } = await import('../server/races.js');
+const { createRoom, closeRoom, listHostedRooms, finishRoom, getRoom, pruneRaceRooms, RaceError } = await import('../server/races.js');
 const userId = `race-test-${randomUUID()}`;
 const otherUserId = `race-test-${randomUUID()}`;
 const roomIds = [];
@@ -61,6 +61,20 @@ try {
   const finished = (await pool.query('SELECT status,question_ids FROM race_rooms WHERE id=$1', [roomIds[1]])).rows[0];
   assert.equal(finished.status, 'finished', 'abandoned opponent is settled without another room visit');
   assert.deepEqual(finished.question_ids, [], 'finished room no longer stores its question snapshot');
+  // Reproduce the reported 1–0 result: the higher scorer ended early,
+  // while the opponent ran out of lives. Both viewers must see the same winner.
+  await pool.query(`UPDATE race_players SET correct_count=1,final_score=1,
+    forfeited_at=finished_at,lives_left=1 WHERE room_id=$1 AND seat=1`, [roomIds[1]]);
+  await pool.query(`UPDATE race_players SET user_id=$2,correct_count=0,final_score=0,
+    forfeited_at=NULL,lives_left=0 WHERE room_id=$1 AND seat=2`, [roomIds[1], otherUserId]);
+  const hostResult = await getRoom(rooms[1].code, userId);
+  const guestResult = await getRoom(rooms[1].code, otherUserId);
+  assert.equal(hostResult.room.winner_seat, 1);
+  assert.equal(guestResult.room.winner_seat, 1);
+  assert.equal(hostResult.me.seat, 1);
+  assert.equal(guestResult.me.seat, 2);
+  assert.equal(hostResult.opponent.correct_count, 0);
+  assert.equal(guestResult.opponent.correct_count, 1);
   const timed = (await pool.query('SELECT status,question_ids FROM race_rooms WHERE id=$1', [roomIds[2]])).rows[0];
   assert.equal(timed.status, 'finished', 'elapsed clock settles without another room visit');
   assert.deepEqual(timed.question_ids, []);

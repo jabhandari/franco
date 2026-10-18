@@ -103,7 +103,7 @@ paths:
   /api/races/{code}/finish:
     post:
       security: [{ LearnerSession: [] }, { RacePlayerToken: [] }]
-      description: Forfeit the remaining questions; once both players finish, return the final winner and scores.
+      description: End the player's remaining questions early. Once both players finish, the higher correct-answer score wins; early finish loses a score tie.
       parameters:
         - { $ref: '#/components/parameters/RaceCode' }
       responses:
