@@ -211,7 +211,8 @@ export async function createRoom(userId, config, displayName) {
       COUNT(*) FILTER (WHERE r.status IN ('lobby','live') AND r.expires_at>NOW()
         AND (r.ends_at IS NULL OR r.ends_at>NOW()))::int AS active
       FROM race_rooms r JOIN race_players p ON p.id=r.host_player_id WHERE p.user_id=$1`, [userId])).rows[0];
-    if (count.hourly >= MAX_HOST_CREATIONS_PER_HOUR || count.active >= MAX_ACTIVE_HOST_ROOMS) throw new RaceError(429, 'Too many active races. Finish one or try again later.');
+    if (count.hourly >= MAX_HOST_CREATIONS_PER_HOUR) throw new RaceError(429, 'You\'re creating race rooms too quickly. Wait a little and try again.');
+    if (count.active >= MAX_ACTIVE_HOST_ROOMS) throw new RaceError(429, `You already have ${MAX_ACTIVE_HOST_ROOMS} open race rooms. Close one from Your open lobbies below to create another.`);
     const roomId = randomUUID();
     const hostId = randomUUID();
     let room;
@@ -401,5 +402,34 @@ export async function finishRoom(roomCode, userId, playerToken) {
       room = (await client.query("UPDATE race_rooms SET status='finished' WHERE id=$1 RETURNING *", [room.id])).rows[0];
     }
     return state(client, room, players, updated);
+  });
+}
+
+export async function listHostedRooms(userId) {
+  if (!userId) throw new RaceError(401, 'Sign in to see your race rooms.');
+  // The same predicate as the creation cap: only rooms that actually block
+  // a new invite are listed, so closing everything here always unblocks.
+  const { rows } = await pool.query(`SELECT r.code, r.status, r.created_at, r.expires_at, r.config_json AS config,
+      EXISTS (SELECT 1 FROM race_players g WHERE g.room_id=r.id AND g.seat=2) AS guest_joined
+    FROM race_rooms r JOIN race_players p ON p.id=r.host_player_id
+    WHERE p.user_id=$1 AND r.status IN ('lobby','live') AND r.expires_at>NOW()
+      AND (r.ends_at IS NULL OR r.ends_at>NOW())
+    ORDER BY r.created_at DESC`, [userId]);
+  return rows;
+}
+
+export async function closeRoom(roomCode, userId) {
+  return transaction(async (client) => {
+    const room = await lockRoom(client, roomCode);
+    if (room.status === 'expired') throw new RaceError(409, 'This race link has already expired.');
+    const players = await playersFor(client, room);
+    const host = players.find((entry) => entry.id === room.host_player_id);
+    if (!host || host.user_id !== userId) throw new RaceError(403, 'Only the host can close this race.');
+    if (room.status !== 'lobby') throw new RaceError(409, 'Only a lobby can be closed. Finish a live race instead.');
+    // Close reuses the expiry path: the invite link dies and the room stops
+    // counting against the host's open-room cap.
+    await client.query("UPDATE race_rooms SET status='expired',question_ids='[]'::jsonb WHERE id=$1", [room.id]);
+    await client.query('DELETE FROM race_players WHERE room_id=$1', [room.id]);
+    return { code: room.code, status: 'expired' };
   });
 }

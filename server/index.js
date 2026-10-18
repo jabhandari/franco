@@ -21,7 +21,7 @@ import { displayName, isNonEmptyName } from './user-names.js';
 import { getLearnerProgress } from './learner-progress.js';
 import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
 import { PuzzleError, puzzleSummary, startPuzzle, getPuzzle, answerPuzzle, endPuzzle, startVerbSprint, getVerbSprint, answerVerbSprint, endVerbSprint } from './puzzles.js';
-import { RaceError, createRoom, getRoom, joinRoom, configureRoom, startRoom, answerRoom, finishRoom, pruneRaceRooms } from './races.js';
+import { RaceError, createRoom, getRoom, joinRoom, configureRoom, startRoom, answerRoom, finishRoom, closeRoom, listHostedRooms, pruneRaceRooms } from './races.js';
 import { allowAuthEmail, authClientIp, genericEmailResponse, hashEmailToken, sendAuthEmail, validEmailToken } from './auth-email.js';
 import { emailConfigured } from './email.js';
 
@@ -704,7 +704,17 @@ async function main() {
                 throw error;
               }
             }
-            const raceMatch = u.pathname.match(/^\/api\/races\/([A-Za-z0-9]{8})(?:\/(join|config|start|answer|finish))?$/);
+            if (u.pathname === '/api/races/hosted' && req.method === 'GET') {
+              const viewer = await user(req);
+              if (!viewer) return json(res, 401, { error: 'Sign in to see your race rooms.' });
+              try {
+                return json(res, 200, { rooms: await listHostedRooms(viewer.id) });
+              } catch (error) {
+                if (error instanceof RaceError) return json(res, error.status, { error: error.message });
+                throw error;
+              }
+            }
+            const raceMatch = u.pathname.match(/^\/api\/races\/([A-Za-z0-9]{8})(?:\/(join|config|start|answer|finish|close))?$/);
             if (raceMatch) {
               const [, code, action] = raceMatch;
               const viewer = await user(req);
@@ -729,6 +739,10 @@ async function main() {
                   return json(res, 200, await answerRoom(code, viewer?.id ?? null, playerToken, payload.question_id, payload.response, payload.timezone));
                 }
                 if (req.method === 'POST' && action === 'finish') return json(res, 200, await finishRoom(code, viewer?.id ?? null, playerToken));
+                if (req.method === 'POST' && action === 'close') {
+                  if (!viewer) return json(res, 401, { error: 'Host sign-in required.' });
+                  return json(res, 200, await closeRoom(code, viewer.id));
+                }
               } catch (error) {
                 if (error instanceof RaceError) return json(res, error.status, { error: error.message });
                 throw error;
