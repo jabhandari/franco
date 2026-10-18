@@ -3213,6 +3213,9 @@ html:not([data-theme="light"]) .story-shelf-copy small { color: #f6a957; }
 .race-hosted-actions .text-button { flex:0 0 auto; margin:0; width:auto; }
 .race-hosted-actions .text-button:last-child:not(:first-child) { color:var(--palette-coral); }
 .race-hosted-empty { padding:14px 0 4px; color:var(--color-muted); }
+.race-hosted-error { display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:6px 0 4px; }
+.race-hosted-error .error-message { flex:1 1 220px; }
+.race-hosted-error .text-button { flex:0 0 auto; margin:0; width:auto; }
 html:not([data-theme="light"]) .race-hosted-actions .text-button:first-child { color:#86e7df; }
 .race-review h3 { font-size:var(--text-20); }
 .race-review-row { display:grid; grid-template-columns:28px minmax(0,1fr) auto; align-items:center; gap:12px; padding:12px 0; border-top:1px solid var(--color-border); }
