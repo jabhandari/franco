@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "Review a franco pull request (or a branch/diff on request) against the repo's own conventions — correctness, the FRA-21 UI boundary, the FRA-16 component-library rules, presenter conventions, content-API scopes, and test/build health — with before/after screenshots for UI changes. Use when asked to review a PR, a diff, or changes in this repo. A review produces comments and a verdict only; it never pushes changes to the author's branch."
+description: "Review a franco pull request (or a branch/diff on request) against the repo's own conventions — correctness, the FRA-21 UI boundary, the FRA-16 component-library rules, presenter conventions, content-API scopes, test/build health, and proportional visual evidence for UI changes. Use when asked to review a PR, a diff, or changes in this repo. A review produces comments and a verdict only; it never pushes changes to the author's branch."
 ---
 
 # Code Review (franco)
@@ -30,12 +30,12 @@ Give every franco PR the same review, in the same order, against the conventions
    - Verify workflow claims against the codepath that actually ships (the guard you remember from another branch may not exist on `main` — check).
    - DB changes ship as a migration under `supabase/`; no manual-DB-steps-only changes.
 7. **Checks.** Run, and report actual output: `npm ci`, `npm run lint:ui` (UI changes), `npm test`, `npm run build`. A check you didn't run is a check that didn't pass — say which ones you skipped and why.
-8. **Screenshots (UI changes only).** Capture before (base branch) and after (PR branch) screenshots of every changed view, in the exact view/mode the author will be judged on (map *and* table, light *and* dark when the change is theme-sensitive), and embed them in the review. No visual change claim without them.
+8. **Visual evidence (UI changes only).** Inspect the rendered UI at the PR commit. Use the PR's existing screenshots when they show the changed state; otherwise capture one representative after screenshot for each changed view or distinct visual state. Add a before screenshot when a comparison clarifies the change. Capture additional mobile, dark-theme, or alternate-mode views only when the diff could affect them; verify those modes even if no extra image is needed. Confirm the preview URL actually serves the reviewed commit, since Cloudflare's hash URLs are immutable snapshots. Backend-only, documentation, and nonvisual changes need tests or API examples, not screenshots. No visual claim without a rendered check.
 9. **Write the review.** Findings first, ordered by severity, each anchored to a file/line with the concrete failure it causes. End with one verdict: approve, approve with nits, or request changes.
 
 ## Output Contract
 
-- A GitHub review (or PR comments) containing: findings by severity with file/line anchors; the checks table (command → pass/fail/not run); screenshots for UI changes; one explicit verdict.
+- A GitHub review (or PR comments) containing: findings by severity with file/line anchors; the checks table (command → pass/fail/not run); a link to representative visual evidence for UI changes; one explicit verdict.
 - Blocking vs non-blocking is labelled per finding. Nits are marked as nits, never padded into blockers.
 - Nothing is posted that the diff doesn't support: every claim names the file, test, or command output behind it.
 
