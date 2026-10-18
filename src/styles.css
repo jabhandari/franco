@@ -3300,7 +3300,7 @@ html[data-theme] .practice-page .mcq-options button.incorrect { border-color:var
 .practice-page .mcq-options button.correct .mcq-option-index { color:var(--practice-good-fill); background:var(--practice-good); }
 .practice-page .mcq-options button.incorrect .mcq-option-index { color:var(--practice-bad-fill); background:var(--practice-bad); }
 .practice-page .mcq-options button:disabled:not(.correct):not(.incorrect) { opacity:.64; }
-.practice-page .mcq-feedback { display:grid; grid-template-columns:48px minmax(0,1fr) auto; align-items:center; gap:13px; min-height:86px; margin-top:0; padding:17px 20px; border:1px solid var(--color-border); border-radius:16px; background:var(--practice-choice); color:var(--color-text); font-size:var(--text-14); }
+.practice-page .mcq-feedback { display:grid; grid-template-columns:48px minmax(0,1fr); align-items:center; gap:13px; min-height:86px; margin-top:0; padding:17px 20px; border:1px solid var(--color-border); border-radius:16px; background:var(--practice-choice); color:var(--color-text); font-size:var(--text-14); }
 .practice-page .mcq-feedback.correct { border-color:var(--practice-good); background:var(--practice-good-fill); color:var(--practice-good); }
 .practice-page .mcq-feedback.incorrect { border-color:var(--practice-bad); background:var(--practice-bad-fill); color:var(--practice-bad); }
 .practice-page .mcq-feedback.correct .mcq-feedback-icon { color:var(--practice-good); }
@@ -3312,7 +3312,7 @@ html[data-theme] .practice-page .mcq-options button.incorrect { border-color:var
 .mcq-feedback-copy > strong { font-size:var(--text-16); }
 .mcq-feedback-copy > span { color:inherit; font-size:var(--text-14); font-weight:500; text-transform:none; }
 .mcq-feedback-copy > span strong { color:inherit; }
-.practice-page .mcq-feedback .retry-button { justify-self:center; margin:0; padding:10px 13px; border-radius:10px; }
+.practice-page .mcq-feedback .retry-button { grid-column:1/-1; justify-self:center; margin:0; padding:10px 13px; border-radius:10px; }
 .practice-page .mcq-feedback .retry-button:hover { background:color-mix(in srgb,currentColor 10%,transparent); }
 .practice-page .practice-response-panel { display:grid; gap:18px; width:100%; padding:clamp(17px,2vw,26px); border:1px solid var(--color-border); border-radius:20px; background:var(--practice-choice); }
 .practice-page .practice-response-heading { display:flex; flex-wrap:wrap; align-items:baseline; gap:5px 16px; }
