@@ -267,7 +267,10 @@ export async function joinRoom(roomCode, userId, displayName) {
     if (players.length >= 2) throw new RaceError(409, 'This race is full.');
     const account = userId ? (await client.query('SELECT name FROM users WHERE id=$1', [userId])).rows[0] : null;
     if (userId && !account) throw new RaceError(401, 'Log in again to join.');
-    const name = cleanName(displayName ?? account.name);
+    // Guests have no account row: never read account.name for them. cleanName
+    // then returns the intended 400 when a guest omits their display name
+    // instead of throwing a TypeError on null.
+    const name = cleanName(userId ? (displayName ?? account.name) : displayName);
     const guestToken = userId ? null : randomBytes(32).toString('hex');
     const player = (await client.query(`INSERT INTO race_players
       (id,room_id,user_id,display_name,player_token_hash,seat,lives_left)
