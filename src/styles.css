@@ -2373,7 +2373,12 @@ html[data-theme] .puzzles-hero h1 { color:#fff; font-family:var(--font-heading);
 .puzzles-section-heading > div { display:grid; gap:8px; }
 .puzzles-section-heading h2 { font-family:var(--font-heading); font-size:var(--text-30); font-weight:500; }
 .puzzles-section-heading > p { color:var(--color-muted); font-size:var(--text-13); }
-.puzzles-game-card { display:grid; grid-template-columns:minmax(230px,.82fr) minmax(0,1.3fr); gap:34px; padding:16px; border:1px solid var(--color-border); border-radius:24px; background:var(--color-surface); box-shadow:0 12px 40px #0716260a; }
+.puzzles-game-card { position:relative; display:grid; grid-template-columns:minmax(230px,.82fr) minmax(0,1.3fr); gap:34px; padding:16px; border:1px solid var(--color-border); border-radius:24px; background:var(--color-surface); box-shadow:0 12px 40px #0716260a; }
+.puzzles-game-card:has(.puzzles-card-actions .primary-button:not(:disabled)) { cursor:pointer; }
+.puzzles-game-card:has(.puzzles-card-actions .primary-button:not(:disabled)):hover { border-color:var(--color-accent); }
+.puzzles-game-card:focus-within { outline:2px solid var(--color-accent); outline-offset:3px; }
+.puzzles-game-card .puzzles-card-actions .primary-button::after { content:''; position:absolute; inset:0; }
+.puzzles-game-card .puzzles-card-actions .primary-button:focus-visible { outline:none; }
 .puzzles-game-art { position:relative; display:grid; place-items:center; min-height:260px; overflow:hidden; border-radius:17px; background:radial-gradient(circle at 28% 20%,#458d8d 0%,#12666b 48%,#123747 100%); color:white; }
 .puzzles-game-art::before,.puzzles-game-art::after { content:""; position:absolute; width:265px; height:265px; border:1px solid #b6f6ec33; border-radius:50%; }
 .puzzles-game-art::after { width:340px; height:340px; }

@@ -369,7 +369,7 @@ export async function chooseExpeditionRoute(userId, runId, route, wager = false)
     if (!choice) throw new PuzzleError(409, 'Choose a route after a correct answer.');
     const issued = await issueExpeditionQuestion(client, run, choice, choice.step + 1);
     const endReason = issued.row ? null : 'questions_exhausted';
-    const nextState = { ...choice, livesLeft: undefined, questionBonus: issued.bonus,
+    const nextState = { ...choice, livesLeft: undefined, questionBonus: (route === 'camp' ? 1 : 0) + issued.bonus,
       activeBounty: issued.bountyItemId, bossEncounter: issued.boss, removedChoices: [] };
     const result = await client.query(`UPDATE puzzle_runs SET expedition_state=$2::jsonb,lives_left=$3,current_item_id=$4,current_item_revision=$5,
       seen_item_ids=CASE WHEN $4::text IS NULL THEN seen_item_ids ELSE array_append(seen_item_ids,$4::text) END,
