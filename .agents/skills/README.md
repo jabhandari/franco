@@ -17,7 +17,7 @@ If two skills could apply, the more specific one wins for the task and `lightwei
 ## Token-cost notes
 
 - `lightweight` — negative cost. It exists to make every other skill's output cheaper to produce and to read.
-- `code-review` — one agent, one pass, plus commands. Cost ≈ reading the diff twice. Screenshots add a little; they save reviewer round-trips.
+- `code-review` — one agent, one pass, plus commands. Cost ≈ reading the diff twice. Reuse representative UI screenshots; extra captures and image inspection consume time and model context without helping every review.
 - `orchestrate` — the expensive one: DAG planning + per-node dispatch + per-node verification + a full-suite run at integration. Only worth it when parallelism or tier savings (mechanical nodes on the economy tier) outweigh the coordination overhead. The triage gate exists to say no.
 - `multi-approach` — bounded by design (3–5 approaches, sketches only, no implementation). Cheap relative to reversing a wrong architecture.
 - `bug-investigation` — costs more than intuition on easy bugs, less on hard ones. Experimental: each use is measured against plain debugging on FRA-35 (root-cause accuracy + token cost) before any wider use.

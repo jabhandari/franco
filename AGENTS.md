@@ -15,8 +15,8 @@ Skills live in `.agents/skills/`. These apply to every session:
 - **code-review** — MUST run before requesting review on any PR and when
   reviewing one. A review is not done until its checklist has been run
   (ticket criteria, FRA-21 boundary, presenters, API scopes, checks,
-  screenshots). Reviews are comments only — never push to another author's
-  PR branch.
+  proportional visual evidence for UI changes). Reviews are comments only —
+  never push to another author's PR branch.
 - **orchestration** — not a skill; it lives in this file (next section),
   because the decision to orchestrate must be visible in every session,
   not loaded on demand. Its tripwire: only when a task decomposes into two
@@ -226,6 +226,17 @@ Every change must pass `lint:ui`, `npm run typecheck`, `npm test`, and
 `npm run build` before it is proposed. Content pipeline scripts (`import:*`, `publish:founding`,
 `sync:founding`, `seed:concepts`) are data operations — run them only when
 the ticket is about content, and say which ones you ran.
+
+For UI PRs, include one representative after screenshot for each changed view
+or distinct visual state. Capture a before screenshot only when a comparison
+helps explain the change. Add mobile or dark-theme screenshots when the change
+affects those layouts or colors; do not generate every theme, viewport, and
+item permutation by default. Link a live preview when available, but verify
+the exact commit behind it and label older preview URLs as snapshots. Reuse
+the PR's existing screenshots during review instead of recapturing them.
+Backend-only, documentation, and nonvisual changes need no screenshots; report
+their tests or API examples instead. Always inspect the rendered UI for visual
+changes even when one screenshot is enough to document them.
 
 ## Where to make changes (navigation)
 
