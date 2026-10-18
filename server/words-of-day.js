@@ -17,7 +17,7 @@
 // database, following the createStoryService(pool) pattern in stories.js.
 import { randomInt, randomUUID } from 'node:crypto';
 import { batches } from '../content/vocab/launch.mjs';
-import { localDateString, normalizeTimeZone } from './streak.js';
+import { localDateString, normalizeTimeZone, shiftDate } from './streak.js';
 
 export const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 export const DAILY_WORD_COUNT = 5;
@@ -321,13 +321,17 @@ export function createWordsOfDayService(pool, loadBank = null) {
 
     // GET /api/me/words/history?tz=... — the learner's sets from the last
     // 7 days before today, newest first, for review on the words page.
+    // The >= bound is load-bearing: without it, a learner who skips days
+    // would get sets older than the promised window (LIMIT 7 alone only
+    // trims when recent days are contiguous).
     async history(userId, timeZone) {
       const client = await pool.connect();
       try {
         const today = localDateString(new Date(), normalizeTimeZone(timeZone));
+        const weekAgo = shiftDate(today, -7);
         const setRows = (await client.query(
-          'SELECT local_date, level, word_ids FROM daily_word_sets WHERE user_id=$1 AND local_date<$2 ORDER BY local_date DESC LIMIT 7',
-          [userId, today],
+          'SELECT local_date, level, word_ids FROM daily_word_sets WHERE user_id=$1 AND local_date>=$2 AND local_date<$3 ORDER BY local_date DESC LIMIT 7',
+          [userId, weekAgo, today],
         )).rows;
         if (!setRows.length) return { status: 200, body: { days: [] } };
         const idsOf = (row) => (typeof row.word_ids === 'string' ? JSON.parse(row.word_ids) : (row.word_ids || []));
