@@ -285,7 +285,10 @@ Within-page or within-component changes do not need one.
 - Branch per ticket: `<KEY>/<slug>` (e.g. `FRA-29/agents-md-source-of-truth`).
 - Reviews are comments only; the author makes the changes. Agents never
   merge PRs — a human merges.
-- UI changes ship with before/after screenshots in the PR, both themes.
+- UI changes ship with proportional visual evidence in the PR: one
+  representative after screenshot for each changed view or distinct
+  visual state; before screenshots and extra theme/viewport views only
+  where they help assess the change.
 - Free-tier only: prefer solutions that cost $0 (hosting, CI, tooling).
 
 ## RTK Codex Guard — evaluation and decision
@@ -370,8 +373,10 @@ already produced false "deleted code" findings on this repo (PR #71).
 
 - Verify the PR against its linked FRA ticket's criteria where the PR
   names one; flag criteria the diff does not address.
-- For UI changes, flag a missing before/after screenshot pair (both
-  themes) as P1 — it is a repo working agreement.
+- For UI changes, flag missing proportional visual evidence as P1 —
+  at least one representative after screenshot for each changed view
+  or distinct visual state. Before/mobile/dark extras are expected
+  only where the change affects them.
 - If the PR claims checks were run (lint:ui, typecheck, test, build),
   do not repeat the claim as verified; you are reviewing the diff, not
   the CI run.
