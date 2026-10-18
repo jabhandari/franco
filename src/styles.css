@@ -3428,3 +3428,17 @@ html:not([data-theme="light"]) .practice-hero-tile.tile-three { background:#276d
   .recording-playback time { min-width:74px; font-size:var(--text-11); }
   .practice-page .freeform-exercise .answer-submit .primary-button { width:100%; }
 }
+/* Friend invitation sits beside the solo games without a card shell. */
+.puzzles-gallery-layout { display:grid; grid-template-columns:minmax(0,1fr) 280px; gap:32px; align-items:start; }
+.puzzles-solo-games { display:grid; gap:24px; min-width:0; }
+.puzzles-friend-promo { display:grid; gap:22px; padding-top:66px; min-width:0; }
+.puzzles-friend-promo .puzzles-game-art { min-height:180px; }
+.puzzles-friend-copy { display:grid; gap:16px; }
+.puzzles-friend-copy h3 { font-family:var(--font-heading); font-size:var(--text-30); }
+.puzzles-friend-copy > p { color:var(--color-muted); line-height:1.55; }
+.race-lobby-invited { grid-template-columns:minmax(0,1fr); max-width:850px; width:100%; margin-inline:auto; }
+.race-setting button { display:inline-flex; align-items:center; justify-content:center; text-align:center; }
+.race-runner-avatar,.race-versus,.race-invite-icon { line-height:1; text-align:center; }
+@media(max-width:1100px) { .puzzles-gallery-layout { grid-template-columns:minmax(0,1fr); } .puzzles-friend-promo { padding-top:0; max-width:550px; } }
+
+.race-room-badge > p { margin:0; line-height:1; }

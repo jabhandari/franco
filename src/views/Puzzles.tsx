@@ -146,6 +146,7 @@ export function Puzzles({ token, onRace }: Props) {
         </Box>
       </Box>
 
+      <Box className="puzzles-gallery-layout"><Box className="puzzles-solo-games">
       <Box className="puzzles-section-heading"><Box><Text className="puzzles-kicker">CHOOSE A PUZZLE</Text><Text as="h2">Ready when you are</Text></Box><Text>3 games available</Text></Box>
       <Box className="puzzles-game-card">
         <Box className="puzzles-game-art" aria-hidden="true"><Box className="puzzles-art-ring"><Zap size={46} /></Box><Text as="span">A1 → C2</Text></Box>
@@ -170,15 +171,18 @@ export function Puzzles({ token, onRace }: Props) {
           <Box className="puzzles-card-actions"><Button variant="primary" onClick={() => { setError(''); setStage('verb'); }} icon={ChevronRight} iconPosition="after">{summary?.verb_active ? 'Resume or restart' : 'Play Verb Sprint'}</Button></Box>
         </Box>
       </Box>
-      <Box className="puzzles-game-card puzzles-race-card">
+
+      </Box>
+      <Box className="puzzles-friend-promo">
         <Box className="puzzles-game-art" aria-hidden="true"><Box className="puzzles-art-ring"><Swords size={46} /></Box><Text as="span">TWO PLAYERS</Text></Box>
-        <Box className="puzzles-game-copy">
+        <Box className="puzzles-friend-copy">
           <Text className="puzzles-kicker">PLAY TOGETHER</Text>
           <Text as="h3">Race a friend</Text>
           <Text>Create a room, send its invite link or QR code, then answer the same French questions at your own pace. First to the finish has bragging rights.</Text>
           <Box className="puzzles-pills"><Text as="span"><Swords size={15} /> Head to head</Text><Text as="span"><Clock3 size={15} /> Your rules</Text><Text as="span"><Heart size={15} /> Lives or timer</Text></Box>
           <Box className="puzzles-card-actions"><Button variant="primary" onClick={onRace} icon={ChevronRight} iconPosition="after">Invite a friend</Button></Box>
         </Box>
+      </Box>
       </Box>
     </>}
 
