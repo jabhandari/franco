@@ -21,6 +21,19 @@ jobs:
   checks:
     name: lint:ui · typecheck · test · build
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: franco_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d franco_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,6 +55,11 @@ jobs:
 
       - name: Test suite
         run: npm test
+
+      - name: MCQ API integration
+        env:
+          TEST_DATABASE_URL: postgres://postgres:test@127.0.0.1:5432/franco_test?sslmode=disable
+        run: node scripts/test-mcq-api.mjs
 
       - name: Production build
         run: npm run build
