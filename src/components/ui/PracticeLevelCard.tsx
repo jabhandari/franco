@@ -7,7 +7,7 @@ export function PracticeLevelCard({level,clb,description,done,total,percent,sele
     <button type="button" className="practice-level-action" disabled={!total} onClick={onStart} aria-label={`Start ${level} exercises`}>
       {yourLevel && <span className="practice-your-level">Your level</span>}
       <span className="practice-level-heading"><strong>{level}</strong><small>CLB {clb}</small></span>
-      <ProgressRing size={54} percent={percent} label={`${level}: ${done} of ${total} done`}/>
+      <ProgressRing size={64} percent={percent} label={`${level}: ${done} of ${total} done`}/>
       <span className="practice-level-description">{description}</span>
       <small>{total ? `${done} of ${total} done` : 'No exercises yet'}</small>
       <span className="practice-level-start">{total ? 'Start →' : 'No exercises yet'}</span>
