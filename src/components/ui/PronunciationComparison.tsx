@@ -80,7 +80,7 @@ export function PronunciationComparison({ recording, referenceUrl, targetText, a
 
   return <div className="local-pronunciation">
     <strong>Compare how it sounded</strong>
-    <p>Compare your recording with “{targetText}” on this device. The first check downloads about 241 MB; later checks may use your browser cache. Audio stays on this device.</p>
+    <p>Compare your recording with “{targetText}” on this device. The first check downloads about 241 MB; later checks may use your browser cache. This local check does not upload your audio.</p>
     <button type="button" className="local-pronunciation-action" disabled={phase !== 'ready'} onClick={() => void analyze()}>
       {phase === 'ready' ? 'Compare my pronunciation' : phase === 'preparing' ? 'Preparing audio…' : phase === 'loading' ? `Downloading model · ${progress}%` : 'Listening to both recordings…'}
     </button>
