@@ -23,8 +23,8 @@ export function SkillCard({ title,gloss,description,done,total,percent,loading=f
       </div>
       <p>{description}</p>
       <small>{loading ? 'Progress loading…' : total ? `${done} of ${total} done` : 'No exercises yet'}</small>
-      {onStart && !loading && total > 0 && <span className="skill-card-invitation" aria-hidden="true">Explore levels <span>↗</span></span>}
-      {onStart && !loading && total > 0 && <button type="button" className="skill-card-start" onClick={onStart} aria-label={`Open ${gloss} practice`}><span className="visually-hidden">Open {gloss} practice</span></button>}
+      {onStart && !loading && <span className="skill-card-invitation" aria-hidden="true">Explore levels <span>↗</span></span>}
+      {onStart && !loading && <button type="button" className="skill-card-start" onClick={onStart} aria-label={`Open ${gloss} practice`}><span className="visually-hidden">Open {gloss} practice</span></button>}
     </section>
   );
 }
