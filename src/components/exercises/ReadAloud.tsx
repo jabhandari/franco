@@ -48,6 +48,11 @@ export function ReadAloud({ entry, token, onResult, simulateSubmit }: Props) {
     finally { setBusy(false); }
   }
 
+  function recordAgain() {
+    recorder.cancelRecording(); setHeard(null); setError('');
+    void recorder.startRecording();
+  }
+
   return <ExerciseShell>
     <Box className="read-aloud-exercise">
       <ExerciseEyebrow level={entry.level} kind="Read aloud" />
@@ -66,13 +71,13 @@ export function ReadAloud({ entry, token, onResult, simulateSubmit }: Props) {
           {available && recorder.browserSupported && recorder.phase === 'idle' && <Button variant="primary" icon={Mic} onClick={recorder.startRecording}>Record reading</Button>}
           {recorder.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
           {recorder.phase === 'recording' && <Box className="practice-recording-live"><Text role="status">Recording <Text as="span">{recorder.elapsed}s / 60s</Text></Text><Button variant="primary" icon={Square} onClick={recorder.stopRecording}>Finish recording</Button></Box>}
-          {recorder.phase === 'ready' && <><Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={recorder.previewUrl} /></Box><Box className="practice-recording-actions"><Button variant="primary" disabled={busy} onClick={transcribe}>{busy ? 'Checking…' : 'Check reading'}</Button><Button variant="text" icon={RotateCcw} onClick={recorder.cancelRecording}>Record again</Button></Box></>}
+          {recorder.phase === 'ready' && <><Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={recorder.previewUrl} /></Box><Box className="practice-recording-actions"><Button variant="primary" disabled={busy} onClick={transcribe}>{busy ? 'Checking…' : 'Check reading'}</Button><Button variant="text" icon={RotateCcw} onClick={recordAgain}>Record again</Button></Box></>}
         </Box>}
         {heard && <Box className="speech-feedback" aria-live="polite">
           <Text as="strong">What was heard</Text><Text>{heard.transcript}</Text>
           {heard.pronunciation.unclear_words.length > 0 && <><Text as="strong">These words sounded unclear — try again</Text><Text>{heard.pronunciation.unclear_words.map((word) => word.word).join(' · ')}</Text></>}
           <Button variant="primary" disabled={busy} onClick={save}>Save practice</Button>
-          <Button variant="text" onClick={() => { setHeard(null); recorder.cancelRecording(); }}>Try again</Button>
+          <Button variant="text" onClick={recordAgain}>Try again</Button>
         </Box>}
       </>}
       {result && <Feedback tone="correct" title="Reading saved." />}
