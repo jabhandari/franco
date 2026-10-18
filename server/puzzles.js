@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { pool, query } from './database.js';
 import { evaluate } from './evaluate.js';
 import { levelOrder, originalChoiceId, publicPuzzleQuestion, puzzleReveal, usesWordBank, validPuzzleConfig } from './puzzle-rules.js';
-import { expeditionAnswer, expeditionChoice, expeditionLevelOrder } from './expedition-rules.js';
+import { BOSS_ENCOUNTERS, MAX_BOUNTIES, expeditionAnswer, expeditionChoice, expeditionLevelOrder, freshExpeditionState, isBossEncounter, loupeRemovals, useProvision } from './expedition-rules.js';
 import { chooseVerbCard, gradeVerbChoice, publicVerbQuestion, verbCard } from './verb-sprint-deck.js';
 
 export class PuzzleError extends Error {
@@ -222,7 +222,44 @@ export async function endVerbSprint(userId, runId) {
   });
 }
 
-const expeditionStart = () => ({ step: 0, phase: 'question', route: 'start', reward: 1, trail: [] });
+function publicExpeditionQuestion(row, secret, state) {
+  const question = publicPuzzleQuestion(row, secret, state.removedChoices ?? []);
+  if (!question) return null;
+  return { ...question, bounty: state.activeBounty === question.id, boss: state.bossEncounter === true };
+}
+
+function expeditionProvisions(state) {
+  const provisions = state.provisions ?? {};
+  return { loupe: provisions.loupe ?? 0, second_chance: provisions.second_chance ?? 0, dictionary: provisions.dictionary ?? 0 };
+}
+
+// Issue the question for an upcoming encounter: a wanted bounty rematch, a
+// Gardien boss gate, or a fresh question at the route's CEFR target.
+async function issueExpeditionQuestion(client, run, state, encounterNumber, excludeItemId = null) {
+  const boss = isBossEncounter(encounterNumber);
+  const bounty = (state.bounties ?? []).find((entry) => entry.item_id !== excludeItemId);
+  if (bounty && (boss || Math.random() < 0.45)) {
+    const found = await client.query(`${QUESTION_SELECT} WHERE r.revision=i.current_revision AND ${ELIGIBLE} AND i.id=$1`, [bounty.item_id]);
+    if (found.rows[0]) {
+      return { row: found.rows[0], bountyItemId: found.rows[0].id, boss, bonus: (boss ? 2 : 0) + 2 };
+    }
+  }
+  if (boss) {
+    const guardian = await nextQuestion(client, 0, run.seen_item_ids, expeditionLevelOrder(encounterNumber - 1, 'hard'));
+    if (guardian) return { row: guardian, bountyItemId: null, boss: true, bonus: 2 };
+  }
+  const row = await nextQuestion(client, 0, run.seen_item_ids, expeditionLevelOrder(encounterNumber - 1, state.route));
+  return { row, bountyItemId: null, boss, bonus: 0 };
+}
+
+function dictionaryHint(row) {
+  const reveal = puzzleReveal(row).trim();
+  if (!reveal) return null;
+  if (row.item_type === 'word_order') return `Premier mot : « ${reveal.split(/\s+/)[0]} »`;
+  return `Ça commence par « ${reveal[0]} »`;
+}
+
+const expeditionStart = () => freshExpeditionState();
 
 export async function startExpedition(userId) {
   return inTransaction(async (client) => {
@@ -231,11 +268,12 @@ export async function startExpedition(userId) {
     if (!question) throw new PuzzleError(409, 'No published expedition questions are available yet.');
     await client.query("UPDATE puzzle_runs SET status='abandoned',end_reason='restarted',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL WHERE user_id=$1 AND game='french_expedition' AND status='active'", [userId]);
     const secret = randomUUID();
+    const state = expeditionStart();
     const result = await client.query(`INSERT INTO puzzle_runs
       (id,user_id,game,lives_total,lives_left,minutes,current_item_id,current_item_revision,seen_item_ids,choice_secret,expedition_state)
       VALUES($1,$2,'french_expedition',3,3,NULL,$3,$4,ARRAY[$3]::text[],$5,$6::jsonb) RETURNING *`,
-      [randomUUID(), userId, question.id, question.current_revision, secret, JSON.stringify(expeditionStart())]);
-    return { run: publicRun(result.rows[0]), question: publicPuzzleQuestion(question, secret) };
+      [randomUUID(), userId, question.id, question.current_revision, secret, JSON.stringify(state)]);
+    return { run: publicRun(result.rows[0]), question: publicExpeditionQuestion(question, secret, state) };
   });
 }
 
@@ -247,7 +285,7 @@ export async function getExpedition(userId, runId) {
       const result = await client.query("UPDATE puzzle_runs SET status='finished',end_reason='questions_exhausted',ended_at=NOW(),current_item_id=NULL,current_item_revision=NULL WHERE id=$1 RETURNING *", [run.id]);
       run = result.rows[0];
     }
-    return { run: publicRun(run), question: publicPuzzleQuestion(question, run.choice_secret) };
+    return { run: publicRun(run), question: publicExpeditionQuestion(question, run.choice_secret, run.expedition_state) };
   });
 }
 
@@ -258,7 +296,8 @@ export async function answerExpedition(userId, runId, questionId, response) {
   }
   return inTransaction(async (client) => {
     const run = await lockedRun(client, userId, runId, 'french_expedition');
-    if (run.status !== 'active' || run.expedition_state.phase !== 'question' || run.current_item_id !== questionId) {
+    const state = run.expedition_state;
+    if (run.status !== 'active' || state.phase !== 'question' || run.current_item_id !== questionId) {
       throw new PuzzleError(409, 'This encounter is no longer active. Refresh your run.');
     }
     const current = await currentQuestion(client, run);
@@ -269,33 +308,106 @@ export async function answerExpedition(userId, runId, questionId, response) {
     if (current.item_type === 'word_order' && !usesWordBank(graded, current.response_json.tokens)) throw new PuzzleError(400, 'Build your answer using the words shown.');
     const sourceChoice = current.item_type === 'word_order' ? null : current.response_json.choices.find((choice) => String(choice.id ?? choice.key) === graded);
     const correct = evaluate(current, graded) || Boolean(sourceChoice && evaluate(current, sourceChoice.text));
-    const outcome = expeditionAnswer(run.expedition_state, correct, current.cefr_level, run.lives_left);
-    const next = !outcome.done && !correct ? await nextQuestion(client, 0, run.seen_item_ids, expeditionLevelOrder(outcome.state.step, 'easy')) : null;
-    const endReason = outcome.done || (!correct && !next ? 'questions_exhausted' : null);
+    const provisions = expeditionProvisions(state);
+    // Seconde chance: the first miss of a run is forgiven — the traveler
+    // keeps their life and may attempt the same encounter again.
+    if (!correct && provisions.second_chance > 0) {
+      const retried = { ...state, provisions: { ...state.provisions, second_chance: 0 }, combo: 0 };
+      await client.query('UPDATE puzzle_runs SET expedition_state=$2::jsonb,combo=0 WHERE id=$1', [run.id, JSON.stringify(retried)]);
+      return { correct: false, retry: true, reveal: puzzleReveal(current),
+        run: publicRun({ ...run, expedition_state: retried, combo: 0 }),
+        question: publicExpeditionQuestion(current, run.choice_secret, retried) };
+    }
+    const outcome = expeditionAnswer(state, correct, current.cefr_level, run.lives_left);
+    let bounties = state.bounties ?? [];
+    const misses = [...(state.misses ?? [])];
+    let bountiesCleared = state.bountiesCleared ?? 0;
+    let bossesBeaten = state.bossesBeaten ?? 0;
+    if (!correct) {
+      const entry = { item_id: current.id, revision: current.current_revision, prompt: current.prompt, reveal: puzzleReveal(current) };
+      misses.push(entry);
+      if (bounties.length < MAX_BOUNTIES && !bounties.some((bounty) => bounty.item_id === current.id)) bounties = [...bounties, entry];
+    } else {
+      if (state.activeBounty) {
+        bounties = bounties.filter((bounty) => bounty.item_id !== state.activeBounty);
+        bountiesCleared += 1;
+      }
+      if (state.bossEncounter) bossesBeaten += 1;
+    }
+    const nextState = { ...outcome.state, bounties, misses, bountiesCleared, bossesBeaten,
+      activeBounty: null, bossEncounter: false, removedChoices: [] };
+    let next = null;
+    let endReason = outcome.done;
+    if (!outcome.done && !correct) {
+      const issued = await issueExpeditionQuestion(client, run, nextState, outcome.state.step + 1, current.id);
+      if (issued.row) {
+        next = issued.row;
+        nextState.questionBonus = issued.bonus;
+        nextState.activeBounty = issued.bountyItemId;
+        nextState.bossEncounter = issued.boss;
+      } else {
+        endReason = 'questions_exhausted';
+      }
+    }
     const result = await client.query(`UPDATE puzzle_runs SET score=score+$2,lives_left=$3,answered_count=answered_count+1,
+      combo=$8,best_combo=GREATEST(best_combo,$8),
       expedition_state=$4::jsonb,current_item_id=$5,current_item_revision=$6,
       seen_item_ids=CASE WHEN $5::text IS NULL THEN seen_item_ids ELSE array_append(seen_item_ids,$5::text) END,
       status=CASE WHEN $7::text IS NULL THEN 'active' ELSE 'finished' END,end_reason=$7,
       ended_at=CASE WHEN $7::text IS NULL THEN NULL ELSE NOW() END WHERE id=$1 RETURNING *`,
-      [run.id, outcome.points, outcome.livesLeft, JSON.stringify(outcome.state), next?.id ?? null, next?.current_revision ?? null, endReason]);
-    return { correct, reveal: puzzleReveal(current), points: outcome.points, run: publicRun(result.rows[0]), question: publicPuzzleQuestion(next, run.choice_secret) };
+      [run.id, outcome.points, outcome.livesLeft, JSON.stringify(nextState), next?.id ?? null, next?.current_revision ?? null, endReason, outcome.state.combo]);
+    return { correct, reveal: puzzleReveal(current), points: outcome.points, livesLost: outcome.livesLost,
+      run: publicRun(result.rows[0]), question: publicExpeditionQuestion(next, run.choice_secret, nextState) };
   });
 }
 
-export async function chooseExpeditionRoute(userId, runId, route) {
+export async function chooseExpeditionRoute(userId, runId, route, wager = false) {
   return inTransaction(async (client) => {
     const run = await lockedRun(client, userId, runId, 'french_expedition');
     if (run.status !== 'active') throw new PuzzleError(409, 'This expedition has ended.');
-    const choice = expeditionChoice(run.expedition_state, route, run.lives_left, run.lives_total);
+    const choice = expeditionChoice(run.expedition_state, route, run.lives_left, run.lives_total, wager);
     if (!choice) throw new PuzzleError(409, 'Choose a route after a correct answer.');
-    const next = await nextQuestion(client, 0, run.seen_item_ids, expeditionLevelOrder(choice.step, route));
-    const endReason = next ? null : 'questions_exhausted';
+    const issued = await issueExpeditionQuestion(client, run, choice, choice.step + 1);
+    const endReason = issued.row ? null : 'questions_exhausted';
+    const nextState = { ...choice, livesLeft: undefined, questionBonus: issued.bonus,
+      activeBounty: issued.bountyItemId, bossEncounter: issued.boss, removedChoices: [] };
     const result = await client.query(`UPDATE puzzle_runs SET expedition_state=$2::jsonb,lives_left=$3,current_item_id=$4,current_item_revision=$5,
       seen_item_ids=CASE WHEN $4::text IS NULL THEN seen_item_ids ELSE array_append(seen_item_ids,$4::text) END,
       status=CASE WHEN $6::text IS NULL THEN 'active' ELSE 'finished' END,end_reason=$6,
       ended_at=CASE WHEN $6::text IS NULL THEN NULL ELSE NOW() END WHERE id=$1 RETURNING *`,
-      [run.id, JSON.stringify({ ...choice, livesLeft: undefined }), choice.livesLeft, next?.id ?? null, next?.current_revision ?? null, endReason]);
-    return { run: publicRun(result.rows[0]), question: publicPuzzleQuestion(next, run.choice_secret) };
+      [run.id, JSON.stringify(nextState), choice.livesLeft, issued.row?.id ?? null, issued.row?.current_revision ?? null, endReason]);
+    return { run: publicRun(result.rows[0]), question: publicExpeditionQuestion(issued.row, run.choice_secret, nextState) };
+  });
+}
+
+export async function useExpeditionProvision(userId, runId, kind) {
+  if (kind !== 'loupe' && kind !== 'dictionary') throw new PuzzleError(400, 'Unknown provision.');
+  return inTransaction(async (client) => {
+    const run = await lockedRun(client, userId, runId, 'french_expedition');
+    const state = run.expedition_state;
+    if (run.status !== 'active' || state.phase !== 'question') throw new PuzzleError(409, 'Provisions can only be used during an encounter.');
+    const current = await currentQuestion(client, run);
+    if (!current || run.current_item_id !== current.id) throw new PuzzleError(409, 'This encounter is no longer active.');
+    const applied = useProvision(state, kind);
+    if (!applied) throw new PuzzleError(409, 'No provisions of that kind remain.');
+    if (kind === 'loupe') {
+      if (current.item_type === 'word_order') throw new PuzzleError(400, 'The loupe only works on choice encounters.');
+      if ((state.removedChoices ?? []).length > 0) throw new PuzzleError(409, 'The loupe was already used on this encounter.');
+      const data = current.response_json || {};
+      const answerId = String(data.answer ?? current.evaluation_json?.answer ?? '');
+      const removed = loupeRemovals(data.choices ?? [], answerId);
+      if (!removed) throw new PuzzleError(409, 'There is nothing for the loupe to remove.');
+      const next = { ...applied, removedChoices: removed };
+      await client.query('UPDATE puzzle_runs SET expedition_state=$2::jsonb WHERE id=$1', [run.id, JSON.stringify(next)]);
+      return { run: publicRun({ ...run, expedition_state: next }),
+        question: publicExpeditionQuestion(current, run.choice_secret, next), provisions: expeditionProvisions(next) };
+    }
+    const hint = dictionaryHint(current);
+    if (!hint) throw new PuzzleError(409, 'No hint is available for this encounter.');
+    await client.query('UPDATE puzzle_runs SET expedition_state=$2::jsonb WHERE id=$1', [run.id, JSON.stringify(applied)]);
+    return { run: publicRun({ ...run, expedition_state: applied }),
+      question: publicExpeditionQuestion(current, run.choice_secret, applied),
+      provisions: expeditionProvisions(applied), hint };
   });
 }
 

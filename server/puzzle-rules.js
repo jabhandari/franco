@@ -27,9 +27,10 @@ export function originalChoiceId(row, submittedToken, secret) {
   return choice ? String(choice.id ?? choice.key) : null;
 }
 
-export function publicPuzzleQuestion(row, secret) {
+export function publicPuzzleQuestion(row, secret, removedChoiceIds = []) {
   if (!row) return null;
   const data = row.response_json || {};
+  const removed = new Set((removedChoiceIds || []).map(String));
   const base = { id: row.id, level: row.cefr_level, type: row.item_type,
     prompt: row.prompt, context: row.item_type === 'word_order' ? null : row.context || null,
     instructions: row.instructions || null,
@@ -47,7 +48,10 @@ export function publicPuzzleQuestion(row, secret) {
     return { ...base, kind: 'word_order', tokens: shuffled };
   }
   const choices = Array.isArray(data.choices) ? data.choices : [];
-  return { ...base, kind: 'choice', choices: choices.map((choice) => ({
+  // The loupe provision removes wrong choices server-side; the trimmed bank
+  // is what the learner sees, while grading still accepts every original id.
+  const visible = choices.filter((choice) => !removed.has(String(choice.id ?? choice.key)));
+  return { ...base, kind: 'choice', choices: visible.map((choice) => ({
     id: token(secret, row.id, `choice:${choice.id ?? choice.key}`), text: String(choice.text ?? ''),
   })).sort((a, b) => a.id.localeCompare(b.id)) };
 }

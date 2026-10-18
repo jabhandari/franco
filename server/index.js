@@ -22,7 +22,7 @@ import { getPort, getHost, corsOrigin, getEnforceEmailVerification } from './con
 import { displayName, isNonEmptyName } from './user-names.js';
 import { getLearnerProgress } from './learner-progress.js';
 import { getLessonPosition,saveLessonPosition } from './lesson-positions.js';
-import { PuzzleError, puzzleSummary, startPuzzle, getPuzzle, answerPuzzle, endPuzzle, startVerbSprint, getVerbSprint, answerVerbSprint, endVerbSprint, startExpedition, getExpedition, answerExpedition, chooseExpeditionRoute, endExpedition } from './puzzles.js';
+import { PuzzleError, puzzleSummary, startPuzzle, getPuzzle, answerPuzzle, endPuzzle, startVerbSprint, getVerbSprint, answerVerbSprint, endVerbSprint, startExpedition, getExpedition, answerExpedition, chooseExpeditionRoute, endExpedition, useExpeditionProvision } from './puzzles.js';
 import { RaceError, createRoom, getRoom, joinRoom, configureRoom, startRoom, answerRoom, finishRoom, closeRoom, listHostedRooms, pruneRaceRooms } from './races.js';
 import { allowAuthEmail, authClientIp, genericEmailResponse, hashEmailToken, sendAuthEmail, validEmailToken } from './auth-email.js';
 import { emailConfigured } from './email.js';
@@ -518,7 +518,7 @@ async function main() {
               try {
                 if (req.method === 'GET' && u.pathname === '/api/me/puzzles') return json(res, 200, await puzzleSummary(x.id));
                 if (req.method === 'POST' && u.pathname === '/api/me/puzzles/expedition/runs') return json(res, 201, await startExpedition(x.id));
-                const expeditionMatch = u.pathname.match(/^\/api\/me\/puzzles\/expedition\/runs\/([A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12})(?:\/(answer|route|end))?$/);
+                const expeditionMatch = u.pathname.match(/^\/api\/me\/puzzles\/expedition\/runs\/([A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12})(?:\/(answer|route|provision|end))?$/);
                 const expeditionRunId = expeditionMatch?.[1].toLowerCase();
                 if (expeditionMatch && req.method === 'GET' && !expeditionMatch[2]) return json(res, 200, await getExpedition(x.id, expeditionRunId));
                 if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'answer') {
@@ -527,7 +527,11 @@ async function main() {
                 }
                 if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'route') {
                   const selection = await body(req);
-                  return json(res, 200, await chooseExpeditionRoute(x.id, expeditionRunId, selection.route));
+                  return json(res, 200, await chooseExpeditionRoute(x.id, expeditionRunId, selection.route, selection.wager === true));
+                }
+                if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'provision') {
+                  const usage = await body(req);
+                  return json(res, 200, await useExpeditionProvision(x.id, expeditionRunId, usage.kind));
                 }
                 if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'end') return json(res, 200, await endExpedition(x.id, expeditionRunId));
                 if (req.method === 'POST' && u.pathname === '/api/me/puzzles/verb-sprint/runs') return json(res, 201, await startVerbSprint(x.id));

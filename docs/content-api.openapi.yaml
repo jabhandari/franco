@@ -420,7 +420,7 @@ paths:
   /api/me/puzzles/expedition/runs/{runId}/answer:
     post:
       security: [{ LearnerSession: [] }]
-      description: Grade the current encounter once using the same server rules as French Rush. A correct answer opens a fork; a miss costs one life and advances automatically.
+      description: Grade the current encounter once using the same server rules as French Rush. A correct answer opens a fork and builds the combo multiplier; a miss costs one life (two on a wagered hard road) and advances automatically, unless Seconde chance is still held — then the encounter is retried with the life spared.
       parameters:
         - name: runId
           in: path
@@ -442,7 +442,7 @@ paths:
   /api/me/puzzles/expedition/runs/{runId}/route:
     post:
       security: [{ LearnerSession: [] }]
-      description: Choose easy (+1 on correct), hard (+3 on correct), or camp (restore one life, next correct +1). Only accepted after a correct answer.
+      description: Choose easy (+1 on correct), hard (+3 on correct), or camp (restore one life, next correct +1). Only accepted after a correct answer. The hard road accepts wager=true for double-or-nothing: +6 on correct, but a miss costs two lives. Combo multipliers and bounty/boss bonuses apply on top.
       parameters:
         - name: runId
           in: path
@@ -457,9 +457,32 @@ paths:
               required: [route]
               properties:
                 route: { type: string, enum: [easy, hard, camp] }
+                wager: { type: boolean, description: 'Double-or-nothing on the hard road only' }
       responses:
-        '200': { description: Updated run and next encounter }
+        '200': { description: Updated run and next encounter (may be a bounty rematch or Gardien boss gate) }
         '409': { description: No route can be chosen in current state }
+  /api/me/puzzles/expedition/runs/{runId}/provision:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Spend one trail provision during an encounter. loupe removes up to two wrong choices (choice encounters only); dictionary reveals a first-letter/first-word hint. second_chance is passive and triggers automatically on the run's first miss.
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [kind]
+              properties:
+                kind: { type: string, enum: [loupe, dictionary] }
+      responses:
+        '200': { description: Updated run, trimmed question and remaining provisions (plus a hint for dictionary) }
+        '400': { description: Unknown provision or loupe on a word-order encounter }
+        '409': { description: No provision remains or no encounter is active }
   /api/me/puzzles/expedition/runs/{runId}/end:
     post:
       security: [{ LearnerSession: [] }]

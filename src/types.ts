@@ -76,7 +76,19 @@ export type PuzzleRun = {
   end_reason: 'time' | 'lives' | 'questions_exhausted' | 'summit' | 'left' | 'restarted' | null;
 };
 
-export type ExpeditionProgress = { step: number; phase: 'question' | 'fork'; route: 'start' | 'easy' | 'hard' | 'camp'; reward: number; trail: { kind: 'easy' | 'hard' | 'camp' | 'success' | 'miss'; step: number; level?: string; points?: number }[] };
+export type ProvisionKind = 'loupe' | 'second_chance' | 'dictionary';
+export type ExpeditionProvisions = Record<ProvisionKind, number>;
+export type ExpeditionBounty = { item_id: string; revision: number; prompt: string; reveal: string };
+export type ExpeditionMiss = { prompt: string; reveal: string };
+export type ExpeditionProgress = {
+  step: number; phase: 'question' | 'fork'; route: 'start' | 'easy' | 'hard' | 'camp';
+  reward: number; combo: number; wager: boolean; questionBonus?: number;
+  provisions: ExpeditionProvisions; removedChoices?: string[];
+  bounties: ExpeditionBounty[]; misses: ExpeditionMiss[];
+  activeBounty?: string | null; bossEncounter?: boolean;
+  bountiesCleared: number; bossesBeaten: number;
+  trail: { kind: 'easy' | 'hard' | 'camp' | 'success' | 'miss'; step: number; level?: string; points?: number; combo?: number }[];
+};
 
 export type PuzzleQuestionBase = {
   id: string;
@@ -89,12 +101,13 @@ export type PuzzleQuestionBase = {
 };
 
 export type PuzzleQuestion = PuzzleQuestionBase & (
-  { kind: 'choice'; choices: { id: string; text: string }[] } |
-  { kind: 'word_order'; tokens: { id: string; text: string }[] }
+  { kind: 'choice'; choices: { id: string; text: string }[]; bounty?: boolean; boss?: boolean } |
+  { kind: 'word_order'; tokens: { id: string; text: string }[]; bounty?: boolean; boss?: boolean }
 );
 
 export type PuzzleState = { run: PuzzleRun; question: PuzzleQuestion | null };
-export type PuzzleAnswer = PuzzleState & { correct?: boolean; reveal?: string; timed_out?: boolean };
+export type PuzzleAnswer = PuzzleState & { correct?: boolean; reveal?: string; timed_out?: boolean; retry?: boolean; points?: number; livesLost?: number };
+export type ExpeditionProvisionResult = { run: PuzzleRun; question: PuzzleQuestion | null; provisions: ExpeditionProvisions; hint?: string };
 export type PuzzleSummary = {
   best: number;
   active: PuzzleRun | null;
