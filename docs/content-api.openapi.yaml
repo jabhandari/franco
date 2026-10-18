@@ -336,13 +336,6 @@ paths:
       responses:
         '201': { description: Server-timed run and first conjugation choice question }
         '401': { description: Missing or expired session }
-  /api/me/puzzles/verb-sprint/runs:
-    post:
-      security: [{ LearnerSession: [] }]
-      description: Start a 60-second Verb Sprint. Replaces only the learner's previous active Verb Sprint; French Rush remains separate.
-      responses:
-        '201': { description: Server-timed run and first conjugation choice question }
-        '401': { description: Missing or expired session }
   /api/me/puzzles/verb-sprint/runs/{runId}:
     get:
       security: [{ LearnerSession: [] }]
@@ -442,7 +435,7 @@ paths:
   /api/me/puzzles/expedition/runs/{runId}/route:
     post:
       security: [{ LearnerSession: [] }]
-      description: Choose easy (+1 on correct), hard (+3 on correct), or camp (restore one life, next correct +1). Only accepted after a correct answer. The hard road accepts wager=true for double-or-nothing: +6 on correct, but a miss costs two lives. Combo multipliers and bounty/boss bonuses apply on top.
+      description: "Choose easy (+1 on correct), hard (+3 on correct), or camp (restore one life, next correct +1). Only accepted after a correct answer. The hard road accepts wager=true for double-or-nothing: +6 on correct, but a miss costs two lives. Combo multipliers and bounty/boss bonuses apply on top."
       parameters:
         - name: runId
           in: path

@@ -518,7 +518,7 @@ async function main() {
               try {
                 if (req.method === 'GET' && u.pathname === '/api/me/puzzles') return json(res, 200, await puzzleSummary(x.id));
                 if (req.method === 'POST' && u.pathname === '/api/me/puzzles/expedition/runs') return json(res, 201, await startExpedition(x.id));
-                const expeditionMatch = u.pathname.match(/^\/api\/me\/puzzles\/expedition\/runs\/([A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12})(?:\/(answer|route|provision|end))?$/);
+                const expeditionMatch = u.pathname.match(/^\/api\/me\/puzzles\/expedition\/runs\/([A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12})(?:\/(answer|route|provision|end))?$/);
                 const expeditionRunId = expeditionMatch?.[1].toLowerCase();
                 if (expeditionMatch && req.method === 'GET' && !expeditionMatch[2]) return json(res, 200, await getExpedition(x.id, expeditionRunId));
                 if (expeditionMatch && req.method === 'POST' && expeditionMatch[2] === 'answer') {

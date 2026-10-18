@@ -47,6 +47,13 @@ function curve(from: number[], to: number[]) {
   return `M ${from[0]} ${from[1]} Q ${middleX} ${middleY - 44} ${to[0]} ${to[1]}`;
 }
 
+// CSS custom properties (--pa, --drift) drive the petal/confetti animations.
+// React.CSSProperties does not declare custom properties, so this helper types
+// them explicitly instead of asserting at each style prop.
+function cssVars(vars: React.CSSProperties & Record<`--${string}`, string>): React.CSSProperties {
+  return vars;
+}
+
 function BoardScene({ points, cy, viewBox, id, step, trail, complete, result, resultKey }: {
   points: number[][]; cy: number; viewBox: string; id: string;
   step: number; trail: ExpeditionProgress['trail']; complete: boolean;
@@ -121,7 +128,7 @@ function BoardScene({ points, cy, viewBox, id, step, trail, complete, result, re
     </g>}
     {result === 'correct' && <g key={`petals-${resultKey}`} transform={`translate(${tx} ${tpy})`}>
       <g transform={`scale(1 ${UNTILT})`}>
-        {Array.from({ length: 10 }).map((_, petal) => <circle key={petal} r="4.5" className="expedition-petal" style={{ '--pa': `${petal * 36}deg` } as React.CSSProperties} />)}
+        {Array.from({ length: 10 }).map((_, petal) => <circle key={petal} r="4.5" className="expedition-petal" style={cssVars({ '--pa': `${petal * 36}deg` })} />)}
       </g>
     </g>}
   </svg>;
@@ -158,7 +165,7 @@ export function ExpeditionMap({ step, trail, complete, place, score, livesLeft, 
           </div>
         </div>
         {summit && <div className="expedition-confetti" aria-hidden="true">
-          {Array.from({ length: 26 }).map((_, index) => <i key={index} style={{ left: `${(index * 37) % 100}%`, animationDelay: `${(index % 9) * 0.18}s`, '--drift': `${((index * 53) % 60) - 30}px` } as React.CSSProperties} />)}
+          {Array.from({ length: 26 }).map((_, index) => <i key={index} style={cssVars({ left: `${(index * 37) % 100}%`, animationDelay: `${(index % 9) * 0.18}s`, '--drift': `${((index * 53) % 60) - 30}px` })} />)}
         </div>}
       </div>
       {children && <div className="expedition-map-encounter">{children}</div>}

@@ -314,7 +314,7 @@ export async function answerExpedition(userId, runId, questionId, response) {
     if (!correct && provisions.second_chance > 0) {
       const retried = { ...state, provisions: { ...state.provisions, second_chance: 0 }, combo: 0 };
       await client.query('UPDATE puzzle_runs SET expedition_state=$2::jsonb,combo=0 WHERE id=$1', [run.id, JSON.stringify(retried)]);
-      return { correct: false, retry: true, reveal: puzzleReveal(current),
+      return { correct: false, retry: true,
         run: publicRun({ ...run, expedition_state: retried, combo: 0 }),
         question: publicExpeditionQuestion(current, run.choice_secret, retried) };
     }
