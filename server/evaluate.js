@@ -48,8 +48,13 @@ export function evaluate(item, response) {
   const mode = ev.mode ?? (ev.scoring === 'exact_match_case_insensitive' ? 'normalized_text' : undefined);
   switch (mode) {
     case 'choice':
-      // Case-insensitive, whitespace-tolerant (matches historic client behavior).
-      return normalizeText(response) === normalizeText(refAnswer);
+      // Imported legacy choices may store the answer as display text while the
+      // client submits a choice id. New content stores the answer as an id.
+      if (!normalizeText(response) || !normalizeText(refAnswer)) return false;
+      if (normalizeText(response) === normalizeText(refAnswer)) return true;
+      return Array.isArray(resp.choices) && resp.choices.some((choice) =>
+        normalizeText(choice.id ?? choice.key) === normalizeText(response) &&
+        normalizeText(choice.text) === normalizeText(refAnswer));
     case 'token_order': {
       const given = normalizeTokens(response);
       // Grade against the stored sentence, not the shuffled word bank.

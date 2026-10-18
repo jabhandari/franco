@@ -586,7 +586,7 @@ async function main() {
                 // FRA-7: for multiple-choice, reveal the correct choice's text
                 // (the right sentence), not just its key.
                 if (target.item_type === 'multiple_choice' && Array.isArray(rj.choices)) {
-                  const correctChoice = rj.choices.find((c) => String(c.id) === String(reveal));
+                  const correctChoice = rj.choices.find((c) => String(c.id ?? c.key) === String(reveal));
                   if (correctChoice && correctChoice.text) reveal = correctChoice.text;
                 }
               } else if (legacyRow) {

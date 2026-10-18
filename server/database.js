@@ -203,5 +203,6 @@ ALTER TABLE public.learner_lesson_positions ENABLE ROW LEVEL SECURITY;
   }
   await pool.query(await readFile(new URL('../supabase/migrations/202610150001_curriculum.sql', import.meta.url), 'utf8'));
   await pool.query(await readFile(new URL('../supabase/migrations/20261016_race_rooms.sql', import.meta.url), 'utf8'));
+  await pool.query(await readFile(new URL('../supabase/migrations/20261018_ungradable_choices.sql', import.meta.url), 'utf8'));
 }
 export async function createProfileForUser(userId) { await query('INSERT INTO learner_profiles (user_id) VALUES (?) ON CONFLICT (user_id) DO NOTHING', [userId]); }

@@ -30,6 +30,10 @@ assert(normalizeText("l\u2019homme") === normalizeText("l'homme"), 'normalize: N
 const choiceItem = { response_json: { answer: 'b' }, evaluation_json: { mode: 'choice' } };
 assert(evaluate(choiceItem, 'B') === true, 'choice: B matches b');
 assert(evaluate(choiceItem, ' a ') === false, 'choice: wrong answer rejected');
+const legacyChoice = { response_json: { answer: 'noun', choices: [{ id: '0', text: 'verb' }, { id: '1', text: 'noun' }] }, evaluation_json: { mode: 'choice' } };
+assert(evaluate(legacyChoice, '1') === true, 'choice: imported text answer accepts its choice id');
+assert(evaluate(legacyChoice, '0') === false, 'choice: imported text answer rejects other choice ids');
+assert(evaluate({ response_json: { choices: legacyChoice.response_json.choices }, evaluation_json: { mode: 'choice' } }, '1') === false, 'choice: missing answer cannot grade correct');
 
 // --- evaluate(): token_order normalizes before comparing ---
 const orderItem = { response_json: { tokens: ['Je', 'suis', 'canadien'] }, evaluation_json: { mode: 'token_order' } };
