@@ -132,6 +132,7 @@ export function Race({ code, token, onExit }: Props) {
   const [copied, setCopied] = React.useState(false);
   const [hostedRooms, setHostedRooms] = React.useState<HostedRoom[]>([]);
   const [closingCode, setClosingCode] = React.useState<string | null>(null);
+  const [hostedLoadError, setHostedLoadError] = React.useState('');
   const polling = React.useRef(false);
   const mutationVersion = React.useRef(0);
   const mounted = React.useRef(true);
@@ -202,7 +203,7 @@ export function Race({ code, token, onExit }: Props) {
   }, [state?.room.status]);
 
   React.useEffect(() => {
-    if (!token || roomCode) { setHostedRooms([]); return; }
+    if (!token || roomCode) { setHostedRooms([]); setHostedLoadError(''); return; }
     void refreshHosted();
   }, [token, roomCode]);
 
@@ -241,11 +242,13 @@ export function Race({ code, token, onExit }: Props) {
   }
 
   async function refreshHosted() {
-    if (!token) { if (mounted.current) setHostedRooms([]); return; }
+    if (!token) { if (mounted.current) { setHostedRooms([]); setHostedLoadError(''); } return; }
     try {
       const data = await raceRequest<{ rooms: HostedRoom[] }>('/api/races/hosted', 'GET', token, null);
-      if (mounted.current) { setHostedRooms(data.rooms); setClosingCode(null); }
-    } catch { /* The lobby list is best-effort; creation errors surface in the panel. */ }
+      if (mounted.current) { setHostedRooms(data.rooms); setClosingCode(null); setHostedLoadError(''); }
+    } catch (caught) {
+      if (mounted.current) setHostedLoadError(errorText(caught instanceof Error ? caught : 'Could not load your open races.'));
+    }
   }
 
   async function closeLobby(targetCode: string) {
@@ -338,7 +341,11 @@ export function Race({ code, token, onExit }: Props) {
       </Box>}
       {token && <Box className="race-hosted">
         <Box><Text className="race-kicker">YOUR OPEN RACES</Text><Text as="h2">Rooms you’re hosting.</Text><Text>Pick up a race or close a lobby you no longer need. You can host three open rooms at a time.</Text></Box>
-        {hostedRooms.length === 0 && <Text className="race-hosted-empty">No open rooms yet. Create an invite to get started.</Text>}
+        {hostedLoadError && <Box className="race-hosted-error">
+          <ErrorMessage message={hostedLoadError} />
+          <Button variant="text" onClick={() => void refreshHosted()}>Try again</Button>
+        </Box>}
+        {!hostedLoadError && hostedRooms.length === 0 && <Text className="race-hosted-empty">No open rooms yet. Create an invite to get started.</Text>}
         {hostedRooms.map((hosted) => <Box className="race-hosted-row" key={hosted.code}>
           <Box className="race-hosted-info">
             <Text as="strong">Room {hosted.code}</Text>
