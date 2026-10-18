@@ -2,11 +2,7 @@ import React from 'react';
 import { recordingToPcm } from '../../pronunciation/audio';
 import { comparePhones, findTargetWord } from '../../pronunciation/compare';
 import type { SoundComparison } from '../../pronunciation/compare';
-
-type WorkerReply =
-  | { id: number; kind: 'progress'; progress: number; file: string }
-  | { id: number; kind: 'result'; phones: string[]; loadMs: number; inferenceMs: number; sampleCount: number }
-  | { id: number; kind: 'error'; message: string };
+import type { PronunciationWorkerReply, PronunciationWorkerRequest } from '../../types';
 
 type Props = { recording: Blob; referenceUrl?: string; targetText: string; attemptId: string };
 
@@ -35,14 +31,17 @@ export function PronunciationComparison({ recording, referenceUrl, targetText, a
     try {
       const userSamples = await recordingToPcm(recording);
       if (current !== run.current) return;
-      const localWorker = new Worker(new URL('../../pronunciation/worker.ts', import.meta.url), { type: 'module' });
-      worker.current = localWorker;
+      let localWorker: Worker | null = null;
       let requestId = 0;
       function recognize(samples: Float32Array, reference: boolean): Promise<string[]> {
         const id = ++requestId;
         return new Promise((resolve, reject) => {
+          if (!localWorker) {
+            localWorker = new Worker(new URL('../../pronunciation/worker.ts', import.meta.url), { type: 'module' });
+            worker.current = localWorker;
+          }
           const timeout = setTimeout(() => reject(new Error('The local model timed out on this device.')), 300_000);
-          localWorker.onmessage = (event: MessageEvent<WorkerReply>) => {
+          localWorker.onmessage = (event: MessageEvent<PronunciationWorkerReply>) => {
             const reply = event.data;
             if (reply.id !== id || current !== run.current) return;
             if (reply.kind === 'progress') { setProgress(Math.round(reply.progress)); setPhase('loading'); return; }
@@ -51,7 +50,8 @@ export function PronunciationComparison({ recording, referenceUrl, targetText, a
             else resolve(reply.phones);
           };
           localWorker.onerror = () => { clearTimeout(timeout); reject(new Error('The local model could not start on this device.')); };
-          localWorker.postMessage({ id, samples, reference }, [samples.buffer]);
+          const request: PronunciationWorkerRequest = { id, samples, reference };
+          localWorker.postMessage(request, [samples.buffer]);
         });
       }
       let referencePhones = target?.phones;

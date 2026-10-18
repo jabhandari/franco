@@ -27,4 +27,7 @@ const steadyNoise = new Float32Array(16_000).map((_, index) => Math.sin(index * 
 assert.equal(hasClearSpeech(steadyNoise), false);
 const speechBurst = new Float32Array(16_000).map((_, index) => index > 4_000 && index < 12_000 ? Math.sin(index * .1) * .12 : Math.sin(index * .1) * .004);
 assert.equal(hasClearSpeech(speechBurst), true);
+const shortestAllowedSpeech = new Float32Array(4000).map((_, index) => Math.sin(index * .1) * (index < 960 ? .004 : .12));
+assert.equal(hasClearSpeech(shortestAllowedSpeech), true);
+assert.equal(hasClearSpeech(shortestAllowedSpeech.slice(0, 3999)), false);
 console.log('pronunciation CTC checks passed');

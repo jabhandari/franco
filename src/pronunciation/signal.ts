@@ -6,7 +6,7 @@ export function hasClearSpeech(samples: Float32Array): boolean {
     for (let index = start; index < start + frameSize; index += 1) energy += samples[index] * samples[index];
     levels.push(Math.sqrt(energy / frameSize));
   }
-  if (levels.length < 13) return false;
+  if (samples.length < 4000) return false;
   const ordered = [...levels].sort((left, right) => left - right);
   const noise = ordered[Math.floor(ordered.length * 0.2)];
   const speech = ordered[Math.floor(ordered.length * 0.85)];
