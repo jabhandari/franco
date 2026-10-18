@@ -19,12 +19,49 @@ let lastPruneAt = 0;
 
 export async function pruneRaceRooms() {
   // Retain an expired-link tombstone briefly, while deleting guest tokens,
-  // answer history and question snapshots at expiry.
+  // answer history and question snapshots at expiry. Host player rows are
+  // kept so recently closed rooms stay attributed to their host in the
+  // hourly creation count (see closeRoom); the room tombstone delete below
+  // cascades them away after 7 days.
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
+    // Match request transactions' lock order (room before players). Skip a
+    // room currently being played rather than blocking that race's answer.
+    const liveIds = (await client.query(`SELECT r.id FROM race_rooms r WHERE r.status='live' AND (
+      r.ends_at<=NOW()
+      OR (r.ends_at IS NULL AND EXISTS (SELECT 1 FROM race_players p
+        JOIN race_players peer ON peer.room_id=p.room_id AND peer.id<>p.id
+        WHERE p.room_id=r.id AND p.finished_at IS NULL
+          AND p.last_seen_at<=NOW()-INTERVAL '10 minutes'
+          AND peer.finished_at<=NOW()-INTERVAL '10 minutes'))
+      OR (EXISTS (SELECT 1 FROM race_players p WHERE p.room_id=r.id)
+        AND NOT EXISTS (SELECT 1 FROM race_players p WHERE p.room_id=r.id AND p.finished_at IS NULL))
+    ) FOR UPDATE OF r SKIP LOCKED`)).rows.map((row) => row.id);
+    // Finish races even when nobody opens their link again. A player who
+    // already crossed the finish line must not leave a disconnected opponent
+    // (and the room's question snapshot) live until the 24-hour expiry.
+    if (liveIds.length) {
+      await client.query(`UPDATE race_players p
+      SET finished_at=NOW(),final_score=COALESCE(p.final_score,p.correct_count)
+      FROM race_rooms r WHERE r.id=p.room_id AND r.status='live'
+        AND r.id=ANY($1) AND r.ends_at<=NOW() AND p.finished_at IS NULL`, [liveIds]);
+      await client.query(`UPDATE race_players p
+      SET finished_at=NOW(),forfeited_at=NOW(),final_score=p.correct_count
+      FROM race_rooms r WHERE r.id=p.room_id AND r.status='live'
+        AND r.id=ANY($1) AND r.ends_at IS NULL AND p.finished_at IS NULL
+        AND p.last_seen_at<=NOW()-INTERVAL '10 minutes'
+        AND EXISTS (SELECT 1 FROM race_players peer WHERE peer.room_id=r.id
+          AND peer.id<>p.id AND peer.finished_at<=NOW()-INTERVAL '10 minutes')`, [liveIds]);
+      await client.query(`UPDATE race_rooms r SET status='finished',question_ids='[]'::jsonb
+        WHERE r.id=ANY($1) AND r.status='live'
+          AND EXISTS (SELECT 1 FROM race_players p WHERE p.room_id=r.id)
+          AND NOT EXISTS (SELECT 1 FROM race_players p WHERE p.room_id=r.id AND p.finished_at IS NULL)`, [liveIds]);
+    }
     await client.query("UPDATE race_rooms SET status='expired',question_ids='[]'::jsonb WHERE expires_at<=NOW() AND status<>'expired'");
-    await client.query("DELETE FROM race_players WHERE room_id IN (SELECT id FROM race_rooms WHERE status='expired')");
+    await client.query(`DELETE FROM race_players p
+      WHERE p.room_id IN (SELECT id FROM race_rooms WHERE status='expired')
+      AND NOT EXISTS (SELECT 1 FROM race_rooms r WHERE r.id=p.room_id AND r.host_player_id=p.id)`);
     await client.query("DELETE FROM race_rooms WHERE expires_at<NOW()-INTERVAL '7 days'");
     await client.query('COMMIT');
   } catch (error) { await client.query('ROLLBACK'); throw error; }
@@ -88,11 +125,11 @@ async function lockRoom(client, roomCode) {
   const timedOut = room.status === 'live' && room.ends_at && new Date(room.ends_at).getTime() <= Date.now();
   if (expired && room.status !== 'expired') {
     room = (await client.query("UPDATE race_rooms SET status='expired',question_ids='[]'::jsonb WHERE id=$1 RETURNING *", [room.id])).rows[0];
-    await client.query('DELETE FROM race_players WHERE room_id=$1', [room.id]);
+    await client.query('DELETE FROM race_players WHERE room_id=$1 AND id<>$2', [room.id, room.host_player_id]);
     return room;
   }
   if (timedOut) {
-    room = (await client.query("UPDATE race_rooms SET status='finished' WHERE id=$1 RETURNING *", [room.id])).rows[0];
+    room = (await client.query("UPDATE race_rooms SET status='finished',question_ids='[]'::jsonb WHERE id=$1 RETURNING *", [room.id])).rows[0];
     await client.query('UPDATE race_players SET finished_at=COALESCE(finished_at,NOW()),final_score=COALESCE(final_score,correct_count) WHERE room_id=$1', [room.id]);
   } else if (room.status === 'live' && !room.ends_at) {
     // Unlimited means no race clock, but a player who has finished should
@@ -102,7 +139,7 @@ async function lockRoom(client, roomCode) {
     const abandoned = abandonedRacePlayer(players);
     if (abandoned) {
       await client.query('UPDATE race_players SET finished_at=NOW(),forfeited_at=NOW(),final_score=correct_count WHERE id=$1', [abandoned.id]);
-      room = (await client.query("UPDATE race_rooms SET status='finished' WHERE id=$1 RETURNING *", [room.id])).rows[0];
+      room = (await client.query("UPDATE race_rooms SET status='finished',question_ids='[]'::jsonb WHERE id=$1 RETURNING *", [room.id])).rows[0];
     }
   }
   return room;
@@ -208,10 +245,11 @@ export async function createRoom(userId, config, displayName) {
     if (!account) throw new RaceError(401, 'Log in to create a race.');
     const name = cleanName(displayName ?? account.name);
     const count = (await client.query(`SELECT COUNT(*) FILTER (WHERE r.created_at>NOW()-INTERVAL '1 hour')::int AS hourly,
-      COUNT(*) FILTER (WHERE r.status IN ('lobby','live') AND r.expires_at>NOW()
-        AND (r.ends_at IS NULL OR r.ends_at>NOW()))::int AS active
+      COUNT(*) FILTER (WHERE r.status IN ('lobby','live') AND p.finished_at IS NULL
+        AND r.expires_at>NOW() AND (r.ends_at IS NULL OR r.ends_at>NOW()))::int AS active
       FROM race_rooms r JOIN race_players p ON p.id=r.host_player_id WHERE p.user_id=$1`, [userId])).rows[0];
-    if (count.hourly >= MAX_HOST_CREATIONS_PER_HOUR || count.active >= MAX_ACTIVE_HOST_ROOMS) throw new RaceError(429, 'Too many active races. Finish one or try again later.');
+    if (count.hourly >= MAX_HOST_CREATIONS_PER_HOUR) throw new RaceError(429, 'You have created 10 race links in the last hour. Try again when the oldest link is an hour old.');
+    if (count.active >= MAX_ACTIVE_HOST_ROOMS) throw new RaceError(429, `You already have ${MAX_ACTIVE_HOST_ROOMS} open race rooms. Close a lobby or finish a live race to create another.`);
     const roomId = randomUUID();
     const hostId = randomUUID();
     let room;
@@ -381,7 +419,7 @@ export async function answerRoom(roomCode, userId, playerToken, questionId, resp
     await recordAttempt(client, room, player, ref, gradedResponse, correct, timeZone);
     players = players.map((entry) => entry.id === player.id ? updated : entry);
     if (players.length === 2 && players.every((entry) => entry.finished_at)) {
-      room = (await client.query("UPDATE race_rooms SET status='finished' WHERE id=$1 RETURNING *", [room.id])).rows[0];
+      room = (await client.query("UPDATE race_rooms SET status='finished',question_ids='[]'::jsonb WHERE id=$1 RETURNING *", [room.id])).rows[0];
     }
     return state(client, room, players, updated, { correct, reveal, duplicate: false });
   });
@@ -398,8 +436,41 @@ export async function finishRoom(roomCode, userId, playerToken) {
     const updated = (await client.query('UPDATE race_players SET finished_at=NOW(),forfeited_at=NOW(),final_score=correct_count WHERE id=$1 RETURNING *', [player.id])).rows[0];
     players = players.map((entry) => entry.id === player.id ? updated : entry);
     if (players.length === 2 && players.every((entry) => entry.finished_at)) {
-      room = (await client.query("UPDATE race_rooms SET status='finished' WHERE id=$1 RETURNING *", [room.id])).rows[0];
+      room = (await client.query("UPDATE race_rooms SET status='finished',question_ids='[]'::jsonb WHERE id=$1 RETURNING *", [room.id])).rows[0];
     }
     return state(client, room, players, updated);
+  });
+}
+
+export async function listHostedRooms(userId) {
+  if (!userId) throw new RaceError(401, 'Sign in to see your race rooms.');
+  // The same predicate as the creation cap: only rooms that actually block
+  // a new invite are listed, so closing everything here always unblocks.
+  const { rows } = await pool.query(`SELECT r.code, r.status, r.created_at, r.expires_at, r.config_json AS config,
+      EXISTS (SELECT 1 FROM race_players g WHERE g.room_id=r.id AND g.seat=2) AS guest_joined
+    FROM race_rooms r JOIN race_players p ON p.id=r.host_player_id
+    WHERE p.user_id=$1 AND p.finished_at IS NULL AND r.status IN ('lobby','live') AND r.expires_at>NOW()
+      AND (r.ends_at IS NULL OR r.ends_at>NOW())
+    ORDER BY r.created_at DESC`, [userId]);
+  return rows;
+}
+
+export async function closeRoom(roomCode, userId) {
+  return transaction(async (client) => {
+    const room = await lockRoom(client, roomCode);
+    if (room.status === 'expired') throw new RaceError(409, 'This race link has already expired.');
+    const players = await playersFor(client, room);
+    const host = players.find((entry) => entry.id === room.host_player_id);
+    if (!host || host.user_id !== userId) throw new RaceError(403, 'Only the host can close this race.');
+    if (room.status !== 'lobby') throw new RaceError(409, 'Only a lobby can be closed. Finish a live race instead.');
+    // Close reuses the expiry path: the invite link dies and the room stops
+    // counting against the host's open-room cap. The host player row is kept
+    // so the room stays attributed to the host in the hourly creation count:
+    // deleting it NULLs host_player_id (ON DELETE SET NULL) and drops the
+    // room from createRoom's join, letting create+close loops dodge
+    // MAX_HOST_CREATIONS_PER_HOUR. Guest players are still removed.
+    await client.query("UPDATE race_rooms SET status='expired',question_ids='[]'::jsonb WHERE id=$1", [room.id]);
+    await client.query('DELETE FROM race_players WHERE room_id=$1 AND id<>$2', [room.id, room.host_player_id]);
+    return { code: room.code, status: 'expired' };
   });
 }

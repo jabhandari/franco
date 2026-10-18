@@ -62,6 +62,14 @@ type RaceState = {
 type RaceAnswer = RaceState & { correct?: boolean; reveal?: string | null; selected?: string | null };
 type Props = { code: string | null; token: string | null; onExit: () => void };
 type Feedback = { correct: boolean; reveal: string; question: RaceQuestion; selected: string };
+type HostedRoom = {
+  code: string;
+  status: 'lobby' | 'live';
+  created_at: string;
+  expires_at: string;
+  config: RaceConfig;
+  guest_joined: boolean;
+};
 
 const DEFAULT_CONFIG: RaceConfig = { source: 'lesson_exercises', level: 'A1', question_count: 10, lives: 3, timer_seconds: 300 };
 const LEVELS: RaceConfig['level'][] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
@@ -75,6 +83,17 @@ function timeLabel(ms: number) {
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 }
 function errorText(error: string | Error) { return error instanceof Error ? error.message : error; }
+function roomSummary(config: RaceConfig) {
+  const pool = config.source === 'past_questions' ? 'Past questions' : 'Lesson exercises';
+  return `${pool} · ${config.level} · ${config.question_count} questions`;
+}
+function ageLabel(iso: string) {
+  const minutes = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 60000));
+  if (minutes < 1) return 'just now';
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  return hours < 24 ? `${hours}h ago` : `${Math.floor(hours / 24)}d ago`;
+}
 
 async function raceRequest<T>(path: string, method: 'GET' | 'POST' | 'PATCH', session: string | null, player: string | null, body?: object): Promise<T> {
   try {
@@ -111,6 +130,8 @@ export function Race({ code, token, onExit }: Props) {
   const [clockOffset, setClockOffset] = React.useState(0);
   const [qrImage, setQrImage] = React.useState<string | null>(null);
   const [copied, setCopied] = React.useState(false);
+  const [hostedRooms, setHostedRooms] = React.useState<HostedRoom[]>([]);
+  const [closingCode, setClosingCode] = React.useState<string | null>(null);
   const polling = React.useRef(false);
   const mutationVersion = React.useRef(0);
   const mounted = React.useRef(true);
@@ -180,6 +201,11 @@ export function Race({ code, token, onExit }: Props) {
     return () => window.clearInterval(timer);
   }, [state?.room.status]);
 
+  React.useEffect(() => {
+    if (!token || roomCode) { setHostedRooms([]); return; }
+    void refreshHosted();
+  }, [token, roomCode]);
+
   async function act<T extends RaceState>(path: string, body?: object): Promise<T | null> {
     if (!roomCode || busy) return null;
     mutationVersion.current += 1;
@@ -209,8 +235,36 @@ export function Race({ code, token, onExit }: Props) {
       setState(next); setRoomCode(next.room.code); setConfig(next.room.config); setClockOffset(Date.parse(next.room.server_now) - Date.now());
       configLoaded.current = next.room.code;
       window.history.pushState({}, '', `/race/${encodeURIComponent(next.room.code)}`);
+      void refreshHosted();
     } catch (caught) { if (mounted.current) setError(errorText(caught instanceof Error ? caught : 'Could not create the race.')); }
     finally { if (mounted.current) setBusy(false); }
+  }
+
+  async function refreshHosted() {
+    if (!token) { if (mounted.current) setHostedRooms([]); return; }
+    try {
+      const data = await raceRequest<{ rooms: HostedRoom[] }>('/api/races/hosted', 'GET', token, null);
+      if (mounted.current) { setHostedRooms(data.rooms); setClosingCode(null); }
+    } catch { /* The lobby list is best-effort; creation errors surface in the panel. */ }
+  }
+
+  async function closeLobby(targetCode: string) {
+    if (!token || busy) return;
+    if (closingCode !== targetCode) { setClosingCode(targetCode); return; }
+    setClosingCode(null);
+    setBusy(true); setError('');
+    try {
+      await raceRequest<{ code: string; status: string }>(`/api/races/${encodeURIComponent(targetCode)}/close`, 'POST', token, null, {});
+      if (mounted.current) await refreshHosted();
+    } catch (caught) { if (mounted.current) setError(errorText(caught instanceof Error ? caught : 'Could not close the race.')); }
+    finally { if (mounted.current) setBusy(false); }
+  }
+
+  function openHosted(targetCode: string) {
+    setRoomCode(targetCode);
+    setPlayerToken(localStorage.getItem(tokenKey(targetCode)));
+    setState(null); setFeedback(null); setError(''); configLoaded.current = null;
+    window.history.pushState({}, '', `/race/${encodeURIComponent(targetCode)}`);
   }
 
   async function join() {
@@ -281,6 +335,20 @@ export function Race({ code, token, onExit }: Props) {
         <Box><Text className="race-kicker">ONE CLICK TO THE STARTING LINE</Text><Text as="h2">Create your race room.</Text><Text>Your invite link appears immediately. Set the level, question pool, lives and clock in the lobby before you start.</Text></Box>
         <Button variant="primary" icon={ArrowRight} iconPosition="after" disabled={busy} onClick={() => void create()}>{busy ? 'Creating race…' : 'Create invite link'}</Button>
         {error && <ErrorMessage message={error} />}
+      </Box>}
+      {token && <Box className="race-hosted">
+        <Box><Text className="race-kicker">YOUR OPEN RACES</Text><Text as="h2">Rooms you’re hosting.</Text><Text>Pick up a race or close a lobby you no longer need. You can host three open rooms at a time.</Text></Box>
+        {hostedRooms.length === 0 && <Text className="race-hosted-empty">No open rooms yet. Create an invite to get started.</Text>}
+        {hostedRooms.map((hosted) => <Box className="race-hosted-row" key={hosted.code}>
+          <Box className="race-hosted-info">
+            <Text as="strong">Room {hosted.code}</Text>
+            <Text>{roomSummary(hosted.config)} · {hosted.guest_joined ? 'Friend joined' : 'Waiting for friend'} · opened {ageLabel(hosted.created_at)}</Text>
+          </Box>
+          <Box className="race-hosted-actions">
+            <Button variant="text" onClick={() => openHosted(hosted.code)}>{hosted.status === 'live' ? 'Resume race' : 'Open lobby'}</Button>
+            {hosted.status === 'lobby' && <Button variant="text" disabled={busy} onClick={() => void closeLobby(hosted.code)}>{closingCode === hosted.code ? 'Confirm close' : 'Close'}</Button>}
+          </Box>
+        </Box>)}
       </Box>}
     </Box>}
 
