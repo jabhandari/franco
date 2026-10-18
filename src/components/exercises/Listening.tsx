@@ -1,6 +1,6 @@
 import React from 'react';
-import type { AttemptItemKind, SpeechTranscribeResponse } from '../../api/client';
-import { getSpeechStatus, reportAttempt, uploadSpeech } from '../../api/client.js';
+import type { AttemptItemKind } from '../../api/client';
+import { reportAttempt } from '../../api/client.js';
 import type { SimulateSubmit } from './ExerciseCard';
 import { getErrorMessage } from '../../presenters/format.presenter.js';
 import { useAudioRecorder } from '../../hooks/useAudioRecorder';
@@ -17,61 +17,38 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
   const [mode, setMode] = React.useState<AnswerMode>('spoken');
   const [typed, setTyped] = React.useState('');
   const [result, setResult] = React.useState<AttemptResult | null>(null);
-  const [heard, setHeard] = React.useState<SpeechTranscribeResponse | null>(null);
   const [error, setError] = React.useState('');
   const [busy, setBusy] = React.useState(false);
-  const [available, setAvailable] = React.useState(false);
   const started = React.useRef(Date.now());
   const audio = useAudioRecorder(60);
   const clip = entry.media?.find((media) => media.kind === 'audio');
   const phrase = clip?.transcript || entry.expected || '';
 
-  React.useEffect(() => {
-    if (!token || simulateSubmit) return;
-    let active = true;
-    getSpeechStatus(token).then((status) => { if (active) setAvailable(status.available); }).catch(() => {});
-    return () => { active = false; };
-  }, [token, simulateSubmit]);
-
   function choose(next: AnswerMode) {
     if (next === mode || busy || result) return;
-    audio.cancelRecording(); setHeard(null); setError(''); setMode(next);
+    audio.cancelRecording(); setError(''); setMode(next);
   }
 
   function useSpokenInput() {
     if (busy || result || audio.phase === 'requesting') return;
     if (mode !== 'spoken') choose('spoken');
-    if (audio.phase === 'recording' || audio.phase === 'ready' || heard) return;
-    if (simulateSubmit) {
-      setHeard({
-        transcription_id: 'preview', transcript: phrase, duration_seconds: 2,
-        feedback: { mode: 'word_diff', expected: [], heard: [] },
-        pronunciation: { mode: 'recording_hints', unclear_words: [{ word: phrase || 'Bonjour', start: 0, end: 1, reason: 'uncertain_audio' }],
-          word_signals: phrase.trim().split(/\s+/).filter(Boolean).map((word) => ({ word, status: 'recognized', audio_confidence_percent: 45 })) },
-        quota: { user_requests_remaining_today: 0, user_audio_seconds_remaining_today: 0, resets_at: '' },
-      });
-      return;
-    }
-    if (available && audio.browserSupported) void audio.startRecording();
+    if (audio.phase === 'recording' || audio.phase === 'ready') return;
+    if (audio.browserSupported) void audio.startRecording();
   }
 
   function recordAgain() {
-    audio.cancelRecording(); setHeard(null); setError('');
+    audio.cancelRecording(); setError('');
     void audio.startRecording();
   }
 
   async function compare() {
     if (busy || result || !listened) return;
-    if (mode === 'typed' ? !typed.trim() : !heard && (!audio.blob || !token)) return;
+    if (mode === 'typed' ? !typed.trim() : !audio.blob) return;
     setBusy(true); setError('');
     try {
-      let transcript = mode === 'spoken' ? heard : null;
-      if (mode === 'spoken' && !transcript && audio.blob && token) transcript = await uploadSpeech(entry.id, audio.blob, token);
-      if (mode === 'spoken' && !transcript) throw new Error('Record an answer before comparing.');
-      if (transcript && !heard) setHeard(transcript);
-      const response = transcript
-        ? { completed: true, transcript: transcript.transcript, transcription_id: transcript.transcription_id }
-        : typed.trim();
+      // Spoken mode is fully browser-driven: the pronunciation comparison
+      // runs on-device. No Groq transcription — submit completion only.
+      const response = mode === 'spoken' ? { completed: true } : typed.trim();
       const saved = simulateSubmit ? await simulateSubmit(entry, response)
         : await reportAttempt(entry, response, token, { durationMs: Date.now() - started.current });
       setResult(saved); onResult?.(saved);
@@ -80,12 +57,11 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
   }
 
   function reset() {
-    audio.cancelRecording(); setResult(null); setHeard(null); setTyped(''); setMode('spoken');
+    audio.cancelRecording(); setResult(null); setTyped(''); setMode('spoken');
     setError(''); started.current = Date.now();
   }
 
-  const ready = mode === 'typed' ? Boolean(typed.trim()) : Boolean(heard || audio.blob);
-  const answer = mode === 'spoken' ? heard?.transcript || '' : typed.trim();
+  const ready = mode === 'typed' ? Boolean(typed.trim()) : Boolean(audio.blob);
 
   return <ExerciseShell variant="pronunciation" answered={result ? (result.correct ? 'correct' : 'wrong') : null}>
     <Box className="pronunciation-drill">
@@ -102,7 +78,7 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
         {mode === 'typed'
           ? <Textarea rows={3} value={typed} onChange={(event) => setTyped(event.target.value)} placeholder="Type what you heard…" />
           : <>
-            {!available && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable. You can type your answer instead.</Text>}
+            {!audio.browserSupported && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable in this browser. You can type your answer instead.</Text>}
             {audio.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
             {audio.phase === 'recording' && <Text role="status">Recording · {audio.elapsed}s</Text>}
             {audio.phase === 'ready' && <Box className="answer-recording-row"><Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={audio.previewUrl} /></Box><Button variant="primary" onClick={recordAgain}>Record again</Button></Box>}
@@ -112,7 +88,6 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
       {result && <>
         {audio.previewUrl && <Box className="answer-recording"><Text as="strong">Your recording</Text><AudioPlayer src={audio.previewUrl} /></Box>}
         <Box className="answer-comparison" aria-live="polite">
-          <Box><Text as="span" className="answer-comparison-label">Your answer</Text><Text as="strong">{answer || 'No words detected'}</Text></Box>
           <Box><Text as="span" className="answer-comparison-label">Words in the audio</Text><Text as="strong">{phrase || 'No transcript available'}</Text></Box>
         </Box>
         {mode === 'typed' && <Text className="speaking-feedback-note">{result.correct ? 'Your typed answer matches.' : 'Compare the words and try the sound again.'}</Text>}

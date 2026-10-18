@@ -526,7 +526,7 @@ async function main() {
                 legacyRow = (await query(`SELECT * FROM ${itemKind === 'exam_question' ? 'exam_questions' : 'exercise_items'} WHERE id=?`, [b.legacy_ref]))[0];
                 if (!legacyRow) return json(res, 404, { error: 'Legacy item not found.' });
               } else return json(res, 400, { error: 'Unknown item_kind.' });
-              if (target?.item_type === 'speaking_prompt' || (target?.item_type === 'listen_repeat' && typeof b.response === 'object' && b.response !== null && b.response.transcription_id)) {
+              if (target?.item_type === 'speaking_prompt' || (target?.item_type === 'listen_repeat' && typeof b.response === 'object' && b.response !== null && (b.response.transcription_id || b.response.completed === true))) {
                 try { b.response = await validateSpeakingCompletion(b.response, x.id, target.id); }
                 catch (error) {
                   if (!(error instanceof SpeechError)) throw error;
@@ -542,7 +542,7 @@ async function main() {
               }
               let correct; let score;
               if (target) {
-                const spokenRepeat = target.item_type === 'listen_repeat' && typeof b.response === 'object' && b.response !== null && b.response.transcription_id;
+                const spokenRepeat = target.item_type === 'listen_repeat' && typeof b.response === 'object' && b.response !== null && (b.response.transcription_id || b.response.completed === true);
                 const freeTextResponse = target.item_type === 'free_text' && typeof b.response === 'object' && b.response !== null && !Array.isArray(b.response) ? b.response : null;
                 if (target.item_type === 'free_text' && (!freeTextResponse || !['typed','spoken'].includes(freeTextResponse.modality) || typeof freeTextResponse.text !== 'string' || !freeTextResponse.text.trim() || freeTextResponse.text.length > 6000)) return json(res,400,{error:'Enter a valid freeform response.'});
                 correct = (target.item_type === 'speaking_prompt' || spokenRepeat || freeTextResponse) ? true : evaluate(target, target.item_type === 'listen_repeat' && typeof b.response === 'object' && b.response !== null ? b.response.typed_text : b.response);
