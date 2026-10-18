@@ -2,7 +2,7 @@ import React from 'react';
 import type { AttemptItemKind } from '../../api/client';
 import { reportAttempt } from '../../api/client.js';
 import type { SimulateSubmit } from './ExerciseCard';
-import { getErrorMessage, humanize, choiceLabel } from '../../presenters/format.presenter.js';
+import { getErrorMessage, humanize } from '../../presenters/format.presenter.js';
 import { shuffle } from '../../presenters/collections.presenter.js';
 import {
   answeredState,
@@ -139,7 +139,7 @@ export function MultipleChoice({ entry, token, onResult, simulateSubmit }: Multi
       {entry.context && <ReadingPassage text={entry.context} />}
       <Text as="h2">{entry.prompt}</Text>
       <OptionList
-        options={options.map((option) => ({ key: option.key, label: choiceLabel(option) }))}
+        options={options.map((option) => ({ key: option.key, label: option.text }))}
         selectedKey={selected}
         answered={hasResult(result)}
         correct={Boolean(result?.correct)}

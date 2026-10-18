@@ -4,6 +4,7 @@ import { getSpeechStatus, reportAttempt, uploadSpeech } from '../../api/client.j
 import type { SimulateSubmit } from './ExerciseCard';
 import { getErrorMessage } from '../../presenters/format.presenter.js';
 import { useAudioRecorder } from '../../hooks/useAudioRecorder';
+import { Mic, RotateCcw, Square } from 'lucide-react';
 import { AudioPlayer, Box, Button, ErrorMessage, ExerciseEyebrow, ExerciseShell, Feedback, Text } from '../ui';
 
 type Entry = { id: string; item_kind: AttemptItemKind; level?: string; prompt?: string; expected?: string };
@@ -54,17 +55,19 @@ export function ReadAloud({ entry, token, onResult, simulateSubmit }: Props) {
       <Text className="read-aloud-phrase">{phrase}</Text>
       <Text className="speaking-task-note">Say exactly the text shown. Hints describe what the recording sounded like, not a pronunciation grade.</Text>
       {!result && <>
-        {simulateSubmit && !heard && <Button variant="primary" onClick={() => setHeard({
-          transcription_id: 'preview', transcript: phrase, duration_seconds: 3,
-          feedback: { mode: 'word_diff', expected: [], heard: [] },
-          pronunciation: { mode: 'recording_hints', unclear_words: [{ word: 'français', start: 1, end: 2, reason: 'uncertain_audio' }] },
-          quota: { user_requests_remaining_today: 0, user_audio_seconds_remaining_today: 0, resets_at: '' },
-        })}>Preview recording feedback</Button>}
-        {!available && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable right now. Please try again later.</Text>}
-        {available && recorder.browserSupported && recorder.phase === 'idle' && <Button variant="primary" onClick={recorder.startRecording}>Record reading</Button>}
-        {recorder.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
-        {recorder.phase === 'recording' && <><Text role="status">Recording · {recorder.elapsed}s / 60s</Text><Button variant="primary" onClick={recorder.stopRecording}>Stop recording</Button></>}
-        {recorder.phase === 'ready' && <><AudioPlayer src={recorder.previewUrl} /><Button variant="primary" disabled={busy} onClick={transcribe}>{busy ? 'Transcribing…' : 'Check reading'}</Button><Button variant="text" onClick={recorder.cancelRecording}>Discard</Button></>}
+        {!heard && <Box className="practice-recording-stage">
+          {simulateSubmit && <Button variant="primary" onClick={() => setHeard({
+            transcription_id: 'preview', transcript: phrase, duration_seconds: 3,
+            feedback: { mode: 'word_diff', expected: [], heard: [] },
+            pronunciation: { mode: 'recording_hints', unclear_words: [{ word: 'français', start: 1, end: 2, reason: 'uncertain_audio' }] },
+            quota: { user_requests_remaining_today: 0, user_audio_seconds_remaining_today: 0, resets_at: '' },
+          })} icon={Mic}>Preview recording feedback</Button>}
+          {!available && !simulateSubmit && <Text className="speaking-task-note">Recording is unavailable right now. Please try again later.</Text>}
+          {available && recorder.browserSupported && recorder.phase === 'idle' && <Button variant="primary" icon={Mic} onClick={recorder.startRecording}>Record reading</Button>}
+          {recorder.phase === 'requesting' && <Text role="status">Requesting microphone…</Text>}
+          {recorder.phase === 'recording' && <Box className="practice-recording-live"><Text role="status">Recording <Text as="span">{recorder.elapsed}s / 60s</Text></Text><Button variant="primary" icon={Square} onClick={recorder.stopRecording}>Finish recording</Button></Box>}
+          {recorder.phase === 'ready' && <><Box className="answer-recording"><Text as="strong">Listen to your recording</Text><AudioPlayer src={recorder.previewUrl} /></Box><Box className="practice-recording-actions"><Button variant="primary" disabled={busy} onClick={transcribe}>{busy ? 'Checking…' : 'Check reading'}</Button><Button variant="text" icon={RotateCcw} onClick={recorder.cancelRecording}>Record again</Button></Box></>}
+        </Box>}
         {heard && <Box className="speech-feedback" aria-live="polite">
           <Text as="strong">What was heard</Text><Text>{heard.transcript}</Text>
           {heard.pronunciation.unclear_words.length > 0 && <><Text as="strong">These words sounded unclear — try again</Text><Text>{heard.pronunciation.unclear_words.map((word) => word.word).join(' · ')}</Text></>}

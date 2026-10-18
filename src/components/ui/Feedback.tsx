@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Info, RotateCcw, XCircle } from 'lucide-react';
 import { Button } from './Button';
 
 export type FeedbackTone = 'info' | 'correct' | 'incorrect';
@@ -30,21 +30,24 @@ export function Feedback({
 }: FeedbackProps) {
   const toneClass = tone === 'correct' || tone === 'incorrect' ? ` ${tone}` : '';
   return (
-    <div className={`mcq-feedback${toneClass}`}>
-      {title ? <strong>{title}</strong> : null}
-      {message ? <span>{message}</span> : null}
-      {reveal ? (
-        <span>
-          {revealLabel ? `${revealLabel} ` : ''}
-          {reveal}
-        </span>
-      ) : null}
+    <div className={`mcq-feedback${toneClass}`} role="status">
+      <span className="mcq-feedback-icon" aria-hidden="true">{tone === 'correct' ? <CheckCircle2 size={22} /> : tone === 'incorrect' ? <XCircle size={22} /> : <Info size={22} />}</span>
+      <div className="mcq-feedback-copy">
+        {title ? <strong>{title}</strong> : null}
+        {message ? <span>{message}</span> : null}
+        {reveal ? (
+          <span>
+            {revealLabel ? `${revealLabel} ` : ''}
+            <strong>{reveal}</strong>
+          </span>
+        ) : null}
+        {children}
+      </div>
       {onRetry ? (
-        <Button variant="retry" onClick={onRetry}>
+        <Button variant="retry" icon={RotateCcw} onClick={onRetry}>
           {retryLabel}
         </Button>
       ) : null}
-      {children}
     </div>
   );
 }

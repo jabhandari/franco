@@ -4,7 +4,7 @@ import { useApiResource } from '../hooks/useApi.js';
 import { reportAttempt, getErrorMessage } from '../api/client.js';
 import type { AttemptResult } from '../api/client.js';
 import { normalizeChoices, type RawChoices } from '../presenters/collections.presenter.js';
-import { capitalize, choiceLabel } from '../presenters/format.presenter.js';
+import { capitalize } from '../presenters/format.presenter.js';
 import { CEFR_LEVELS, formatLevelWithClb } from '../presenters/levels.presenter.js';
 import {
   Box,
@@ -94,7 +94,7 @@ function ExamQuestionCard({ question, selected, onSelect, onRetry, result, pendi
       <Text as="h2">{prompt}</Text>
       {choices.length > 0 && (
         <OptionList
-          options={choices.map((choice: NormalizedChoice) => ({ key: choice.key, label: choiceLabel(choice) }))}
+          options={choices.map((choice: NormalizedChoice) => ({ key: choice.key, label: choice.text }))}
           selectedKey={selected}
           answered={Boolean(result)}
           correct={isCorrect}

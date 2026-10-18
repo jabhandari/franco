@@ -1,4 +1,5 @@
 import React from 'react';
+import { Check, X } from 'lucide-react';
 import { Button } from './Button';
 import { Textarea } from './Field';
 
@@ -57,7 +58,7 @@ export type OptionListProps = {
 export function OptionList({ options = [], selectedKey, answered = false, correct = false, disabled = false, onSelect }: OptionListProps) {
   return (
     <div className="mcq-options">
-      {options.map((option) => {
+      {options.map((option, index) => {
         const isSelected = selectedKey === option.key;
         const tone = isSelected && answered ? (correct ? 'correct' : 'incorrect') : '';
         return (
@@ -68,7 +69,9 @@ export function OptionList({ options = [], selectedKey, answered = false, correc
             disabled={disabled}
             onClick={() => onSelect(option.key)}
           >
-            {option.label}
+            <span className="mcq-option-index" aria-hidden="true">{String.fromCharCode(65 + index)}</span>
+            <span className="mcq-option-label">{option.label}</span>
+            {tone ? <span className="mcq-option-state" aria-hidden="true">{correct ? <Check size={17} /> : <X size={17} />}</span> : null}
           </button>
         );
       })}
