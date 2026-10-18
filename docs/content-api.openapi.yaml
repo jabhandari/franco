@@ -163,6 +163,37 @@ paths:
         '200': { description: correct, correct_choice_id, answered_count, total_questions, completed }
         '400': { description: Question is not part of today's set, or ids missing }
         '401': { description: Authentication required }
+  /api/races/{code}/close:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Host-only close of a lobby. The invite link dies and the room stops counting against the host's open-room cap.
+      parameters:
+        - { $ref: '#/components/parameters/RaceCode' }
+      responses:
+        '200': { description: Room code and expired status }
+        '401': { description: Sign-in required }
+        '403': { description: Viewer is not the host }
+        '404': { description: Room not found }
+        '409': { description: Race is not in lobby status }
+  /api/races/{code}/close:
+    post:
+      security: [{ LearnerSession: [] }]
+      description: Host-only close of a lobby. The invite link dies and the room stops counting against the host's open-room cap.
+      parameters:
+        - { $ref: '#/components/parameters/RaceCode' }
+      responses:
+        '200': { description: Room code and expired status }
+        '401': { description: Sign-in required }
+        '403': { description: Viewer is not the host }
+        '404': { description: Room not found }
+        '409': { description: Race is not in lobby status }
+  /api/races/hosted:
+    get:
+      security: [{ LearnerSession: [] }]
+      description: Rooms hosted by the signed-in learner that count against the open-room creation cap (lobby/live, unexpired).
+      responses:
+        '200': { description: Hosted rooms with code, status, timestamps, config and guest seat state }
+        '401': { description: Sign-in required }
   /api/me/stories:
     get:
       security: [{ LearnerSession: [] }]
