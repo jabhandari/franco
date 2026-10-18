@@ -330,7 +330,7 @@ export function Race({ code, token, onExit }: Props) {
         <Text className="race-kicker"><Sparkles size={15} /> NEW · PLAY WITH A FRIEND</Text>
         <Text as="h1">Two minds.<Text as="span">One finish line.</Text></Text>
         <Text>Create a room, send a private link, then choose the rules together before the race starts. Every answer moves you closer to the finish.</Text>
-        <Box className="race-intro-pills"><Text as="span"><Users size={16} /> Two players</Text><Text as="span"><Clock3 size={16} /> Your pace</Text><Text as="span"><Trophy size={16} /> One winner</Text></Box>
+        <Box className="race-intro-pills"><Text as="span"><Users size={16} /> Two players</Text><Text as="span"><Clock3 size={16} /> Your pace</Text><Text as="span"><Trophy size={16} /> Best score wins</Text></Box>
         {!token && <Box className="race-signin-note"><LockKeyhole size={20} /><Text>Sign in to create a race. Friends can join your link without an account.</Text></Box>}
       </Box>
       <Box className="race-intro-art" aria-hidden="true"><Box className="race-art-track"><Box className="race-art-lane race-art-lane-one"><Text as="span">01</Text><Box /><Box /><Box className="race-art-runner">FR</Box></Box><Box className="race-art-lane race-art-lane-two"><Text as="span">02</Text><Box /><Box className="race-art-runner">VOUS</Box><Box /></Box></Box><Box className="race-art-finish"><Flag size={31} /><Text as="span">FINISH</Text></Box></Box>

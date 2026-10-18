@@ -103,7 +103,7 @@ paths:
   /api/races/{code}/finish:
     post:
       security: [{ LearnerSession: [] }, { RacePlayerToken: [] }]
-      description: End the player's remaining questions early. Once both players finish, the higher correct-answer score wins; early finish loses a score tie.
+      description: End the player's remaining questions early. Once both players finish, the higher correct-answer score wins; equal scores are a tie.
       parameters:
         - { $ref: '#/components/parameters/RaceCode' }
       responses:

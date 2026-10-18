@@ -73,16 +73,11 @@ export function resolveRaceChoice(row, response, secret) {
 export function raceWinner(players) {
   if (players.length !== 2 || players.some((player) => !player.finished_at)) return null;
   // The result cards show correct answers as the score. Ending early only
-  // gives up unanswered questions; it cannot reverse a higher score.
+  // gives up unanswered questions; equal scores are a draw.
   const firstScore = players[0].final_score ?? players[0].correct_count;
   const secondScore = players[1].final_score ?? players[1].correct_count;
   if (firstScore !== secondScore) {
     return firstScore > secondScore ? players[0].seat : players[1].seat;
   }
-  if (Boolean(players[0].forfeited_at) !== Boolean(players[1].forfeited_at)) {
-    return players[0].forfeited_at ? players[1].seat : players[0].seat;
-  }
-  const first = new Date(players[0].finished_at).getTime();
-  const second = new Date(players[1].finished_at).getTime();
-  return first === second ? 'tie' : first < second ? players[0].seat : players[1].seat;
+  return 'tie';
 }

@@ -48,7 +48,7 @@ assert.equal(raceWinner([{ seat: 1, correct_count: 8, finished_at: finished },
 assert.equal(raceWinner([{ seat: 1, correct_count: 8, finished_at: finished },
   { seat: 2, correct_count: 8, finished_at: finished }]), 'tie');
 assert.equal(raceWinner([{ seat: 1, correct_count: 8, finished_at: finished },
-  { seat: 2, correct_count: 8, finished_at: '2026-10-16T10:00:01Z' }]), 1);
+  { seat: 2, correct_count: 8, finished_at: '2026-10-16T10:00:01Z' }]), 'tie');
 assert.equal(raceWinner([{ seat: 1, correct_count: 8, finished_at: finished, forfeited_at: finished },
   { seat: 2, correct_count: 6, finished_at: '2026-10-16T10:00:01Z' }]), 1);
 assert.equal(raceWinner([{ seat: 1, correct_count: 1, finished_at: finished, forfeited_at: finished, lives_left: 1 },
@@ -56,7 +56,9 @@ assert.equal(raceWinner([{ seat: 1, correct_count: 1, finished_at: finished, for
 assert.equal(raceWinner([{ seat: 1, correct_count: 0, finished_at: finished, lives_left: 0 },
   { seat: 2, correct_count: 1, finished_at: finished, forfeited_at: finished, lives_left: 1 }]), 2);
 assert.equal(raceWinner([{ seat: 1, correct_count: 1, finished_at: finished, forfeited_at: finished },
-  { seat: 2, correct_count: 1, finished_at: '2026-10-16T10:00:01Z' }]), 2);
+  { seat: 2, correct_count: 1, finished_at: '2026-10-16T10:00:01Z' }]), 'tie');
+assert.equal(raceWinner([{ seat: 1, correct_count: 2, final_score: 2, finished_at: finished, forfeited_at: finished },
+  { seat: 2, correct_count: 2, final_score: 2, finished_at: '2026-10-16T10:00:01Z' }]), 'tie');
 assert.equal(raceWinner([{ seat: 1, correct_count: 0, final_score: 1, finished_at: finished },
   { seat: 2, correct_count: 2, final_score: 0, finished_at: finished }]), 1);
 assert.equal(raceWinner([{ seat: 1, correct_count: 8, finished_at: null },
