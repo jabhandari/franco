@@ -75,6 +75,8 @@ export { AudioPlayer, ClipPlayer } from './AudioPlayer';
 export type { AudioPlayerProps } from './AudioPlayer';
 export { ReadingPassage } from './ReadingPassage';
 export type { ReadingPassageProps } from './ReadingPassage';
+export { QuestionSourceImage } from './QuestionSourceImage';
+export type { QuestionSourceImageProps } from './QuestionSourceImage';
 export { RubricBox } from './RubricBox';
 export type { RubricBoxProps } from './RubricBox';
 export { WordToken, TokenTray } from './Token';

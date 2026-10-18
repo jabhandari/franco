@@ -69,6 +69,7 @@ Reusable helper logic lives in `src/presenters/` as pure functions (no JSX):
 | `Badge` | `variant` (`queue`\|`stub`\|`timer`\|`roadmap`), `kind`, `icon`, `children` | Pills/badges |
 | `QueueKindLabel` | `kind` | `Badge variant="queue"` (legacy alias) |
 | `Feedback` | `tone` (`correct`\|`incorrect`\|`info`), `title`, `message`, `revealLabel`, `reveal`, `onRetry`, `retryLabel`, `children` | `div.mcq-feedback` |
+| `QuestionSourceImage` | `src` | Source illustration or document for a question |
 | `ErrorMessage` | `message` | `p.error-message` |
 | `Field` | `label`, `icon`, `iconSize`, + input props | Labeled `input-wrap` field |
 | `Textarea` | `rows`, + textarea props | `textarea.free-text-input` |

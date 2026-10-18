@@ -20,6 +20,7 @@ import {
   PageHeader,
   Panel,
   ReadingPassage,
+  QuestionSourceImage,
   Tabs,
   Text,
   Toolbar,
@@ -46,6 +47,7 @@ type ExamQuestion = {
   choices_json: ChoicesInput;
   answer: string | null;
   explanation: string | null;
+  metadata_json?: { image_url?: string } | null;
 };
 
 type ExamQuestionCardProps = {
@@ -93,6 +95,9 @@ function ExamQuestionCard({ question, selected, onSelect, onRetry, result, pendi
   return (
     <ExerciseShell eyebrow={`${question.exam_name} - ${question.skill}`} answered={answered}>
       {passage && passage.toLowerCase() !== prompt.toLowerCase() && <ReadingPassage text={passage} />}
+      {question.metadata_json?.image_url && (
+        <QuestionSourceImage src={question.metadata_json.image_url} />
+      )}
       <Text as="h2">{prompt}</Text>
       {choices.length > 0 && (
         <OptionList

@@ -12,6 +12,7 @@ import {
   elapsedMs,
 } from '../../presenters/attempt.presenter.js';
 import * as UIRaw from '../ui';
+import { QuestionSourceImage } from '../ui';
 
 type ExerciseShellProps = {
   answered?: 'correct' | 'wrong' | null;
@@ -87,6 +88,7 @@ export type MultipleChoiceItem = {
   prompt?: string;
   explanation?: string;
   context?: string;
+  media?: Array<{ kind: string; url: string }>;
   choices?: MultipleChoiceOption[];
 };
 
@@ -137,6 +139,9 @@ export function MultipleChoice({ entry, token, onResult, simulateSubmit }: Multi
     <ExerciseShell answered={answeredState(result)}>
       <ExerciseEyebrow level={entry.level} kind={entry.skill || humanize(entry.type)} />
       {entry.context && <ReadingPassage text={entry.context} />}
+      {entry.media?.filter((media) => media.kind === 'image').map((media) => (
+        <QuestionSourceImage key={media.url} src={media.url} />
+      ))}
       <Text as="h2">{entry.prompt}</Text>
       <OptionList
         options={options.map((option) => ({ key: option.key, label: option.text }))}
