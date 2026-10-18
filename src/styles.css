@@ -963,6 +963,7 @@ html[data-theme="light"] .roadmap-table-row p { color:var(--palette-slate); }
 .reading-passage { margin:12px 0 14px; padding:14px 16px; border:1px solid var(--palette-gray); border-radius:10px; background:var(--palette-charcoal); }
 .reading-passage strong { display:block; margin-bottom:6px; color:var(--palette-mint); font-size: var(--text-11); letter-spacing:.08em; text-transform:uppercase; }
 .reading-passage p { margin:0; color:var(--palette-teal-soft); line-height:1.6; white-space:pre-wrap; }
+.question-source-image { display:block; width:auto; max-width:min(100%,600px); max-height:420px; margin:12px 0 18px; border:1px solid var(--color-border); border-radius:12px; background:#fff; object-fit:contain; }
 html[data-theme="light"] .reading-passage { background:var(--palette-cream); border-color:var(--palette-sand); }
 html[data-theme="light"] .reading-passage p { color:var(--palette-navy-soft); }
 /* Use the same wide content container across home, session, content, and progress pages. */
