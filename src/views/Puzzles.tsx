@@ -182,6 +182,8 @@ export function Puzzles({ token, onRace }: Props) {
           <Text>Create a room, send its invite link or QR code, then answer the same French questions at your own pace. First to the finish has bragging rights.</Text>
           <Box className="puzzles-pills"><Text as="span"><Swords size={15} /> Head to head</Text><Text as="span"><Clock3 size={15} /> Your rules</Text><Text as="span"><Heart size={15} /> Lives or timer</Text></Box>
           <Box className="puzzles-card-actions"><Button variant="primary" onClick={onRace} icon={ChevronRight} iconPosition="after">Invite a friend</Button></Box>
+        </Box>
+      </Box>
       <Box className="puzzles-game-card puzzles-expedition-card">
         <Box className="puzzles-game-art puzzles-expedition-art" aria-hidden="true"><Box className="puzzles-art-ring"><Map size={46} /></Box><Text as="span">10 ENCOUNTERS</Text></Box>
         <Box className="puzzles-game-copy">

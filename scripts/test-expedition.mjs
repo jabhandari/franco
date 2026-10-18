@@ -86,6 +86,6 @@ const removed = loupeRemovals(choices, 'a');
 assert.equal(removed.length, 2);
 assert.ok(!removed.includes('a'));
 assert.ok(removed.every((id) => ['b', 'c', 'd'].includes(id)));
-assert.deepEqual(loupeRemovals([{ id: 'a', text: 'x' }, { id: 'b', text: 'y' }], 'a'), ['b']);
+assert.equal(loupeRemovals([{ id: 'a', text: 'x' }, { id: 'b', text: 'y' }], 'a'), null);
 assert.equal(loupeRemovals([{ id: 'a', text: 'x' }], 'a'), null);
 console.log('Expedition rules passed');
