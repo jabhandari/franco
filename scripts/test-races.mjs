@@ -62,3 +62,25 @@ assert.equal(abandonedRacePlayer([{ finished_at: '2026-10-16T10:09:00Z', last_se
 assert.equal(abandonedRacePlayer([{ finished_at: null, last_seen_at: finished },
   { finished_at: null, last_seen_at: finished }], Date.parse('2026-10-16T10:12:00Z')), null);
 console.log('race rules checks passed');
+
+// Real transaction boundary behavior: rollback before retry, no duplicate commit,
+// release every client, and never retry validation or unrelated database errors.
+const { raceTransaction } = await import('../server/race-transaction.js');
+const events = [];
+const fakePool = { connect: async () => ({ query: async (sql) => events.push(sql), release: () => events.push('release') }) };
+let calls = 0;
+assert.equal(await raceTransaction(fakePool, async () => {
+  calls += 1;
+  if (calls === 1) throw Object.assign(new Error('deadlock detected'), { code: '40P01' });
+  return 'joined';
+}), 'joined');
+assert.deepEqual(events, ['BEGIN', 'ROLLBACK', 'release', 'BEGIN', 'COMMIT', 'release']);
+assert.equal(calls, 2);
+calls = 0;
+await assert.rejects(raceTransaction(fakePool, async () => { calls += 1; throw new Error('room full'); }), /room full/);
+assert.equal(calls, 1);
+calls = 0;
+await assert.rejects(raceTransaction(fakePool, async () => {
+  calls += 1; throw Object.assign(new Error('deadlock detected'), { code: '40P01' });
+}), /race is busy/);
+assert.equal(calls, 3);

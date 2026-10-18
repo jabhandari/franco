@@ -1,5 +1,6 @@
 import { createHash, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 import { pool } from './database.js';
+import { raceTransaction } from './race-transaction.js';
 import { evaluate, gradeExamQuestion } from './evaluate.js';
 import { abandonedRacePlayer, publicRaceQuestion, raceChoices, raceWinner, resolveRaceChoice, validRaceConfig } from './race-rules.js';
 import { originalChoiceId, puzzleReveal, usesWordBank } from './puzzle-rules.js';
@@ -62,18 +63,7 @@ function requireConfig(config) {
   return config;
 }
 
-async function transaction(work) {
-  const client = await pool.connect();
-  try {
-    await client.query('BEGIN');
-    const value = await work(client);
-    await client.query('COMMIT');
-    return value;
-  } catch (error) {
-    await client.query('ROLLBACK');
-    throw error;
-  } finally { client.release(); }
-}
+function transaction(work) { return raceTransaction(pool, work); }
 
 function publicPlayer(player, includeHistory = false) {
   if (!player) return null;
