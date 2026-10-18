@@ -156,13 +156,15 @@ export function WordOrder({ entry, token, onResult, simulateSubmit }: WordOrderP
       <ExerciseEyebrow level={entry.level} kind="word order" />
       <Text as="h2">{entry.prompt}</Text>
       <Text variant="muted">Tap the words in order to build the sentence. Tap a placed word to remove it.</Text>
-      <TokenTray variant="answer" label="Your sentence" emptyHint="Your sentence appears here…">
+      <Text as="strong" className="practice-tray-label">Your sentence</Text>
+      <TokenTray variant="answer" label="Your sentence" emptyHint="Tap a word below to begin.">
         {answer.map((word, index) => (
           <WordToken key={`a-${index}`} placed disabled={Boolean(result)} onClick={() => giveBack(index)}>
             {word}
           </WordToken>
         ))}
       </TokenTray>
+      <Text as="strong" className="practice-tray-label">Word bank</Text>
       <TokenTray variant="bank" label="Word bank">
         {bank.map((word, index) => (
           <WordToken key={`b-${index}-${word}`} disabled={Boolean(result)} onClick={() => take(index)}>

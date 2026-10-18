@@ -88,6 +88,8 @@ function ExamQuestionCard({ question, selected, onSelect, onRetry, result, pendi
   let passage = String(question.context || '').trim();
   if (passage && prompt && passage.toLowerCase().startsWith(prompt.toLowerCase())) passage = passage.slice(prompt.length).trim();
   const answered = result ? (isCorrect ? 'correct' : 'wrong') : null;
+  const reveal = result?.reveal || question.answer;
+  const correctAnswer = choices.find(choice => choice.key.trim().toLowerCase() === String(reveal ?? '').trim().toLowerCase())?.text || reveal || 'See the explanation.';
   return (
     <ExerciseShell eyebrow={`${question.exam_name} - ${question.skill}`} answered={answered}>
       {passage && passage.toLowerCase() !== prompt.toLowerCase() && <ReadingPassage text={passage} />}
@@ -108,7 +110,7 @@ function ExamQuestionCard({ question, selected, onSelect, onRetry, result, pendi
         <Feedback
           tone={isCorrect ? 'correct' : 'incorrect'}
           title={isCorrect ? 'Correct!' : 'Not quite.'}
-          message={isCorrect ? (question.explanation || 'Well done.') : `Correct answer: ${result.reveal || question.answer || 'See the explanation.'}`}
+          message={isCorrect ? (question.explanation || 'Well done.') : `Correct answer: ${correctAnswer}`}
           onRetry={isCorrect ? undefined : onRetry}
           retryLabel="Retry"
         />

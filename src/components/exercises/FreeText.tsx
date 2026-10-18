@@ -102,7 +102,8 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
       {entry.instructions && <Text>{entry.instructions}</Text>}
       <Text className="speaking-task-note">{GUIDANCE[entry.level || 'A1'] || GUIDANCE.A1}</Text>
       {entry.example && <Box as="details" className="speaking-followups"><Box as="summary">See an example</Box><Text>{entry.example}</Text></Box>}
-      {!feedback && <>
+      {!feedback && <Box className="practice-response-panel">
+        <Box className="practice-response-heading"><Text as="h3">Your response</Text><Text>Choose how you want to answer.</Text></Box>
         <Box className="answer-mode-row">
           <AnswerModePicker value={mode} onChange={choose} disabled={busy || recorder.phase === 'requesting'} />
         </Box>
@@ -116,7 +117,7 @@ export function FreeText({ entry, token, onResult, simulateSubmit }: Props) {
             {heard && !recorder.previewUrl && <Text className="speaking-task-note">Sample answer ready for feedback.</Text>}
           </Box>}
         {(mode === 'typed' ? Boolean(value.trim()) : Boolean(heard || recorder.blob)) && <Box className="answer-submit"><Button variant="primary" wide disabled={busy} onClick={submit}>{busy ? 'Getting feedback…' : 'Get feedback'}</Button></Box>}
-      </>}
+      </Box>}
       {feedback && <Box className="content-feedback" aria-live="polite">
         <Text as="h3">What went well</Text>
         {feedback.what_went_well.map((item, index) => <Box key={index}><Text>{item.point}</Text><Text className="speaking-feedback-note">“{item.quote}”</Text></Box>)}
