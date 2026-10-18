@@ -19,12 +19,17 @@ let lastPruneAt = 0;
 
 export async function pruneRaceRooms() {
   // Retain an expired-link tombstone briefly, while deleting guest tokens,
-  // answer history and question snapshots at expiry.
+  // answer history and question snapshots at expiry. Host player rows are
+  // kept so recently closed rooms stay attributed to their host in the
+  // hourly creation count (see closeRoom); the room tombstone delete below
+  // cascades them away after 7 days.
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
     await client.query("UPDATE race_rooms SET status='expired',question_ids='[]'::jsonb WHERE expires_at<=NOW() AND status<>'expired'");
-    await client.query("DELETE FROM race_players WHERE room_id IN (SELECT id FROM race_rooms WHERE status='expired')");
+    await client.query(`DELETE FROM race_players p
+      WHERE p.room_id IN (SELECT id FROM race_rooms WHERE status='expired')
+      AND NOT EXISTS (SELECT 1 FROM race_rooms r WHERE r.id=p.room_id AND r.host_player_id=p.id)`);
     await client.query("DELETE FROM race_rooms WHERE expires_at<NOW()-INTERVAL '7 days'");
     await client.query('COMMIT');
   } catch (error) { await client.query('ROLLBACK'); throw error; }
@@ -427,9 +432,13 @@ export async function closeRoom(roomCode, userId) {
     if (!host || host.user_id !== userId) throw new RaceError(403, 'Only the host can close this race.');
     if (room.status !== 'lobby') throw new RaceError(409, 'Only a lobby can be closed. Finish a live race instead.');
     // Close reuses the expiry path: the invite link dies and the room stops
-    // counting against the host's open-room cap.
+    // counting against the host's open-room cap. The host player row is kept
+    // so the room stays attributed to the host in the hourly creation count:
+    // deleting it NULLs host_player_id (ON DELETE SET NULL) and drops the
+    // room from createRoom's join, letting create+close loops dodge
+    // MAX_HOST_CREATIONS_PER_HOUR. Guest players are still removed.
     await client.query("UPDATE race_rooms SET status='expired',question_ids='[]'::jsonb WHERE id=$1", [room.id]);
-    await client.query('DELETE FROM race_players WHERE room_id=$1', [room.id]);
+    await client.query('DELETE FROM race_players WHERE room_id=$1 AND id<>$2', [room.id, room.host_player_id]);
     return { code: room.code, status: 'expired' };
   });
 }
