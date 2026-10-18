@@ -86,8 +86,6 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
 
   const ready = mode === 'typed' ? Boolean(typed.trim()) : Boolean(heard || audio.blob);
   const answer = mode === 'spoken' ? heard?.transcript || '' : typed.trim();
-  const wordSignals = heard?.pronunciation.word_signals || [];
-  const recognizedWords = wordSignals.filter((word) => word.status === 'recognized').length;
 
   return <ExerciseShell variant="pronunciation" answered={result ? (result.correct ? 'correct' : 'wrong') : null}>
     <Box className="pronunciation-drill">
@@ -118,25 +116,6 @@ export function ListenRepeat({ entry, token, onResult, compact = false, sequence
           <Box><Text as="span" className="answer-comparison-label">Words in the audio</Text><Text as="strong">{phrase || 'No transcript available'}</Text></Box>
         </Box>
         {mode === 'typed' && <Text className="speaking-feedback-note">{result.correct ? 'Your typed answer matches.' : 'Compare the words and try the sound again.'}</Text>}
-        {mode === 'spoken' && <Box className="answer-hints">
-          <Text as="strong">What Groq recognized</Text>
-          {wordSignals.length ? <>
-            <Text>Recognition match: {Math.round(recognizedWords / wordSignals.length * 100)}% · {recognizedWords} of {wordSignals.length} expected word{wordSignals.length === 1 ? '' : 's'} recognized.</Text>
-            {heard?.pronunciation.audio_confidence_percent !== null && heard?.pronunciation.audio_confidence_percent !== undefined
-              && <Text>Groq audio certainty: ~{heard.pronunciation.audio_confidence_percent}% for its transcript.</Text>}
-            <Box className="answer-word-signals">
-              {wordSignals.map((word, index) => <Box key={`${word.word}-${index}`} className="answer-word-signal">
-                <Text as="strong">{word.word}</Text>
-                <Text>{word.status === 'recognized' ? 'Recognized' : 'Not recognized'}</Text>
-                {word.audio_confidence_percent !== null && <Text>Audio certainty ~{word.audio_confidence_percent}%</Text>}
-              </Box>)}
-            </Box>
-            {heard?.pronunciation.audio_confidence_percent == null && !wordSignals.some((word) => word.audio_confidence_percent !== null)
-              && <Text>Groq did not provide an audio certainty value for this recording.</Text>}
-          </> : <Text>A word-by-word check is unavailable for this recording.</Text>}
-          {heard?.pronunciation.unclear_words.length ? <Text>These words sounded unclear: {heard.pronunciation.unclear_words.map((word) => word.word).join(' · ')}</Text> : null}
-          <Text className="speaking-feedback-note">Groq’s certainty is an approximate transcription signal, not a pronunciation grade. Microphone noise can affect it.</Text>
-        </Box>}
         {mode === 'spoken' && audio.blob && phrase && <PronunciationComparison recording={audio.blob} referenceUrl={clip?.url} targetText={phrase} attemptId={entry.id} />}
         <Button variant="text" onClick={reset}>Try again</Button>
       </>}
