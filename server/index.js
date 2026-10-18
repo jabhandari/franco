@@ -584,9 +584,15 @@ async function main() {
                 const ej = target.evaluation_json || {};
                 reveal = rj.answer ?? rj.expected ?? ej.answer ?? ej.expected ?? (Array.isArray(rj.tokens) ? rj.tokens.join(' ') : null);
                 // FRA-7: for multiple-choice, reveal the correct choice's text
-                // (the right sentence), not just its key.
+                // (the right sentence), not just its key. Match identifiers the
+                // same way grading does — normalized, id and key checked
+                // independently — so a stored key like 'B' still resolves when
+                // the answer is recorded as 'b'.
                 if (target.item_type === 'multiple_choice' && Array.isArray(rj.choices)) {
-                  const correctChoice = rj.choices.find((c) => String(c.id ?? c.key) === String(reveal));
+                  const wantChoice = normalizeText(reveal);
+                  const correctChoice = wantChoice
+                    ? rj.choices.find((c) => normalizeText(c.id) === wantChoice || normalizeText(c.key) === wantChoice)
+                    : undefined;
                   if (correctChoice && correctChoice.text) reveal = correctChoice.text;
                 }
               } else if (legacyRow) {
