@@ -1,13 +1,9 @@
 import React from 'react';
 import { recordingToPcm } from '../../pronunciation/audio';
 import { useAudioRecorder } from '../../hooks/useAudioRecorder';
+import type { PronunciationWorkerReply, PronunciationWorkerRequest } from '../../types';
 
-type WorkerReply =
-  | { id: number; kind: 'progress'; progress: number; file: string }
-  | { id: number; kind: 'result'; phones: string[]; loadMs: number; inferenceMs: number; sampleCount: number }
-  | { id: number; kind: 'error'; message: string };
-
-type Result = Extract<WorkerReply, { kind: 'result' }>;
+type Result = Extract<PronunciationWorkerReply, { kind: 'result' }>;
 
 export function PronunciationSpikePanel() {
   const recorder = useAudioRecorder(60);
@@ -37,7 +33,7 @@ export function PronunciationSpikePanel() {
       if (!worker.current) {
         worker.current = new Worker(new URL('../../pronunciation/worker.ts', import.meta.url), { type: 'module' });
       }
-      worker.current.onmessage = (event: MessageEvent<WorkerReply>) => {
+      worker.current.onmessage = (event: MessageEvent<PronunciationWorkerReply>) => {
         const reply = event.data;
         if (reply.id !== id) return;
         if (reply.kind === 'progress') { setProgress(Math.round(reply.progress)); setPhase('loading'); return; }
@@ -61,7 +57,8 @@ export function PronunciationSpikePanel() {
         worker.current?.terminate(); worker.current = null; setPhase('ready');
         setError('The local model timed out. The normal speaking exercise still uses transcription.');
       }, 300_000);
-      worker.current.postMessage({ id, samples: pcm }, [pcm.buffer]);
+      const request: PronunciationWorkerRequest = { id, samples: pcm };
+      worker.current.postMessage(request, [pcm.buffer]);
     } catch (caught) {
       setPhase('ready'); setError(caught instanceof Error ? caught.message : 'Could not decode this recording.');
     }

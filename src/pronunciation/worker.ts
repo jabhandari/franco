@@ -1,18 +1,13 @@
 import { AutoModelForCTC, Wav2Vec2FeatureExtractor, env } from '@huggingface/transformers';
 import { decodePhones } from './ctc';
 import { hasClearSpeech } from './signal';
+import type { PronunciationWorkerReply, PronunciationWorkerRequest } from '../types';
 
 const MODEL = 'qnighy/wav2vec2-xlsr-53-espeak-cv-ft-ONNX';
 const REVISION = 'd2987af7ae07d53eafee15dc7190479062faa1e8';
 const ROOT = `https://huggingface.co/${MODEL}/resolve/${REVISION}`;
 
-type WorkerRequest = { id: number; samples: Float32Array; reference?: boolean };
-type WorkerReply =
-  | { id: number; kind: 'progress'; progress: number; file: string }
-  | { id: number; kind: 'result'; phones: string[]; loadMs: number; inferenceMs: number; sampleCount: number }
-  | { id: number; kind: 'error'; message: string };
-
-function send(reply: WorkerReply) { self.postMessage(reply); }
+function send(reply: PronunciationWorkerReply) { self.postMessage(reply); }
 
 env.allowLocalModels = false;
 env.useBrowserCache = true;
@@ -43,7 +38,7 @@ async function load(id: number) {
   return loaded;
 }
 
-self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
+self.onmessage = async (event: MessageEvent<PronunciationWorkerRequest>) => {
   const { id, samples, reference } = event.data;
   try {
     if (!(samples instanceof Float32Array) || samples.length < 4000 || samples.length > 16_000 * 60) {

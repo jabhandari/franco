@@ -1,6 +1,13 @@
 /** Public auth screen modes shared by routing and the auth view. */
 export type AuthMode = 'login' | 'signup' | 'forgot' | 'reset' | 'verify' | 'check-email' | 'unverified';
 
+/** Messages exchanged with the browser-side pronunciation worker. */
+export type PronunciationWorkerRequest = { id: number; samples: Float32Array; reference?: boolean };
+export type PronunciationWorkerReply =
+  | { id: number; kind: 'progress'; progress: number; file: string }
+  | { id: number; kind: 'result'; phones: string[]; loadMs: number; inferenceMs: number; sampleCount: number }
+  | { id: number; kind: 'error'; message: string };
+
 // Shared TypeScript types for the franco SPA — the single home for
 // cross-cutting domain types. Import from here instead of redefining a
 // shape locally; a type used by only one module lives in that module.
