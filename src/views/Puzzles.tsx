@@ -177,7 +177,7 @@ export function Puzzles({ token, onRace }: Props) {
           <Text as="h3">Race a friend</Text>
           <Text>Create a room, send its invite link or QR code, then answer the same French questions at your own pace. First to the finish has bragging rights.</Text>
           <Box className="puzzles-pills"><Text as="span"><Swords size={15} /> Head to head</Text><Text as="span"><Clock3 size={15} /> Your rules</Text><Text as="span"><Heart size={15} /> Lives or timer</Text></Box>
-          <Box className="puzzles-card-actions"><Button variant="primary" onClick={onRace} icon={ChevronRight} iconPosition="after">Play with a friend</Button></Box>
+          <Box className="puzzles-card-actions"><Button variant="primary" onClick={onRace} icon={ChevronRight} iconPosition="after">Invite a friend</Button></Box>
         </Box>
       </Box>
     </>}
