@@ -6,6 +6,7 @@ export type StoryChapter = {
   level: CefrLevel;
   number: number;
   nameFr: string;
+  descriptor: string;
   tone: StoryChapterTone;
   stops: StoryStop[];
   total: number;
@@ -22,13 +23,13 @@ export type StoryTrophyProgress = {
 
 const LEVEL_ORDER: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
-const CHAPTER_META: Record<CefrLevel, {nameFr: string; tone: StoryChapterTone}> = {
-  A1: {nameFr: 'Premiers pas', tone: 'teal'},
-  A2: {nameFr: 'Petites aventures', tone: 'sky'},
-  B1: {nameFr: 'En route', tone: 'amber'},
-  B2: {nameFr: 'Nouveaux horizons', tone: 'coral'},
-  C1: {nameFr: 'Voix et idées', tone: 'violet'},
-  C2: {nameFr: 'Les grandes questions', tone: 'navy'},
+const CHAPTER_META: Record<CefrLevel, {nameFr: string; descriptor: string; tone: StoryChapterTone}> = {
+  A1: {nameFr: 'Premiers pas', descriptor: 'Everyday beginnings', tone: 'teal'},
+  A2: {nameFr: 'Petites aventures', descriptor: 'A little more to discover', tone: 'sky'},
+  B1: {nameFr: 'En route', descriptor: 'Choices and consequences', tone: 'amber'},
+  B2: {nameFr: 'Nouveaux horizons', descriptor: 'More than one point of view', tone: 'coral'},
+  C1: {nameFr: 'Voix et idées', descriptor: 'Read between the lines', tone: 'violet'},
+  C2: {nameFr: 'Les grandes questions', descriptor: 'Ideas with many layers', tone: 'navy'},
 };
 
 export function storyStateLabel(stop: StoryStop): string {
@@ -50,6 +51,7 @@ export function storyChapters(stories: StoryStop[]): StoryChapter[] {
       level,
       number: index + 1,
       nameFr: CHAPTER_META[level].nameFr,
+      descriptor: CHAPTER_META[level].descriptor,
       tone: CHAPTER_META[level].tone,
       stops,
       total: stops.length,

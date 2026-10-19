@@ -112,13 +112,14 @@ export function StoryPath({stops, onSelect, nextId = null}: StoryPathProps) {
             className={`story-chapter tone-${chapter.tone}`}
             aria-label={`Chapter ${chapter.number} · ${chapter.level} · ${chapter.nameFr}`}
           >
-            <header className="story-chapter-head">
+            <header className="story-chapter-head" id={`stories-${chapter.level.toLowerCase()}`}>
               <span className="story-chapter-chip">
                 <ChapterIcon size={22} aria-hidden="true" />
               </span>
               <span className="story-chapter-copy">
-                <small>Chapter {chapter.number} · {chapter.level}</small>
+                <small>Chapter {String(chapter.number).padStart(2, '0')} · {chapter.level}</small>
                 <h3>{chapter.nameFr}</h3>
+                <span className="story-chapter-descriptor">{chapter.descriptor}</span>
               </span>
               <span className="story-chapter-count">
                 {chapter.completed} of {chapter.total} stories
@@ -141,12 +142,16 @@ export function StoryPath({stops, onSelect, nextId = null}: StoryPathProps) {
                       aria-label={`${stop.order_index}. ${stop.title}. ${isNext && !stop.answered ? 'Your next adventure' : storyStateLabel(stop)}`}
                       onClick={() => onSelect(stop.id)}
                     >
-                      <span className="story-stop-marker">
-                        {stop.state === 'completed' ? (
-                          <Check size={22} aria-hidden="true" />
-                        ) : (
-                          <Icon size={22} aria-hidden="true" />
-                        )}
+                      <span className="story-stop-cover" aria-hidden="true">
+                        <span className="story-stop-cover-orbit" />
+                        <span className="story-stop-marker">
+                          {stop.state === 'completed' ? (
+                            <Check size={38} aria-hidden="true" />
+                          ) : (
+                            <Icon size={38} aria-hidden="true" />
+                          )}
+                        </span>
+                        <span className="story-cover-number">FRANCO · {String(stop.order_index).padStart(2, '0')}</span>
                       </span>
                       <span className="story-stop-copy">
                         <small>

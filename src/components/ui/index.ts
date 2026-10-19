@@ -107,6 +107,8 @@ export { StoryPath } from './StoryPath';
 export type { StoryPathProps } from './StoryPath';
 export { StoryTrophyShelf } from './StoryTrophyShelf';
 export type { StoryTrophyShelfProps } from './StoryTrophyShelf';
+export { StoryAnswerOptions } from './StoryAnswerOptions';
+export type { StoryAnswerOptionsProps } from './StoryAnswerOptions';
 export { RaceInviteCode } from './RaceInviteCode';
 export { PronunciationSpikePanel } from './PronunciationSpikePanel';
 export { PronunciationComparison } from './PronunciationComparison';
