@@ -202,3 +202,12 @@ export type StoryStop = {id:string;title:string;title_en:string;level:CefrLevel;
 export type StoryQuestion = {id:string;prompt:string;options:{id:string;text:string}[]};
 export type ReadingStory = {id:string;title:string;title_en:string;level:CefrLevel;text:string;glossary:{french:string;english:string}[];version:number;questions:StoryQuestion[];answered_question_ids:string[]};
 export type StoryActionResult = {story_id:string;state:StoryState;correct:boolean|null;explanation:string|null;answered_question_ids:string[]};
+
+export type LearnStatus = 'not_started' | 'in_progress' | 'completed';
+export type LearnProgressRow = { topic_id:string; subtopic_id:string; status:'in_progress'|'completed'; updated_at:string };
+export type LearnProgressResponse = { level:CefrLevel; subtopics:LearnProgressRow[] };
+export type LearnProgressInput = Pick<LearnProgressRow,'topic_id'|'subtopic_id'|'status'>;
+export type LearnSubtopic = { subtopicId:string; title:string; state:LearnStatus };
+export type LearnTopicCard = { slug:string; topicId:string; title:string; description:string; subtopicCount:number; doneCount:number; state:LearnStatus; colour:string; icon:string; subtopics:LearnSubtopic[] };
+export type LearnJump = { topicTitle:string; subtopicTitle:string; slug:string; subtopicId:string };
+export type LearnRoute = { level:CefrLevel; topic?:string; subtopic?:string };

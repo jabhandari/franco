@@ -139,3 +139,30 @@ export function levelMastery(
   }
   return summary;
 }
+
+// Mockup A cards share the practice inventory helpers above.
+import type { ContentConcept } from '../api/client';
+import type { LearnTopicCard, LearnProgressRow, LearnJump, LearnSubtopic } from '../types';
+import { CEFR_LEVELS, CLB_BY_CEFR } from './levels.presenter';
+export const TOPIC_PALETTE = ['#0da49c','#3d9bd6','#e8a020','#f4604e','#8b6fd8','#3fae6a','#e5638f','#5a74d6','#d97036','#2a9d8f','#b565a7','#6a8f3f','#0e7fb5','#c98a1b','#7a5fc0','#3d9b78'];
+export function topicColor(index:number):string { return TOPIC_PALETTE[((index % 16) + 16) % 16]; }
+const ICONS:Record<string,string> = {
+ 'A1-01':'MessageCircle','A1-02':'ListOrdered','A1-03':'CircleUserRound','A1-04':'Tag','A1-05':'Bookmark','A1-06':'Copy','A1-07':'Clock','A1-08':'Zap','A1-09':'Palette','A1-10':'CircleMinus','A1-11':'HelpCircle','A1-12':'Coffee','A1-13':'Calendar','A1-14':'MapPin','A1-15':'MessageCircle',
+ 'A2-01':'Zap','A2-02':'Clock','A2-03':'Clock','A2-04':'ArrowRight','A2-05':'CircleUserRound','A2-06':'Users','A2-07':'ListOrdered','A2-08':'Clock','A2-09':'Bookmark','A2-10':'MapPin','A2-11':'HelpCircle','A2-12':'MessageCircle','A2-13':'Calendar','A2-14':'Heart','A2-15':'MessageCircle',
+};
+export function topicIcon(id:string):string { return ICONS[id] ?? 'BookOpen'; }
+export function learnLevels() { const colours=['#0da49c','#50a8df','#d99b28','#f4604e','#9b80d8','#243b53']; return CEFR_LEVELS.map((id,index)=>({id,clb:`CLB ${CLB_BY_CEFR[id]}`,colour:colours[index]})); }
+export function topicCards(concepts:ContentConcept[], rows:LearnProgressRow[], level:string):LearnTopicCard[] {
+ return concepts.filter(c=>c.level_code===level).map((c,index)=>{
+  const topicId=c.metadata.lesson?.topic_id ?? c.slug;
+  const subtopics:LearnSubtopic[]=(c.metadata.subtopics ?? []).map(s=>({subtopicId:s.subtopic_id,title:s.title,state:rows.find(r=>r.topic_id===topicId && r.subtopic_id===s.subtopic_id)?.status ?? 'not_started'}));
+  const doneCount=subtopics.filter(s=>s.state==='completed').length;
+  return {slug:c.slug,topicId,title:c.title,description:c.description ?? '',subtopicCount:subtopics.length,doneCount,state:subtopics.length>0 && doneCount===subtopics.length?'completed':subtopics.some(s=>s.state!=='not_started')?'in_progress':'not_started',colour:topicColor(index),icon:topicIcon(topicId),subtopics};
+ });
+}
+export function jumpBackIn(cards:LearnTopicCard[], rows:LearnProgressRow[]):LearnJump|null {
+ for(const row of rows.filter(r=>r.status==='in_progress').sort((a,b)=>Date.parse(b.updated_at)-Date.parse(a.updated_at))) {
+  const card=cards.find(c=>c.topicId===row.topic_id); const sub=card?.subtopics.find(s=>s.subtopicId===row.subtopic_id);
+  if(card && sub) return {topicTitle:card.title,subtopicTitle:sub.title,slug:card.slug,subtopicId:sub.subtopicId};
+ } return null;
+}

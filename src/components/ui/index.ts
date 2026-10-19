@@ -94,7 +94,7 @@ export { TimerRing } from './TimerRing';
 
 export { LanguageTools } from './LanguageTools';
 
-export { Roadmap } from './Roadmap';
+export { LearnTopic, LearnLevelPills, LearnJumpBack, LearnLessonBand } from './LearnTopics';
 export { CheckRow } from './CheckRow';
 
 

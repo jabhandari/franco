@@ -6,6 +6,63 @@ info:
 servers:
   - url: https://franco.example.com
 paths:
+  /api/me/learn/progress:
+    get:
+      summary: Read this learner's subtopic progress for one level
+      security: [{ LearnerSession: [] }]
+      parameters:
+        - in: query
+          name: level
+          required: true
+          schema: { type: string, enum: [A1, A2, B1, B2, C1, C2] }
+      responses:
+        '200':
+          description: Only the authenticated user's rows in the requested level
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [level, subtopics]
+                properties:
+                  level: { type: string }
+                  subtopics:
+                    type: array
+                    items:
+                      type: object
+                      required: [topic_id, subtopic_id, status, updated_at]
+                      properties:
+                        topic_id: { type: string }
+                        subtopic_id: { type: string }
+                        status: { type: string, enum: [in_progress, completed] }
+                        updated_at: { type: string, format: date-time }
+        '400': { description: Missing or invalid level }
+        '401': { description: Authentication required }
+    post:
+      summary: Save subtopic progress; completion cannot be downgraded
+      security: [{ LearnerSession: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [topic_id, subtopic_id, status]
+              properties:
+                topic_id: { type: string }
+                subtopic_id: { type: string }
+                status: { type: string, enum: [in_progress, completed] }
+      responses:
+        '200':
+          description: Progress saved
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [saved]
+                properties:
+                  saved: { type: boolean, const: true }
+        '400': { description: Unknown topic, mismatched subtopic or invalid status }
+        '401': { description: Authentication required }
   /api/content/v1/curriculum/review:
     get:
       description: Internal curriculum review queue with full lesson bodies and per-item provenance. Requires a content API key with content:review scope.

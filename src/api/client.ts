@@ -1084,3 +1084,15 @@ export function reportAttempt(entry: ReportAttemptEntry, response: AttemptRespon
   else payload.legacy_ref = entry.id;
   return apiPost<AttemptResult>('/api/me/attempts', payload, token);
 }
+
+// Completion is sticky on the server; serialize writes and reads so a return
+// to the list observes the last accepted mastery write.
+let learnWrites:Promise<void> = Promise.resolve();
+export function saveLearnProgress(input:import('../types').LearnProgressInput, token:string) {
+ const write=learnWrites.then(()=>apiPost<{saved:boolean}>('/api/me/learn/progress',input,token));
+ learnWrites=write.then(()=>{},()=>{}); return write;
+}
+export async function getLearnProgress(level:string, token:string) {
+ await learnWrites;
+ return apiGet<import('../types').LearnProgressResponse>(`/api/me/learn/progress?level=${encodeURIComponent(level)}`,token);
+}
