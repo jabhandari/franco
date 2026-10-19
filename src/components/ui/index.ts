@@ -103,6 +103,8 @@ export type { ActionTileProps } from './ActionTile';
 export { ProductTour } from './ProductTour';
 export { WelcomeHighlights } from './WelcomeHighlights';
 
+export { StoryCoverImage } from './StoryCoverImage';
+export type { StoryCoverImageProps } from './StoryCoverImage';
 export { StoryPath } from './StoryPath';
 export type { StoryPathProps } from './StoryPath';
 export { StoryTrophyShelf } from './StoryTrophyShelf';
