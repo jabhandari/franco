@@ -3,7 +3,7 @@ import {ArrowLeft,BookOpen,Compass,SkipForward,Sparkles,ArrowRight,BookMarked} f
 import {apiGet,apiPost,getErrorMessage} from '../api/client';
 import type {ReadingStory,StoryActionResult,StoryState,StoryStop} from '../types';
 import {nextStory,storyCtaLabel} from '../presenters/stories.presenter';
-import {Box,Button,EmptyState,ErrorMessage,LoadingSpinner,Page,Panel,StoryAnswerOptions,StoryPath,StoryTrophyShelf,Text} from '../components/ui';
+import {Box,Button,EmptyState,ErrorMessage,LoadingSpinner,Page,Panel,StoryAnswerOptions,StoryCoverImage,StoryPath,StoryTrophyShelf,Text} from '../components/ui';
 
 function StoryReader({id,token,onBack,onProgress}:{key?:React.Key;id:string;token:string;onBack:()=>void;onProgress:()=>Promise<void>}) {
   const [story,setStory]=React.useState<ReadingStory|null>(null),[state,setState]=React.useState<StoryState>('current');
@@ -48,7 +48,7 @@ function StoryReader({id,token,onBack,onProgress}:{key?:React.Key;id:string;toke
           <Text className="story-reader-translation">{story.title_en}</Text>
           <Text className="story-reader-instruction">Settle in, read at your pace, then see what you remember.</Text>
         </Box>
-        <Box className="story-reader-intro-art" aria-hidden="true"><BookMarked size={96}/><Text>UNE HISTOIRE</Text></Box>
+        <Box className="story-reader-intro-art" aria-hidden="true"><StoryCoverImage storyId={story.id}/><BookMarked size={96}/><Text>UNE HISTOIRE</Text></Box>
       </Box>
       <Box className="story-book">
         <Box className="story-book-topline"><Text>FRANCO STORIES</Text><Text>{story.level} · {story.id.slice(-2)}</Text></Box>
