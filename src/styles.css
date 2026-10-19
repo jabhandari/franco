@@ -3325,7 +3325,7 @@ html:not([data-theme="light"]) .practice-hero-tile.tile-three { background:#276d
 .learn-jump p { margin:0; font-size:13px; color:#bfe5e5; }
 .learn-jump small { letter-spacing:.12em; font-size:10px; font-weight:800; color:#8ee2e2; }
 .learn-jump .primary-button { margin-left:auto; flex-shrink:0; border-radius:30px; background:#f4604e; color:white; }
-.learn-topics-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; align-items:start; }
+.learn-topics-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:22px; align-items:start; }
 .learn-topic { min-width:0; overflow:hidden; border:1px solid var(--color-border); border-radius:23px; background:var(--color-surface); box-shadow:0 3px 9px #10283b10; }
 .learn-topic-art { position:relative; overflow:hidden; display:grid; grid-template-columns:58px minmax(0,1fr) auto; gap:10px 14px; text-align:left; align-items:center; width:100%; border:0; padding:22px; background:linear-gradient(120deg,var(--topic-colour),color-mix(in srgb,var(--topic-colour) 85%,#153144)); color:white; font:inherit; cursor:pointer; }
 .learn-topic-art::after { content:''; position:absolute; width:180px; height:180px; border-radius:50%; background:#ffffff17; top:-65px; right:-65px; pointer-events:none; }
