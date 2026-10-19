@@ -2800,12 +2800,6 @@ html:not([data-theme="light"]) .welcome-highlight-learn .welcome-highlight-label
 html:not([data-theme="light"]) .auth-landing .product-tour-eyebrow { color:#79ddd3; }
 html:not([data-theme="light"]) .welcome-highlight-play .welcome-highlight-label { color:#c7a6fc; }
 .curriculum-review-json { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 36rem; overflow: auto; }
-.curriculum-review-bulk { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:16px 0; }
-.curriculum-review-bulk p { margin:0; color:var(--color-muted); font-size:var(--text-13); }
-.curriculum-review-bulk .primary-button { margin-left:auto; }
-.curriculum-review-bulk ~ details summary { display:flex; align-items:center; gap:8px; }
-.curriculum-review-bulk ~ details summary input[type="checkbox"] { width:18px; height:18px; accent-color:var(--palette-teal); cursor:pointer; }
-.curriculum-review-bulk ~ details summary input[type="checkbox"]:disabled { cursor:default; }
 
 /* Stories (FRA-160): bright chapters, trophy shelf and trophy stops.
    Identical geometry in both themes; paint comes from shared tokens and
