@@ -1,9 +1,9 @@
 import React from 'react';
-import {ArrowLeft,BookOpen,Compass,SkipForward} from 'lucide-react';
+import {ArrowLeft,BookOpen,Compass,SkipForward,Sparkles,ArrowRight,BookMarked} from 'lucide-react';
 import {apiGet,apiPost,getErrorMessage} from '../api/client';
 import type {ReadingStory,StoryActionResult,StoryState,StoryStop} from '../types';
 import {nextStory,storyCtaLabel} from '../presenters/stories.presenter';
-import {Box,Button,EmptyState,ErrorMessage,LoadingSpinner,Page,PageHeader,Panel,StoryPath,StoryTrophyShelf,Text} from '../components/ui';
+import {Box,Button,EmptyState,ErrorMessage,LoadingSpinner,Page,Panel,StoryAnswerOptions,StoryPath,StoryTrophyShelf,Text} from '../components/ui';
 
 function StoryReader({id,token,onBack,onProgress}:{key?:React.Key;id:string;token:string;onBack:()=>void;onProgress:()=>Promise<void>}) {
   const [story,setStory]=React.useState<ReadingStory|null>(null),[state,setState]=React.useState<StoryState>('current');
@@ -40,10 +40,22 @@ function StoryReader({id,token,onBack,onProgress}:{key?:React.Key;id:string;toke
     {error && <ErrorMessage message={error}/>}
     {!story && !error && <LoadingSpinner label="Loading story…"/>}
     {story && <>
-      <PageHeader eyebrow={`${story.level} · Story adventure`} title={story.title} lede={story.title_en}/>
-      <Panel><Text as="h2">Read the story</Text><Box as="p" className="story-reading-text" lang="fr">{story.text}</Box>
-        <Box as="details"><Box as="summary">English word support</Box>{story.glossary.map(word=><Text key={word.french}><Text as="strong">{word.french}</Text> — {word.english}</Text>)}</Box>
-      </Panel>
+      <Box className="story-reader-intro">
+        <Box className="story-reader-intro-copy">
+          <Text className="story-reader-kicker">THE READING ROOM <Sparkles size={15}/></Text>
+          <Text className="story-reader-level">{story.level} · {story.text.trim().split(/\s+/).length} words</Text>
+          <Text as="h1">{story.title}</Text>
+          <Text className="story-reader-translation">{story.title_en}</Text>
+          <Text className="story-reader-instruction">Settle in, read at your pace, then see what you remember.</Text>
+        </Box>
+        <Box className="story-reader-intro-art" aria-hidden="true"><BookMarked size={96}/><Text>UNE HISTOIRE</Text></Box>
+      </Box>
+      <Box className="story-book">
+        <Box className="story-book-topline"><Text>FRANCO STORIES</Text><Text>{story.level} · {story.id.slice(-2)}</Text></Box>
+        <Text as="h2" className="story-book-title">{story.title}</Text>
+        <Box as="div" className="story-reading-text" lang="fr">{story.text}</Box>
+        <Box as="details" className="story-glossary"><Box as="summary">Words to help you along</Box><Box className="story-glossary-grid">{story.glossary.map(word=><Text key={word.french}><Text as="strong">{word.french}</Text> — {word.english}</Text>)}</Box></Box>
+      </Box>
       {skipDone ? <Panel><Text as="h2">Questions skipped</Text><Text>No problem — this story stays on your path. Open it again whenever you want the questions.</Text><Button variant="primary" icon={Compass} onClick={onBack}>Explore the path</Button></Panel>
       : skipConfirm ? <Panel><Text as="h2">Skip the questions for this story?</Text><Text>The story stays on your path and you can answer the questions any time. Any answers you have already given are kept.</Text><Box className="story-reader-actions"><Button variant="primary" icon={SkipForward} disabled={busy} onClick={skip}>{busy?'Skipping…':'Skip questions'}</Button><Button variant="text" disabled={busy} onClick={()=>setSkipConfirm(false)}>Keep answering</Button></Box></Panel>
       : <>
@@ -54,7 +66,7 @@ function StoryReader({id,token,onBack,onProgress}:{key?:React.Key;id:string;toke
         {feedback?.explanation && <Box role="status"><Text>{feedback.explanation}</Text></Box>}
         {question ? <Box>
           <Text as="h3">{question.prompt}</Text>
-          <Box className="story-options">{question.options.map(option=><Button key={option.id} variant={selection===option.id?'primary':'text'} aria-pressed={selection===option.id} disabled={busy} onClick={()=>setSelection(option.id)}>{option.text}</Button>)}</Box>
+          <StoryAnswerOptions options={question.options} selected={selection} disabled={busy} onSelect={setSelection}/>
           <Button variant="primary" disabled={busy || !selection} onClick={answer}>{busy?'Checking…':'Check answer'}</Button>
         </Box> : <Text as="strong">All six questions answered. Well done!</Text>}
         {state!=='completed' && <Button variant="text" icon={SkipForward} onClick={()=>setSkipConfirm(true)}>Skip questions</Button>}
@@ -83,11 +95,15 @@ export function Stories({token}:{token:string|null}) {
       {!loading && !error && (stops.length ? <>
         <Box className="story-hero">
           <Box className="story-hero-copy">
-            <Text className="home-kicker">Read · Discover · Continue</Text>
-            <Text as="h1">Your story adventure</Text>
-            <Text className="story-hero-lede">Choose any story, from everyday French to richer adventures. Read and answer six questions at your own pace — finish a chapter to earn its trophy.</Text>
-            {next && <Button variant="primary" icon={BookOpen} onClick={()=>setSelected(next.id)}>{storyCtaLabel(next)}</Button>}
+            <Text className="story-hero-eyebrow"><Sparkles size={16}/> YOUR FRENCH LIBRARY</Text>
+            <Text as="h1"><Text as="span" className="story-hero-line">A little reading.</Text><Text as="span" className="story-hero-line">A lot of possibility.</Text></Text>
+            <Text className="story-hero-lede">Fifty original stories, six chapters, and a whole world of French to discover. Pick a cover and turn the page.</Text>
+            {next && <Button variant="primary" icon={ArrowRight} onClick={()=>setSelected(next.id)}>{storyCtaLabel(next)}</Button>}
           </Box>
+          <Box className="story-hero-art" aria-hidden="true"><Box className="story-art-orbit"/><Box className="story-art-book story-art-book-back"><BookOpen size={48}/><Text>LES MOTS</Text></Box><Box className="story-art-book story-art-book-front"><Sparkles size={44}/><Text>IL ÉTAIT UNE FOIS</Text></Box><Box className="story-art-stamp">A1 <Text as="span">to</Text> C2</Box></Box>
+        </Box>
+        <Box className="story-library-bar">
+          <Box><Text className="story-library-eyebrow">YOUR COLLECTION</Text><Text as="h2">Choose your chapter</Text><Text>Stories grow with you, from small moments to big ideas.</Text></Box>
           <StoryTrophyShelf stops={stops}/>
         </Box>
         <StoryPath stops={stops} onSelect={setSelected} nextId={next && next.state!=='completed' ? next.id : null}/>

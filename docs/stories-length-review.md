@@ -1,5 +1,7 @@
 # FRA-159 story expansion evidence
 
+Historical review of the earlier 100–150-word edition. The current collection has been recalibrated by level; see [story calibration](story-calibration.md) for its current bands and sourcing. Counts below describe the prior edition.
+
 All 50 stories contain 100–150 words and exactly six questions.
 
 Counting method: `story.text.trim().split(/\s+/).length`, i.e. whitespace-split of the French body only. Titles, glosses, questions and explanations are excluded. `npm test` runs the count assertions in its pretest content check.
