@@ -123,7 +123,7 @@ export function Profile({ token, user, userData, streak, onSaved, onLogout, onRo
             const progress = skillCompletion(learner?.skill_progress || [], skill.id);
             return <Box key={skill.id}>{learner && <ProgressRing percent={progress.percent} size={62} label={`${skill.label}: ${progress.done} of ${progress.total} exercises done`} />}<Text>{skill.label}</Text></Box>;
           })}</Box>
-          <Button variant="text" icon={ArrowRight} iconPosition="after" onClick={onRoadmap}>Explore your roadmap</Button>
+          <Button variant="text" icon={ArrowRight} iconPosition="after" onClick={onRoadmap}>Explore topics</Button>
         </Box>
       </Box>
     </Box>
