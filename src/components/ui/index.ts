@@ -112,3 +112,5 @@ export type { StoryAnswerOptionsProps } from './StoryAnswerOptions';
 export { RaceInviteCode } from './RaceInviteCode';
 export { PronunciationSpikePanel } from './PronunciationSpikePanel';
 export { PronunciationComparison } from './PronunciationComparison';
+export { GameArtImage } from './GameArtImage';
+export type { GameArtImageProps, GameArtKind } from './GameArtImage';
