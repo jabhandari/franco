@@ -1,8 +1,9 @@
+import { getLearnProgress, saveLearnProgress } from './learn-progress.js';
 import { createStoryService } from './stories.js';
 import { createWordsOfDayService } from './words-of-day.js';
 import { curriculumConcepts } from './curriculum-contract.js';
 import { createHash, pbkdf2Sync, randomBytes, randomUUID } from 'node:crypto';
-import { reviewCurriculum } from './curriculum-editorial.js';
+import { reviewCurriculum, publishCurriculumBatch } from './curriculum-editorial.js';
 import { createServer } from 'node:http';
 import { query, pool, migrate, createProfileForUser } from './database.js';
 import { CONTENT_SCHEMA_VERSION, normalizeItem, schemaDocument, validateBatch } from './content-contract.js';
@@ -27,7 +28,7 @@ import { allowAuthEmail, authClientIp, genericEmailResponse, hashEmailToken, sen
 import { emailConfigured } from './email.js';
 
 const PORT = getPort(); const HOST = getHost(); const hashToken = (v) => createHash('sha256').update(v).digest('hex');
-const json = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-headers': 'content-type, authorization, x-race-player-token', 'access-control-allow-methods': 'GET, POST, PATCH, OPTIONS', 'access-control-expose-headers': 'retry-after', ...headers }); res.end(JSON.stringify(body)); };
+const json = (res, status, body, headers = {}) => { res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-headers': 'content-type, authorization, x-api-key, x-race-player-token', 'access-control-allow-methods': 'GET, POST, PATCH, OPTIONS', 'access-control-expose-headers': 'retry-after', ...headers }); res.end(JSON.stringify(body)); };
 const body = (req) => new Promise((resolve, reject) => { let b = ''; req.on('data', c => b += c); req.on('end', () => { try { resolve(b ? JSON.parse(b) : {}) } catch (e) { reject(e) } }); });
 const password = (p, s = randomBytes(16).toString('hex')) => ({ salt: s, hash: pbkdf2Sync(p, s, 120000, 64, 'sha512').toString('hex') });
 async function user(req) { const h = req.headers.authorization || ''; if (!h.startsWith('Bearer ')) return null; const r = await query('SELECT u.id,u.email,u.name,u.first_name,u.last_name,s.expires_at FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=?', [hashToken(h.slice(7))]); return r[0] && new Date(r[0].expires_at) > new Date() ? r[0] : null; }
@@ -333,6 +334,13 @@ async function main() {
               if (!(await apiKey(req,'content:review'))) return json(res,401,{error:'A content:review API key is required.'});
               return json(res,200,{lessons:await query('SELECT topic_id,review_status,version,pack_json FROM curriculum_lessons ORDER BY topic_id')});
             }
+            if (u.pathname === '/api/content/v1/curriculum/review/publish' && req.method === 'POST') {
+              if (!(await apiKey(req,'content:review'))) return json(res,401,{error:'A content:review API key is required.'});
+              const input=await body(req);
+              const keyId=createHash('sha256').update(req.headers['x-api-key']).digest('hex');
+              const result=await publishCurriculumBatch(pool,input,keyId);
+              return json(res,result.status,result.body);
+            }
             const curriculumReview=u.pathname.match(/^\/api\/content\/v1\/curriculum\/([^/]+)\/review$/);
             if (curriculumReview && req.method === 'POST') {
               if (!(await apiKey(req,'content:review'))) return json(res,401,{error:'A content:review API key is required.'});
@@ -488,6 +496,11 @@ async function main() {
                 const prereqs = await query('SELECT concept_id,prerequisite_concept_id FROM concept_prerequisites');
                 const slugById = new Map(concepts.map((c) => [c.id, c.slug]));
                 return json(res, 200, { concepts: concepts.map((c) => ({ id: c.id, slug: c.slug, title: c.title, description: c.description, concept_type: c.concept_type, level_code: c.level_code, parent_id: c.parent_id, status: c.status, list_order:c.list_order, metadata: c.metadata_json || {}, prerequisites: prereqs.filter((p) => p.concept_id === c.id).map((p) => slugById.get(p.prerequisite_concept_id)).filter(Boolean) })) });
+            }
+            if (u.pathname === '/api/me/learn/progress' && ['GET','POST'].includes(req.method)) {
+              const x=await user(req); if(!x) return json(res,401,{error:'Authentication required.'});
+              const result=req.method==='GET' ? await getLearnProgress(query,x.id,u.searchParams.get('level')) : await saveLearnProgress(query,x.id,await body(req));
+              return json(res,result.status,result.body);
             }
             if (u.pathname === '/api/me/lesson-position' && ['GET','POST'].includes(req.method)) {
               const x=await user(req);

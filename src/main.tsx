@@ -25,7 +25,8 @@ import { LoadingScreen, NavButton, Brand, Button, Field, ErrorMessage, Box, Text
 import { streakPath } from './presenters/streak.presenter.js';
 import { Home } from './views/Home.js';
 import { Session } from './views/Session.js';
-import { Content } from './views/Content.js';
+import { Learn } from './views/Learn';
+import { legacyLearnUrl } from './presenters/learn-route.presenter';
 import { PastQuestions } from './views/PastQuestions.js';
 import { Practice } from './views/Practice';
 import { Progress } from './views/Progress.js';
@@ -60,7 +61,7 @@ declare module 'next-themes' {
 // FRA-67: app-shell types. ViewId is the sidebar's view vocabulary — the
 // auth gate, router, and nav all speak it, so a bad view id is a type
 // error, not a silent blank page.
-type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'content' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types' | 'puzzles' | 'stories' | 'race' | 'pronunciation-spike' | 'words';
+type ViewId = 'practice' | 'home' | 'learn' | 'placement' | 'session' | 'past' | 'progress' | 'conversation' | 'review' | 'profile' | 'question-types' | 'puzzles' | 'stories' | 'race' | 'pronunciation-spike' | 'words';
 const authViewFromPath = (): AuthMode => window.location.pathname === '/reset-password' ? 'reset' : window.location.pathname === '/verify-email' ? 'verify' : window.location.pathname === '/forgot-password' ? 'forgot' : 'login';
 
 type NavItem = {
@@ -99,7 +100,6 @@ const viewPaths: Record<ViewId, string> = {
   learn: '/learn',
   placement: '/placement',
   session: '/session',
-  content: '/content',
   past: '/past-questions',
   progress: '/progress',
   conversation: '/conversation',
@@ -112,9 +112,10 @@ const viewPaths: Record<ViewId, string> = {
   'pronunciation-spike': '/pronunciation-spike',
   words: '/words',
 };
-const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'content', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types', 'puzzles', 'stories', 'race', 'pronunciation-spike', 'words'];
+const VIEW_IDS: ViewId[] = ['practice', 'home', 'learn', 'placement', 'session', 'past', 'progress', 'conversation', 'review', 'profile', 'question-types', 'puzzles', 'stories', 'race', 'pronunciation-spike', 'words'];
 
 function viewFromPath(pathname: string): ViewId {
+  if(pathname==='/content'){window.history.replaceState({},'',legacyLearnUrl(window.location.search));return 'learn';}
   for (const id of VIEW_IDS) {
     const path = viewPaths[id];
     if (path === pathname || (path !== '/' && pathname.startsWith(`${path}/`))) return id;
@@ -141,6 +142,7 @@ function App(): React.JSX.Element {
   function navigate(nextView: ViewId, replace = false, params?: URLSearchParams): void {
     setView(nextView);
     window.history[replace ? 'replaceState' : 'pushState']({}, '', `${viewPaths[nextView] || '/'}${params ? `?${params}` : ''}`);
+    window.dispatchEvent(new PopStateEvent('popstate'));
   }
 
   React.useEffect(() => {
@@ -335,7 +337,7 @@ function App(): React.JSX.Element {
   }
 
   return (
-    <Box className={`app-shell language-tools-enabled${view === 'learn' || view === 'content' ? ' learn-page-shell' : ''}`}>
+    <Box className="app-shell language-tools-enabled">
       <LanguageTools key={session.id} userId={session.id} token={authToken} page={view}/>
       <Box as="aside" className="sidebar">
         <Brand onClick={() => navigate('home')} />
@@ -345,7 +347,7 @@ function App(): React.JSX.Element {
             <NavButton
               key={item.id}
               icon={item.icon}
-              active={view === item.id || (item.id === 'practice' && view === 'past') || (item.id === 'learn' && view === 'content')}
+              active={view === item.id || (item.id === 'practice' && view === 'past')}
               onClick={() => navigate(item.id)}
             >
               {item.label}
@@ -366,29 +368,28 @@ function App(): React.JSX.Element {
       </Box>
 
       <Box as="nav" className="phone-tabs" aria-label="Phone navigation">
-        {navItems.map((item) => <NavButton key={item.id} icon={item.icon} active={view === item.id || (item.id === 'practice' && view === 'past') || (item.id === 'learn' && view === 'content')} onClick={() => navigate(item.id)}>{item.label}</NavButton>)}
+        {navItems.map((item) => <NavButton key={item.id} icon={item.icon} active={view === item.id || (item.id === 'practice' && view === 'past')} onClick={() => navigate(item.id)}>{item.label}</NavButton>)}
       </Box>
 
-      <Box as="main" className={`main-content ${view === 'content' ? 'wide-content' : ''}`}>
+      <Box as="main" className="main-content">
         {view === 'home' && <Home token={authToken} userData={userData} streak={streak}
           onStart={() => { setSessionLevel(userData?.profile?.current_level || 'A1'); navigate('session'); }}
           onPlacement={() => navigate('placement')}
-          onContinue={(lesson) => navigate('content', false, new URLSearchParams({ level:lesson.level_code,concept:lesson.slug,section:lesson.section }))}
-          onLesson={(lesson) => navigate('content', false, new URLSearchParams({ level:lesson.level_code || 'A1',concept:lesson.slug }))}
-          onExplore={() => navigate('content', false, new URLSearchParams({ level:userData?.profile?.current_level || 'A1' }))}
+          onContinue={(lesson) => navigate('learn', false, new URLSearchParams({ level:lesson.level_code,topic:lesson.slug }))}
+          onLesson={(lesson) => navigate('learn', false, new URLSearchParams({ level:lesson.level_code || 'A1',topic:lesson.slug }))}
+          onExplore={() => navigate('learn', false, new URLSearchParams({ level:userData?.profile?.current_level || 'A1' }))}
           onConversation={() => navigate('conversation')} onPuzzles={() => navigate('puzzles')}
           onWords={() => navigate('words')}
         />}
-        {view === 'learn' && <Content token={authToken} onPractice={(level) => { setSessionLevel(level); navigate('session'); }} />}
+        {view === 'learn' && <Learn token={authToken} currentLevel={userData?.profile?.current_level || 'A1'} onPractice={(level) => { setSessionLevel(level); navigate('session'); }} />}
         {view === 'placement' && <Placement token={authToken} onPlaced={() => refreshUserData()} />}
         {view === 'session' && <Session key={sessionLevel || 'default'} token={authToken} initialLevel={sessionLevel} />}
-        {view === 'content' && <Content token={authToken} onPractice={(level) => { setSessionLevel(level); navigate('session'); }} />}
         {view === 'past' && <PastQuestions token={authToken} />}
         {view === 'practice' && <Practice token={authToken} />}
         {view === 'progress' && <Progress token={authToken} />}
         {view === 'conversation' && <Conversation token={authToken} />}
         {view === 'review' && <ReviewQueue />}
-        {view === 'profile' && <Profile token={authToken} user={session} userData={userData} streak={streak} onSaved={handleProfileSaved} onLogout={logout} onRoadmap={() => navigate('content')} />}
+        {view === 'profile' && <Profile token={authToken} user={session} userData={userData} streak={streak} onSaved={handleProfileSaved} onLogout={logout} onRoadmap={() => navigate('learn')} />}
         {view === 'question-types' && <QuestionTypes token={authToken} />}
         {view === 'puzzles' && <Puzzles token={authToken} onRace={() => navigate('race')} />}
         {view === 'stories' && <StoriesPage token={authToken} />}

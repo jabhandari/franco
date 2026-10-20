@@ -11,6 +11,7 @@ import {
 import type {LucideIcon} from 'lucide-react';
 import type {CefrLevel, StoryStop} from '../../types';
 import {storyChapters, storyStateLabel} from '../../presenters/stories.presenter';
+import {StoryCoverImage} from './StoryCoverImage';
 
 // One icon per story, matched to its title in content/stories/stories.v1.json.
 // A story added without an entry falls back to the chapter icon.
@@ -151,6 +152,7 @@ export function StoryPath({stops, onSelect, nextId = null}: StoryPathProps) {
                             <Icon size={38} aria-hidden="true" />
                           )}
                         </span>
+                        <StoryCoverImage storyId={stop.id} />
                         <span className="story-cover-number">FRANCO · {String(stop.order_index).padStart(2, '0')}</span>
                       </span>
                       <span className="story-stop-copy">

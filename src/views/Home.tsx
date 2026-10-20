@@ -84,7 +84,7 @@ export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLes
           <Text className="home-kicker">{lesson ? 'CONTINUE YOUR LESSON' : 'YOUR NEXT LESSON'}</Text>
           {resumeError && <ErrorMessage message="Couldn't load your saved place. You can still open your lessons." />}
           <Text as="h2">{lesson?.title || nextLesson?.title || 'A little French, every day'}</Text>
-          <Text as="small">{lesson ? `${lesson.level_code} roadmap · Lesson ${lesson.position} of ${lesson.total} · You left off at ${lesson.section}.` : 'Start with a lesson matched to your level.'}</Text>
+          <Text as="small">{lesson ? `${lesson.level_code} topics · Topic ${lesson.position} of ${lesson.total}.` : 'Start with a lesson matched to your level.'}</Text>
           <Button variant="text" icon={ArrowRight} iconPosition="after" onClick={() => lesson ? onContinue(lesson) : nextLesson ? onLesson(nextLesson) : onExplore()}>{lesson ? 'Continue lesson' : 'Explore Learn'}</Button>
         </Box>
         <Box className="home-play-card">

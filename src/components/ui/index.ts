@@ -94,7 +94,7 @@ export { TimerRing } from './TimerRing';
 
 export { LanguageTools } from './LanguageTools';
 
-export { Roadmap } from './Roadmap';
+export { LearnTopic, LearnLevelPills, LearnJumpBack, LearnLessonBand } from './LearnTopics';
 export { CheckRow } from './CheckRow';
 
 
@@ -103,6 +103,8 @@ export type { ActionTileProps } from './ActionTile';
 export { ProductTour } from './ProductTour';
 export { WelcomeHighlights } from './WelcomeHighlights';
 
+export { StoryCoverImage } from './StoryCoverImage';
+export type { StoryCoverImageProps } from './StoryCoverImage';
 export { StoryPath } from './StoryPath';
 export type { StoryPathProps } from './StoryPath';
 export { StoryTrophyShelf } from './StoryTrophyShelf';
@@ -112,5 +114,7 @@ export type { StoryAnswerOptionsProps } from './StoryAnswerOptions';
 export { RaceInviteCode } from './RaceInviteCode';
 export { PronunciationSpikePanel } from './PronunciationSpikePanel';
 export { PronunciationComparison } from './PronunciationComparison';
+export { GameArtImage } from './GameArtImage';
+export type { GameArtImageProps, GameArtKind } from './GameArtImage';
 export { TypewriterText } from './TypewriterText';
 export type { TypewriterTextProps } from './TypewriterText';

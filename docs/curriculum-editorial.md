@@ -30,5 +30,16 @@ POST /api/content/v1/curriculum/{topic_id}/review advances one state with body:
 The server records the key fingerprint, reviewer, note, pack hash and version.
 Concurrent reviews lock the lesson row; a stale state/version returns 409.
 
+Reviewers who have completed the remaining editorial work may select all
+unpublished packs in the queue and use the explicit bulk publish action. It
+requires reviewer identity and evidence, validates every selected pack's
+structure and provenance, then publishes the entire selection atomically. Each
+pack receives one auditable `published` event; the action does not fabricate
+the intermediate factual, language, or license approval events. Use
+`POST /api/content/v1/curriculum/review/publish` with
+`{lessons: [{topic_id, version}], reviewer, note}`. The submitted version is
+checked so a changed pack cannot be published based on stale review. If any selected pack is missing, already
+published, or invalid, none of the selection is published.
+
 The seed never publishes. After these PRs merge, seed once, review each pack,
 and publish through this surface. No production data is modified by a PR.

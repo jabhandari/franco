@@ -11,13 +11,7 @@ assert(
   Array.isArray(CEFR_LEVELS) && CEFR_LEVELS.join(',') === 'A1,A2,B1,B2,C1,C2',
   'CEFR_LEVELS: A1..C2 in order'
 );
-{
-  const conceptsSrc = readFileSync(new URL('../components/concepts.tsx', import.meta.url), 'utf8');
-  assert(
-    /from '\.\.\/presenters\/levels\.presenter\.js'/.test(conceptsSrc) && /export const LEVELS = CEFR_LEVELS;/.test(conceptsSrc),
-    'concepts LEVELS export still aliases CEFR_LEVELS'
-  );
-}
+
 
 console.log('levels.presenter checks passed');
 
@@ -33,11 +27,6 @@ assert(clbForCefr('Z9') === null, "clbForCefr('Z9') falls back to null");
 assert(formatLevelWithClb('B2') === 'B2 (CLB 7)', "formatLevelWithClb('B2') is 'B2 (CLB 7)'");
 assert(formatLevelWithClb('Z9') === 'Z9', "formatLevelWithClb('Z9') falls back to bare level");
 {
-  const conceptsSrc = readFileSync(new URL('../components/concepts.tsx', import.meta.url), 'utf8');
-  assert(
-    /formatLevelWithClb\(section\)/.test(conceptsSrc),
-    'LevelGuide eyebrow renders the CEFR · CLB label'
-  );
   const pastSrc = readFileSync(new URL('../views/PastQuestions.tsx', import.meta.url), 'utf8');
   assert(
     /formatLevelWithClb\(section\)/.test(pastSrc) && /Canadian Language Benchmark/.test(pastSrc),

@@ -65,3 +65,44 @@ export async function reviewCurriculum(pool,topicId,input,keyId) {
     await client.query('COMMIT');return {status:200,body:{topic_id:topicId,review_status:input.state}};
   } catch(error) {await client.query('ROLLBACK');throw error;} finally {client.release();}
 }
+
+// Explicit bulk-publish override for a reviewer who has reviewed the remaining
+// queue outside the staged workflow. Keep this auditable as one published
+// event per pack; do not manufacture factual/language/license approvals.
+export async function publishCurriculumBatch(pool,input,keyId) {
+  const selected=input?.lessons;
+  const topicIds=Array.isArray(selected) ? selected.map(lesson=>lesson?.topic_id) : null;
+  const reviewer=input?.reviewer;
+  const note=input?.note;
+  if (!Array.isArray(topicIds) || !topicIds.length || topicIds.length>500 || topicIds.some((id,index)=>!nonempty(id) || !Number.isInteger(selected[index].version) || selected[index].version<1) || new Set(topicIds).size!==topicIds.length) {
+    return {status:422,body:{error:'Provide 1–500 unique lessons with topic_id and version.'}};
+  }
+  if (!nonempty(reviewer) || !nonempty(note)) return {status:422,body:{error:'Reviewer and review evidence are required.'}};
+  const client=await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const rows=(await client.query('SELECT topic_id,version,review_status,pack_json FROM curriculum_lessons WHERE topic_id = ANY($1::text[]) ORDER BY topic_id FOR UPDATE',[topicIds])).rows;
+    const byId=new Map(rows.map(row=>[row.topic_id,row]));
+    const errors=[];
+    for (const topicId of topicIds) {
+      const row=byId.get(topicId);
+      if (!row) { errors.push({topic_id:topicId,error:'Topic not found.'}); continue; }
+      if (row.version!==selected.find(lesson=>lesson.topic_id===topicId).version) { errors.push({topic_id:topicId,error:'Lesson changed. Reload before publishing.'}); continue; }
+      if (row.review_status==='published') { errors.push({topic_id:topicId,error:'Already published. Reload the review queue.'}); continue; }
+      const validation=lessonErrors(row.pack_json);
+      if (validation.length) errors.push({topic_id:topicId,error:validation.join('; '),details:validation});
+    }
+    if (errors.length) {
+      await client.query('ROLLBACK');
+      return {status:422,body:{error:`Nothing was published. ${errors.map(({topic_id,error})=>`${topic_id}: ${error}`).join(' | ')}`,errors}};
+    }
+    for (const topicId of topicIds) {
+      const row=byId.get(topicId);
+      const hash=createHash('sha256').update(JSON.stringify(row.pack_json)).digest('hex');
+      await client.query('INSERT INTO curriculum_editorial_reviews(id,topic_id,version,pack_hash,state,reviewer,key_id,note) VALUES($1,$2,$3,$4,$5,$6,$7,$8)',[randomUUID(),topicId,row.version,hash,'published',reviewer.trim(),keyId,note.trim()]);
+      await client.query("UPDATE curriculum_lessons SET review_status='published',updated_at=NOW() WHERE topic_id=$1",[topicId]);
+    }
+    await client.query('COMMIT');
+    return {status:200,body:{published:topicIds}};
+  } catch(error) {await client.query('ROLLBACK');throw error;} finally {client.release();}
+}
