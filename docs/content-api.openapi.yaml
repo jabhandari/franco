@@ -13,6 +13,34 @@ paths:
       responses:
         '200': { description: Lessons with topic_id, review_status, version and pack_json }
         '401': { description: Missing or insufficiently scoped key }
+  /api/content/v1/curriculum/review/publish:
+    post:
+      description: Explicitly publishes selected unpublished lesson packs after structural and provenance validation. This records a published event per lesson and does not create staged factual, language, or license approvals. The whole selection is atomic. Requires content:review.
+      security: [{ ContentApiKey: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [lessons, reviewer, note]
+              properties:
+                lessons:
+                  type: array
+                  minItems: 1
+                  maxItems: 500
+                  items:
+                    type: object
+                    required: [topic_id, version]
+                    properties:
+                      topic_id: { type: string }
+                      version: { type: integer, minimum: 1 }
+                reviewer: { type: string, minLength: 1 }
+                note: { type: string, minLength: 1 }
+      responses:
+        '200': { description: All selected packs published; returns their topic IDs }
+        '401': { description: Missing or insufficiently scoped key }
+        '422': { description: No packs published; request invalid or one or more packs failed validation }
   /api/races:
     post:
       security: [{ LearnerSession: [] }]
