@@ -36,6 +36,7 @@ export function TextInput({
   autoFocus,
   required = false,
   minLength,
+  disabled = false,
   className,
   ...rest
 }: TextInputProps) {
@@ -57,6 +58,7 @@ export function TextInput({
       autoFocus={autoFocus}
       required={required}
       minLength={minLength}
+      disabled={disabled}
       className={className}
       {...ariaProps}
     />
