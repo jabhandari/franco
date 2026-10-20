@@ -300,6 +300,11 @@ function App(): React.JSX.Element {
 
   function logout(): void {
     latestAuthToken.current=null;latestMeRequest.current++;latestSavedProfile.current=null;profileRevision.current++;
+    // FRA-176: a fresh sign-in is a first dashboard load — forget the entrance
+    // gate so the Home stagger plays again on the next login. In-app
+    // back-navigation still never replays it (the flag is only cleared here).
+    const exitingId=session?.id;
+    if(exitingId){try{sessionStorage.removeItem(`franco-home-enter:v2:${exitingId}`);}catch{/* storage unavailable */}}
     setSession(null);
     setAuthToken(null);
     setUserData(null);
@@ -317,6 +322,9 @@ function App(): React.JSX.Element {
 
   function handlePasswordReset(): void {
     latestAuthToken.current=null;latestMeRequest.current++;
+    // FRA-176: same as logout — the next sign-in is a first dashboard load.
+    const exitingId=session?.id;
+    if(exitingId){try{sessionStorage.removeItem(`franco-home-enter:v2:${exitingId}`);}catch{/* storage unavailable */}}
     setSession(null);setAuthToken(null);setUserData(null);
     sessionStorage.removeItem(TOKEN_KEY);
     setAuthMode('login');setError('');

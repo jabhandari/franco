@@ -11,16 +11,17 @@ export type SkillCardProps = {
   total: number;
   percent: number;
   loading?: boolean;
+  animateRing?: boolean;
   icon?: LucideIcon;
   onStart?: () => void;
   key?: React.Key;
 };
 
-export function SkillCard({ title,gloss,description,done,total,percent,loading=false,onStart,icon: Icon }: SkillCardProps) {
+export function SkillCard({ title,gloss,description,done,total,percent,loading=false,animateRing=false,onStart,icon: Icon }: SkillCardProps) {
   return (
     <section className={onStart ? 'skill-card skill-card-action' : 'skill-card'}>
       <div className="skill-card-heading"><div>{Icon && <span className="skill-card-icon"><Icon size={20} aria-hidden="true" /></span>}<h3>{title}</h3><span>{gloss}</span></div>
-        {!loading && (onStart ? <ProgressCount done={done} total={total} /> : <ProgressRing percent={percent} size={52} label={`${gloss}: ${done} of ${total} done`} />)}
+        {!loading && (onStart ? <ProgressCount done={done} total={total} /> : <ProgressRing percent={percent} size={52} label={`${gloss}: ${done} of ${total} done`} animate={animateRing} />)}
       </div>
       <p>{description}</p>
       <small>{loading ? 'Progress loading…' : total ? `${done} of ${total} done` : 'No exercises yet'}</small>
