@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Check, CheckCircle2 } from 'lucide-react';
 import { useApiResource } from '../hooks/useApi';
 import { getLearnProgress, saveLearnProgress } from '../api/client';
 import type { ContentConcept, ContentConceptsResponse } from '../api/client';
@@ -7,7 +7,7 @@ import type { LearnProgressRow, LearnRoute, LearnTopicCard } from '../types';
 import { topicCards, jumpBackIn, learnLevels } from '../presenters/learn.presenter';
 import { parseLearnRoute, learnUrl } from '../presenters/learn-route.presenter';
 import { CurriculumLesson } from '../components/CurriculumLesson';
-import { Box, Text, Button, ErrorMessage, LoadingSpinner, LearnTopic, LearnLevelPills, LearnJumpBack, LearnLessonBand } from '../components/ui';
+import { Box, Text, Button, ErrorMessage, LoadingSpinner, ProgressBar, LearnTopic, LearnLevelPills, LearnJumpBack, LearnLessonBand } from '../components/ui';
 
 type Props={token:string|null;currentLevel?:string;onPractice:(level:string)=>void};
 export function Learn({token,currentLevel='A1',onPractice}:Props) {
@@ -56,7 +56,7 @@ export function Learn({token,currentLevel='A1',onPractice}:Props) {
  }
  if(loading) return <LoadingSpinner label="Loading topics…"/>;
  if(error) return <ErrorMessage message={error}/>;
- if(route.subtopic && selected && concept) return <LearnLesson key={`${token}:${route.subtopic}`} token={token} card={selected} concept={concept} subtopicId={route.subtopic} rows={rows} onBack={back} onPractice={onPractice} onSaved={()=>setRevision(r=>r+1)}/>;
+ if(route.subtopic && selected && concept) return <LearnLesson key={`${token}:${route.subtopic}`} token={token} card={selected} concept={concept} subtopicId={route.subtopic} rows={rows} toneIndex={Math.max(0,cards.findIndex(c=>c.slug===route.topic))} onBack={back} onPractice={onPractice} onSaved={()=>setRevision(r=>r+1)} onSelectSubtopic={subtopic=>navigate({level:route.level,topic:selected.slug,subtopic})}/>;
  return <Box as="section" className="learn-topics-page">
   <Box className="learn-topics-heading"><Text as="h1">Learn</Text><Text>Pick a topic, open it up, and learn one small idea at a time. Everything is open — start wherever looks fun.</Text></Box>
   <LearnLevelPills levels={learnLevels()} selected={route.level} onSelect={level=>navigate({level})}/>
@@ -65,12 +65,14 @@ export function Learn({token,currentLevel='A1',onPractice}:Props) {
   {!cards.length && <Text>No topics at {route.level} yet — check back soon.</Text>}
  </Box>;
 }
-function LearnLesson({token,card,concept,subtopicId,rows,onBack,onPractice,onSaved}:{key?:React.Key;token:string|null;card:LearnTopicCard;concept:ContentConcept;subtopicId:string;rows:LearnProgressRow[];onBack:()=>void;onPractice:(level:string)=>void;onSaved:()=>void}) {
+function LearnLesson({token,card,concept,subtopicId,rows,toneIndex,onBack,onPractice,onSaved,onSelectSubtopic}:{key?:React.Key;token:string|null;card:LearnTopicCard;concept:ContentConcept;subtopicId:string;rows:LearnProgressRow[];toneIndex:number;onBack:()=>void;onPractice:(level:string)=>void;onSaved:()=>void;onSelectSubtopic:(subtopicId:string)=>void}) {
  const lesson=concept.metadata.lesson;
  const published=!concept.metadata.stub && concept.metadata.review_status==='published' && lesson?.review_status==='published';
  const subtopic=card.subtopics.find(s=>s.subtopicId===subtopicId);
  const saved=rows.some(r=>r.topic_id===card.topicId && r.subtopic_id===subtopicId && r.status==='completed');
  const [completed,setCompleted]=React.useState(saved);
+ const [progress,setProgress]=React.useState({done:0,total:0});
+ const reportProgress=React.useCallback((done:number,total:number)=>setProgress({done,total}),[]);
  const opened=React.useRef(false);const finished=React.useRef(false);
  React.useEffect(()=>{if(saved)setCompleted(true);},[saved]);
  React.useEffect(()=>{
@@ -88,8 +90,9 @@ function LearnLesson({token,card,concept,subtopicId,rows,onBack,onPractice,onSav
   void saveLearnProgress({topic_id:card.topicId,subtopic_id:subtopicId,status:'completed'},token).then(()=>{setCompleted(true);onSaved();}).catch(()=>{finished.current=false;});
  },[published,token,completed,card.topicId,subtopicId,onSaved]);
  const level=concept.level_code || 'A1';const clb=learnLevels().find(l=>l.id===level)?.clb;
- return <Box as="section" className="learn-lesson-page"><Button variant="text" icon={ArrowLeft} onClick={onBack}>Back to {level} topics</Button>
+ return <Box as="section" className={`learn-lesson-page topic-tone-${toneIndex}`}><Button variant="text" icon={ArrowLeft} onClick={onBack}>Back to {level} topics</Button>
+  <Box className="learn-lesson-stepper" role="group" aria-label="Lessons in this topic">{card.subtopics.map(s=><Box as="button" type="button" key={s.subtopicId} className={`learn-step-pill${s.subtopicId===subtopicId?' is-current':s.state==='completed'?' is-done':''}`} aria-current={s.subtopicId===subtopicId?'step':undefined} onClick={()=>onSelectSubtopic(s.subtopicId)}>{s.state==='completed' && s.subtopicId!==subtopicId && <Check size={14}/>}{s.title}</Box>)}</Box>
   <LearnLessonBand colour={card.colour} crumb={`${level} · ${clb} · Lesson ${card.subtopics.findIndex(s=>s.subtopicId===subtopicId)+1} of ${card.subtopicCount}`} title={subtopic?.title ?? card.title} topic={card.title}/>
-  {published && lesson?<><CurriculumLesson lesson={lesson} onComplete={complete}/><Box className="learn-lesson-footer">{completed && <Box><Text><CheckCircle2 size={18}/> Lesson complete</Text><Text>Nice work — this one counts toward your {level} progress.</Text></Box>}<Button variant="primary" onClick={()=>onPractice(level)}>{completed?'Practice again':'Practice this concept'}</Button></Box></>:<Text>In preparation. This lesson is being reviewed; explore any other topic freely.</Text>}
+  {published && lesson?<><Box className="learn-lesson-progress"><ProgressBar label="Lesson progress" percent={progress.total?progress.done/progress.total*100:0}/></Box><CurriculumLesson lesson={lesson} onComplete={complete} onProgress={reportProgress}/><Box className="learn-lesson-footer">{completed && <Box className="learn-lesson-complete"><Text as="strong"><CheckCircle2 size={18}/> Lesson complete</Text><Text>This one counts toward your {level} progress.</Text><Box as="span" className="learn-lesson-chip">We’ll bring this back in {lesson.review_due_policy.initial_days} {lesson.review_due_policy.initial_days===1?'day':'days'} to keep it fresh.</Box></Box>}<Button variant="primary" onClick={()=>onPractice(level)}>{completed?'Practice again':'Practice this concept'}</Button></Box></>:<Text>In preparation. This lesson is being reviewed; explore any other topic freely.</Text>}
  </Box>;
 }

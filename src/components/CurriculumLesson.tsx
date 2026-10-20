@@ -1,48 +1,281 @@
 import React from 'react';
+import { AlertTriangle, BookOpen, CheckCircle2, Languages, Lightbulb, MessageCircle, PenLine, Target, Trophy, Zap } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import type { CurriculumLesson as Lesson, CurriculumQuestion, CurriculumProvenance } from '../types';
-import { curriculumAnswer, curriculumReviewDays } from '../presenters/curriculum.presenter';
+import { curriculumAnswer, curriculumCorrectAnswerText, parseWordBank } from '../presenters/curriculum.presenter';
+import type { WordBank } from '../presenters/curriculum.presenter';
 import { shuffle } from '../presenters/collections.presenter';
-import { Box, Button, Card, Text, TextInput } from './ui';
+import { Box, Button, Checklist, CollapsibleSection, ExerciseShell, Feedback, OptionList, ReadingPassage, Text, Textarea, TextInput, TokenTray, WordToken } from './ui';
+import type { AnsweredState } from './ui';
+
+type ResultHandler = (id: string, correct: boolean | null) => void;
 
 function Attribution({ provenance }: { provenance: CurriculumProvenance }) {
   if (provenance.kind === 'original') return null;
-  return <Text as="small">{provenance.attribution_text} · {provenance.source_author} · {provenance.license_id} {provenance.source_url && <Box as="a" href={provenance.source_url} target="_blank" rel="noreferrer">Source</Box>}</Text>;
+  return <Text as="small" className="learn-attribution">{provenance.attribution_text} · {provenance.source_author} · {provenance.license_id} {provenance.source_url && <Box as="a" href={provenance.source_url} target="_blank" rel="noreferrer">Source</Box>}</Text>;
 }
-function Question({ question, onResult }: { key?: React.Key; question: CurriculumQuestion; onResult?: (id: string, correct: boolean | null) => void }) {
-  const [answer, setAnswer] = React.useState('');
+
+function SectionHeading({ icon: Icon, title }: { icon: LucideIcon; title: string }) {
+  return <Box className="learn-section-heading"><Box as="span" className="learn-section-icon"><Icon size={17} /></Box><Text as="h3">{title}</Text></Box>;
+}
+
+function AnswerFeedback({ question, correct, onRetry }: { question: CurriculumQuestion; correct: boolean; onRetry: () => void }) {
+  return <Feedback
+    tone={correct ? 'correct' : 'incorrect'}
+    title={correct ? 'Correct!' : 'Not quite.'}
+    message={correct ? question.feedback.rule : `Correct answer: ${curriculumCorrectAnswerText(question)}`}
+    onRetry={correct ? undefined : onRetry}
+    retryLabel="Retry"
+  />;
+}
+
+// Multiple choice: tapping an option grades it instantly, exactly like
+// the Practice page — there is no separate check step.
+function ChoiceAnswer({ question, onResult }: { question: CurriculumQuestion; onResult: ResultHandler }) {
   // Shuffle display order once per question: authored content keeps the
   // correct choice at a fixed position, so static rendering would make
   // answers position-predictable. Grading stays id-based, unaffected.
   const [options] = React.useState(() => shuffle(question.choices ?? []));
-  const [result, setResult] = React.useState<{ correct: boolean; message: string } | null>(null);
-  function check() { const next = curriculumAnswer(question, answer); setResult(next); onResult?.(question.id, next.correct); }
-  return <Card>
-    <Text>{question.prompt}</Text>
-    {question.choices ? <Box display="flex" gap="sm" wrap>{options.map(choice => <Button key={choice.id} variant={answer === choice.id ? 'primary' : 'text'} onClick={() => { setAnswer(choice.id); setResult(null); onResult?.(question.id, null); }}>{choice.text}</Button>)}</Box> : <TextInput value={answer} aria-label={question.prompt} onChange={event => { setAnswer(event.target.value); setResult(null); onResult?.(question.id, null); }} />}
-    <Button variant="text" disabled={!answer.trim()} onClick={check}>Check answer</Button>
-    {result && <Box role="status"><Text>{result.correct ? 'Correct!' : 'Not quite.'} {result.message}</Text>{!result.correct && <Text>Answer: {question.correct_answers.map(value => question.choices?.find(c => c.id === value)?.text ?? value).join(' / ')}</Text>}</Box>}
-    <Attribution provenance={question.provenance} />
-  </Card>;
+  const [selected, setSelected] = React.useState<string | null>(null);
+  const [result, setResult] = React.useState<{ correct: boolean } | null>(null);
+  const correctKey = options.find(option => question.correct_answers.includes(option.id))?.id;
+  function select(key: string) {
+    if (result) return;
+    const graded = curriculumAnswer(question, key);
+    setSelected(key);
+    setResult(graded);
+    onResult(question.id, graded.correct);
+  }
+  function retry() {
+    setSelected(null);
+    setResult(null);
+    onResult(question.id, null);
+  }
+  return <>
+    <OptionList
+      options={options.map(choice => ({ key: choice.id, label: choice.text }))}
+      selectedKey={selected ?? undefined}
+      answered={Boolean(result)}
+      correct={result?.correct ?? false}
+      correctKey={correctKey}
+      disabled={Boolean(result)}
+      onSelect={select}
+    />
+    {result && <AnswerFeedback question={question} correct={result.correct} onRetry={retry} />}
+  </>;
 }
-export function CurriculumLesson({ lesson, onComplete }: { key?: React.Key; lesson: Lesson; onComplete?:()=>void }) {
-  const [mastery, setMastery] = React.useState<Record<string, boolean>>({});
-  const complete=lesson.mastery.length>0 && lesson.mastery.every(q=>mastery[q.id]);
-  React.useEffect(()=>{if(complete) onComplete?.();},[complete,onComplete]);
-  if (lesson.review_status !== 'published') return <Text>In preparation. You can freely explore other topics while this lesson is reviewed.</Text>;
-  const attempted = Object.keys(mastery).length;
-  const correct = Object.values(mastery).filter(Boolean).length;
-  return <Box className="learn-pack">
-    <Box id="lesson-overview"><Text as="h3">What you’ll learn</Text><Text>{lesson.outcome}</Text></Box>
-    <Box id="lesson-theory"><Text as="h3">The idea, in plain English</Text><Text>{lesson.explanation}</Text>
-      <Box id="lesson-examples"><Text as="h3">See it in French</Text>{lesson.example_items.map((example, i) => <Card key={i}><Text as="strong">{example.french}</Text><Text>{example.english}</Text><Attribution provenance={example.provenance} /></Card>)}</Box>
+
+// Typed answer: submit on Enter (form submit), no visible submit button.
+function TypedAnswer({ question, onResult }: { question: CurriculumQuestion; onResult: ResultHandler }) {
+  const [value, setValue] = React.useState('');
+  const [result, setResult] = React.useState<{ correct: boolean } | null>(null);
+  const [retries, setRetries] = React.useState(0);
+  function submit() {
+    if (result || !value.trim()) return;
+    const graded = curriculumAnswer(question, value);
+    setResult(graded);
+    onResult(question.id, graded.correct);
+  }
+  function retry() {
+    setValue('');
+    setResult(null);
+    setRetries(count => count + 1);
+    onResult(question.id, null);
+  }
+  return <>
+    <Box as="form" className="learn-answer-form" onSubmit={event => { event.preventDefault(); submit(); }}>
+      <TextInput key={retries} value={value} disabled={Boolean(result)} autoFocus={retries > 0} aria-label={question.prompt} placeholder="Type your answer…" onChange={event => setValue(event.target.value)} />
     </Box>
-    <Text as="h3">3. Recognition check</Text>{lesson.recognition.map(q => <Question key={q.id} question={q} />)}
-    <Text as="h3">4. Guided production</Text>{lesson.guided_production.map(q => <Question key={q.id} question={q} />)}
-    <Text as="h3">5. Read for meaning</Text><Card><Text>{lesson.reading.french}</Text><Text>{lesson.reading.prompt}</Text><Box as="details"><Box as="summary">English support</Box><Text>{lesson.reading.english}</Text></Box><Attribution provenance={lesson.reading.provenance} /></Card>
-    <Text as="h3">6. Use it in real life</Text><Card><Text>{lesson.realistic_use.prompt}</Text>{lesson.realistic_use.rubric.map(line => <Text key={line}>• {line}</Text>)}<Box as="details"><Box as="summary">Compare with a model after you try</Box><Text>{lesson.realistic_use.model}</Text><Text>{lesson.realistic_use.model_translation}</Text></Box></Card>
-    <Box id="lesson-feedback"><Text as="h3">Watch out</Text><Text>{lesson.feedback.rule}</Text><Text>{lesson.feedback.error}</Text><Text>{lesson.feedback.remediation}</Text></Box>
-    <Text as="h3">8. Mastery and review</Text>{lesson.mastery.map(q => <Question key={q.id} question={q} onResult={(id, passed) => setMastery(current => { const next = { ...current }; if (passed === null) delete next[id]; else next[id] = passed; return next; })} />)}
-    {attempted === lesson.mastery.length && <Text>Self-check: {correct}/{lesson.mastery.length}. Review in {curriculumReviewDays(correct, lesson.mastery.length, lesson.review_due_policy)} day(s). This practice does not change your recorded mastery.</Text>}
-    <Text as="small">Lesson version {lesson.version}. Review again after {lesson.review_due_policy.subsequent_days.join(', ')} days as recall improves.</Text>
+    {!result && <Text variant="muted" size="sm">Type your answer, then press Enter</Text>}
+    {result && <AnswerFeedback question={question} correct={result.correct} onRetry={retry} />}
+  </>;
+}
+
+// Word bank: chips assemble in tap order; placing the last chip grades
+// the sentence instantly.
+function WordBankAnswer({ question, bank, onResult }: { question: CurriculumQuestion; bank: WordBank; onResult: ResultHandler }) {
+  const [order] = React.useState(() => shuffle(bank.tokens.map((_, index) => index)));
+  const [placed, setPlaced] = React.useState<number[]>([]);
+  const [result, setResult] = React.useState<{ correct: boolean } | null>(null);
+  const available = order.filter(index => !placed.includes(index));
+  function place(index: number) {
+    if (result) return;
+    const next = [...placed, index];
+    setPlaced(next);
+    if (next.length === bank.tokens.length) {
+      const graded = curriculumAnswer(question, next.map(token => bank.tokens[token]).join(' '));
+      setResult(graded);
+      onResult(question.id, graded.correct);
+    }
+  }
+  function remove(index: number) {
+    if (result) return;
+    setPlaced(current => current.filter(token => token !== index));
+  }
+  function retry() {
+    setPlaced([]);
+    setResult(null);
+    onResult(question.id, null);
+  }
+  return <>
+    <Text variant="muted">Tap the words in order to build the sentence. Tap a placed word to remove it.</Text>
+    <Text as="strong" className="practice-tray-label">Your sentence</Text>
+    <TokenTray variant="answer" label="Your sentence" emptyHint="Tap a word below to begin.">
+      {placed.map(index => <WordToken key={`placed-${index}`} placed disabled={Boolean(result)} onClick={() => remove(index)}>{bank.tokens[index]}</WordToken>)}
+    </TokenTray>
+    <Text as="strong" className="practice-tray-label">Word bank</Text>
+    <TokenTray variant="bank" label="Word bank">
+      {available.map(index => <WordToken key={`bank-${index}`} disabled={Boolean(result)} onClick={() => place(index)}>{bank.tokens[index]}</WordToken>)}
+    </TokenTray>
+    {result && <AnswerFeedback question={question} correct={result.correct} onRetry={retry} />}
+  </>;
+}
+
+function QuestionBody({ question, onResult }: { key?: React.Key; question: CurriculumQuestion; onResult: ResultHandler }) {
+  const bank = question.choices?.length ? null : parseWordBank(question.prompt);
+  return <>
+    <Text as="h2">{bank ? bank.prompt : question.prompt}</Text>
+    {question.choices?.length
+      ? <ChoiceAnswer question={question} onResult={onResult} />
+      : bank
+        ? <WordBankAnswer question={question} bank={bank} onResult={onResult} />
+        : <TypedAnswer question={question} onResult={onResult} />}
+    <Attribution provenance={question.provenance} />
+  </>;
+}
+
+// One question at a time inside a single card; a correct answer reveals
+// the Next/Finish button, and the card settles into a completed state
+// once the last question is passed.
+function QuestionGroup({ questions, onResult }: { questions: CurriculumQuestion[]; onResult: ResultHandler }) {
+  const [index, setIndex] = React.useState(0);
+  const [answered, setAnswered] = React.useState<AnsweredState | null>(null);
+  const [passed, setPassed] = React.useState(false);
+  const finished = index >= questions.length;
+  const question = questions[index];
+  function handle(id: string, correct: boolean | null) {
+    setAnswered(correct === null ? null : correct ? 'correct' : 'wrong');
+    setPassed(correct === true);
+    onResult(id, correct);
+  }
+  function next() {
+    setAnswered(null);
+    setPassed(false);
+    setIndex(current => current + 1);
+  }
+  if (finished) {
+    return <ExerciseShell answered="correct">
+      <Text as="strong"><CheckCircle2 size={18} /> Set complete</Text>
+      <Text variant="muted">Every question in this set is answered correctly.</Text>
+    </ExerciseShell>;
+  }
+  return <ExerciseShell eyebrow={`Question ${index + 1} of ${questions.length}`} answered={answered}>
+    <QuestionBody key={question.id} question={question} onResult={handle} />
+    {passed && <Button variant="primary" onClick={next}>{index + 1 === questions.length ? 'Finish' : 'Next question'}</Button>}
+  </ExerciseShell>;
+}
+
+// Guided production stacks one card per question, like the Practice page.
+function StackQuestion({ question, eyebrow, onResult }: { key?: React.Key; question: CurriculumQuestion; eyebrow: string; onResult: ResultHandler }) {
+  const [answered, setAnswered] = React.useState<AnsweredState | null>(null);
+  function handle(id: string, correct: boolean | null) {
+    setAnswered(correct === null ? null : correct ? 'correct' : 'wrong');
+    onResult(id, correct);
+  }
+  return <ExerciseShell eyebrow={eyebrow} answered={answered}>
+    <QuestionBody question={question} onResult={handle} />
+  </ExerciseShell>;
+}
+
+function RealisticUse({ lesson }: { lesson: Lesson }) {
+  const [checked, setChecked] = React.useState<Record<string, boolean>>({});
+  const [draft, setDraft] = React.useState('');
+  return <ExerciseShell>
+    <Text as="h2">{lesson.realistic_use.prompt}</Text>
+    <Checklist
+      items={lesson.realistic_use.rubric.map((line, index) => ({ id: `rubric-${index}`, title: line }))}
+      checked={checked}
+      onToggle={id => setChecked(current => ({ ...current, [id]: !current[id] }))}
+    />
+    <Textarea rows={3} value={draft} onChange={event => setDraft(event.target.value)} placeholder="Write your version here…" aria-label="Your version" />
+    <CollapsibleSection title="Compare with a model after you try">
+      <Text as="strong">{lesson.realistic_use.model}</Text>
+      <Text variant="muted">{lesson.realistic_use.model_translation}</Text>
+    </CollapsibleSection>
+  </ExerciseShell>;
+}
+
+export function CurriculumLesson({ lesson, onComplete, onProgress }: { key?: React.Key; lesson: Lesson; onComplete?: () => void; onProgress?: (done: number, total: number) => void }) {
+  const [results, setResults] = React.useState<Record<string, boolean>>({});
+  const handleResult = React.useCallback<ResultHandler>((id, correct) => {
+    setResults(current => {
+      if (correct === null) {
+        if (!(id in current)) return current;
+        const next = { ...current };
+        delete next[id];
+        return next;
+      }
+      return current[id] === correct ? current : { ...current, [id]: correct };
+    });
+  }, []);
+  const total = lesson.recognition.length + lesson.guided_production.length + lesson.mastery.length;
+  const done = Object.values(results).filter(Boolean).length;
+  React.useEffect(() => { onProgress?.(done, total); }, [done, total, onProgress]);
+  const masteryComplete = lesson.mastery.length > 0 && lesson.mastery.every(q => results[q.id] === true);
+  React.useEffect(() => { if (masteryComplete) onComplete?.(); }, [masteryComplete, onComplete]);
+  if (lesson.review_status !== 'published') return <Text>In preparation. You can freely explore other topics while this lesson is reviewed.</Text>;
+  return <Box className="learn-pack">
+    <Box className="learn-section learn-outcome">
+      <SectionHeading icon={Target} title="What you’ll learn" />
+      <Text>{lesson.outcome}</Text>
+    </Box>
+    <Box className="learn-section">
+      <SectionHeading icon={Lightbulb} title="The idea, in plain English" />
+      <Text>{lesson.explanation}</Text>
+    </Box>
+    <Box className="learn-section">
+      <SectionHeading icon={Languages} title="See it in French" />
+      <Box className="learn-examples">
+        {lesson.example_items.map((example, i) => <Box className="learn-example" key={i}>
+          <Text as="strong">{example.french}</Text>
+          <Text variant="muted">{example.english}</Text>
+          <Attribution provenance={example.provenance} />
+        </Box>)}
+      </Box>
+    </Box>
+    {lesson.recognition.length > 0 && <Box className="learn-section">
+      <SectionHeading icon={Zap} title="Quick check" />
+      <QuestionGroup questions={lesson.recognition} onResult={handleResult} />
+    </Box>}
+    {lesson.guided_production.length > 0 && <Box className="learn-section">
+      <SectionHeading icon={PenLine} title="Your turn — build it" />
+      <Box className="learn-question-stack">
+        {lesson.guided_production.map((q, i) => <StackQuestion key={q.id} question={q} eyebrow={`Question ${i + 1} of ${lesson.guided_production.length}`} onResult={handleResult} />)}
+      </Box>
+    </Box>}
+    <Box className="learn-section">
+      <SectionHeading icon={BookOpen} title="Read for meaning" />
+      <ExerciseShell>
+        <ReadingPassage text={lesson.reading.french} />
+        <Text>{lesson.reading.prompt}</Text>
+        <CollapsibleSection title="English support">
+          <Text>{lesson.reading.english}</Text>
+        </CollapsibleSection>
+        <Attribution provenance={lesson.reading.provenance} />
+      </ExerciseShell>
+    </Box>
+    <Box className="learn-section">
+      <SectionHeading icon={MessageCircle} title="Use it in real life" />
+      <RealisticUse lesson={lesson} />
+    </Box>
+    <Box className="learn-section learn-watchout">
+      <SectionHeading icon={AlertTriangle} title="Watch out" />
+      <Text>{lesson.feedback.error}</Text>
+      <Text>{lesson.feedback.remediation}</Text>
+    </Box>
+    {lesson.mastery.length > 0 && <Box className="learn-section">
+      <SectionHeading icon={Trophy} title="Master it" />
+      <QuestionGroup questions={lesson.mastery} onResult={handleResult} />
+    </Box>}
   </Box>;
 }

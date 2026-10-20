@@ -48,19 +48,26 @@ export type OptionListProps = {
   selectedKey?: string;
   answered?: boolean;
   correct?: boolean;
+  // Key of the right option: after a wrong pick it is highlighted
+  // .correct alongside the selected option's .incorrect.
+  correctKey?: string;
   disabled?: boolean;
   onSelect: (key: string) => void;
   key?: React.Key;
 };
 
 // Choice buttons: div.mcq-options. After answering, the selected option
-// gets .correct / .incorrect based on the `correct` result.
-export function OptionList({ options = [], selectedKey, answered = false, correct = false, disabled = false, onSelect }: OptionListProps) {
+// gets .correct / .incorrect based on the `correct` result; when
+// `correctKey` is given, the right option is also marked .correct after
+// a wrong pick so the learner sees the answer.
+export function OptionList({ options = [], selectedKey, answered = false, correct = false, correctKey, disabled = false, onSelect }: OptionListProps) {
   return (
     <div className="mcq-options">
       {options.map((option, index) => {
         const isSelected = selectedKey === option.key;
-        const tone = isSelected && answered ? (correct ? 'correct' : 'incorrect') : '';
+        const showCorrect = answered && (correctKey ? option.key === correctKey : isSelected && correct);
+        const showIncorrect = answered && isSelected && !correct;
+        const tone = showCorrect ? 'correct' : showIncorrect ? 'incorrect' : '';
         return (
           <button
             key={option.key}
@@ -71,7 +78,7 @@ export function OptionList({ options = [], selectedKey, answered = false, correc
           >
             <span className="mcq-option-index" aria-hidden="true">{String.fromCharCode(65 + index)}</span>
             <span className="mcq-option-label">{option.label}</span>
-            {tone ? <span className="mcq-option-state" aria-hidden="true">{correct ? <Check size={17} /> : <X size={17} />}</span> : null}
+            {tone ? <span className="mcq-option-state" aria-hidden="true">{tone === 'correct' ? <Check size={17} /> : <X size={17} />}</span> : null}
           </button>
         );
       })}
