@@ -116,3 +116,5 @@ export { PronunciationSpikePanel } from './PronunciationSpikePanel';
 export { PronunciationComparison } from './PronunciationComparison';
 export { GameArtImage } from './GameArtImage';
 export type { GameArtImageProps, GameArtKind } from './GameArtImage';
+export { TypewriterText } from './TypewriterText';
+export type { TypewriterTextProps } from './TypewriterText';

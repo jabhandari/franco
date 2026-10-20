@@ -43,14 +43,14 @@ export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLes
   // gate is read synchronously in the lazy initializer so the first paint
   // already carries the right state (no flash); the write stays in the effect.
   function homeEnterSeen(userId:string):boolean{
-    try{return window.sessionStorage.getItem(`franco-home-enter:${userId}`)!==null;}
+    try{return window.sessionStorage.getItem(`franco-home-enter:v2:${userId}`)!==null;}
     catch{return false;}
   }
   const userId=userData?.user?.id;
   const [enter]=React.useState(()=>!homeEnterSeen(userId ?? 'anon'));
   React.useEffect(()=>{
     if(!userId) return;
-    try{window.sessionStorage.setItem(`franco-home-enter:${userId}`,'1');}catch{/* storage unavailable: animate anyway */}
+    try{window.sessionStorage.setItem(`franco-home-enter:v2:${userId}`,'1');}catch{/* storage unavailable: animate anyway */}
   },[userId]);
 
   return (

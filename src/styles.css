@@ -3352,8 +3352,9 @@ html[data-theme] .learn-lesson-band h1, html[data-theme] .learn-lesson-band p { 
 @keyframes auth-card-in{from{opacity:0;transform:translateY(22px) scale(.985)}to{opacity:1;transform:none}}
 @keyframes rise-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes drift-glow{from{transform:translate3d(-4%,-3%,0) scale(1)}to{transform:translate3d(4%,4%,0) scale(1.1)}}
-/* FRA-176: the hero's second half drifts in slowly after the first line lands. */
-@keyframes hero-tail-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+/* FRA-176: the hero's second half is typed in char-by-char (see TypewriterText);
+   it sits on its own line from the start so typing never shifts layout. */
+.auth-hero-title-tail{display:block}
 .auth-enter{position:relative}
 .auth-enter>*{position:relative;z-index:1}
 .auth-enter::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(42% 36% at 22% 18%,color-mix(in srgb,var(--color-accent) 13%,transparent),transparent 70%),radial-gradient(40% 34% at 80% 82%,color-mix(in srgb,#7dd3c8 11%,transparent),transparent 70%);animation:drift-glow 16s ease-in-out infinite alternate}
@@ -3367,22 +3368,20 @@ html[data-theme] .learn-lesson-band h1, html[data-theme] .learn-lesson-band p { 
 .auth-enter .auth-b-form>*:nth-child(2){animation-delay:.19s}
 .auth-enter .auth-b-form>*:nth-child(3){animation-delay:.26s}
 .auth-enter .auth-b-form>*:nth-child(n+4){animation-delay:.33s}
-.auth-enter .auth-hero-title-tail{display:inline-block;animation:hero-tail-in 1.5s cubic-bezier(.2,.6,.3,1) .55s both}
 .home-enter .home-greeting>*{animation:rise-in .55s cubic-bezier(.2,.7,.25,1) both}
 .home-enter .home-greeting>*:nth-child(2){animation-delay:.1s}
 .home-enter .home-action-grid>*{animation:rise-in .55s cubic-bezier(.2,.7,.25,1) both}
-.home-enter .home-action-grid>*:nth-child(2){animation-delay:.06s}
-.home-enter .home-action-grid>*:nth-child(3){animation-delay:.12s}
-.home-enter .home-action-grid>*:nth-child(4){animation-delay:.18s}
+.home-enter .home-action-grid>*:nth-child(2){animation-delay:.13s}
+.home-enter .home-action-grid>*:nth-child(3){animation-delay:.26s}
+.home-enter .home-action-grid>*:nth-child(4){animation-delay:.39s}
 .home-enter .home-skill-grid>*{animation:rise-in .55s cubic-bezier(.2,.7,.25,1) both}
-.home-enter .home-skill-grid>*:nth-child(2){animation-delay:.06s}
-.home-enter .home-skill-grid>*:nth-child(3){animation-delay:.12s}
-.home-enter .home-skill-grid>*:nth-child(4){animation-delay:.18s}
+.home-enter .home-skill-grid>*:nth-child(2){animation-delay:.13s}
+.home-enter .home-skill-grid>*:nth-child(3){animation-delay:.26s}
+.home-enter .home-skill-grid>*:nth-child(4){animation-delay:.39s}
 .home-enter .home-bottom-grid>*{animation:rise-in .55s cubic-bezier(.2,.7,.25,1) both}
-.home-enter .home-bottom-grid>*:nth-child(2){animation-delay:.08s}
+.home-enter .home-bottom-grid>*:nth-child(2){animation-delay:.15s}
 @media (prefers-reduced-motion:reduce){
 .auth-enter::before{animation:none}
 .auth-enter .auth-b-card,.auth-enter .auth-b-rail>*,.auth-enter .auth-b-form>*,
 .home-enter .home-greeting>*,.home-enter .home-action-grid>*,.home-enter .home-skill-grid>*,.home-enter .home-bottom-grid>*{animation:none !important}
-.auth-enter .auth-hero-title-tail{animation:none !important}
 }

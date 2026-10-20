@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowRight, BookOpen, Check, Circle, Gamepad2, Sparkles } from 'lucide-react';
 import { apiGet, apiPost, getErrorMessage, startGoogleSignIn } from '../api/client';
-import { Box, Text, Field, TextInput, Button, ErrorMessage, SuccessMessage, ProductTour, WelcomeHighlights } from '../components/ui';
+import { Box, Text, Field, TextInput, Button, ErrorMessage, SuccessMessage, ProductTour, WelcomeHighlights, TypewriterText } from '../components/ui';
 import type { AuthMode } from '../types';
 
 type AuthScreenProps = {mode:AuthMode;onModeChange:(mode:AuthMode)=>void;onSubmit:(event:React.FormEvent<HTMLFormElement>)=>void;loading:boolean;error:string;onPasswordReset:()=>void};
@@ -73,7 +73,7 @@ export function AuthScreen({mode,onModeChange,onSubmit,loading,error,onPasswordR
       <Box as="aside" className="auth-b-rail">
         {marketing ? <>
           <Text className="auth-hero-kicker">FRENCH THAT GOES PLACES <Text as="span">✳</Text></Text>
-          <Text as="h1" className="auth-hero-title">A little French can take you <Text as="span" className="auth-hero-title-tail">a long way...</Text></Text>
+          <Text as="h1" className="auth-hero-title">A little French can take you <TypewriterText text="a long way..." className="auth-hero-title-tail" startDelayMs={650} charMs={115} /></Text>
           <Text className="auth-hero-lede">A lively place to learn, practice and play — one small win at a time.</Text>
           <Box className="auth-hero-pills" aria-label="Ways to learn"><Text as="span"><BookOpen size={15} aria-hidden="true"/> Learn</Text><Text as="span"><Sparkles size={15} aria-hidden="true"/> Practice</Text><Text as="span"><Gamepad2 size={15} aria-hidden="true"/> Play</Text></Box>
           <ProductTour />
