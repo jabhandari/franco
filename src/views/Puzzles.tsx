@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, Check, ChevronRight, Clock3, Flame, Heart, Rotat
 import { apiGet, apiPost } from '../api/client.js';
 import { getErrorMessage } from '../presenters/format.presenter.js';
 import type { PuzzleAnswer, PuzzleQuestion, PuzzleRun, PuzzleState, PuzzleSummary } from '../types';
-import { AudioPlayer, Box, Button, ErrorMessage, Text } from '../components/ui';
+import { AudioPlayer, Box, Button, ErrorMessage, GameArtImage, Text } from '../components/ui';
 import { VerbSprint } from './VerbSprint';
 
 type Stage = 'gallery' | 'setup' | 'playing' | 'over' | 'verb';
@@ -149,7 +149,7 @@ export function Puzzles({ token, onRace }: Props) {
       <Box className="puzzles-gallery-layout"><Box className="puzzles-solo-games">
       <Box className="puzzles-section-heading"><Box><Text className="puzzles-kicker">CHOOSE A PUZZLE</Text><Text as="h2">Ready when you are</Text></Box><Text>3 games available</Text></Box>
       <Box className="puzzles-game-card">
-        <Box className="puzzles-game-art" aria-hidden="true"><Box className="puzzles-art-ring"><Zap size={46} /></Box><Text as="span">A1 → C2</Text></Box>
+        <Box className="puzzles-game-art" aria-hidden="true"><Box className="puzzles-art-ring"><GameArtImage game="rush" /><Zap size={46} /></Box><Text as="span">A1 → C2</Text></Box>
         <Box className="puzzles-game-copy">
           <Text className="puzzles-kicker">THE ENDURANCE GAME</Text>
           <Text as="h3">French Rush</Text>
@@ -162,7 +162,7 @@ export function Puzzles({ token, onRace }: Props) {
         </Box>
       </Box>
       <Box className="puzzles-game-card puzzles-verb-card">
-        <Box className="puzzles-game-art puzzles-verb-art" aria-hidden="true"><Box className="puzzles-art-ring"><Flame size={46} /></Box><Text as="span">60 SECONDS</Text></Box>
+        <Box className="puzzles-game-art puzzles-verb-art" aria-hidden="true"><Box className="puzzles-art-ring"><GameArtImage game="sprint" /><Flame size={46} /></Box><Text as="span">60 SECONDS</Text></Box>
         <Box className="puzzles-game-copy">
           <Text className="puzzles-kicker">THE SPEED GAME</Text>
           <Text as="h3">Verb Sprint</Text>
@@ -174,7 +174,7 @@ export function Puzzles({ token, onRace }: Props) {
 
       </Box>
       <Box className="puzzles-friend-promo">
-        <Box className="puzzles-game-art" aria-hidden="true"><Box className="puzzles-art-ring"><Swords size={46} /></Box><Text as="span">TWO PLAYERS</Text></Box>
+        <Box className="puzzles-game-art" aria-hidden="true"><Box className="puzzles-art-ring"><GameArtImage game="race" /><Swords size={46} /></Box><Text as="span">TWO PLAYERS</Text></Box>
         <Box className="puzzles-friend-copy">
           <Text className="puzzles-kicker">PLAY TOGETHER</Text>
           <Text as="h3">Race a friend</Text>
