@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowRight, BookOpen, Check, Circle, Gamepad2, Sparkles } from 'lucide-react';
 import { apiGet, apiPost, getErrorMessage, startGoogleSignIn } from '../api/client';
-import { Box, Text, Field, TextInput, Button, ErrorMessage, SuccessMessage, ProductTour, WelcomeHighlights, TypewriterText } from '../components/ui';
+import { Box, Text, Field, TextInput, Button, ErrorMessage, SuccessMessage, ProductTour, WelcomeHighlights } from '../components/ui';
 import type { AuthMode } from '../types';
 
 type AuthScreenProps = {mode:AuthMode;onModeChange:(mode:AuthMode)=>void;onSubmit:(event:React.FormEvent<HTMLFormElement>)=>void;loading:boolean;error:string;onPasswordReset:()=>void};
@@ -73,14 +73,13 @@ export function AuthScreen({mode,onModeChange,onSubmit,loading,error,onPasswordR
       <Box as="aside" className="auth-b-rail">
         {marketing ? <>
           <Text className="auth-hero-kicker">FRENCH THAT GOES PLACES <Text as="span">✳</Text></Text>
-          <Text as="h1" className="auth-hero-title">A little French can take you <Text as="span">a long way.</Text></Text>
+          <Text as="h1" className="auth-hero-title">A little French can take you <Text as="span" className="auth-hero-title-tail">a long way...</Text></Text>
           <Text className="auth-hero-lede">A lively place to learn, practice and play — one small win at a time.</Text>
           <Box className="auth-hero-pills" aria-label="Ways to learn"><Text as="span"><BookOpen size={15} aria-hidden="true"/> Learn</Text><Text as="span"><Sparkles size={15} aria-hidden="true"/> Practice</Text><Text as="span"><Gamepad2 size={15} aria-hidden="true"/> Play</Text></Box>
           <ProductTour />
         </> : <><Box className="auth-b-brand"><Text as="span">fr</Text><Box><Text as="strong">Franco</Text><Text as="small">French learning platform</Text></Box></Box><Box className="auth-b-simple"><Text as="h1">Your French, kept in one place.</Text><Text>One step closer to your next lesson.</Text></Box></>}
       </Box>
       <Box as="section" className="auth-b-form" id="auth-form">
-        {marketing && <TypewriterText text="Bonjour, on commence ?" />}
         {(mode==='login'||signup) && <Box className="auth-b-segments" role="group" aria-label="Account mode"><Box as="button" type="button" disabled={loading} aria-pressed={!signup} onClick={()=>switchMode('login')}>Log in</Box><Box as="button" type="button" disabled={loading} aria-pressed={signup} onClick={()=>switchMode('signup')}>Create account</Box></Box>}
         <Text as="h2">{mode==='verify' && notice ? 'Email verified' : title[mode]}</Text>
         <Text className="auth-b-subtitle">{signup?'Save your level, your lessons and your progress.':mode==='login'?'Pick up where you left off.':mode==='verify' ? notice ? 'Your address is confirmed. You can now log in.' : working ? 'Confirming your email address.' : localError ? 'We could not confirm your email address.' : 'Confirming your email address.':mode==='reset'?'Enter a new password for your account.':'We will email you a secure link if the address is eligible.'}</Text>
