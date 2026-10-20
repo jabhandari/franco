@@ -39,18 +39,19 @@ export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLes
   const lesson=resume?.lesson;
   const firstName=userData?.user?.first_name || userData?.user?.name.split(' ')[0] || 'learner';
   // FRA-176: entrance animations run only on the first Home mount per user per
-  // tab session — in-app back-navigation must not replay the stagger.
-  const [enter,setEnter]=React.useState(false);
+  // tab session — in-app back-navigation must not replay the stagger. The
+  // gate is read synchronously in the lazy initializer so the first paint
+  // already carries the right state (no flash); the write stays in the effect.
+  function homeEnterSeen(userId:string):boolean{
+    try{return window.sessionStorage.getItem(`franco-home-enter:${userId}`)!==null;}
+    catch{return false;}
+  }
+  const userId=userData?.user?.id;
+  const [enter]=React.useState(()=>!homeEnterSeen(userId ?? 'anon'));
   React.useEffect(()=>{
-    const userId=userData?.user?.id || 'anon';
-    let seen=false;
-    try{
-      const key=`franco-home-enter:${userId}`;
-      seen=window.sessionStorage.getItem(key)!==null;
-      window.sessionStorage.setItem(key,'1');
-    }catch{seen=false;}
-    if(!seen) setEnter(true);
-  },[userData?.user?.id]);
+    if(!userId) return;
+    try{window.sessionStorage.setItem(`franco-home-enter:${userId}`,'1');}catch{/* storage unavailable: animate anyway */}
+  },[userId]);
 
   return (
     <Box as="section" className={enter ? 'home-page home-enter' : 'home-page'}>
