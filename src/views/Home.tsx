@@ -38,9 +38,22 @@ export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLes
   const spoken=plan?.queue?.find(item => item.type==='speaking_prompt');
   const lesson=resume?.lesson;
   const firstName=userData?.user?.first_name || userData?.user?.name.split(' ')[0] || 'learner';
+  // FRA-176: entrance animations run only on the first Home mount per user per
+  // tab session — in-app back-navigation must not replay the stagger.
+  const [enter,setEnter]=React.useState(false);
+  React.useEffect(()=>{
+    const userId=userData?.user?.id || 'anon';
+    let seen=false;
+    try{
+      const key=`franco-home-enter:${userId}`;
+      seen=window.sessionStorage.getItem(key)!==null;
+      window.sessionStorage.setItem(key,'1');
+    }catch{seen=false;}
+    if(!seen) setEnter(true);
+  },[userData?.user?.id]);
 
   return (
-    <Box as="section" className="home-page">
+    <Box as="section" className={enter ? 'home-page home-enter' : 'home-page'}>
       <Box className="home-greeting">
         <Box className="home-hero-copy">
           <Text className="home-kicker">YOUR FRENCH STARTS HERE</Text>
@@ -87,7 +100,7 @@ export function Home({token,userData,streak,onStart,onPlacement,onContinue,onLes
         <Text className="home-kicker">A LITTLE OF EVERYTHING</Text>
         <Text as="h2" className="home-skills-title">Four ways to grow</Text>
         <Box className="home-skill-grid">
-          {SKILLS.map(skill => <SkillCard key={skill.id} title={skill.title} icon={skill.icon} gloss={skill.gloss} description={skill.description} {...skillCompletion(snapshot?.skill_progress || [],skill.id)} loading={!snapshot} />)}
+          {SKILLS.map(skill => <SkillCard key={skill.id} title={skill.title} icon={skill.icon} gloss={skill.gloss} description={skill.description} {...skillCompletion(snapshot?.skill_progress || [],skill.id)} loading={!snapshot} animateRing={enter} />)}
         </Box>
       </Box>
     </Box>

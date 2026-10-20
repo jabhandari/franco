@@ -3449,3 +3449,43 @@ html:not([data-theme="light"]) .practice-hero-tile.tile-three { background:#276d
 @media(max-width:1100px) { .puzzles-gallery-layout { grid-template-columns:minmax(0,1fr); } .puzzles-friend-promo { padding-top:0; max-width:550px; } }
 
 .race-room-badge > p { margin:0; line-height:1; }
+
+/* FRA-176: entrance animations. Transform/opacity only (GPU-friendly); every
+   rule below is disabled under prefers-reduced-motion. */
+@keyframes auth-card-in{from{opacity:0;transform:translateY(22px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes rise-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes drift-glow{from{transform:translate3d(-4%,-3%,0) scale(1)}to{transform:translate3d(4%,4%,0) scale(1.1)}}
+@keyframes caret-blink{0%,45%{opacity:1}50%,100%{opacity:0}}
+.auth-enter{position:relative}
+.auth-enter>*{position:relative;z-index:1}
+.auth-enter::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(42% 36% at 22% 18%,color-mix(in srgb,var(--color-accent) 13%,transparent),transparent 70%),radial-gradient(40% 34% at 80% 82%,color-mix(in srgb,#7dd3c8 11%,transparent),transparent 70%);animation:drift-glow 16s ease-in-out infinite alternate}
+.auth-enter .auth-b-card{animation:auth-card-in .65s cubic-bezier(.2,.7,.25,1) both}
+.auth-enter .auth-b-rail>*{animation:rise-in .55s cubic-bezier(.2,.7,.25,1) both}
+.auth-enter .auth-b-rail>*:nth-child(2){animation-delay:.07s}
+.auth-enter .auth-b-rail>*:nth-child(3){animation-delay:.14s}
+.auth-enter .auth-b-rail>*:nth-child(4){animation-delay:.21s}
+.auth-enter .auth-b-rail>*:nth-child(n+5){animation-delay:.28s}
+.auth-enter .auth-b-form>*{animation:rise-in .55s cubic-bezier(.2,.7,.25,1) both;animation-delay:.12s}
+.auth-enter .auth-b-form>*:nth-child(2){animation-delay:.19s}
+.auth-enter .auth-b-form>*:nth-child(3){animation-delay:.26s}
+.auth-enter .auth-b-form>*:nth-child(n+4){animation-delay:.33s}
+.typewriter-text{min-height:1.5em;margin:0 0 4px;font-weight:700;letter-spacing:.06em;font-size:12px;text-transform:uppercase;color:var(--color-accent)}
+.typewriter-caret{display:inline-block;width:2px;height:1em;margin-left:2px;vertical-align:-.12em;background:currentColor;animation:caret-blink 1.05s steps(2,start) infinite}
+.home-enter .home-greeting>*{animation:rise-in .55s cubic-bezier(.2,.7,.25,1) both}
+.home-enter .home-greeting>*:nth-child(2){animation-delay:.1s}
+.home-enter .home-action-grid>*{animation:rise-in .55s cubic-bezier(.2,.7,.25,1) both}
+.home-enter .home-action-grid>*:nth-child(2){animation-delay:.06s}
+.home-enter .home-action-grid>*:nth-child(3){animation-delay:.12s}
+.home-enter .home-action-grid>*:nth-child(4){animation-delay:.18s}
+.home-enter .home-skill-grid>*{animation:rise-in .55s cubic-bezier(.2,.7,.25,1) both}
+.home-enter .home-skill-grid>*:nth-child(2){animation-delay:.06s}
+.home-enter .home-skill-grid>*:nth-child(3){animation-delay:.12s}
+.home-enter .home-skill-grid>*:nth-child(4){animation-delay:.18s}
+.home-enter .home-bottom-grid>*{animation:rise-in .55s cubic-bezier(.2,.7,.25,1) both}
+.home-enter .home-bottom-grid>*:nth-child(2){animation-delay:.08s}
+@media (prefers-reduced-motion:reduce){
+.auth-enter::before{animation:none}
+.auth-enter .auth-b-card,.auth-enter .auth-b-rail>*,.auth-enter .auth-b-form>*,
+.home-enter .home-greeting>*,.home-enter .home-action-grid>*,.home-enter .home-skill-grid>*,.home-enter .home-bottom-grid>*{animation:none !important}
+.typewriter-caret{animation:none}
+}

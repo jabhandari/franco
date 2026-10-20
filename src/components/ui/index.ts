@@ -112,3 +112,5 @@ export type { StoryAnswerOptionsProps } from './StoryAnswerOptions';
 export { RaceInviteCode } from './RaceInviteCode';
 export { PronunciationSpikePanel } from './PronunciationSpikePanel';
 export { PronunciationComparison } from './PronunciationComparison';
+export { TypewriterText } from './TypewriterText';
+export type { TypewriterTextProps } from './TypewriterText';
