@@ -17,6 +17,20 @@ export async function curriculumConcepts(query, concepts) {
   return curriculum.map(c => {
     const lesson = byTopic.get(c.slug);
     const published = lesson?.review_status === 'published';
-    return { ...c, metadata_json: { ...c.metadata_json, review_status: lesson?.review_status || 'draft', stub: !published, ...(published ? { ...lesson.pack_json, review_status: 'published', question_items: [...lesson.pack_json.recognition, ...lesson.pack_json.guided_production, ...lesson.pack_json.mastery], correct_answers: [...lesson.pack_json.recognition, ...lesson.pack_json.guided_production, ...lesson.pack_json.mastery].map(q => q.correct_answers), lesson: { ...lesson.pack_json, review_status: 'published' } } : {}) } };
+    if (!published) return { ...c, metadata_json: { ...c.metadata_json, review_status: lesson?.review_status || 'draft', stub: true } };
+    // Keep the large subtopic collection only inside `lesson`, not duplicated
+    // at the metadata root. Parent publication covers the validated children.
+    const { subtopic_lessons, ...overview } = lesson.pack_json;
+    const questions = [...overview.recognition, ...overview.guided_production, ...overview.mastery];
+    const publishedPack = {
+      ...overview,
+      ...(subtopic_lessons ? { subtopic_lessons: Object.fromEntries(Object.entries(subtopic_lessons).map(([id, pack]) => [id, { ...pack, review_status: 'published' }])) } : {}),
+      review_status: 'published',
+    };
+    return { ...c, metadata_json: {
+      ...c.metadata_json, ...overview, review_status: 'published', stub: false,
+      question_items: questions, correct_answers: questions.map(question => question.correct_answers),
+      lesson: publishedPack,
+    } };
   });
 }

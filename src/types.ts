@@ -182,6 +182,8 @@ export type CurriculumQuestion = {
   provenance: CurriculumProvenance;
 };
 export type CurriculumLesson = {
+  subtopic_id?: string;
+  subtopic_lessons?: Record<string, CurriculumLesson>;
   topic_id: string;
   level: CefrLevel;
   outcome: string;

@@ -17,11 +17,11 @@ export function provenanceErrors(pack) {
   }
   return errors;
 }
-export function lessonErrors(pack) {
+export function lessonErrors(pack, subtopic = false) {
   const errors=[];
   for (const key of ['topic_id','level','explanation','outcome']) if (!nonempty(pack[key])) errors.push(`Missing ${key}`);
   if (!pack.outcome?.startsWith('I can ')) errors.push('Outcome must be an I can statement');
-  for (const key of ['example_items','recognition','guided_production']) if (!Array.isArray(pack[key]) || pack[key].length<3 || pack[key].length>5) errors.push(`${key} requires 3–5 items`);
+  for (const key of ['example_items','recognition','guided_production']) if (!Array.isArray(pack[key]) || pack[key].length<(subtopic ? 1 : 3) || pack[key].length>5) errors.push(`${key} requires ${subtopic ? '1' : '3'}–5 items`);
   if (!pack.mastery?.length) errors.push('Missing mastery check');
   for (const item of pack.example_items || []) if (!nonempty(item.french) || !nonempty(item.english)) errors.push('Examples require French and English');
   const questions=[...(pack.recognition || []),...(pack.guided_production || []),...(pack.mastery || [])];
@@ -36,6 +36,14 @@ export function lessonErrors(pack) {
   if (!nonempty(pack.realistic_use?.prompt) || !pack.realistic_use?.rubric?.length || !nonempty(pack.realistic_use?.model) || !nonempty(pack.realistic_use?.model_translation)) errors.push('Missing realistic task or model');
   if (!['rule','error','remediation'].every(key=>nonempty(pack.feedback?.[key]))) errors.push('Missing repair feedback');
   if (!(pack.review_due_policy?.initial_days>0) || !pack.review_due_policy?.subsequent_days?.length || !pack.review_due_policy?.subsequent_days?.every(n=>Number.isFinite(n)&&n>0)) errors.push('Missing review scheduling policy');
+  if (pack.subtopic_lessons) {
+    for (const [id, lesson] of Object.entries(pack.subtopic_lessons)) {
+      if (lesson.subtopic_id !== id || lesson.topic_id !== pack.topic_id || lesson.level !== pack.level) errors.push(`Invalid subtopic identity: ${id}`);
+      errors.push(...lessonErrors(lesson, true).map(error => `${id}: ${error}`));
+    }
+    const lessons = Object.values(pack.subtopic_lessons);
+    for (const field of ['explanation', 'outcome']) if (new Set(lessons.map(lesson => lesson[field])).size !== lessons.length) errors.push(`Duplicate subtopic ${field}`);
+  }
   return [...errors,...provenanceErrors(pack)];
 }
 export function transitionErrors(current,next,pack,evidence,history=[]) {

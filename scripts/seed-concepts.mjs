@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFile, readdir } from 'node:fs/promises';
 import { migrate, pool } from '../server/database.js';
 import { validateCurriculumTopic } from '../server/curriculum-contract.js';
+import { lessonErrors } from '../server/curriculum-editorial.js';
 
 const topics = JSON.parse(await readFile(new URL('../content/curriculum/topics.json', import.meta.url), 'utf8'));
 if (topics.length !== 90 || new Set(topics.map(t => t.topic_id)).size !== 90) throw new Error('Curriculum must contain exactly 90 distinct topics.');
@@ -34,6 +35,10 @@ try {
     for (const pack of JSON.parse(await readFile(new URL(name, directory), 'utf8'))) {
       if (!topics.some(t => t.topic_id === pack.topic_id)) throw new Error(`Unknown topic ${pack.topic_id}`);
       if (!pack.outcome?.startsWith('I can ') || !pack.explanation || !['example_items','recognition','guided_production'].every(k => Array.isArray(pack[k]) && pack[k].length >= 3 && pack[k].length <= 5) || !pack.mastery?.length || !pack.reading?.english || !pack.realistic_use?.rubric?.length || !Number.isInteger(pack.version)) throw new Error(`Incomplete lesson pack: ${pack.topic_id}`);
+      const errors = lessonErrors(pack);
+      if (errors.length) throw new Error(`${pack.topic_id}: ${errors.join('; ')}`);
+      const expectedIds = topics.find(topic => topic.topic_id === pack.topic_id).subtopics.map(subtopic => subtopic.subtopic_id);
+      if (expectedIds.some(id => !pack.subtopic_lessons?.[id]) || Object.keys(pack.subtopic_lessons).length !== expectedIds.length) throw new Error(`Incomplete subtopics: ${pack.topic_id}`);
       const inserted = await client.query(`INSERT INTO curriculum_lessons(topic_id,review_status,version,pack_json) VALUES($1,'generated',$2,$3) ON CONFLICT(topic_id) DO NOTHING RETURNING topic_id`, [pack.topic_id,pack.version,JSON.stringify(pack)]);
       let replaced = inserted.rowCount > 0;
       if (!replaced) {

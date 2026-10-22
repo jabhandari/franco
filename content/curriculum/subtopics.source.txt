@@ -1,0 +1,455 @@
+# Each topic's rows follow topics.json subtopic order: teaching note | French example | English meaning.
+[A1-01]
+French has 26 letters. Spell names letter by letter; accents are written marks, not extra alphabet letters.|Mon prénom s'écrit L-I-N-A.|My first name is spelled L-I-N-A.
+Final consonants are often silent: the s in Paris is silent. Pronunciation cannot be predicted from English spelling.|J'habite à Paris.|I live in Paris.
+Accents belong to French spelling: é, è and ê mark different vowel histories or sounds; ç makes c soft before a, o or u.|Le garçon prend un café.|The boy is having a coffee.
+Use bonjour during the day and bonsoir in the evening; salut is informal.|Bonsoir, madame !|Good evening, madam!
+Give your name with je m'appelle and ask another person's name with comment tu t'appelles.|Je m'appelle Nora, et toi ?|My name is Nora, and you?
+Use tu for one familiar person and vous for a group or one person addressed politely; the verb changes too.|Vous habitez ici, monsieur ?|Do you live here, sir?
+[A1-02]
+In a simple statement, the subject usually comes before the verb and its object.|Lina regarde le film.|Lina is watching the film.
+A French statement normally needs an expressed subject, even when the verb ending suggests who acts.|Nous travaillons ici.|We work here.
+Use c'est before a singular identifying noun phrase and ce sont before a plural one.|Ce sont des amis.|They are friends.
+A short complete sentence still needs a subject and a conjugated verb.|Le train arrive.|The train is arriving.
+[A1-03]
+Je means I and becomes j' before a vowel sound or silent h.|J'écoute la radio.|I am listening to the radio.
+Tu addresses one person informally; regular -er verbs commonly end in -es with tu.|Tu parles français.|You speak French.
+Il and elle refer to masculine and feminine subjects; on often means we in everyday speech but takes a singular verb.|On mange ensemble.|We eat together.
+Nous means we and commonly takes a verb ending in -ons.|Nous habitons à Lyon.|We live in Lyon.
+Vous means plural you or polite singular you and commonly takes a verb ending in -ez.|Vous cherchez la gare.|You are looking for the station.
+Ils refers to a masculine or mixed group; elles to an all-feminine group. Both take third-person plural verbs.|Elles regardent les photos.|They are looking at the photos.
+[A1-04]
+Learn each noun with its article: un livre is masculine and une table is feminine; grammatical gender is not physical sex.|Une table et un livre.|A table and a book.
+Nouns ending in -tion are usually feminine, but endings are clues rather than guarantees.|La station est petite.|The station is small.
+Some nouns for people change form with gender, while objects keep their grammatical gender.|Mon frère est étudiant.|My brother is a student.
+[A1-05]
+Le, la, l' and les identify definite nouns; l' precedes a vowel sound or silent h.|J'aime la musique.|I like music.
+Un, une and des introduce an unspecified singular or plural noun.|Elle achète une pomme.|She is buying an apple.
+À plus le becomes au and à plus les becomes aux; de plus le becomes du and de plus les becomes des.|Je vais au marché.|I am going to the market.
+Choose an indefinite article to introduce an item and a definite article when referring to that known item.|J'ai un chat. Le chat dort.|I have a cat. The cat is sleeping.
+[A1-06]
+Most French nouns form the plural by adding a written s, often without changing pronunciation.|Les livres sont ici.|The books are here.
+Plural definite nouns use les; unspecified plural nouns usually use des.|J'achète des oranges.|I am buying oranges.
+Many nouns ending in -eau form their plural with x.|Les bateaux arrivent.|The boats are arriving.
+Some plural forms must be learned individually: un œil becomes des yeux.|Elle a les yeux verts.|She has green eyes.
+[A1-07]
+Conjugating changes a verb to match its subject and tense; the infinitive is its dictionary form.|Je parle et nous parlons.|I speak and we speak.
+For regular -er verbs, remove -er and add -e, -es, -e, -ons, -ez or -ent.|Nous regardons un film.|We are watching a film.
+Regular finir-type -ir verbs use -issons with nous; regular vendre-type -re verbs use -ons.|Nous finissons le travail.|We are finishing the work.
+Choose the verb form from the grammatical subject, even when another noun is nearby.|Les enfants parlent français.|The children speak French.
+[A1-08]
+Être describes identity or state: je suis, tu es, il est, nous sommes, vous êtes, ils sont.|Je suis professeur.|I am a teacher.
+Avoir expresses possession and age; French says to have a number of years.|Elle a vingt ans.|She is twenty years old.
+Aller describes going: je vais, tu vas, il va, nous allons, vous allez, ils vont.|Nous allons à la gare.|We are going to the station.
+Faire means to do or make and occurs in many activity expressions.|Il fait du sport.|He does sport.
+Venir means to come; venir de plus a place gives someone's origin.|Je viens de Lille.|I come from Lille.
+Prendre means to take and is used for transport and ordering food.|Vous prenez le bus.|You take the bus.
+Pouvoir plus an infinitive expresses ability or permission.|Tu peux entrer.|You can come in.
+Vouloir plus an infinitive expresses a wish or intention.|Je veux apprendre.|I want to learn.
+[A1-09]
+An adjective agrees with the noun it describes; a written e often marks the feminine and s the plural.|Les portes sont ouvertes.|The doors are open.
+Most descriptive adjectives follow the noun, but common ones such as petit and grand often precede it.|Elle a une petite voiture rouge.|She has a small red car.
+Most simple colour adjectives agree, but colours derived from nouns such as orange are usually invariable.|Les chaussures sont bleues.|The shoes are blue.
+Nationality adjectives agree with their noun and normally have a lowercase initial in French.|Elles sont canadiennes.|They are Canadian.
+Use être plus an adjective to describe a person or thing, checking agreement.|Cette maison est grande.|This house is big.
+[A1-10]
+Ne comes before a conjugated verb and pas after it; ne becomes n' before a vowel sound.|Je ne comprends pas.|I do not understand.
+Ne...jamais means never; jamais replaces pas.|Elle ne fume jamais.|She never smokes.
+Ne...plus means no longer or not any more and describes a change from before.|Nous ne travaillons plus ici.|We no longer work here.
+A short negative reply can begin non, followed by a complete negative sentence.|Non, je ne suis pas prêt.|No, I am not ready.
+[A1-11]
+In familiar spoken French, a statement can become a yes/no question through rising intonation.|Tu viens demain ?|Are you coming tomorrow?
+Est-ce que introduces a question without inverting the subject and verb.|Est-ce que vous aimez le thé ?|Do you like tea?
+Où asks where, quand asks when, pourquoi asks why and comment asks how.|Où est la bibliothèque ?|Where is the library?
+In a simple inverted question, a hyphen joins the conjugated verb to its subject pronoun.|Parlez-vous anglais ?|Do you speak English?
+[A1-12]
+Numbers quantify nouns; French generally places the number before the noun.|Je voudrais trois pommes.|I would like three apples.
+Give a date with le plus a day number and month; use premier for the first day.|Nous sommes le deux mai.|It is the second of May.
+Use il est with clock time; heure agrees with the number except at une heure.|Il est huit heures.|It is eight o'clock.
+Family words often take possessives that agree with the relative's noun, not the speaker.|Ma sœur habite ici.|My sister lives here.
+State many professions after être without an indefinite article.|Mon père est médecin.|My father is a doctor.
+Use du, de la or de l' for an unspecified quantity of food.|Je mange du pain.|I eat bread.
+Combien coûte asks the price of one item; combien coûtent asks about several.|Combien coûte cette veste ?|How much does this jacket cost?
+Learn common place nouns with their articles and use à to indicate being at a place.|La pharmacie est près de la gare.|The pharmacy is near the station.
+Many weather expressions use il fait; rain uses il pleut.|Il fait froid aujourd'hui.|It is cold today.
+[A1-13]
+A reflexive verb uses a pronoun matching its subject: me, te, se, nous, vous or se.|Je me lève tôt.|I get up early.
+Describe routines with present-tense verbs and time expressions.|Je prends le petit déjeuner à sept heures.|I have breakfast at seven o'clock.
+Frequency words such as souvent and toujours commonly follow a simple conjugated verb.|Elle marche souvent.|She often walks.
+Jouer à introduces many games; jouer de introduces musical instruments.|Il joue au tennis.|He plays tennis.
+Aimer, adorer and préférer can introduce an infinitive to describe a preferred activity.|Je préfère lire.|I prefer reading.
+[A1-14]
+À locates someone in a city or introduces a destination; it can contract with a following article.|Nous sommes à Montréal.|We are in Montreal.
+De can express origin or link a possessed noun to its owner.|Le sac de Léa est bleu.|Léa's bag is blue.
+Use en with feminine country names and masculine countries starting with a vowel.|Elle habite en France.|She lives in France.
+Chez locates something at a person's home or professional premises.|Je vais chez le dentiste.|I am going to the dentist.
+Location phrases such as devant and derrière describe one thing relative to another.|Le vélo est devant la maison.|The bicycle is in front of the house.
+Tournez à droite and allez tout droit give simple directions.|Tournez à gauche après la banque.|Turn left after the bank.
+Il y a introduces the existence or presence of something.|Il y a un parc ici.|There is a park here.
+A possessive agrees with the possessed noun: mon sac, ma voiture, mes clés.|Mes clés sont sur la table.|My keys are on the table.
+Et adds information, mais marks a contrast and parce que gives a reason.|Je reste ici parce qu'il pleut.|I am staying here because it is raining.
+[A1-15]
+A short introduction can combine name, origin and occupation in separate present-tense sentences.|Je m'appelle Adam. Je suis étudiant.|My name is Adam. I am a student.
+Je voudrais is a polite way to order food or a drink.|Je voudrais un café, s'il vous plaît.|I would like a coffee, please.
+In a shop, asking for an item with vous avez is more useful than naming the item alone.|Vous avez cette chemise en bleu ?|Do you have this shirt in blue?
+A brief message states the essential information and can end with à bientôt.|Salut, je suis à la gare. À bientôt !|Hi, I am at the station. See you soon!
+The near future uses a present form of aller followed by an infinitive.|Nous allons visiter Paris.|We are going to visit Paris.
+In a spoken exchange, attend to the question word before choosing a relevant answer; où asks for a place.|Où habites-tu ? J'habite à Nice.|Where do you live? I live in Nice.
+[A2-01]
+Regular present-tense endings differ by verb family: finir adds -iss- in plural forms, while vendre does not.|Nous vendons des livres et finissons à dix-huit heures.|We sell books and finish at six in the evening.
+Some -er verbs change spelling to preserve a sound: manger becomes nous mangeons and commencer becomes nous commençons.|Nous commençons le cours.|We are starting the class.
+High-frequency irregular verbs have stems that must be learned: prendre gives nous prenons and ils prennent.|Ils prennent le métro.|They take the metro.
+The present can describe a habit or an action happening now; a time expression clarifies the intended meaning.|D'habitude, elle travaille chez elle.|She usually works from home.
+[A2-02]
+The passé composé combines a present auxiliary with a past participle; most verbs use avoir, while a smaller group uses être.|Elle est arrivée et a téléphoné.|She arrived and phoned.
+Regular past participles end in -é for -er verbs, -i for finir-type verbs and -u for vendre-type verbs.|Nous avons vendu la voiture.|We sold the car.
+With être, the past participle usually agrees with the subject in gender and number.|Mes sœurs sont parties.|My sisters left.
+In a compound tense, ne and pas surround the auxiliary, not the past participle.|Je n'ai pas vu Paul.|I did not see Paul.
+A passé composé question can begin with est-ce que, keeping the auxiliary before the participle.|Est-ce que tu as réservé ?|Have you booked?
+[A2-03]
+Build the imparfait from the nous present stem without -ons, then add -ais, -ais, -ait, -ions, -iez or -aient; être uses ét-.|Nous habitions près du lac.|We used to live near the lake.
+The imparfait describes repeated past habits without presenting each repetition as a completed event.|Chaque été, je nageais dans la rivière.|Every summer, I used to swim in the river.
+Use the imparfait for background conditions such as weather, appearance or an ongoing situation.|Il faisait chaud et les rues étaient calmes.|It was hot and the streets were quiet.
+The imparfait sets an ongoing background; the passé composé presents an event against it.|Je lisais quand le téléphone a sonné.|I was reading when the phone rang.
+[A2-04]
+The near future uses aller in the present plus an infinitive; only aller is conjugated.|Elle va changer de travail.|She is going to change jobs.
+The futur simple adds -ai, -as, -a, -ons, -ez or -ont to a future stem, often the infinitive.|Nous partirons demain.|We will leave tomorrow.
+Use a future form with a time expression to make the timing of a plan explicit.|La semaine prochaine, je vais visiter ma famille.|Next week, I am going to visit my family.
+[A2-05]
+Reflexive pronouns agree with the subject and precede a conjugated present-tense verb.|Vous vous réveillez à quelle heure ?|What time do you wake up?
+A plural reflexive pronoun can express a reciprocal action when people act on each other.|Ils se téléphonent chaque semaine.|They phone each other every week.
+Reflexive verbs use être in the passé composé, with the reflexive pronoun before the auxiliary.|Elle s'est levée à huit heures.|She got up at eight o'clock.
+Reflexive participle agreement depends on the pronoun's role: no agreement when se is indirect, as in se parler.|Elles se sont parlé hier.|They spoke to each other yesterday.
+[A2-06]
+Le, la and les replace direct objects without a preposition and come before the conjugated verb.|Je vois la gare. Je la vois.|I see the station. I see it.
+Lui and leur replace indirect objects referring to people after verbs such as parler à.|Nous parlons à Léa. Nous lui parlons.|We are talking to Léa. We are talking to her.
+With a conjugated verb followed by an infinitive, an object pronoun usually goes before the infinitive it belongs to.|Je vais les appeler.|I am going to call them.
+[A2-07]
+Compare an adjective with plus, moins or aussi followed by que.|Ce train est plus rapide que le bus.|This train is faster than the bus.
+Use a definite article with le plus or le moins to identify an extreme within a group.|C'est le plus petit village de la région.|It is the smallest village in the region.
+Meilleur compares bon and describes a noun; mieux compares bien and usually describes an action.|Ce pain est meilleur, mais elle cuisine mieux.|This bread is better, but she cooks better.
+[A2-08]
+Many adverbs form from the feminine adjective plus -ment, as in lente becoming lentement.|Elle parle lentement.|She speaks slowly.
+Degree adverbs such as très and assez modify an adjective or another adverb.|Cette soupe est assez chaude.|This soup is hot enough.
+Frequency adverbs describe how often something happens; jamais is normally paired with ne in formal writing.|Nous allons rarement au cinéma.|We rarely go to the cinema.
+Short common adverbs often sit between the auxiliary and participle in compound tenses.|J'ai bien compris la question.|I understood the question well.
+[A2-09]
+Possessives agree with the possessed noun: leur voiture is singular and leurs voitures is plural.|Leurs enfants sont à l'école.|Their children are at school.
+Demonstratives identify a noun: ce, cet, cette and ces; cet precedes a masculine vowel sound or silent h.|Cet appartement est lumineux.|This apartment is bright.
+Stressed pronouns follow prepositions and can add emphasis: moi, toi, lui, elle, nous, vous, eux, elles.|Tu viens avec moi ?|Are you coming with me?
+Y often replaces à plus a place; en replaces de plus a noun or an indefinite quantity.|Tu vas à la piscine ? Oui, j'y vais.|Are you going to the swimming pool? Yes, I am going there.
+[A2-10]
+Movement prepositions specify a path: vers indicates a direction and jusqu'à an endpoint.|Marchez jusqu'au pont.|Walk as far as the bridge.
+Use à for cities, en for most feminine countries, au for masculine consonant-initial countries and aux for plural countries.|Ils vont au Canada.|They are going to Canada.
+Directions often use the vous imperative followed by a landmark or a distance.|Continuez tout droit jusqu'au feu.|Continue straight on as far as the traffic light.
+For transport, common expressions include en train, en voiture, à vélo and à pied.|Nous voyageons en train.|We travel by train.
+[A2-11]
+Quel agrees with the noun it accompanies: quel train, quelle rue, quels billets and quelles dates.|Quelle heure vous convient ?|What time suits you?
+Rien means nothing, personne nobody and plus no longer; do not add pas to these negative patterns.|Je ne connais personne ici.|I do not know anyone here.
+[A2-12]
+A shopping request can specify an item, a size and a preferred alternative.|Je cherche une veste en taille moyenne.|I am looking for a medium-sized jacket.
+When travelling, ask the departure time or destination with the appropriate question word.|À quelle heure part le prochain train ?|What time does the next train leave?
+Propose an appointment using a date or time and ask whether it suits the other person.|Est-ce que mardi à dix heures vous convient ?|Does Tuesday at ten o'clock suit you?
+At a restaurant, distinguish an order from a request for the bill.|Pourriez-vous nous apporter l'addition ?|Could you bring us the bill?
+A polite request for help names the action needed after pouvez-vous or pourriez-vous.|Pouvez-vous m'aider à remplir ce formulaire ?|Can you help me fill in this form?
+[A2-13]
+Use the imparfait to describe a remembered habitual situation and a time expression to locate it.|Quand j'étais enfant, je jouais dans ce parc.|When I was a child, I used to play in this park.
+A holiday account commonly uses passé composé for completed activities and destinations.|Nous avons passé une semaine à la mer.|We spent a week by the sea.
+D'abord, ensuite and enfin make the order of past events clear.|D'abord, nous avons visité le musée, puis nous avons déjeuné.|First, we visited the museum, then we had lunch.
+Describe a past emotional state with être in the imparfait, checking adjective agreement.|J'étais contente de revoir mes amis.|I was happy to see my friends again.
+[A2-14]
+Préférer plus an infinitive states a preference; use à to compare two nouns.|Je préfère le thé au café.|I prefer tea to coffee.
+Aussi...que expresses equality; distinguish it from plus...que and moins...que.|Ce quartier est aussi calme que le nôtre.|This neighbourhood is as quiet as ours.
+Parce que introduces a clause explaining a personal reason.|Je prends le vélo parce que c'est pratique.|I take my bike because it is convenient.
+On pourrait plus an infinitive offers a suggestion without presenting it as an order.|On pourrait dîner ensemble samedi.|We could have dinner together on Saturday.
+[A2-15]
+Use et to add, mais to contrast and donc to connect a consequence to its cause.|Il pleut, donc nous restons à la maison.|It is raining, so we are staying at home.
+A short email needs a greeting, a clear reason for writing and an appropriate closing.|Bonjour Léa, je confirme notre rendez-vous de demain.|Hello Léa, I confirm our appointment tomorrow.
+Keep a narrative understandable by linking events rather than listing unrelated sentences.|J'ai raté le bus, alors je suis arrivé en retard.|I missed the bus, so I arrived late.
+A dialogue reply should answer the previous speaker's actual request or question.|Tu es libre ce soir ? Oui, après dix-neuf heures.|Are you free tonight? Yes, after seven o'clock.
+In listening, identify who, where and when before trying to interpret every individual word.|Le rendez-vous est déplacé à vendredi matin.|The appointment has been moved to Friday morning.
+[B1-01]
+Choose passé composé for a bounded event and imparfait for an ongoing state or habitual background, not simply for short versus long duration.|Pendant que je préparais le dîner, Léa est arrivée.|While I was preparing dinner, Léa arrived.
+Past sequencing expressions order completed events and show whether they overlap or follow one another.|Il a fermé la porte, puis il est parti.|He closed the door, then he left.
+An imparfait background can describe the setting before the main event begins.|La ville dormait quand nous sommes arrivés.|The city was asleep when we arrived.
+[B1-02]
+The future uses stems such as ser-, aur-, ir- and fer- with the same endings as regular stems.|Demain, nous aurons plus de temps.|Tomorrow, we will have more time.
+The futur simple can predict a future situation without presenting it as an immediate plan.|Les températures augmenteront cette semaine.|Temperatures will rise this week.
+Use the future first person to make a promise and specify the action promised.|Je te rappellerai dès mon arrivée.|I will call you back as soon as I arrive.
+A future plan may include a time clause; French uses the future after quand for a future event.|Quand je terminerai mes études, je chercherai un emploi.|When I finish my studies, I will look for a job.
+[B1-03]
+The conditional softens a request; pourriez-vous is less direct than pouvez-vous.|Pourriez-vous fermer la fenêtre ?|Could you close the window?
+Conditional devoir offers advice rather than the stronger obligation of present-tense devoir.|Tu devrais prendre un peu de repos.|You should get some rest.
+J'aimerais plus an infinitive expresses a wish without asserting that it will happen.|J'aimerais apprendre à conduire.|I would like to learn to drive.
+A conditional result can depend on a hypothetical condition expressed with si plus imparfait.|Avec plus de temps, nous voyagerions davantage.|With more time, we would travel more.
+[B1-04]
+For an open future condition, use si plus present and a future, present or imperative result; do not put the future after si.|Si tu viens, nous préparerons un repas.|If you come, we will prepare a meal.
+Si plus imparfait introduces a hypothetical present condition, typically followed by a conditional result.|Si j'avais une voiture, je viendrais te chercher.|If I had a car, I would come and pick you up.
+The result clause expresses what follows from the condition; its tense reflects whether the situation is open or hypothetical.|Si vous avez besoin d'aide, appelez-moi.|If you need help, call me.
+[B1-05]
+Parce que supplies a reason that answers an explicit or implied why question.|Je suis rentré parce que j'étais fatigué.|I went home because I was tired.
+Puisque introduces a reason presented as already known or accepted in the exchange.|Puisque tu es ici, aidons Léa.|Since you are here, let us help Léa.
+Car adds an explanatory reason in written or relatively formal discourse and normally follows the claim.|La route est fermée, car des travaux sont en cours.|The road is closed, because work is under way.
+Donc marks a conclusion or consequence; the second proposition must follow logically from the first.|Le dernier bus est parti, donc nous prendrons un taxi.|The last bus has left, so we will take a taxi.
+Alors can indicate a result or a next step; context distinguishes it from its temporal meaning then.|Il n'y avait plus de pain, alors j'en ai acheté.|There was no bread left, so I bought some.
+Grâce à introduces a cause evaluated positively and is followed by a noun phrase.|Grâce à ton aide, j'ai réussi.|Thanks to your help, I succeeded.
+À cause de introduces a cause usually viewed negatively and takes a noun phrase rather than a finite clause.|Le match est annulé à cause de la pluie.|The match is cancelled because of the rain.
+[B1-06]
+À mon avis frames a statement as the speaker's perspective rather than an uncontested fact.|À mon avis, cette solution est plus simple.|In my opinion, this solution is simpler.
+Disagree with a claim respectfully by identifying the point of difference rather than rejecting the person.|Je comprends ton avis, mais je ne partage pas ta conclusion.|I understand your view, but I do not share your conclusion.
+Support an opinion with a reason that explains the claim instead of merely repeating it.|Je recommande ce quartier parce qu'il est bien desservi.|I recommend this neighbourhood because it has good transport links.
+[B1-07]
+Qui replaces the subject of a relative clause, whether that subject is a person or a thing.|Le train qui arrive vient de Nantes.|The train that is arriving comes from Nantes.
+Que replaces a direct object in a relative clause and becomes qu' before a vowel sound.|Le livre que tu lis est passionnant.|The book you are reading is fascinating.
+Où introduces a relative clause locating a place or a time.|Voici le village où j'ai grandi.|Here is the village where I grew up.
+Dont replaces a complement introduced by de; avoid repeating the de complement in the relative clause.|C'est le projet dont je t'ai parlé.|It is the project I told you about.
+A relative clause connects information to a specific noun; choose its pronoun from the noun's role inside that clause.|J'ai une voisine qui travaille à l'hôpital.|I have a neighbour who works at the hospital.
+[B1-08]
+Identify the verb's construction before replacing its object: voir quelqu'un is direct, parler à quelqu'un indirect.|Je les connais et je leur parle souvent.|I know them and often talk to them.
+En replaces de complements and quantities; retain an explicit number when stating how many.|Tu as des frères ? Oui, j'en ai deux.|Do you have brothers? Yes, I have two.
+Before most conjugated verbs, direct le/la/les precede indirect lui/leur.|Je le lui donne.|I am giving it to him.
+[B1-09]
+Il faut que introduces a finite clause in the subjunctive to express necessity.|Il faut que tu sois à l'heure.|You need to be on time.
+Vouloir que introduces a desired action by another subject and normally takes the subjunctive.|Je veux que vous veniez demain.|I want you to come tomorrow.
+Use a subjunctive clause after expressions of necessity such as il est nécessaire que.|Il est nécessaire que nous partions tôt.|It is necessary for us to leave early.
+An emotional reaction expressed with être content que normally introduces the subjunctive.|Je suis heureuse que tu ailles mieux.|I am happy that you are feeling better.
+Learn common irregular subjunctives in context: être gives sois, avoir aie and aller aille.|Bien qu'il soit tard, nous continuons.|Although it is late, we are continuing.
+[B1-10]
+Report a statement with dire que and a yes/no question with demander si; indirect questions do not keep est-ce que.|Elle dit qu'elle est prête et demande si nous venons.|She says she is ready and asks whether we are coming.
+With a present reporting verb, the reported tense often stays unchanged; past reporting can shift the temporal viewpoint.|Il disait qu'il travaillait ce jour-là.|He was saying that he was working that day.
+[B1-11]
+Pour plus an infinitive gives a purpose when the subject of both actions is the same.|Je révise pour réussir l'examen.|I am revising to pass the exam.
+Afin de introduces an intended goal in a more formal style and takes an infinitive.|Nous écrivons afin de confirmer la réservation.|We are writing to confirm the booking.
+Cependant marks a contrast between two propositions without denying the first.|Le trajet est long. Cependant, il est agréable.|The journey is long. However, it is pleasant.
+Pourtant marks a result contrary to what the preceding statement would lead one to expect.|Il avait étudié, pourtant il a échoué.|He had studied, yet he failed.
+Même si introduces a concession and normally takes the indicative, not the subjunctive.|Même s'il pleut, nous sortirons.|Even if it rains, we will go out.
+Concession acknowledges a potentially opposing fact while maintaining the main claim.|Bien que ce soit difficile, elle persévère.|Although it is difficult, she perseveres.
+[B1-12]
+A story establishes a situation, introduces a change and explains the outcome; tense choices mark these roles.|Tout était calme, puis nous avons entendu un cri.|Everything was quiet, then we heard a shout.
+Auparavant, ensuite and finalement locate events in a narrative timeline.|Après le repas, nous sommes retournés au bureau.|After the meal, we returned to the office.
+Relevant details clarify people, places or actions rather than adding unrelated description.|La porte, qui était entrouverte, donnait sur le jardin.|The door, which was ajar, opened onto the garden.
+An experience account links what happened to its effect on the speaker.|Ce voyage m'a appris à être plus patient.|That trip taught me to be more patient.
+[B1-13]
+Recommander de plus an infinitive gives advice; the recipient can be introduced with an indirect object.|Je vous recommande de réserver à l'avance.|I recommend that you book in advance.
+Devoir states an obligation, while il faut expresses a general requirement.|Vous devez présenter une pièce d'identité.|You must show identification.
+A useful solution identifies a feasible action and connects it to the problem it addresses.|Pour réduire les frais, nous pourrions partager le trajet.|To reduce costs, we could share the journey.
+Negotiation combines a condition, an offer and room for the other person's response.|Je peux accepter si nous modifions la date.|I can agree if we change the date.
+[B1-14]
+Explain a travel problem by stating what went wrong and the practical help required.|Mon train a été annulé. Puis-je changer mon billet ?|My train was cancelled. Can I change my ticket?
+In a work exchange, make the task, responsible person and deadline explicit.|Je vous enverrai le dossier avant vendredi.|I will send you the file before Friday.
+Describe an educational choice by connecting a course or programme to its purpose.|J'ai choisi cette formation pour améliorer mes compétences.|I chose this course to improve my skills.
+When discussing a social issue, distinguish a general observation from an unsupported universal claim.|Dans notre quartier, certains habitants manquent de transports.|In our neighbourhood, some residents lack transport.
+Express a feeling and its cause clearly; se sentir is followed by an adjective.|Je me sens soulagé depuis que j'ai reçu la réponse.|I have felt relieved since receiving the reply.
+[B1-15]
+An opinion paragraph states a position, gives a relevant reason and supports it with an example.|Je soutiens ce projet, car il facilitera les déplacements.|I support this project because it will make travel easier.
+A short presentation announces its subject and uses signposting to guide the listener.|Je présenterai d'abord le problème, puis les solutions.|I will first present the problem, then the solutions.
+A listening summary retains the speaker's central idea and key facts without adding personal opinions.|L'intervenante explique que le service fermera lundi.|The speaker explains that the service will close on Monday.
+A constructive discussion response refers to what has just been said before adding a point or asking for clarification.|Quand vous dites coûteux, parlez-vous du prix initial ?|When you say costly, are you referring to the initial price?
+[B2-01]
+The plus-que-parfait uses an imparfait auxiliary plus a past participle to locate an event before another past reference point.|Quand je suis arrivé, elle avait déjà terminé.|When I arrived, she had already finished.
+Anteriority describes one event as earlier than another; choose tense from that relationship rather than from sentence order.|Il a retrouvé les clés qu'il avait perdues.|He found the keys he had lost.
+A nuanced past narrative can move between background, completed events and earlier causes without changing its reference point accidentally.|Il était inquiet parce qu'il avait oublié le rendez-vous.|He was worried because he had forgotten the appointment.
+[B2-02]
+Lequel agrees with its antecedent and often follows a preposition referring to a thing.|Voici la chaise sur laquelle j'ai posé le dossier.|Here is the chair on which I put the file.
+À plus lequel contracts to auquel, auxquels or auxquelles, while à laquelle remains separate.|C'est une question à laquelle je réfléchis.|It is a question I am thinking about.
+De plus lequel contracts to duquel, desquels or desquelles, often after compound prepositions.|Le bâtiment près duquel nous attendons est fermé.|The building near which we are waiting is closed.
+Select the preposition required by the relative clause; avec lequel and pour lequel express different relationships.|Le logiciel avec lequel je travaille est récent.|The software I work with is recent.
+[B2-03]
+The past subjunctive uses a subjunctive auxiliary plus a participle to express an action earlier than the main clause.|Je suis heureux que vous ayez accepté.|I am happy that you accepted.
+Douter que normally takes the subjunctive because the event is presented as uncertain.|Je doute qu'il puisse venir.|I doubt that he can come.
+A subjunctive after an emotional evaluation does not by itself mean the event is unreal.|Elle regrette que nous soyons partis.|She regrets that we left.
+Compare asserted knowledge with doubt: savoir que normally takes the indicative, while douter que takes the subjunctive.|Je sais qu'il est là, mais je doute qu'il reste.|I know he is here, but I doubt he will stay.
+[B2-04]
+The past conditional combines aurais or serais with a past participle and expresses a hypothetical completed action.|Nous aurions accepté cette proposition.|We would have accepted that proposal.
+J'aurais dû plus an infinitive expresses regret about an action not taken in the past.|J'aurais dû vérifier l'adresse.|I should have checked the address.
+A past counterfactual uses si plus plus-que-parfait and a past conditional result.|Si tu m'avais prévenu, je serais venu.|If you had warned me, I would have come.
+[B2-05]
+Mixed conditional sentences can connect a past condition to a present consequence when the timeline supports it.|Si j'avais accepté ce poste, j'habiterais à Lyon aujourd'hui.|If I had accepted that job, I would be living in Lyon today.
+Distinguish probable, possible and improbable events through modal expressions rather than treating them as equivalent.|Il est probable qu'elle viendra, mais rien n'est certain.|She will probably come, but nothing is certain.
+A conditional can mark an unconfirmed report rather than a personal hypothetical situation.|Selon la presse, le ministre aurait démissionné.|According to the press, the minister is reported to have resigned.
+[B2-06]
+An arguable claim identifies a precise position that can be supported or challenged.|La gratuité des transports réduirait certains obstacles à la mobilité.|Free public transport would reduce some barriers to mobility.
+Evidence supports a claim only when its scope and relevance match the conclusion drawn.|L'enquête porte sur trois villes, non sur tout le pays.|The survey covers three cities, not the whole country.
+A counterargument represents a credible opposing reason before explaining its limits.|Certes, le coût initial est élevé, mais les économies seront durables.|Admittedly, the initial cost is high, but the savings will last.
+Persuasion links benefits to the audience's concerns instead of relying on unsupported certainty.|En simplifiant la procédure, nous réduirons votre temps d'attente.|By simplifying the procedure, we will reduce your waiting time.
+A conclusion follows from the argument and avoids introducing new unsupported evidence.|Ces résultats justifient donc un essai à plus grande échelle.|These results therefore justify a larger-scale trial.
+[B2-07]
+Toutefois introduces a qualification or contrast to the preceding statement, often in written argument.|Le projet est prometteur. Toutefois, son financement reste incertain.|The project is promising. However, its funding remains uncertain.
+Néanmoins maintains the main proposition despite a previously acknowledged obstacle.|Les données sont limitées. Elles restent néanmoins utiles.|The data are limited. Nevertheless, they remain useful.
+En revanche contrasts two aspects, often balancing a disadvantage with an advantage.|Le logement est petit. En revanche, il est bien situé.|The accommodation is small. On the other hand, it is well located.
+Par conséquent explicitly marks a logical result, not simply the next event in time.|Le seuil a été dépassé. Par conséquent, une révision est nécessaire.|The threshold has been exceeded. Consequently, a review is necessary.
+En outre adds an additional argument or fact pointing in the same direction.|Le service est fiable. En outre, il est accessible à tous.|The service is reliable. Furthermore, it is accessible to everyone.
+[B2-08]
+With past reporting, a future viewed from that past point commonly becomes a conditional.|Elle a annoncé qu'elle reviendrait le lendemain.|She announced that she would return the next day.
+Indirect questions use normal subject-verb order and omit est-ce que.|Je me demande pourquoi il a changé d'avis.|I wonder why he changed his mind.
+Report opinions with an attribution verb that preserves the source's strength and stance.|La chercheuse estime que ces résultats restent provisoires.|The researcher considers that these results remain provisional.
+[B2-09]
+A professional email states its purpose early and uses a closing suited to the relationship.|Je vous écris au sujet de notre entretien de lundi.|I am writing regarding our interview on Monday.
+Tone depends on wording and degree of directness; a question can be less abrupt than a command.|Serait-il possible de revoir ce délai ?|Would it be possible to reconsider this deadline?
+Politeness can combine a conditional request with recognition of the other person's constraints.|Je vous serais reconnaissant de me répondre dès que possible.|I would be grateful if you could reply as soon as possible.
+Adapt terminology and detail to the reader's knowledge rather than using the same message for every audience.|Vous trouverez ci-dessous une explication destinée aux nouveaux utilisateurs.|Below you will find an explanation intended for new users.
+[B2-10]
+A passive clause uses être plus a past participle agreeing with its subject; it foregrounds the affected entity.|Les résultats seront publiés demain.|The results will be published tomorrow.
+A passive agent is often introduced by par, but it may be omitted if unknown or irrelevant.|Le rapport a été rédigé par une équipe indépendante.|The report was written by an independent team.
+C'est...qui foregrounds a subject and c'est...que foregrounds an object or another complement.|C'est Léa qui a proposé cette solution.|It was Léa who proposed this solution.
+When changing active to passive, preserve tense and meaning while making the direct object the new subject.|La décision a été annoncée par la directrice.|The decision was announced by the director.
+[B2-11]
+Before a declarative verb, le/la/les precede lui/leur; do not copy the order of the full noun phrases.|Nous les leur avons envoyés.|We sent them to them.
+In the usual pre-verbal pronoun sequence, y precedes en and both follow the other object-pronoun groups.|Il y en a encore trois.|There are still three of them there.
+An affirmative imperative places object pronouns after the verb with hyphens; a negative imperative restores the pre-verbal order.|Donnez-le-moi, mais ne le lui donnez pas.|Give it to me, but do not give it to him.
+[B2-12]
+Doubt can concern the truth of a statement or the probability of a future event; state what is uncertain.|Il n'est pas certain que cette mesure suffise.|It is not certain that this measure will be enough.
+Certainty expressions such as il est évident que normally introduce the indicative when affirming a fact.|Il est évident que les besoins ont augmenté.|It is clear that needs have increased.
+Bien que concedes a fact while maintaining the main point and normally takes the subjunctive.|Bien que le délai soit court, le travail reste faisable.|Although the deadline is short, the work remains feasible.
+Ne...que expresses only and restricts a particular constituent rather than negating the whole proposition.|Cette offre ne concerne que les nouveaux abonnés.|This offer concerns only new subscribers.
+Hedging limits the strength or scope of a claim without erasing its content.|Ces résultats semblent indiquer une amélioration.|These results appear to indicate an improvement.
+[B2-13]
+A subordinate clause depends on a main clause; its connector identifies the relationship between the two.|Nous vérifierons le dossier avant que la réunion commence.|We will check the file before the meeting begins.
+Puisque presents an accepted cause, whereas parce que may introduce new explanatory information.|Puisque les données sont incomplètes, reportons la décision.|Since the data are incomplete, let us postpone the decision.
+Use pour que plus subjunctive when a purpose clause has a different subject from the main clause.|Je te laisse le dossier pour que tu puisses le consulter.|I am leaving you the file so that you can consult it.
+Alors que can contrast two simultaneous or comparable situations rather than express a cause.|Elle préfère négocier, alors que lui souhaite voter.|She prefers to negotiate, whereas he wants to vote.
+Après que normally takes the indicative; avant que takes the subjunctive.|Après que le comité a voté, la séance a été levée.|After the committee voted, the meeting was adjourned.
+[B2-14]
+Defend a viewpoint by addressing the contested claim and giving a reason that bears on it.|Je maintiens cette proposition, car elle répond au problème principal.|I stand by this proposal because it addresses the main problem.
+Respond to an objection by acknowledging its valid part and clarifying the scope of your answer.|Votre objection est fondée, mais elle ne concerne que la première étape.|Your objection is valid, but it concerns only the first stage.
+Discuss social questions with precise quantifiers and distinguish affected groups instead of making blanket claims.|Cette réforme pourrait aider les ménages aux revenus les plus faibles.|This reform could help the lowest-income households.
+[B2-15]
+An argumentative essay builds a coherent line from a question through reasons and counterarguments to a conclusion.|Il convient d'examiner les avantages de cette mesure ainsi que ses limites.|It is appropriate to examine this measure's advantages as well as its limits.
+A report separates observations from recommendations and states the basis for each conclusion.|Les entretiens révèlent trois difficultés qui appellent des réponses distinctes.|The interviews reveal three difficulties requiring separate responses.
+When interpreting an interview, distinguish the interviewer's framing from the interviewee's actual claim.|L'invitée nuance la question en distinguant urgence et importance.|The guest qualifies the question by distinguishing urgency from importance.
+Reading an authentic text requires attention to its purpose, genre and audience as well as vocabulary.|Cet éditorial cherche à convaincre plutôt qu'à présenter un bilan neutre.|This editorial seeks to persuade rather than present a neutral assessment.
+[C1-01]
+A logical connector should encode the actual relationship: a consequence is not interchangeable with an addition or a concession.|Le dispositif est coûteux ; il n'en demeure pas moins nécessaire.|The system is costly; it remains necessary nonetheless.
+Encore que introduces a qualification that narrows a preceding claim and normally takes the subjunctive.|Le bilan paraît favorable, encore qu'il faille rester prudent.|The assessment seems positive, although caution is still needed.
+Cohesion requires clear referents as well as connectors; a demonstrative noun phrase can resume an entire previous proposition.|Cette réserve ne remet toutefois pas en cause le constat général.|This reservation does not, however, call the overall finding into question.
+A transition should explain how the next paragraph advances the argument rather than merely announcing a new topic.|Reste à déterminer dans quelles conditions ce principe peut être appliqué.|It remains to determine under what conditions this principle can be applied.
+[C1-02]
+Reported tenses express simultaneity, anteriority or posteriority relative to the reporting viewpoint; shifts are not purely mechanical.|Il affirmait qu'il avait déjà transmis ce qu'on lui demanderait ensuite.|He claimed that he had already sent what he would later be asked for.
+Attribution distinguishes the writer's claims from those of a source and preserves who is responsible for an assertion.|Selon la rapporteuse, le désaccord porterait surtout sur le calendrier.|According to the rapporteur, the disagreement is said to concern mainly the timetable.
+Reporting verbs encode stance: constater presents an observation, prétendre can signal distance and reconnaître an admission.|L'auteur reconnaît que son hypothèse n'explique pas tous les cas.|The author acknowledges that his hypothesis does not explain every case.
+[C1-03]
+Colloquial expressions depend on familiarity and situation; recognising them does not make them appropriate in a formal document.|Franchement, ça me prend la tête.|Honestly, it is doing my head in.
+Neutral language prioritises an accessible, unmarked formulation that suits a broad everyday audience.|Cette situation me préoccupe et j'aimerais en discuter.|This situation concerns me and I would like to discuss it.
+Formal register often uses precise nouns and less direct requests, but should still state the action required.|Je vous prie de bien vouloir préciser les modalités de cette décision.|Please specify the arrangements for this decision.
+Academic register distinguishes a hypothesis from a demonstrated result and defines the limits of its claims.|Cette hypothèse demande à être vérifiée sur un échantillon plus large.|This hypothesis needs to be tested on a larger sample.
+Switching register should preserve the message while adapting wording and directness to the addressee.|Pourriez-vous me transmettre ce document d'ici demain ?|Could you send me this document by tomorrow?
+[C1-04]
+Near-synonyms overlap in meaning but differ in scope, intensity or usual contexts; plausible does not mean proven.|Son explication est plausible, mais elle n'est pas démontrée.|His explanation is plausible, but it has not been demonstrated.
+A word's connotation adds evaluation beyond its reference: obstiné can criticise persistence that persévérant praises.|On loue sa persévérance, mais on critique parfois son obstination.|People praise her perseverance but sometimes criticise her stubbornness.
+Collocations are conventional word combinations; French takes une décision and raises an objection with soulever.|Le comité a pris une décision après avoir soulevé plusieurs objections.|The committee made a decision after raising several objections.
+Lexical precision identifies the exact kind of change rather than using a broad word such as problème or chose.|La baisse concerne les inscriptions, non la fréquentation quotidienne.|The decline concerns registrations, not daily attendance.
+[C1-05]
+Embedding one clause inside another requires a clear attachment and a recoverable main proposition.|Le fait que cette hypothèse ait été écartée ne prouve pas qu'elle soit fausse.|The fact that this hypothesis was rejected does not prove that it is false.
+Subordinate clauses can express several nested relationships; keep the condition distinct from the reason and the result.|Si les délais sont prolongés parce que le dossier est incomplet, nous en informerons les candidats.|If deadlines are extended because the file is incomplete, we will inform the applicants.
+Refined syntax manages information without hiding the agent or overloading the reader with nominalisations.|Faute d'avoir été consultés, les riverains contestent la procédure.|Having not been consulted, local residents dispute the procedure.
+[C1-06]
+The subjunctive can reflect an evaluated or selected possibility rather than straightforward temporal uncertainty.|C'est le seul argument qui puisse encore convaincre le jury.|It is the only argument that could still convince the jury.
+Expressions of uncertainty require attention to both degree and scope; unlikely is stronger than merely unconfirmed.|Il est peu probable que ces deux phénomènes soient indépendants.|It is unlikely that these two phenomena are independent.
+Modal constructions combine necessity, possibility or counterfactuality with temporal perspective; each layer changes the claim.|Encore aurait-il fallu que chacun puisse accéder au dossier.|It would still have been necessary for everyone to be able to access the file.
+[C1-07]
+A sophisticated claim specifies its conditions and avoids overstating what its evidence establishes.|La mesure serait pertinente à condition qu'elle cible les besoins effectivement observés.|The measure would be relevant provided that it targets the needs actually observed.
+A strong counterargument challenges an inference or assumption rather than inventing an easier opposing position.|Cet exemple montre une possibilité ; il ne suffit pas à établir une règle générale.|This example shows a possibility; it is not enough to establish a general rule.
+Rhetorical questions guide an audience towards a conclusion; evaluate the implied premise as well as the persuasive effect.|Comment défendre cette priorité sans expliquer ce qu'elle implique pour les autres services ?|How can this priority be defended without explaining what it means for the other services?
+[C1-08]
+Subtext is inferred from wording and context; distinguish a supported implication from an invented motive.|Votre proposition est intéressante ; nous en reparlerons quand le budget sera connu.|Your proposal is interesting; we will discuss it again when the budget is known.
+An implied stance can emerge through qualifiers that distance the speaker from an apparently positive description.|Ce prétendu progrès reste difficile à mesurer.|This supposed progress remains difficult to measure.
+Presuppositions are background assumptions carried by an expression, such as encore implying continuation or repetition.|Le service connaît encore des retards.|The service is still experiencing delays.
+Irony can create a gap between literal praise and a negative contextual evaluation; context must support that reading.|Quelle ponctualité : la réunion a commencé avec une heure de retard !|Such punctuality: the meeting started an hour late!
+[C1-09]
+An idiom's meaning is not obtained by translating each word literally; mettre la main à la pâte means to help with the work.|Tout le monde a mis la main à la pâte pour préparer la salle.|Everyone pitched in to prepare the room.
+Metaphor transfers a familiar domain to another; un frein à describes an obstacle rather than a physical brake.|Le manque de moyens constitue un frein à la recherche.|The lack of resources is a brake on research.
+An expression's cultural associations do not make it appropriate in every situation; informal idioms can jar in official writing.|On ne va pas en faire tout un fromage.|We are not going to make a big deal out of it.
+Context selects an idiom's intended sense; tourner la page describes moving on from a completed or difficult period.|Après cet échec, elle a décidé de tourner la page.|After that failure, she decided to move on.
+[C1-10]
+Thematic progression connects known information to a new contribution, giving each sentence a clear point of departure.|Cette évolution pose une nouvelle question : celle du financement à long terme.|This development raises a new question: that of long-term funding.
+Cohesion relies on precise reference; a summary noun should identify which preceding idea it resumes.|Cette contradiction explique les réserves exprimées par le comité.|This contradiction explains the reservations expressed by the committee.
+A long explanation becomes easier to follow when its stages are explicit and each stage has a distinct function.|Il faut distinguer le principe, ses conditions d'application et ses effets prévisibles.|We must distinguish the principle, its conditions of application and its foreseeable effects.
+[C1-11]
+In a meeting, a concise intervention identifies the decision needed and separates it from matters still open.|Pour avancer, convenons d'abord du périmètre de notre décision.|To move forward, let us first agree on the scope of our decision.
+A professional report should make its method, findings and recommendations distinguishable.|Les observations ci-dessous reposent sur les entretiens menés auprès de douze responsables.|The observations below are based on interviews with twelve managers.
+A presentation signposts its argument while adapting technical detail to the audience's needs.|Je limiterai cette présentation aux résultats qui éclairent directement notre choix.|I will limit this presentation to the results that directly inform our choice.
+Academic discussion tests an interpretation against evidence and takes alternative explanations seriously.|Cette corrélation pourrait aussi s'expliquer par un facteur non mesuré.|This correlation could also be explained by an unmeasured factor.
+[C1-12]
+An editorial argues from a standpoint; identify its thesis separately from the events it cites.|L'éditorial défend une réforme que les faits cités ne suffisent pas, à eux seuls, à justifier.|The editorial defends a reform that the cited facts alone are not enough to justify.
+Tone emerges from lexical choices, sentence form and emphasis, not merely from an explicit opinion statement.|Le choix du mot dérive donne au constat une tonalité alarmiste.|The choice of the word drift gives the finding an alarmist tone.
+Bias can arise from selecting evidence or comparison points even when every stated fact is accurate.|Le texte cite les réussites du dispositif sans évoquer les échecs comparables.|The text cites the system's successes without mentioning comparable failures.
+An author's stance may remain cautious even when reporting a confident source; distinguish these voices.|L'auteur rapporte cette affirmation sans pour autant la reprendre à son compte.|The author reports this assertion without thereby endorsing it.
+Argument analysis distinguishes a premise, the inference drawn from it and the conclusion that still needs support.|Que la demande augmente ne prouve pas que cette réponse soit la seule possible.|The fact that demand is rising does not prove that this response is the only possible one.
+[C1-13]
+In a debate, track concessions and reformulations to identify what speakers actually disagree about.|Je ne conteste pas l'objectif ; c'est le moyen choisi qui me pose problème.|I do not dispute the goal; it is the chosen means that troubles me.
+A lecture often marks its structure through spoken signposts; use these to distinguish examples from central claims.|Retenons surtout ceci : les deux phénomènes ne se produisent pas à la même échelle.|Let us retain this above all: the two phenomena do not occur on the same scale.
+Fast speech compresses sounds and includes repairs; reconstruct the completed proposition rather than treating every fragment as a separate claim.|Enfin, ce que je veux dire, c'est qu'on manque surtout de temps.|Well, what I mean is that we mainly lack time.
+Accents vary in vowels, rhythm and familiar wording; a written transcript alone cannot teach reliable accent recognition.|Vous pourrez entendre plusieurs façons de prononcer le même mot.|You may hear several ways of pronouncing the same word.
+[C1-14]
+A debate contribution can concede a point while defending a narrower thesis supported by the evidence.|Je vous accorde ce point, mais il ne suffit pas à invalider notre analyse.|I grant you that point, but it is not enough to invalidate our analysis.
+Negotiation distinguishes a fixed requirement from a negotiable implementation detail.|Nous pouvons revoir le calendrier, à condition de maintenir les garanties prévues.|We can revise the timetable provided that we keep the planned safeguards.
+An extended presentation should return to its main question after a digression or example.|Cet exemple nous ramène à la question centrale : qui assume le risque ?|This example brings us back to the central question: who bears the risk?
+Spontaneous speech can include a repair that improves precision without abandoning the speaking turn.|Disons plutôt que le résultat est encourageant, sans être encore concluant.|Let us say rather that the result is encouraging, without yet being conclusive.
+[C1-15]
+A synthesis organises sources around shared issues and differences rather than summarising each source in isolation.|Les deux textes reconnaissent l'urgence, mais divergent sur les moyens d'agir.|The two texts acknowledge the urgency but differ on the means of acting.
+An analytical report interprets findings while marking what the evidence cannot establish.|L'écart observé suggère une difficulté d'accès, sans permettre d'en isoler la cause.|The observed gap suggests an access difficulty without allowing its cause to be isolated.
+An essay develops a qualified thesis through connected reasoning and a conclusion answering the initial question.|L'enjeu n'est donc pas seulement de choisir, mais de rendre ce choix justifiable.|The issue is therefore not only to choose, but to make that choice justifiable.
+Editing should improve clarity and logical relations while preserving the author's intended degree of certainty.|Remplaçons cette généralisation par une formulation limitée aux cas étudiés.|Let us replace this generalisation with wording limited to the cases studied.
+[C2-01]
+Layered reasoning distinguishes what follows necessarily, what remains plausible and which additional premise would bridge the gap.|Même si ce lien était établi, il resterait à montrer qu'il explique l'ensemble du phénomène.|Even if this link were established, it would remain to be shown that it explains the whole phenomenon.
+Persuasive discourse can align an audience with a shared value before presenting a contested inference; inspect both steps.|Au nom d'une équité que nul ne conteste, on nous invite à accepter un dispositif dont les effets restent discutés.|In the name of an equity no one disputes, we are invited to accept a system whose effects remain contested.
+A rebuttal can expose a false dilemma without having to prove the opposite extreme.|Rien n'oblige à choisir entre l'immobilisme et une réforme dépourvue de garanties.|Nothing requires a choice between inaction and a reform without safeguards.
+[C2-02]
+Advanced idioms carry pragmatic force: prêcher le faux pour savoir le vrai describes probing through a knowingly false suggestion.|En affirmant que tout était réglé, elle prêchait le faux pour savoir le vrai.|By claiming that everything was settled, she was fishing for the truth with a false assertion.
+A figurative expression may extend across an argument; identify the shared image and what it foregrounds or conceals.|Le débat s'est enlisé avant même que les positions aient pu se rapprocher.|The debate became bogged down before the positions could even converge.
+Regional vocabulary varies without one standard variety being intrinsically more correct; context resolves meanings such as québécois dépanneur.|Au Québec, le dépanneur du coin vend du lait jusque tard le soir.|In Quebec, the corner convenience store sells milk until late in the evening.
+[C2-03]
+Subtext can depend on a strategically omitted commitment; distinguish deferral from an explicit refusal.|Nous ne manquerons pas de revenir vers vous si les circonstances le permettent.|We will be sure to get back to you if circumstances permit.
+A hidden assumption may enter through a definite description that treats a disputed claim as already established.|Comment remédier à cette prétendue incapacité sans d'abord vérifier qu'elle existe ?|How can this supposed inability be remedied without first checking that it exists?
+An indirect social cue often leaves room for a face-saving response rather than issuing a literal instruction.|Il se fait tard, et certains ont encore un long trajet devant eux.|It is getting late, and some people still have a long journey ahead of them.
+[C2-04]
+Precision requires choosing a formulation whose scope excludes plausible unintended interpretations.|L'interdiction porte sur la diffusion des données, non sur leur consultation autorisée.|The prohibition concerns dissemination of the data, not authorised consultation of them.
+Tone can be adjusted through restraint and degree of assertion without weakening the substantive criticism.|Cette réponse laisse entière la difficulté qu'elle prétend résoudre.|This response leaves untouched the difficulty it purports to resolve.
+Rhythm emerges from clause length, parallelism and stress placement; variation should serve the intended emphasis.|On avait promis la clarté ; on a obtenu des chiffres, des sigles, des silences.|Clarity had been promised; what emerged was figures, acronyms and silences.
+Resolve ambiguous attachment by explicitly naming the referent instead of relying on an unclear possessive.|La directrice a demandé au conseiller de modifier le rapport de ce dernier.|The director asked the adviser to amend the adviser's report.
+[C2-05]
+Irony invites recognition of a conflict between the literal statement and the situation; it is not equivalent to any negative opinion.|Une simplification exemplaire : il faut désormais remplir trois formulaires au lieu d'un.|An exemplary simplification: we must now fill in three forms instead of one.
+Understatement reduces the literal force of an evaluation while allowing context to convey a stronger one.|Dire que la négociation fut délicate serait un euphémisme.|To say that the negotiation was delicate would be an understatement.
+Satire uses exaggeration or an invented situation to expose a target's inconsistency, not merely to report it.|Le comité chargé de réduire les réunions a créé trois sous-comités.|The committee tasked with reducing meetings created three subcommittees.
+Anaphora and parallel structures can intensify an argument; assess how repeated form shapes the audience's attention.|Nous demandons des preuves, nous demandons des garanties, nous demandons des comptes.|We ask for evidence, we ask for safeguards, we demand accountability.
+[C2-06]
+Connotation can reframe the same conduct: prudence and frilosité evaluate caution differently.|Ce que les uns saluent comme de la prudence, les autres le dénoncent comme de la frilosité.|What some praise as prudence, others condemn as timidity.
+Polysemy gives one word several related senses; surrounding collocations determine which sense is active.|La portée de cette décision dépasse largement le secteur concerné.|The implications of this decision extend well beyond the sector concerned.
+Near-synonyms can differ in presupposition: remédier à treats something as a problem, while modifier does not necessarily do so.|Modifier une pratique n'implique pas nécessairement qu'il faille y remédier.|Changing a practice does not necessarily imply that it needs to be remedied.
+Pragmatics interprets an utterance as an action in context; a question can function as a request rather than a request for knowledge.|Pourriez-vous éviter de rendre cette discussion publique pour le moment ?|Could you avoid making this discussion public for now?
+[C2-07]
+Literary style can foreground perspective through syntax and imagery; describe the textual effect rather than assigning a genre from one word.|La ville retenait son souffle, comme si l'aube elle-même hésitait à paraître.|The city held its breath, as though dawn itself hesitated to appear.
+Free indirect discourse can blend narration with a character's perspective without an explicit reporting clause.|Il referma la lettre. Pourquoi fallait-il toujours qu'on lui réclame des comptes ?|He folded the letter shut. Why did people always have to demand explanations from him?
+Close reading grounds an interpretation in particular lexical or grammatical choices, while allowing other supported readings.|Le mot enfin suggère ici moins un soulagement qu'une impatience longtemps contenue.|The word at last here suggests less relief than long-contained impatience.
+[C2-08]
+Framing selects what counts as the problem and therefore which solutions seem relevant; a frame is not neutral description.|Présenter la crise comme un simple défaut d'information écarte d'emblée la question des intérêts en jeu.|Presenting the crisis as a mere lack of information excludes from the outset the question of the interests involved.
+A rhetorical strategy may concede a marginal point to protect a central assumption from scrutiny.|En reconnaissant une erreur mineure, l'orateur détourne l'attention du principe contesté.|By acknowledging a minor error, the speaker diverts attention from the disputed principle.
+An implied causal relationship can arise from juxtaposition alone; temporal succession does not establish causation.|Les ventes ont augmenté après la campagne ; encore faut-il établir qu'elles ont augmenté grâce à elle.|Sales rose after the campaign; it still has to be established that they rose because of it.
+[C2-09]
+Humour may depend on shared knowledge, incongruity or a double meaning; an unexplained literal reading can miss its social function.|Il a un sens remarquable de l'économie : il économise même ses compliments.|He has a remarkable sense of thrift: he even saves on compliments.
+Communicative conventions are context-dependent expectations rather than universal rules for all French speakers.|La familiarité du ton ne dispense pas de tenir compte de la situation et de l'interlocuteur.|A familiar tone does not remove the need to consider the situation and the interlocutor.
+Politeness can protect another person's autonomy through an indirect proposal while still making the request recognisable.|Si cela ne bouleverse pas votre organisation, peut-être pourrions-nous avancer l'entretien.|If it does not disrupt your arrangements, perhaps we could bring the interview forward.
+Intercultural fluency checks the intended meaning of unfamiliar conventions before treating a difference as rudeness or agreement.|Plutôt que d'interpréter ce silence comme un accord, demandons une confirmation explicite.|Rather than interpreting this silence as agreement, let us ask for explicit confirmation.
+[C2-10]
+Specialised academic language should distinguish an operational definition from a claim about the phenomenon itself.|Le terme est employé ici dans un sens opérationnel qui ne préjuge pas de sa validité théorique.|The term is used here in an operational sense that does not prejudge its theoretical validity.
+Professional precision makes responsibilities, exceptions and conditions explicit without hiding them in vague institutional language.|Sous réserve de validation juridique, la direction assumera seule la responsabilité de cette communication.|Subject to legal approval, management alone will take responsibility for this communication.
+A technical register requires terms with stable referents and a clear distinction between requirement and recommendation.|La mise à jour doit préserver l'intégrité des données, y compris en cas d'interruption du transfert.|The update must preserve data integrity, including if the transfer is interrupted.
+[C2-11]
+Fast conversation includes ellipsis and repair; interpret the completed intention rather than every abandoned fragment.|Non, pas mardi ; enfin, mardi serait possible, mais seulement après dix-huit heures.|No, not Tuesday; well, Tuesday would be possible, but only after six in the evening.
+Overlapping voices require tracking speaker turns and reactions; a written exchange illustrates discourse roles but cannot replace audio practice.|Attends, je termine : je n'ai pas dit que c'était impossible, seulement que c'était prématuré.|Wait, let me finish: I did not say it was impossible, only that it was premature.
+Implicit stance can be conveyed by an apparently neutral qualifier that questions a source's reliability.|C'est du moins ce qu'il affirme, et nous n'avons pour l'instant que sa parole.|That is at least what he claims, and for now we have only his word for it.
+[C2-12]
+Rapid reformulation keeps the central claim while repairing scope or terminology in real time.|Je dirais plutôt que la mesure déplace le problème qu'elle ne le résout.|I would say rather that the measure shifts the problem instead of solving it.
+In complex debate, separate an opponent's premise from the consequence they draw and address the weaker link.|J'accepte votre constat, mais je récuse la nécessité de la conclusion que vous en tirez.|I accept your observation, but I reject the claim that the conclusion you draw from it is necessary.
+Natural fluency includes purposeful pauses and concise repair; speed alone does not demonstrate precision.|Laissez-moi préciser ce point avant d'en tirer une conclusion trop rapide.|Let me clarify this point before drawing an overhasty conclusion from it.
+[C2-13]
+A critical analysis evaluates how an argument is built without substituting a personal reaction for textual evidence.|La démonstration convainc par sa cohérence, mais sa prémisse centrale reste insuffisamment étayée.|The argument persuades through its coherence, but its central premise remains insufficiently supported.
+A synthesis should retain meaningful disagreements and asymmetries between sources rather than inventing a consensus.|Les sources convergent sur le diagnostic tout en attribuant aux mêmes faits des implications opposées.|The sources converge on the diagnosis while assigning opposite implications to the same facts.
+Editorial refinement removes ambiguity, redundancy and unsupported intensification while preserving voice and stance.|La reformulation gagne en netteté sans transformer une réserve méthodologique en objection de principe.|The rewording gains clarity without turning a methodological reservation into an objection in principle.
+[C2-14]
+Reconciling sources may require distinguishing scales, populations or definitions before deciding whether claims truly conflict.|Les deux études ne se contredisent qu'en apparence, puisqu'elles ne mesurent ni la même durée ni la même population.|The two studies contradict each other only apparently, since they measure neither the same duration nor the same population.
+A fair account of divergent viewpoints identifies common ground and locates disagreement without flattening either position.|Tous reconnaissent la contrainte budgétaire ; le désaccord porte sur la manière d'en répartir les effets.|Everyone acknowledges the budget constraint; the disagreement concerns how to distribute its effects.
+[C2-15]
+Subtle error detection distinguishes an actual change of meaning from a stylistic preference; check grammatical scope and reference.|Ce n'est pas tant le manque de données que leur interprétation qui pose problème.|It is not so much the lack of data as their interpretation that causes difficulty.
+Ambiguity resolution makes the intended logical relation explicit, especially when a modifier could attach to several constituents.|Seuls les dossiers reçus avant lundi seront examinés mardi.|Only the applications received before Monday will be examined on Tuesday.
+Self-editing checks whether a claim's wording still matches its evidence after revisions and qualifications.|Relisons la conclusion pour vérifier qu'elle ne dit pas davantage que ce que l'analyse permet d'affirmer.|Let us reread the conclusion to check that it says no more than the analysis allows us to assert.

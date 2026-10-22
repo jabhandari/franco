@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, BookOpen, CheckCircle2, Languages, Lightbulb, MessageCircle, PenLine, Target, Trophy, Zap } from 'lucide-react';
+import { AlertTriangle, BookOpen, Languages, Lightbulb, MessageCircle, PenLine, Target, Trophy, Zap } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { CurriculumLesson as Lesson, CurriculumQuestion, CurriculumProvenance } from '../types';
 import { curriculumAnswer, curriculumCorrectAnswerText, parseWordBank } from '../presenters/curriculum.presenter';
@@ -7,6 +7,7 @@ import type { WordBank } from '../presenters/curriculum.presenter';
 import { shuffle } from '../presenters/collections.presenter';
 import { Box, Button, Checklist, CollapsibleSection, ExerciseShell, Feedback, OptionList, ReadingPassage, Text, Textarea, TextInput, TokenTray, WordToken } from './ui';
 import type { AnsweredState } from './ui';
+import { featureFlags } from '../feature-flags';
 
 type ResultHandler = (id: string, correct: boolean | null) => void;
 
@@ -20,11 +21,12 @@ function SectionHeading({ icon: Icon, title }: { icon: LucideIcon; title: string
 }
 
 function AnswerFeedback({ question, correct, onRetry }: { question: CurriculumQuestion; correct: boolean; onRetry: () => void }) {
+  if (correct) return null;
   return <Feedback
-    tone={correct ? 'correct' : 'incorrect'}
-    title={correct ? 'Correct!' : 'Not quite.'}
-    message={correct ? question.feedback.rule : `Correct answer: ${curriculumCorrectAnswerText(question)}`}
-    onRetry={correct ? undefined : onRetry}
+    tone="incorrect"
+    title="Not quite."
+    message={`Correct answer: ${curriculumCorrectAnswerText(question)}`}
+    onRetry={onRetry}
     retryLabel="Retry"
   />;
 }
@@ -118,14 +120,14 @@ function WordBankAnswer({ question, bank, onResult }: { question: CurriculumQues
     onResult(question.id, null);
   }
   return <>
-    <Text variant="muted">Tap the words in order to build the sentence. Tap a placed word to remove it.</Text>
+    <Text variant="muted">Tap or swipe words into your sentence. Tap or swipe a placed word to remove it.</Text>
     <Text as="strong" className="practice-tray-label">Your sentence</Text>
     <TokenTray variant="answer" label="Your sentence" emptyHint="Tap a word below to begin.">
-      {placed.map(index => <WordToken key={`placed-${index}`} placed disabled={Boolean(result)} onClick={() => remove(index)}>{bank.tokens[index]}</WordToken>)}
+      {placed.map(index => <WordToken key={`placed-${index}`} placed disabled={Boolean(result)} onSwipe={() => remove(index)} onClick={() => remove(index)}>{bank.tokens[index]}</WordToken>)}
     </TokenTray>
     <Text as="strong" className="practice-tray-label">Word bank</Text>
     <TokenTray variant="bank" label="Word bank">
-      {available.map(index => <WordToken key={`bank-${index}`} disabled={Boolean(result)} onClick={() => place(index)}>{bank.tokens[index]}</WordToken>)}
+      {available.map(index => <WordToken key={`bank-${index}`} disabled={Boolean(result)} onSwipe={() => place(index)} onClick={() => place(index)}>{bank.tokens[index]}</WordToken>)}
     </TokenTray>
     {result && <AnswerFeedback question={question} correct={result.correct} onRetry={retry} />}
   </>;
@@ -144,37 +146,6 @@ function QuestionBody({ question, onResult }: { key?: React.Key; question: Curri
   </>;
 }
 
-// One question at a time inside a single card; a correct answer reveals
-// the Next/Finish button, and the card settles into a completed state
-// once the last question is passed.
-function QuestionGroup({ questions, onResult }: { questions: CurriculumQuestion[]; onResult: ResultHandler }) {
-  const [index, setIndex] = React.useState(0);
-  const [answered, setAnswered] = React.useState<AnsweredState | null>(null);
-  const [passed, setPassed] = React.useState(false);
-  const finished = index >= questions.length;
-  const question = questions[index];
-  function handle(id: string, correct: boolean | null) {
-    setAnswered(correct === null ? null : correct ? 'correct' : 'wrong');
-    setPassed(correct === true);
-    onResult(id, correct);
-  }
-  function next() {
-    setAnswered(null);
-    setPassed(false);
-    setIndex(current => current + 1);
-  }
-  if (finished) {
-    return <ExerciseShell answered="correct">
-      <Text as="strong"><CheckCircle2 size={18} /> Set complete</Text>
-      <Text variant="muted">Every question in this set is answered correctly.</Text>
-    </ExerciseShell>;
-  }
-  return <ExerciseShell eyebrow={`Question ${index + 1} of ${questions.length}`} answered={answered}>
-    <QuestionBody key={question.id} question={question} onResult={handle} />
-    {passed && <Button variant="primary" onClick={next}>{index + 1 === questions.length ? 'Finish' : 'Next question'}</Button>}
-  </ExerciseShell>;
-}
-
 // Guided production stacks one card per question, like the Practice page.
 function StackQuestion({ question, eyebrow, onResult }: { key?: React.Key; question: CurriculumQuestion; eyebrow: string; onResult: ResultHandler }) {
   const [answered, setAnswered] = React.useState<AnsweredState | null>(null);
@@ -185,6 +156,15 @@ function StackQuestion({ question, eyebrow, onResult }: { key?: React.Key; quest
   return <ExerciseShell eyebrow={eyebrow} answered={answered}>
     <QuestionBody question={question} onResult={handle} />
   </ExerciseShell>;
+}
+
+function ReadingTranslation({ english }: { english: string }) {
+  const [open, setOpen] = React.useState(false);
+  const id = React.useId();
+  return <Box className="learn-translation">
+    <Button variant="text" icon={Languages} aria-expanded={open} aria-controls={id} onClick={() => setOpen(value => !value)}>{open ? 'Hide translation' : 'Translate'}</Button>
+    {open && <Box id={id}><Text variant="muted">{english}</Text></Box>}
+  </Box>;
 }
 
 function RealisticUse({ lesson }: { lesson: Lesson }) {
@@ -245,10 +225,11 @@ export function CurriculumLesson({ lesson, onComplete, onProgress }: { key?: Rea
     </Box>
     {lesson.recognition.length > 0 && <Box className="learn-section">
       <SectionHeading icon={Zap} title="Quick check" />
-      <QuestionGroup questions={lesson.recognition} onResult={handleResult} />
+      <Box className="learn-question-stack">{lesson.recognition.map((q, i) => <StackQuestion key={q.id} question={q} eyebrow={`Question ${i + 1} of ${lesson.recognition.length}`} onResult={handleResult} />)}</Box>
     </Box>}
     {lesson.guided_production.length > 0 && <Box className="learn-section">
-      <SectionHeading icon={PenLine} title="Your turn — build it" />
+      <SectionHeading icon={PenLine} title="Your turn" />
+      <Text variant="muted">Write the French answer. Spelling and word order count; case, accents, punctuation and spaces don’t.</Text>
       <Box className="learn-question-stack">
         {lesson.guided_production.map((q, i) => <StackQuestion key={q.id} question={q} eyebrow={`Question ${i + 1} of ${lesson.guided_production.length}`} onResult={handleResult} />)}
       </Box>
@@ -257,17 +238,15 @@ export function CurriculumLesson({ lesson, onComplete, onProgress }: { key?: Rea
       <SectionHeading icon={BookOpen} title="Read for meaning" />
       <ExerciseShell>
         <ReadingPassage text={lesson.reading.french} />
-        <Text>{lesson.reading.prompt}</Text>
-        <CollapsibleSection title="English support">
-          <Text>{lesson.reading.english}</Text>
-        </CollapsibleSection>
+        <ReadingTranslation english={lesson.reading.english} />
+        <Text>Try to understand the passage. Use Translate if you need a hand.</Text>
         <Attribution provenance={lesson.reading.provenance} />
       </ExerciseShell>
     </Box>
-    <Box className="learn-section">
+    {featureFlags.realLifeCoach && <Box className="learn-section">
       <SectionHeading icon={MessageCircle} title="Use it in real life" />
       <RealisticUse lesson={lesson} />
-    </Box>
+    </Box>}
     <Box className="learn-section learn-watchout">
       <SectionHeading icon={AlertTriangle} title="Watch out" />
       <Text>{lesson.feedback.error}</Text>
@@ -275,7 +254,7 @@ export function CurriculumLesson({ lesson, onComplete, onProgress }: { key?: Rea
     </Box>
     {lesson.mastery.length > 0 && <Box className="learn-section">
       <SectionHeading icon={Trophy} title="Master it" />
-      <QuestionGroup questions={lesson.mastery} onResult={handleResult} />
+      <Box className="learn-question-stack">{lesson.mastery.map((q, i) => <StackQuestion key={q.id} question={q} eyebrow={`Question ${i + 1} of ${lesson.mastery.length}`} onResult={handleResult} />)}</Box>
     </Box>}
   </Box>;
 }

@@ -3130,7 +3130,7 @@ html[data-theme] .practice-page .mcq-options, html[data-theme] .learn-lesson-pag
 html[data-theme] .practice-page .mcq-options button, html[data-theme] .learn-lesson-page .mcq-options button { padding:15px 17px; border:1px solid var(--color-border); border-radius:15px; background:var(--practice-choice); color:var(--color-text); box-shadow:none; transition:transform .16s ease,border-color .16s ease,background .16s ease; }
 html[data-theme] .practice-page .mcq-options button:hover:not(:disabled), .learn-lesson-page .mcq-options button:hover:not(:disabled) { transform:translateY(-2px); border-color:var(--color-accent); background:var(--practice-choice-hover); }
 .practice-page .mcq-option-index, .learn-lesson-page .mcq-option-index { background:color-mix(in srgb,var(--color-accent) 13%,var(--practice-choice)); color:var(--color-accent); }
-.practice-page .mcq-option-label { color:inherit; font-size:var(--text-15); font-weight:650; text-transform:none; }
+.practice-page .mcq-option-label, .learn-lesson-page .mcq-option-label { color:inherit; font-size:var(--text-15); font-weight:650; text-transform:none; }
 .practice-page .mcq-option-state { color:inherit; }
 .practice-page .reading-passage strong, .learn-lesson-page .reading-passage strong { color:var(--color-accent); }
 html[data-theme] .practice-page .mcq-options button.correct, html[data-theme] .learn-lesson-page .mcq-options button.correct { border-color:var(--practice-good); background:var(--practice-good-fill); color:var(--practice-good); }
@@ -3401,3 +3401,9 @@ html[data-theme] .learn-lesson-band h1, html[data-theme] .learn-lesson-band p { 
 .auth-enter .auth-b-card,.auth-enter .auth-b-rail>*,.auth-enter .auth-b-form>*,
 .home-enter .home-greeting>*,.home-enter .home-action-grid>*,.home-enter .home-skill-grid>*,.home-enter .home-bottom-grid>*{animation:none !important}
 }
+
+/* Keep lesson options and translations consistent with Practice. */
+.learn-translation { display:grid; justify-items:end; gap:8px; }
+.learn-translation .text-button { color:var(--color-text); width:auto; margin:0; padding:4px 6px; font-size:12px; }
+.learn-translation p { justify-self:stretch; width:100%; margin:0; }
+.word-token.swipeable { touch-action:pan-y; }

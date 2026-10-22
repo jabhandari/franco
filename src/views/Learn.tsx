@@ -66,7 +66,7 @@ export function Learn({token,currentLevel='A1',onPractice}:Props) {
  </Box>;
 }
 function LearnLesson({token,card,concept,subtopicId,rows,toneIndex,onBack,onPractice,onSaved,onSelectSubtopic}:{key?:React.Key;token:string|null;card:LearnTopicCard;concept:ContentConcept;subtopicId:string;rows:LearnProgressRow[];toneIndex:number;onBack:()=>void;onPractice:(level:string)=>void;onSaved:()=>void;onSelectSubtopic:(subtopicId:string)=>void}) {
- const lesson=concept.metadata.lesson;
+ const lesson=concept.metadata.lesson?.subtopic_lessons?.[subtopicId];
  const published=!concept.metadata.stub && concept.metadata.review_status==='published' && lesson?.review_status==='published';
  const subtopic=card.subtopics.find(s=>s.subtopicId===subtopicId);
  const saved=rows.some(r=>r.topic_id===card.topicId && r.subtopic_id===subtopicId && r.status==='completed');

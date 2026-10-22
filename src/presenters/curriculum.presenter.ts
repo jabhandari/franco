@@ -1,8 +1,12 @@
 import type { CurriculumQuestion } from '../types';
-const normalize = (value: string): string => value.normalize('NFKC').trim().toLocaleLowerCase('fr').replace(/[’]/g, "'").replace(/\s+/g, ' ');
+// Lessons assess letters and their order, independent of typing conventions.
+const normalize = (value: string): string => value.normalize('NFD').toLocaleLowerCase('fr').replace(/œ/g, 'oe').replace(/æ/g, 'ae').replace(/[^\p{L}\p{N}]/gu, '');
 export function curriculumAnswer(question: CurriculumQuestion, response: string): { correct: boolean; message: string } {
-  const correct = question.correct_answers.some(answer => normalize(answer) === normalize(response));
-  return { correct, message: correct ? `Correct. ${question.feedback.rule}` : `${question.feedback.error} ${question.feedback.rule} Try this: ${question.feedback.remediation}` };
+  // Choice IDs are opaque: never apply forgiving text matching to them.
+  const correct = question.choices?.length
+    ? question.correct_answers.includes(response)
+    : Boolean(normalize(response)) && question.correct_answers.some(answer => normalize(answer) === normalize(response));
+  return { correct, message: correct ? 'Correct.' : `${question.feedback.error} Try this: ${question.feedback.remediation}` };
 }
 export function curriculumReviewDays(correct: number, total: number, policy: { initial_days: number; subsequent_days: number[] }): number {
   return total > 0 && correct === total ? policy.subsequent_days[0] ?? policy.initial_days : policy.initial_days;
